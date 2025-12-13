@@ -1,0 +1,32 @@
+name: API Issue
+description: 서버 API 통신 작업을 위한 템플릿입니다.
+title: "API: "
+labels: ["📬 API"]
+body:
+  - type: input
+    id: description
+    attributes:
+      label: "📬 API 작업 설명"
+      description: "요청할 API 기능과 상세 내용 작성해주세요"
+    validations:
+      required: true
+
+  - type: textarea
+    id: tasks
+    attributes:
+      label: "🔌 API 작업 목록"
+      description: "진행할 작업들을 작성해주세요"
+      value: |
+        - [ ] 요청/응답 타입 정의
+        - [ ] fetch 함수 작성
+    validations:
+      required: true
+
+  - type: input
+    id: links
+    attributes:
+      label: "🔗 참고 링크"
+      description: "Swagger 문서, 예시 API 경로 등 (선택)"
+      placeholder: "https://..."
+    validations:
+      required: false

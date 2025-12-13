@@ -1,0 +1,32 @@
+name: Question
+description: 추가 정보나 논의가 필요한 질문을 등록할 때 사용합니다.
+title: "Question: "
+labels: ["🙋‍♂️ Question"]
+body:
+  - type: input
+    id: description
+    attributes:
+      label: "🙋‍♂️ 질문 내용"
+      description: "어떤 점이 궁금한지 구체적으로 적어주세요"
+    validations:
+      required: true
+
+  - type: textarea
+    id: tasks
+    attributes:
+      label: "💭 관련 논의 사항"
+      description: "질문과 관련된 이전 논의나 참고할 내용이 있다면 작성해주세요"
+      value: |
+        - [ ] 관련 문서 확인
+        - [ ] 팀원 피드백 요청
+    validations:
+      required: false
+
+  - type: input
+    id: links
+    attributes:
+      label: "🔗 참고 링크"
+      description: "관련 자료가 있다면 첨부해주세요 (선택)"
+      placeholder: "https://..."
+    validations:
+      required: false
