@@ -134,7 +134,6 @@ xcuserdata
 ### Xcode config file ###
 *.xcconfig
 
-
 ### Xcode ###
 
 ## Xcode 8 and earlier
@@ -148,3 +147,6 @@ xcuserdata
 **/xcshareddata/WorkspaceSettings.xcsettings
 
 # End of https://www.toptal.com/developers/gitignore/api/xcode,macos,swift,swiftpackagemanager,cocoapods
+
+# Firebase
+GoogleService-Info.plist
