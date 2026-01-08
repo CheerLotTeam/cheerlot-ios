@@ -1,0 +1,12 @@
+git_url("https://github.com/CheerLotTeam/cheerlot-match.git")
+
+storage_mode("git")
+
+username("sj8971@icloud.com") # Your Apple Developer Portal username
+
+app_identifier([
+  "group.com.CheerLot",
+  "group.com.CheerLot.watchkitapp"
+])
+
+readonly(true)
