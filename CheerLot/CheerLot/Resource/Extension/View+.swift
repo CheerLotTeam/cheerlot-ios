@@ -36,4 +36,13 @@ extension View {
       LineHeightMultipleAdaptFreshman(
         fontSize: fontSize, lineHeight: lineHeight, letterSpacing: letterSpacing))
   }
+  
+  /// 커스텀 폰트 스타일(`TypeStyle`)을 한 줄로 적용하는 확장 메서드
+  func font(_ style: TypeStyle) -> some View {
+    self
+      .font(style.font)
+      .kerning(style.letterSpacingPx)
+      .lineSpacing(style.extraSpacing)
+      .padding(.vertical, style.extraSpacing / 2)
+  }
 }

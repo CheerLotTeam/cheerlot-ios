@@ -57,7 +57,6 @@ extension Font {
 }
 
 import UIKit
-import SwiftUI
 
 // MARK: - TypeStyle
 
@@ -177,24 +176,6 @@ public extension Font {
     func swiftUIFont(size: CGFloat) -> Font {
       Font.custom(value, size: size)
     }
-  }
-}
-
-// MARK: - View Extension
-/// 커스텀 폰트 스타일(`TypeStyle`)을 한 줄로 적용하는 확장 메서드
-///
-/// - Example:
-/// ```swift
-/// Text("본문 텍스트")
-///   .font(.B1_M)
-/// ```
-public extension View {
-  func font(_ style: TypeStyle) -> some View {
-    self
-      .font(style.font)
-      .kerning(style.letterSpacingPx)
-      .lineSpacing(style.extraSpacing)
-      .padding(.vertical, style.extraSpacing / 2)
   }
 }
 
