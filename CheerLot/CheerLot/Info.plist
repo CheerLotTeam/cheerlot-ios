@@ -23,6 +23,13 @@
 		<string>Pretendard-SemiBold.otf</string>
 		<string>Pretendard-Thin.otf</string>
 		<string>Freshman.ttf</string>
+		<string>SUITE-Bold.otf</string>
+		<string>SUITE-ExtraBold.otf</string>
+		<string>SUITE-Heavy.otf</string>
+		<string>SUITE-Light.otf</string>
+		<string>SUITE-Medium.otf</string>
+		<string>SUITE-Regular.otf</string>
+		<string>SUITE-SemiBold.otf</string>
 	</array>
 	<key>UIDesignRequiresCompatibility</key>
 	<true/>
