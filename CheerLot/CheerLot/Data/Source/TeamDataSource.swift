@@ -11,7 +11,7 @@ struct TeamDataSource {
     /// 실제 팀 목록 데이터
     enum TeamCode: String, CaseIterable {
         case doosan = "DOOSAN"
-        case hanwha = "HANWHA"
+        case hanwha = "HANHWA"
         case kia = "KIA"
         case kiwoom = "KIWOOM"
         case kt = "KT"
@@ -36,7 +36,7 @@ struct TeamDataSource {
             
         case .hanwha:
             return TeamInfo(
-                id: "HANWHA",
+                id: "HANHWA",
                 shortName: "한화",
                 longName: "한화 이글스",
                 englishFullName: "HANHWA EAGLES",
