@@ -27,7 +27,7 @@ struct TeamDataSource {
         switch code {
         case .samsung:
             return TeamInfo(
-                id: "SAMSUNG",
+                id: code.rawValue,
                 shortName: "삼성",
                 longName: "삼성 라이온즈",
                 englishFullName: "SAMSUNG LIONS",
@@ -36,7 +36,7 @@ struct TeamDataSource {
             
         case .hanwha:
             return TeamInfo(
-                id: "HANHWA",
+                id: code.rawValue,
                 shortName: "한화",
                 longName: "한화 이글스",
                 englishFullName: "HANHWA EAGLES",
@@ -45,7 +45,7 @@ struct TeamDataSource {
             
         case .lg:
             return TeamInfo(
-                id: "LG",
+                id: code.rawValue,
                 shortName: "LG",
                 longName: "LG 트윈스",
                 englishFullName: "LG TWINS",
@@ -54,7 +54,7 @@ struct TeamDataSource {
             
         case .lotte:
             return TeamInfo(
-                id: "LOTTE",
+                id: code.rawValue,
                 shortName: "롯데",
                 longName: "롯데 자이언츠",
                 englishFullName: "LOTTE GIANTS",
@@ -63,7 +63,7 @@ struct TeamDataSource {
             
         case .nc:
             return TeamInfo(
-                id: "NC",
+                id: code.rawValue,
                 shortName: "NC",
                 longName: "NC 다이노스",
                 englishFullName: "NC DINOS",
@@ -72,7 +72,7 @@ struct TeamDataSource {
             
         case .ssg:
             return TeamInfo(
-                id: "SSG",
+                id: code.rawValue,
                 shortName: "SSG",
                 longName: "SSG 랜더스",
                 englishFullName: "SSG LANDERS",
@@ -81,7 +81,7 @@ struct TeamDataSource {
             
         case .doosan:
             return TeamInfo(
-                id: "DOOSAN",
+                id: code.rawValue,
                 shortName: "두산",
                 longName: "두산 베어스",
                 englishFullName: "DOOSAN BEARS",
@@ -90,7 +90,7 @@ struct TeamDataSource {
             
         case .kt:
             return TeamInfo(
-                id: "KT",
+                id: code.rawValue,
                 shortName: "KT",
                 longName: "KT 위즈",
                 englishFullName: "KT WIZ",
@@ -99,7 +99,7 @@ struct TeamDataSource {
             
         case .kiwoom:
             return TeamInfo(
-                id: "KIWOOM",
+                id: code.rawValue,
                 shortName: "키움",
                 longName: "키움 히어로즈",
                 englishFullName: "KIWOOM HEROES",
@@ -108,7 +108,7 @@ struct TeamDataSource {
             
         case .kia:
             return TeamInfo(
-                id: "KIA",
+                id: code.rawValue,
                 shortName: "KIA",
                 longName: "기아 타이거즈",
                 englishFullName: "KIA TIGERS",
