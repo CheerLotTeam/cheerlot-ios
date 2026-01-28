@@ -48,11 +48,11 @@
 		CF3BA7982DED855A00E600B6 /* Exceptions for "CheerLot" folder in "WatchCheerLot Watch App" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				Common/Enum/Theme.swift,
-				Common/UIComponents/Custom/RoundedCornerShape.swift,
+				Core/DesignSystem/RoundedCornerShape.swift,
 				Core/Util/Config.swift,
 				Core/Util/Constants.swift,
-				Models/DTO/WatchDto/PlayerWatchDto.swift,
+				Data/DTOs/Response/PlayerWatchDto.swift,
+				Legacy/Enum/Theme.swift,
 			);
 			target = CF3BA72A2DED7FB800E600B6 /* WatchCheerLot Watch App */;
 		};
@@ -265,6 +265,10 @@
 				"",
 				"",
 				"",
+				"",
+				"",
+				"",
+				"",
 			);
 		};
 		CF09BDF52E22D35300E11198 /* Run Script: Firebase Crashlytics */ = {
@@ -282,6 +286,10 @@
 			shellScript = (
 				"# Type a script or drag a script file from your workspace to insert its path.",
 				"\"${BUILD_DIR%/Build/*}/SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run\"",
+				"",
+				"",
+				"",
+				"",
 				"",
 				"",
 				"",
@@ -537,7 +545,6 @@
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 3;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_ASSET_PATHS = "\"CheerLot/Preview Content\"";
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = D8KHM6Q8SA;
 				ENABLE_PREVIEWS = YES;
@@ -584,7 +591,6 @@
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 3;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_ASSET_PATHS = "\"CheerLot/Preview Content\"";
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = D8KHM6Q8SA;
 				ENABLE_PREVIEWS = YES;
