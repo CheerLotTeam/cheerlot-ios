@@ -119,62 +119,36 @@ public struct TypeStyle {
 /// Font.Pretendard.semibold.uiFont(size: 20)
 /// ```
 public extension Font {
-  enum SUITE {
-    case heavy
-    case extrabold
-    case bold
-    
-    var value: String {
-      switch self {
-      case .heavy:
-        return "SUITE-Heavy"
-      case .extrabold:
-        return "SUITE-ExtraBold"
-      case .bold:
-        return "SUITE-Bold"
-      }
-    }
+  enum RobotoCondensed: String {
+    case black = "RobotoCondensed-Black"
     
     /// UIKit 폰트 반환
-    func uiFont(size: CGFloat) -> UIFont {
-      UIFont(name: value, size: size)
-      ?? UIFont.systemFont(ofSize: size)
-    }
-    
-    /// SwiftUI 폰트 반환
-    func swiftUIFont(size: CGFloat) -> Font {
-      Font.custom(value, size: size)
-    }
+     func uiFont(size: CGFloat) -> UIFont {
+       UIFont(name: rawValue, size: size)
+         ?? .systemFont(ofSize: size)
+     }
+
+     /// SwiftUI 폰트 반환
+     func swiftUIFont(size: CGFloat) -> Font {
+       .custom(rawValue, size: size)
+     }
   }
   
-  enum Pretendard {
-    case bold
-    case semibold
-    case medium
-    case regular
-    
-    var value: String {
-      switch self {
-      case .bold:
-        return "Pretendard-Bold"
-      case .semibold:
-        return "Pretendard-SemiBold"
-      case .medium:
-        return "Pretendard-Medium"
-      case .regular:
-        return "Pretendard-Regular"
-      }
-    }
+  enum Pretendard: String {
+    case bold = "Pretendard-Bold"
+    case semibold = "Pretendard-SemiBold"
+    case medium = "Pretendard-Medium"
+    case regular = "Pretendard-Regular"
     
     /// UIKit 폰트 반환
     func uiFont(size: CGFloat) -> UIFont {
-      UIFont(name: value, size: size)
-        ?? UIFont.systemFont(ofSize: size)
+      UIFont(name: rawValue, size: size)
+      ?? .systemFont(ofSize: size)
     }
     
     /// SwiftUI 폰트 반환
     func swiftUIFont(size: CGFloat) -> Font {
-      Font.custom(value, size: size)
+      .custom(rawValue, size: size)
     }
   }
 }
@@ -182,59 +156,33 @@ public extension Font {
 // MARK: - Style Presets
 /// 프로젝트 전역에서 사용 가능한 텍스트 스타일 프리셋 모음
 public extension TypeStyle {
-  // MARK: - SUITE
-  /// Heavy 32pt
-  static let H1 = TypeStyle(
-    font: Font.SUITE.heavy.swiftUIFont(size: 32),
-    uiFont: Font.SUITE.heavy.uiFont(size: 32),
-    size: 32,
-    lineHeight: 1.3,
-    letterSpacing: -0.04
-  )
   
-  /// Heavy 30pt
-  static let H2 = TypeStyle(
-    font: Font.SUITE.heavy.swiftUIFont(size: 30),
-    uiFont: Font.SUITE.heavy.uiFont(size: 30),
-    size: 30,
-    lineHeight: 1.3,
-    letterSpacing: -0.04
-  )
-  
-  /// ExtraBold 30pt
+  // MARK: - RobotoCondensed
+  /// Black 38pt
   static let T1 = TypeStyle(
-    font: Font.SUITE.extrabold.swiftUIFont(size: 30),
-    uiFont: Font.SUITE.extrabold.uiFont(size: 30),
-    size: 30,
-    lineHeight: 1.3,
-    letterSpacing: -0.04
+    font: Font.RobotoCondensed.black.swiftUIFont(size: 38),
+    uiFont: Font.RobotoCondensed.black.uiFont(size: 38),
+    size: 38,
+    lineHeight: 1.0,
+    letterSpacing: 0
   )
   
-  /// ExtraBold 28pt
+  /// Black 30pt
   static let T2 = TypeStyle(
-    font: Font.SUITE.extrabold.swiftUIFont(size: 28),
-    uiFont: Font.SUITE.extrabold.uiFont(size: 28),
-    size: 28,
-    lineHeight: 1.3,
-    letterSpacing: -0.04
+    font: Font.RobotoCondensed.black.swiftUIFont(size: 30),
+    uiFont: Font.RobotoCondensed.black.uiFont(size: 30),
+    size: 30,
+    lineHeight: 1.0,
+    letterSpacing: 0
   )
   
-  /// ExtraBold 26pt
+  /// Black 24pt
   static let T3 = TypeStyle(
-    font: Font.SUITE.extrabold.swiftUIFont(size: 26),
-    uiFont: Font.SUITE.extrabold.uiFont(size: 26),
-    size: 26,
-    lineHeight: 1.3,
-    letterSpacing: -0.04
-  )
-  
-  /// Bold 24pt
-  static let T4 = TypeStyle(
-    font: Font.SUITE.bold.swiftUIFont(size: 24),
-    uiFont: Font.SUITE.bold.uiFont(size: 24),
+    font: Font.RobotoCondensed.black.swiftUIFont(size: 24),
+    uiFont: Font.RobotoCondensed.black.uiFont(size: 24),
     size: 24,
-    lineHeight: 1.3,
-    letterSpacing: -0.04
+    lineHeight: 0.9,
+    letterSpacing: 0
   )
   
   // MARK: - Pretendard
@@ -265,8 +213,35 @@ public extension TypeStyle {
     letterSpacing: -0.04
   )
   
-  /// SemiBold 24pt
+  /// Bold 12pt
+  static let B4 = TypeStyle(
+    font: Font.Pretendard.bold.swiftUIFont(size: 12),
+    uiFont: Font.Pretendard.bold.uiFont(size: 12),
+    size: 12,
+    lineHeight: 1.2,
+    letterSpacing: 0
+  )
+  
+  /// SemiBold 48pt
   static let SB1 = TypeStyle(
+    font: Font.Pretendard.semibold.swiftUIFont(size: 48),
+    uiFont: Font.Pretendard.semibold.uiFont(size: 48),
+    size: 48,
+    lineHeight: 1.0,
+    letterSpacing: 0
+  )
+  
+  /// SemiBold 32pt
+  static let SB2 = TypeStyle(
+    font: Font.Pretendard.semibold.swiftUIFont(size: 32),
+    uiFont: Font.Pretendard.semibold.uiFont(size: 32),
+    size: 32,
+    lineHeight: 1.5,
+    letterSpacing: 0
+  )
+  
+  /// SemiBold 24pt
+  static let SB3 = TypeStyle(
     font: Font.Pretendard.semibold.swiftUIFont(size: 24),
     uiFont: Font.Pretendard.semibold.uiFont(size: 24),
     size: 24,
@@ -275,7 +250,7 @@ public extension TypeStyle {
   )
   
   /// SemiBold 22pt
-  static let SB2 = TypeStyle(
+  static let SB4 = TypeStyle(
     font: Font.Pretendard.semibold.swiftUIFont(size: 22),
     uiFont: Font.Pretendard.semibold.uiFont(size: 22),
     size: 22,
@@ -284,7 +259,7 @@ public extension TypeStyle {
   )
   
   /// SemiBold 20pt
-  static let SB3 = TypeStyle(
+  static let SB5 = TypeStyle(
     font: Font.Pretendard.semibold.swiftUIFont(size: 20),
     uiFont: Font.Pretendard.semibold.uiFont(size: 20),
     size: 20,
@@ -293,12 +268,57 @@ public extension TypeStyle {
   )
   
   /// SemiBold 18pt
-  static let SB4 = TypeStyle(
+  static let SB6 = TypeStyle(
     font: Font.Pretendard.semibold.swiftUIFont(size: 18),
     uiFont: Font.Pretendard.semibold.uiFont(size: 18),
     size: 18,
     lineHeight: 1.3,
     letterSpacing: -0.04
+  )
+  
+  /// SemiBold 16pt
+  static let SB7 = TypeStyle(
+    font: Font.Pretendard.semibold.swiftUIFont(size: 16),
+    uiFont: Font.Pretendard.semibold.uiFont(size: 16),
+    size: 16,
+    lineHeight: 1.3,
+    letterSpacing: -0.04
+  )
+  
+  /// SemiBold 14pt
+  static let SB8 = TypeStyle(
+    font: Font.Pretendard.semibold.swiftUIFont(size: 14),
+    uiFont: Font.Pretendard.semibold.uiFont(size: 14),
+    size: 14,
+    lineHeight: 1.3,
+    letterSpacing: -0.04
+  )
+  
+  /// SemiBold 12pt
+  static let SB9 = TypeStyle(
+    font: Font.Pretendard.semibold.swiftUIFont(size: 12),
+    uiFont: Font.Pretendard.semibold.uiFont(size: 12),
+    size: 12,
+    lineHeight: 1.3,
+    letterSpacing: -0.04
+  )
+  
+  /// SemiBold 10pt
+  static let SB10 = TypeStyle(
+    font: Font.Pretendard.semibold.swiftUIFont(size: 10),
+    uiFont: Font.Pretendard.semibold.uiFont(size: 10),
+    size: 10,
+    lineHeight: 0,
+    letterSpacing: 0
+  )
+  
+  /// Medium 28pt
+  static let M0 = TypeStyle(
+    font: Font.Pretendard.medium.swiftUIFont(size: 28),
+    uiFont: Font.Pretendard.medium.uiFont(size: 28),
+    size: 28,
+    lineHeight: 1.3,
+    letterSpacing: 0
   )
   
   /// Medium 20pt
@@ -328,6 +348,33 @@ public extension TypeStyle {
     letterSpacing: -0.04
   )
   
+  /// Medium 14pt
+  static let M4 = TypeStyle(
+    font: Font.Pretendard.medium.swiftUIFont(size: 14),
+    uiFont: Font.Pretendard.medium.uiFont(size: 14),
+    size: 14,
+    lineHeight: 1.3,
+    letterSpacing: -0.04
+  )
+  
+  /// Medium 12pt
+  static let M5 = TypeStyle(
+    font: Font.Pretendard.medium.swiftUIFont(size: 12),
+    uiFont: Font.Pretendard.medium.uiFont(size: 12),
+    size: 12,
+    lineHeight: 1.3,
+    letterSpacing: -0.04
+  )
+  
+  /// Medium 10pt
+  static let M6 = TypeStyle(
+    font: Font.Pretendard.medium.swiftUIFont(size: 10),
+    uiFont: Font.Pretendard.medium.uiFont(size: 10),
+    size: 10,
+    lineHeight: 0,
+    letterSpacing: 0
+  )
+  
   /// Regular 16pt
   static let R1 = TypeStyle(
     font: Font.Pretendard.regular.swiftUIFont(size: 16),
@@ -342,6 +389,15 @@ public extension TypeStyle {
     font: Font.Pretendard.regular.swiftUIFont(size: 14),
     uiFont: Font.Pretendard.regular.uiFont(size: 14),
     size: 14,
+    lineHeight: 1.3,
+    letterSpacing: -0.04
+  )
+  
+  /// Regular 12pt
+  static let R3 = TypeStyle(
+    font: Font.Pretendard.regular.swiftUIFont(size: 12),
+    uiFont: Font.Pretendard.regular.uiFont(size: 12),
+    size: 12,
     lineHeight: 1.3,
     letterSpacing: -0.04
   )
