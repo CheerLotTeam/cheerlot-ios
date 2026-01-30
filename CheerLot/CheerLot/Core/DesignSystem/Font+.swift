@@ -308,7 +308,7 @@ public extension TypeStyle {
     font: Font.Pretendard.semibold.swiftUIFont(size: 10),
     uiFont: Font.Pretendard.semibold.uiFont(size: 10),
     size: 10,
-    lineHeight: 0,
+    lineHeight: 1.2,
     letterSpacing: 0
   )
   
@@ -371,7 +371,7 @@ public extension TypeStyle {
     font: Font.Pretendard.medium.swiftUIFont(size: 10),
     uiFont: Font.Pretendard.medium.uiFont(size: 10),
     size: 10,
-    lineHeight: 0,
+    lineHeight: 1.2,
     letterSpacing: 0
   )
   
