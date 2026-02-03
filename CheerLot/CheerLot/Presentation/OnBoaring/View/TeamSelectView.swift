@@ -43,7 +43,7 @@ struct TeamSelectView: View {
     VStack(spacing: DynamicLayout.dynamicValuebyHeight(15)) {
       LazyVGrid(columns: columns, spacing: DynamicLayout.dynamicValuebyHeight(9)) {
         ForEach(Theme.allCases) { theme in
-          TeamCard(theme: theme, isSelected: selectedTheme == theme)
+          TeamBtn(theme: theme, isSelected: selectedTheme == theme)
             .onTapGesture {
               selectedTheme = theme
               AnalyticsLogger.logCellClick(
