@@ -9,33 +9,33 @@ import SwiftUI
 
 /// 전체 선수 화면 전용 Asset VO입니다.
 struct TeamMembersAssetVO {
-  
+
   // MARK: - Properties
   let base: TeamAssetVO
-  
+
   // MARK: - Init
   init(team: TeamInfo) {
     self.base = TeamAssetVO(team: team)
   }
-  
+
   init(base: TeamAssetVO) {
     self.base = base
   }
-  
+
   // MARK: - Base Colors
-  
+
   /// 팀 Primary 컬러
   var primaryColor: Color {
     base.primary
   }
-  
+
   /// 팀 Secondary 컬러
   var secondaryColor: Color {
     base.secondary
   }
-  
+
   // MARK: - Team Card
-  
+
   /// 카드 배경 그라데이션 시작
   var cardGradientStart: Color {
     switch base.team.id {
@@ -53,7 +53,7 @@ struct TeamMembersAssetVO {
       return primaryColor.opacity(0.2)
     }
   }
-  
+
   /// 카드 배경 그라데이션 끝
   var cardGradientEnd: Color {
     switch base.team.id {
@@ -71,19 +71,19 @@ struct TeamMembersAssetVO {
       return primaryColor
     }
   }
-  
+
   /// 카드 배경 그라데이션
   var cardBackgroundGradient: LinearGradient {
     LinearGradient(
       colors: [
         cardGradientStart,
-        cardGradientEnd
+        cardGradientEnd,
       ],
       startPoint: .leading,
       endPoint: .trailing
     )
   }
-  
+
   /// 카드 서브 텍스트 컬러 (200)
   var cardSubtitleColor: Color {
     switch base.team.id {
@@ -101,7 +101,7 @@ struct TeamMembersAssetVO {
       return secondaryColor
     }
   }
-  
+
   /// 카드 텍스트 그림자 컬러 (600)
   var cardTextShadowColor: Color {
     switch base.team.id {

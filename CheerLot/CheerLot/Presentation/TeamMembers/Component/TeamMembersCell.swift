@@ -9,27 +9,27 @@ import SwiftUI
 
 /// 전체 선수 List Cell 입니다.
 struct TeamMembersCell: View {
-  
+
   // MARK: - Properties
   let asset: TeamMembersAssetVO
   let memberName: String
   let hasSong: Bool
   let backNumber: Int
-  
+
   // MARK: - Body
   var body: some View {
     HStack(spacing: 3) {
       Text(memberName)
         .font(.SB4)
         .foregroundStyle(.grayBlack)
-      
+
       Text("\(backNumber)")
         .font(.M3)
         .foregroundStyle(.gray400)
         .offset(y: -2)
-      
+
       Spacer()
-      
+
       Image(systemName: "play.fill")
         .resizable()
         .scaledToFit()

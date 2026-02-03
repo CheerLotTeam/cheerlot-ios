@@ -9,34 +9,34 @@ import SwiftUI
 
 /// 전체 선수 화면의 팀 카드입니다.
 struct TeamCard: View {
-  
+
   // MARK: - Properties
-  
+
   let asset: TeamMembersAssetVO
-  
+
   // MARK: - Init
-  
+
   init(teamInfo: TeamInfo) {
     self.asset = TeamMembersAssetVO(team: teamInfo)
   }
-  
+
   // MARK: - Body
-  
+
   var body: some View {
     ZStack {
       /// 기본 컬러
       asset.primaryColor
-      
+
       /// 그라데이션
       asset.cardBackgroundGradient
         .opacity(0.2)
-      
+
       /// 점박스 이미지
       Image(.teamCardBG)
         .resizable()
         .scaledToFill()
         .opacity(0.5)
-      
+
       /// 텍스트 모음
       textContents
     }
@@ -62,7 +62,7 @@ extension TeamCard {
           x: 0,
           y: 1
         )
-      
+
       Text(asset.base.team.slogan)
         .font(.M5)
         .foregroundStyle(asset.cardSubtitleColor)

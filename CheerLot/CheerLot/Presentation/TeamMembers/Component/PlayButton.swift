@@ -9,14 +9,14 @@ import SwiftUI
 
 /// 전체 선수 화면의 전체 재생 버튼입니다.
 struct PlayButton: View {
-  
+
   // MARK: - Properties
-  
+
   let action: () -> Void
   let asset: TeamMembersAssetVO
-  
+
   // MARK: - Body
-  
+
   var body: some View {
     Button {
       action()
@@ -25,7 +25,7 @@ struct PlayButton: View {
         Text("전체 재생")
           .font(.M5)
           .foregroundColor(.grayWhite)
-        
+
         Image(.musicNote)
           .resizable()
           .frame(width: 15, height: 14)

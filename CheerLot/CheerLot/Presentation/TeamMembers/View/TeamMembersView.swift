@@ -9,23 +9,23 @@ import SwiftUI
 
 /// 전체 선수 화면입니다.
 struct TeamMembersView: View {
-  
+
   // MARK: - Properties
   let teamInfo: TeamInfo
   private let asset: TeamMembersAssetVO
-  
+
   // MARK: - Init
   init(teamInfo: TeamInfo) {
     self.teamInfo = teamInfo
     self.asset = TeamMembersAssetVO(team: teamInfo)
   }
-  
+
   // MARK: - Body
   var body: some View {
     ScrollView {
       LazyVStack(spacing: 16) {
         header
-        
+
         ForEach(mockMembers) { member in
           TeamMembersCell(
             asset: asset,
@@ -52,16 +52,16 @@ extension TeamMembersView {
       infoPlayRow
     }
   }
-  
+
   /// 곡 수 + 전체 재생 버튼
   private var infoPlayRow: some View {
     HStack {
       Text("총 \(mockMembers.count)곡")
         .font(.M4)
         .foregroundStyle(.gray400)
-      
+
       Spacer()
-      
+
       PlayButton(
         action: { print("전체 재생") },
         asset: asset
@@ -100,7 +100,7 @@ private let mockMembers: [Member] = [
   Member(name: "박선수", backNumber: 10, hasSong: true),
   Member(name: "김선수", backNumber: 23, hasSong: true),
   Member(name: "이선수", backNumber: 7, hasSong: false),
-  Member(name: "박선수", backNumber: 10, hasSong: true)
+  Member(name: "박선수", backNumber: 10, hasSong: true),
 ]
 
 #Preview {
