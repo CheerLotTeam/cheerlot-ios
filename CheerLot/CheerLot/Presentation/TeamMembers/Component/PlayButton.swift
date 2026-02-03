@@ -1,20 +1,22 @@
 //
-//  PlayBtn.swift
+//  PlayButton.swift
 //  CheerLot
 //
-//  Created by 이승진 on 2/2/26.
+//  Created by 이승진 on 2/3/26.
 //
 
 import SwiftUI
 
 /// 전체 선수 화면의 전체 재생 버튼입니다.
-struct PlayBtn: View {
+struct PlayButton: View {
   
   // MARK: - Properties
+  
   let action: () -> Void
-  let theme: Theme
+  let asset: TeamMembersAssetVO
   
   // MARK: - Body
+  
   var body: some View {
     Button {
       action()
@@ -34,12 +36,17 @@ struct PlayBtn: View {
       .padding(.horizontal, 10)
       .background(
         RoundedRectangle(cornerRadius: 12)
-          .foregroundStyle(theme.primaryColor)
+          .foregroundStyle(asset.primaryColor)
       )
     }
   }
 }
 
 #Preview {
-  PlayBtn(action: { print("전체 재생 버튼입니다") }, theme: .SS)
+  PlayButton(
+    action: { print("전체 재생 버튼입니다") },
+    asset: TeamMembersAssetVO(
+      team: TeamDataSource.toEntity(.samsung)
+    )
+  )
 }
