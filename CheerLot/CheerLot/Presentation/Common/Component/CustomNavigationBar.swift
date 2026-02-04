@@ -18,7 +18,7 @@ enum NavigationBarItem {
     case custom(AnyView)
 }
 
-struct ToolbarItemBuilder {
+struct ToolBarItemBuilder {
     static func buildItem(for item: NavigationBarItem, placement: ToolbarItemPlacement) -> some ToolbarContent {
         ToolbarItem(placement: placement) {
             buildView(for: item)

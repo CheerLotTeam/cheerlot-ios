@@ -58,25 +58,25 @@ extension View {
                 if let leftItem {
                     if #available(iOS 26.0, *) {
                         ToolbarItem(placement: .topBarLeading) {
-                            ToolbarItemBuilder.buildView(for: leftItem)
+                            ToolBarItemBuilder.buildView(for: leftItem)
                         }
                         .sharedBackgroundVisibility(.hidden)
                     } else {
                         ToolbarItem(placement: .topBarLeading) {
-                            ToolbarItemBuilder.buildView(for: leftItem)
+                            ToolBarItemBuilder.buildView(for: leftItem)
                         }
                     }
                 }
                 
                 if let centerItem {
                     ToolbarItem(placement: .principal) {
-                        ToolbarItemBuilder.buildView(for: centerItem)
+                        ToolBarItemBuilder.buildView(for: centerItem)
                     }
                 }
                 
                 if let rightItem {
                     ToolbarItem(placement: .topBarTrailing) {
-                        ToolbarItemBuilder.buildView(for: rightItem)
+                        ToolBarItemBuilder.buildView(for: rightItem)
                     }
                 }
             }
