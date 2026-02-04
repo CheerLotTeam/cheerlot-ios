@@ -49,7 +49,6 @@ final class TeamAssetVO {
     }()
 }
 
-
 extension TeamAssetVO {
     private static func getAssetPrefix(for teamId: String) -> String {
         let normalizedId = teamId.uppercased()
