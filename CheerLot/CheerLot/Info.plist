@@ -31,7 +31,5 @@
 		<string>SUITE-Regular.otf</string>
 		<string>SUITE-SemiBold.otf</string>
 	</array>
-	<key>UIDesignRequiresCompatibility</key>
-	<true/>
 </dict>
 </plist>
