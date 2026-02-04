@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct TeamCard: View {
+struct TeamBtn: View {
   let theme: Theme
   let isSelected: Bool
 
@@ -37,5 +37,5 @@ struct TeamCard: View {
 }
 
 #Preview {
-  TeamCard(theme: .HT, isSelected: true)
+  TeamBtn(theme: .HT, isSelected: true)
 }

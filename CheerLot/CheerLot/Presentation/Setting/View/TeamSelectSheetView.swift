@@ -51,7 +51,7 @@ struct TeamSelectSheetView: View {
 
       LazyVGrid(columns: columns, spacing: 9) {
         ForEach(Theme.allCases) { theme in
-          TeamCard(theme: theme, isSelected: tempSelectedTheme == theme)
+          TeamBtn(theme: theme, isSelected: tempSelectedTheme == theme)
             .onTapGesture {
               tempSelectedTheme = theme
               AnalyticsLogger.logCellClick(
