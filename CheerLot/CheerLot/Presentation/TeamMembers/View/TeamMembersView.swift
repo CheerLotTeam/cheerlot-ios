@@ -11,13 +11,11 @@ import SwiftUI
 struct TeamMembersView: View {
 
   // MARK: - Properties
-  let teamInfo: TeamInfo
   private let asset: TeamMembersAssetVO
 
   // MARK: - Init
-  init(teamInfo: TeamInfo) {
-    self.teamInfo = teamInfo
-    self.asset = TeamMembersAssetVO(team: teamInfo)
+  init(asset: TeamMembersAssetVO) {
+    self.asset = asset
   }
 
   // MARK: - Body
@@ -48,7 +46,7 @@ extension TeamMembersView {
   /// 상단 헤더 영역 (TeamCard + infoPlayRow)
   private var header: some View {
     VStack(alignment: .center, spacing: 12) {
-      TeamCard(teamInfo: teamInfo)
+      TeamCard(asset: asset)
       infoPlayRow
     }
   }
@@ -105,6 +103,8 @@ private let mockMembers: [Member] = [
 
 #Preview {
   TeamMembersView(
-    teamInfo: TeamDataSource.toEntity(.kia)
+    asset: TeamMembersAssetVO(
+      base: TeamAssetVO(team: TeamDataSource.toEntity(.kia))
+    )
   )
 }

@@ -14,12 +14,6 @@ struct TeamCard: View {
 
   let asset: TeamMembersAssetVO
 
-  // MARK: - Init
-
-  init(teamInfo: TeamInfo) {
-    self.asset = TeamMembersAssetVO(team: teamInfo)
-  }
-
   // MARK: - Body
 
   var body: some View {
@@ -73,5 +67,11 @@ extension TeamCard {
 }
 
 #Preview {
-  TeamCard(teamInfo: TeamDataSource.toEntity(.samsung))
+  TeamCard(
+    asset: TeamMembersAssetVO(
+      base: TeamAssetVO(
+        team: TeamDataSource.toEntity(.samsung)
+      )
+    )
+  )
 }
