@@ -25,6 +25,14 @@ final class TeamAssetVO {
 
   var primary: Color { colors.primary }
   var secondary: Color { colors.secondary }
+  
+  lazy var primaryPalette: Color.TeamPrimaryPalette = {
+    Color.teamPrimaryPalette(for: assetPrefix)
+  }()
+  
+  lazy var secondaryPalette: Color.TeamSecondaryPalette = {
+    Color.teamSecondaryPalette(for: assetPrefix)
+  }()
 
   // MARK: - Background Images (후에 교체 요망)
   lazy var mainTopBackground: Image = {
