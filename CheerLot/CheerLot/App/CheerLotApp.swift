@@ -90,7 +90,7 @@ struct CheerLotApp: App {
     WindowGroup {
       switch appFlowViewModel.appState {
       case .splash:
-        SplashView()
+        MainTabView(team: TeamDataSource.toEntity(.samsung))
           .environmentObject(appFlowViewModel)  // 상태 전환 위해 주입
       case .main:
         NavigationRoutingView()
