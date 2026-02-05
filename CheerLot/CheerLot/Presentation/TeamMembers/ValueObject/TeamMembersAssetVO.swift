@@ -32,25 +32,25 @@ struct TeamMembersAssetVO {
   }
 
   // MARK: - Team Card
-  
+
   /// 카드 배경 그라데이션
   var cardBackgroundGradient: LinearGradient {
     LinearGradient(
       colors: [
         base.primaryPalette.color200,
         base.primaryPalette.color200,
-        base.primaryPalette.color600
+        base.primaryPalette.color600,
       ],
       startPoint: .top,
       endPoint: .bottom
     )
   }
-  
+
   /// 카드 서브 텍스트 컬러
   var cardSubtitleColor: Color {
     base.primaryPalette.color200
   }
-  
+
   /// 카드 텍스트 그림자 컬러
   var cardTextShadowColor: Color {
     base.primaryPalette.color600

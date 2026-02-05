@@ -98,7 +98,7 @@ private let mockMembers: [Member] = [
   Member(name: "박선수", backNumber: 10, hasSong: true),
   Member(name: "김선수", backNumber: 23, hasSong: true),
   Member(name: "이선수", backNumber: 7, hasSong: false),
-  Member(name: "박선수", backNumber: 10, hasSong: true)
+  Member(name: "박선수", backNumber: 10, hasSong: true),
 ]
 
 #Preview {
