@@ -45,11 +45,12 @@ struct TeamMembersCell: View {
 #Preview {
   TeamMembersCell(
     asset: TeamMembersAssetVO(
-      team: TeamDataSource.toEntity(.samsung)
+      base: TeamAssetVO(
+        team: TeamDataSource.toEntity(.samsung)
+      )
     ),
     memberName: "김선수",
     hasSong: true,
     backNumber: 23
   )
-  .padding()
 }

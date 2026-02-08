@@ -44,9 +44,13 @@ struct PlayButton: View {
 
 #Preview {
   PlayButton(
-    action: { print("전체 재생 버튼입니다") },
+    action: {
+      print("전체 재생 버튼입니다")
+    },
     asset: TeamMembersAssetVO(
-      team: TeamDataSource.toEntity(.samsung)
+      base: TeamAssetVO(
+        team: TeamDataSource.toEntity(.samsung)
+      )
     )
   )
 }
