@@ -8,17 +8,17 @@
 import Foundation
 
 final class TeamInfoRepositoryImpl: TeamInfoRepository {
-  func getTeamInfo(_ teamId: String) -> TeamInfo? {
+  func fetchTeamInfo(_ teamId: TeamID) throws -> TeamInfo {
     // 대소문자 무관하게 처리
-    let normalizedId = teamId.uppercased()
+    let normalizedId = teamId.value.uppercased()
 
     guard let teamCode = TeamDataSource.TeamCode(rawValue: normalizedId) else {
-      return nil
+        throw RepositoryError.notFound
     }
     return TeamDataSource.toEntity(teamCode)
   }
 
-  func getAllTeamInfo() -> [TeamInfo] {
+  func fetchAllTeamInfo() -> [TeamInfo] {
     return TeamDataSource.TeamCode.allCases.map { code in
       TeamDataSource.toEntity(code)
     }
