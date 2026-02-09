@@ -7,15 +7,83 @@
 
 import Foundation
 
-/// 앱 전역에서 사용할 의존성 주입(Dependency Injection) 컨테이너 클래스
-class DIContainer: ObservableObject {
+/// Thread-safe한 DI Container
+final class DIContainer {
+    static let shared = DIContainer()
+    
+    private var singletons: [String: Any] = [:]
+    private var factories: [String: (DIContainer) -> Any] = [:]
+    private let lock = NSLock()
+    
+    private init() {}
+    
+    /// Singleton 등록 (한 번만 생성)
+    func registerSingleton<T>(
+        _ type: T.Type,
+        _ factory: @escaping () -> T
+    ) {
+        lock.lock()
+        defer { lock.unlock() }
+        
+        let key = String(describing: type)
+        let instance = factory()
+        singletons[key] = instance
+    }
+    
+    /// Transient 등록 (매번 생성)
+    func register<T>(
+        _ type: T.Type,
+        _ factory: @escaping (DIContainer) -> T
+    ) {
+        lock.lock()
+        defer { lock.unlock() }
+        
+        let key = String(describing: type)
+        factories[key] = factory
+    }
+    
+    /// 의존성 해결
+    func resolve<T>(_ type: T.Type) -> T {
+        lock.lock()
+        defer { lock.unlock() }
+        
+        let key = String(describing: type)
+        
+        // 1. Singleton 확인
+        if let singleton = singletons[key] as? T {
+            return singleton
+        }
+        
+        // 2. Factory 확인
+        if let factory = factories[key] {
+            guard let instance = factory(self) as? T else {
+                fatalError("\(key)의 타입이 일치하지 않습니다.")
+            }
+            return instance
+        }
+        
+        fatalError("\(key)가 등록되지 않았습니다. assemble()을 먼저 호출하세요.")
+    }
+    
+    /// 모든 의존성 조립
+    func assemble() {
+        assembleRepositories()
+        assembleUseCases()
+    }
+}
 
-  /// 화면 전환을 제어하는 네비게이션 라우터
-  @Published var navigationRouter: NavigationRouter
-
-  init(
-    navigationRouter: NavigationRouter = .init(),
-  ) {
-    self.navigationRouter = navigationRouter
-  }
+extension DIContainer {
+    private func assembleRepositories() {
+        registerSingleton(TeamSelectionRepository.self) {
+            TeamSelectionRepositoryImpl()
+        }
+    }
+    
+    private func assembleUseCases() {
+        register(TeamSelectionUseCase.self) { container in
+            TeamSelectionUseCaseImpl(
+                teamSelectionRepository: container.resolve(TeamSelectionRepository.self)
+            )
+        }
+    }
 }
