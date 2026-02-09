@@ -9,7 +9,7 @@ import SwiftUI
 
 struct StartingMemberListView: View {
 
-  @EnvironmentObject var container: DIContainer
+//  @EnvironmentObject var container: DIContainer
   @EnvironmentObject private var themeManager: ThemeManager
   @Binding var startingMembers: [Player]
 
@@ -117,9 +117,9 @@ struct StartingMemberListView: View {
           // 1개:  바로 재생
           if let song = cheerSongs.first {
             let index = startIndexFor(player: player.wrappedValue, song: song)
-            container.navigationRouter.push(
-              to:
-                .playCheerSong(players: startingMembers, startIndex: index))
+//            container.navigationRouter.push(
+//              to:
+//                .playCheerSong(players: startingMembers, startIndex: index))
           }
         default:
           // 2개 이상: 시트 열기
@@ -137,7 +137,7 @@ struct StartingMemberListView: View {
           screen: screenName,
           button: LoggerEvent.ButtonEvent.changePlayerBtnTapped
         )
-        container.navigationRouter.push(to: .changeMemember(selectedPlayer: player.wrappedValue))
+        
       } label: {
         Label("Change", image: .changeIcon)
       }
@@ -148,7 +148,7 @@ struct StartingMemberListView: View {
       Button {
         AnalyticsLogger.logButtonClick(
           screen: screenName, button: LoggerEvent.ButtonEvent.changePlayerBtnTapped)
-        container.navigationRouter.push(to: .changeMemember(selectedPlayer: player.wrappedValue))
+//        container.navigationRouter.push(to: .changeMemember(selectedPlayer: player.wrappedValue))
       } label: {
         Label("교체", systemImage: "arrow.trianglehead.2.clockwise.rotate.90")
       }
@@ -159,12 +159,12 @@ struct StartingMemberListView: View {
           Button {
             AnalyticsLogger.logCellClick(
               screen: screenName, cell: LoggerEvent.CellEvent.cheerSongTapped, index: song.id)
-            container.navigationRouter.push(
-              to:
-                .playCheerSong(
-                  players: [player.wrappedValue],
-                  startIndex: index
-                ))
+//            container.navigationRouter.push(
+//              to:
+//                .playCheerSong(
+//                  players: [player.wrappedValue],
+//                  startIndex: index
+//                ))
           } label: {
             Label(song.title, systemImage: "play.fill")
           }

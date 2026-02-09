@@ -9,7 +9,7 @@ import SwiftUI
 
 struct TeamMemberListView: View {
   //  @EnvironmentObject var router: NavigationRouter
-  @EnvironmentObject var container: DIContainer
+//  @EnvironmentObject var container: DIContainer
   @EnvironmentObject private var themeManager: ThemeManager
   @Binding var teamMembers: [Player]
 
@@ -83,8 +83,8 @@ struct TeamMemberListView: View {
           // 1개:  바로 재생
           if let song = cheerSongs.first {
             let index = teamIndexFor(player: player.wrappedValue, song: song)
-            container.navigationRouter.push(
-              to: .playCheerSong(players: teamMembers, startIndex: index))
+//            container.navigationRouter.push(
+//              to: .playCheerSong(players: teamMembers, startIndex: index))
           }
         default:
           // 2개 이상: 시트 열기
@@ -104,12 +104,12 @@ struct TeamMemberListView: View {
               cell: LoggerEvent.CellEvent.cheerSongTapped,
               index: song.id
             )
-            container.navigationRouter.push(
-              to:
-                .playCheerSong(
-                  players: [player.wrappedValue],
-                  startIndex: index
-                ))
+//            container.navigationRouter.push(
+//              to:
+//                .playCheerSong(
+//                  players: [player.wrappedValue],
+//                  startIndex: index
+//                ))
           } label: {
             Label(song.title, systemImage: "play.fill")
           }

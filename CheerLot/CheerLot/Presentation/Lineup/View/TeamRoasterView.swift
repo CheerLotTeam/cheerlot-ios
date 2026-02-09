@@ -10,7 +10,7 @@ import SwiftUI
 
 /// 아마 이게 MainView?
 struct TeamRoasterView: View {
-  @EnvironmentObject var container: DIContainer
+//  @EnvironmentObject var container: DIContainer
   @EnvironmentObject private var themeManager: ThemeManager
   @Environment(\.modelContext) private var modelContext
   @Bindable private var viewModel = TeamRoasterViewModel.shared
@@ -122,7 +122,7 @@ struct TeamRoasterView: View {
         Button(action: {
           AnalyticsLogger.logButtonClick(
             screen: screenName, button: LoggerEvent.ButtonEvent.appInfoBtnTapped)
-          container.navigationRouter.push(to: .appInfo)
+//          container.navigationRouter.push(to: .appInfo)
         }) {
           Image(.info)
             .resizable()
