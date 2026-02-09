@@ -5,7 +5,7 @@
 //  Created by 이현주 on 2/9/26.
 //
 
-import Foundation
+import SwiftUI
 
 enum MainRoute: Hashable {
     case settings
@@ -18,4 +18,27 @@ enum MainRoute: Hashable {
     case termsOfService
     case privacyPolicy
     case copyright
+}
+
+extension AppCoordinator {
+    
+    @ViewBuilder
+    func buildView(for route: MainRoute) -> some View {
+//        let factory = ViewModelFactory.shared
+        
+        // TODO: - View 넣기
+        switch route {
+        case .settings:
+
+        case .serviceInfo:
+            
+        case .makerInfo:
+            
+        case .termsOfService:
+            
+        case .privacyPolicy:
+            
+        case .copyright:
+        }
+    }
 }

@@ -38,3 +38,28 @@ enum ModalRoute: Identifiable {
         }
     }
 }
+
+extension AppCoordinator {
+    @ViewBuilder
+    func buildModalView(for route: ModalRoute) -> some View {
+//        let factory = ViewModelFactory.shared
+        
+        // TODO: - View 넣기
+        switch route {
+        case let .cheerSongList:
+            
+        case let .lineupChange:
+            
+        case let .teamChange:
+            
+        case let .inquiry:
+            
+        case let .servicePage:
+            
+        case let .lineupPlayback:
+            
+        case let .basePlayback:
+            
+        }
+    }
+}
