@@ -47,19 +47,19 @@ extension AppCoordinator {
         // TODO: - View 넣기
         switch route {
         case let .cheerSongList:
-            
+            Color.clear
         case let .lineupChange:
-            
+            Color.clear
         case let .teamChange:
-            
+            Color.clear
         case let .inquiry:
-            
+            Color.clear
         case let .servicePage:
-            
+            Color.clear
         case let .lineupPlayback:
-            
+            Color.clear
         case let .basePlayback:
-            
+            Color.clear
         }
     }
 }

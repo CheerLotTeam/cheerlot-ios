@@ -29,16 +29,17 @@ extension AppCoordinator {
         // TODO: - View 넣기
         switch route {
         case .settings:
-
+            Color.clear
         case .serviceInfo:
-            
+            Color.clear
         case .makerInfo:
-            
+            Color.clear
         case .termsOfService:
-            
+            Color.clear
         case .privacyPolicy:
-            
+            Color.clear
         case .copyright:
+            Color.clear
         }
     }
 }
