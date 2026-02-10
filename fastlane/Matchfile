@@ -10,4 +10,4 @@ app_identifier([
   "group.com.CheerLot.WidgetCheerLot"
 ])
 
-# readonly(true)
+readonly(true)
