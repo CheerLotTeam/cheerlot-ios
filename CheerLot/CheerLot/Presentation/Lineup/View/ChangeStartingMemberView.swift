@@ -9,7 +9,7 @@ import SwiftUI
 
 struct ChangeStartingMemberView: View {
 
-  @EnvironmentObject var container: DIContainer
+//  @EnvironmentObject var container: DIContainer
   @EnvironmentObject private var themeManager: ThemeManager
   let viewModel = TeamRoasterViewModel.shared
   // 교체 가능한 선수 리스트
@@ -46,7 +46,7 @@ struct ChangeStartingMemberView: View {
     .navigationBarBackButtonHidden(true)
     .customNavigation(
       title: "선수 교체",
-      leadingAction: { container.navigationRouter.pop() },
+      leadingAction: {  },
       showDoneButton: true,
       trailingAction: {
         AnalyticsLogger.logButtonClick(
@@ -56,7 +56,7 @@ struct ChangeStartingMemberView: View {
           Task {
             await viewModel.swapBattingOrder(
               playerToBench: changeForPlayer, playerToStart: playerToStart)
-            container.navigationRouter.pop()
+            
           }
         } else {
           // 교체할 선수가 선택되지 않은 경우
