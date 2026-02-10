@@ -193,7 +193,7 @@ extension TypeStyle {
     lineHeight: 1.3,
     letterSpacing: -0.04
   )
-  
+
   /// Bold 28pt,  lineHeight 1.6%
   public static let B1_1 = TypeStyle(
     font: Font.Pretendard.bold.swiftUIFont(size: 28),

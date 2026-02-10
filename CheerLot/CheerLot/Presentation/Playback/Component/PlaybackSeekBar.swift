@@ -30,7 +30,8 @@ struct PlaybackSeekBar: View {
   var body: some View {
     GeometryReader { geometry in
       let width = geometry.size.width
-      let progress = maxValue > 0
+      let progress =
+        maxValue > 0
         ? min(max(value / maxValue, 0), 1)
         : 0
       let xPosition = width * progress
