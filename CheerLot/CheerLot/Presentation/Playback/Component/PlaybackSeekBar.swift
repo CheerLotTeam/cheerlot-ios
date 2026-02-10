@@ -86,6 +86,7 @@ extension PlaybackSeekBar {
     locationX: CGFloat,
     width: CGFloat
   ) -> Double {
+    guard width > 0 else { return value }
     let percent = min(max(locationX / width, 0), 1)
     let newValue = percent * maxValue
     value = newValue

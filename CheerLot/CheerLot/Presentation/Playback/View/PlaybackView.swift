@@ -61,7 +61,7 @@ extension PlaybackView {
   /// 재생바 + 컨트롤뷰
   private var footer: some View {
     VStack(spacing: 20) {
-      progreesView
+      progressView
       controlView
     }
     .padding(.horizontal, 20)
@@ -69,7 +69,7 @@ extension PlaybackView {
   }
 
   /// 재생바
-  private var progreesView: some View {
+  private var progressView: some View {
     VStack(spacing: 8) {
       PlaybackSeekBar(
         value: $currentTime,
@@ -120,9 +120,7 @@ extension PlaybackView {
         )
         .foregroundStyle(.grayWhite)
     }
-    .buttonStyle(
-      PlaybackButtonStyle(size: center ? 56 : 56)
-    )
+    .buttonStyle(PlaybackButtonStyle(size: 56))
   }
 }
 
