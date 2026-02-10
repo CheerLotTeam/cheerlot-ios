@@ -6,7 +6,8 @@ username("sj8971@icloud.com") # Your Apple Developer Portal username
 
 app_identifier([
   "group.com.CheerLot",
-  "group.com.CheerLot.watchkitapp"
+  "group.com.CheerLot.watchkitapp",
+  "group.com.CheerLot.WidgetCheerLot"
 ])
 
-readonly(true)
+# readonly(true)
