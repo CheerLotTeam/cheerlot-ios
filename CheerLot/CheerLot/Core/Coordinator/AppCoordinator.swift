@@ -9,7 +9,7 @@ import SwiftUI
 
 @MainActor
 @Observable
-final class AppCoordinator: ObservableObject {
+final class AppCoordinator {
     var paths: [MainRoute] = []
     var modal: ModalRoute?
     

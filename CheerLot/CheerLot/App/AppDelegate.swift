@@ -5,7 +5,7 @@
 //  Created by 이현주 on 2/9/26.
 //
 
-import Foundation
+import UIKit
 import FirebaseCore
 import AdSupport
 import AppTrackingTransparency

@@ -13,7 +13,7 @@ final class DIContainer {
     
     private var singletons: [String: Any] = [:]
     private var factories: [String: (DIContainer) -> Any] = [:]
-    private let lock = NSLock()
+    private let lock = NSRecursiveLock()
     
     private init() {}
     
