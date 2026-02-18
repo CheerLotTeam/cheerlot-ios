@@ -25,7 +25,7 @@ struct PlaybackView: View {
       content
       footer
     }
-    .background(asset.primary)
+    .background(asset.primaryColor)
     .ignoresSafeArea()
   }
 }
@@ -125,5 +125,5 @@ extension PlaybackView {
 }
 
 #Preview {
-  PlaybackView(asset: TeamAssetVO(team: TeamDataSource.toEntity(.samsung)))
+    PlaybackView(asset: TeamAssetVO(TeamDataSource.toEntity(.samsung).id))
 }

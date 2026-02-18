@@ -10,6 +10,7 @@ import SwiftUI
 struct RootViewSwitcher: View {
     
     @State private var appState: AppState = .splash
+    @State private var teamSelectViewModel = ViewModelFactory.shared.createTeamSelectViewModel()
     
     // TODO: - 분리 예정
     @StateObject private var remoteConfigChecker = RemoteConfigChecker()
@@ -32,7 +33,7 @@ extension RootViewSwitcher {
                 }
             
         case .onboarding:
-            TeamSelectView()
+            TeamSelectView(viewModel: teamSelectViewModel)
                 .onReceive(
                     NotificationCenter.default.publisher(for: .teamSelected)
                 ) { notification in
@@ -72,11 +73,8 @@ extension RootViewSwitcher {
         let useCase = DIContainer.shared.resolve(TeamSelectionUseCase.self)
         
         if useCase.hasSelectedTeam() {
-            do {
-                let team = try useCase.getCurrentTeam()
+            if let team = useCase.getCurrentTeam() {
                 appState = .main(team: team)
-            } catch {
-                appState = .onboarding
             }
         } else {
             appState = .onboarding

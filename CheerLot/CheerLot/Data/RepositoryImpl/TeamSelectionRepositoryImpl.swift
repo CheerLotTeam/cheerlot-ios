@@ -23,28 +23,23 @@ final class TeamSelectionRepositoryImpl: TeamSelectionRepository {
         self.sharedDefaults = defaults
     }
     
-    func fetchCurrentTeam() throws -> TeamInfo {
+    func fetchCurrentTeam() -> TeamInfo? {
         // 1. UserDefaults에서 TeamID 가져오기
-        guard let teamId = sharedDefaults.string(forKey: Keys.selectedTeamId) else {
-            throw RepositoryError.notFound
-        }
+        guard let teamId = sharedDefaults.string(forKey: Keys.selectedTeamId) else { return nil }
         
         // 2. TeamCode로 변환
-        guard let teamCode = TeamDataSource.TeamCode(rawValue: teamId) else {
-            throw RepositoryError.invalidData
-        }
+        guard let teamCode = TeamDataSource.TeamCode(rawValue: teamId) else { return nil }
         
         return TeamDataSource.toEntity(teamCode)
     }
     
-    func updateSelectedTeam(_ team: TeamInfo) async throws {
-        sharedDefaults.set(team.id.value, forKey: Keys.selectedTeamId)
+    func updateSelectedTeam(_ teamId: TeamID) {
+        sharedDefaults.set(teamId.value, forKey: Keys.selectedTeamId)
         sharedDefaults.set(true, forKey: Keys.hasSelectedTeam)
-        sharedDefaults.synchronize()
         
         NotificationCenter.default.post(
             name: .teamSelected,
-            object: team
+            object: teamId
         )
     }
     
@@ -55,7 +50,6 @@ final class TeamSelectionRepositoryImpl: TeamSelectionRepository {
     func deleteSelectedTeam() {
         sharedDefaults.removeObject(forKey: Keys.selectedTeamId)
         sharedDefaults.set(false, forKey: Keys.hasSelectedTeam)
-        sharedDefaults.synchronize()
     }
 }
 

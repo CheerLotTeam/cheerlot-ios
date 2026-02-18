@@ -9,22 +9,22 @@ import Foundation
 
 final class TeamSelectionUseCaseImpl: TeamSelectionUseCase {
     
-    let teamSelectionRepository: TeamSelectionRepository
+    private let teamSelectionRepository: TeamSelectionRepository
     
     init(teamSelectionRepository: TeamSelectionRepository) {
         self.teamSelectionRepository = teamSelectionRepository
     }
     
-    func getCurrentTeam() throws -> TeamInfo {
-        try teamSelectionRepository.fetchCurrentTeam()
+    func getCurrentTeam() -> TeamInfo? {
+        teamSelectionRepository.fetchCurrentTeam()
     }
     
-    func selectTeam(_ team: TeamInfo) async throws {
-        try await teamSelectionRepository.updateSelectedTeam(team)
+    func selectTeam(_ teamId: TeamID) {
+        teamSelectionRepository.updateSelectedTeam(teamId)
     }
     
-    func changeTeam(_ team: TeamInfo) async throws {
-        try await teamSelectionRepository.updateSelectedTeam(team)
+    func changeTeam(_ teamId: TeamID) {
+        teamSelectionRepository.updateSelectedTeam(teamId)
     }
     
     func hasSelectedTeam() -> Bool {

@@ -46,7 +46,7 @@ struct TeamMembersCell: View {
   TeamMembersCell(
     asset: TeamMembersAssetVO(
       base: TeamAssetVO(
-        team: TeamDataSource.toEntity(.samsung)
+        TeamDataSource.toEntity(.samsung).id
       )
     ),
     memberName: "김선수",

@@ -17,7 +17,7 @@ struct MainTabView: View {
   @State private var selectedTab: TabKey = .lineup
 
   private var asset: TeamAssetVO {
-    TeamAssetVO(team: team)
+      TeamAssetVO(team.id)
   }
 
   private var showMiniPlayer: Bool {
@@ -80,7 +80,7 @@ extension MainTabView {
         tabContent(for: .search)
       }
     }
-    .tint(asset.primary)
+    .tint(asset.primaryColor)
     .tabBarMinimizeBehavior(.onScrollDown)
     .tabViewBottomAccessory {
       if showMiniPlayer {
@@ -103,7 +103,7 @@ extension MainTabView {
         tabContent(for: .search)
       }
     }
-    .tint(asset.primary)
+    .tint(asset.primaryColor)
   }
 }
 

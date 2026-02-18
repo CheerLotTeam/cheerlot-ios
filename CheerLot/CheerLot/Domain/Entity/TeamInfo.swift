@@ -14,14 +14,6 @@ struct TeamInfo: Identifiable, Hashable, Equatable {
     let longName: String
     let englishFullName: String
     let slogan: String
-    
-    init(id: TeamID, shortName: String, longName: String, englishFullName: String, slogan: String) {
-        self.id = id
-        self.shortName = shortName
-        self.longName = longName
-        self.englishFullName = englishFullName
-        self.slogan = slogan
-    }
 }
 
 struct TeamID: Hashable, Codable {

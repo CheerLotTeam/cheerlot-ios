@@ -9,11 +9,11 @@ import Foundation
 import SwiftData
 
 final class LocalStorage {
-    let modelContainer = {
+    lazy var modelContainer = {
         let schema = Schema([
             Team.self,
             Player.self,
-            CheerSong.self,
+            CheerSong.self
         ])
         
         let configuration = ModelConfiguration(
@@ -33,5 +33,3 @@ final class LocalStorage {
         }
     }()
 }
-
-// TODO: - DataMigrationService 위치 찾기

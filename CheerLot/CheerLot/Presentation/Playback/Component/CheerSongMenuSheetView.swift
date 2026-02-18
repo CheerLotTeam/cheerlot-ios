@@ -96,17 +96,17 @@ struct CheerSongMenuSheetView: View {
   }
 }
 
-#Preview {
-  CheerSongMenuSheetView(
-    player: Player(
-      cheerSongList: [
-        CheerSong(title: "기본 응원가", lyrics: "", audioFileName: ".mp3"),
-        CheerSong(title: "안타", lyrics: "", audioFileName: ".mp3"),
-      ],
-      jerseyNumber: 0, name: "구자욱", position: "좌타수", battingOrder: 1),
-    selectedTheme: .SS, startingMembers: []
-  )
-  .environmentObject(ThemeManager())
-//  .environmentObject(DIContainer())  // ⬅️ Router 포함
-  .modelContainer(for: [Team.self, Player.self, CheerSong.self], inMemory: true)
-}
+//#Preview {
+//  CheerSongMenuSheetView(
+//    player: Player(
+//      cheerSongList: [
+//        CheerSong(title: "기본 응원가", lyrics: "", audioFileName: ".mp3"),
+//        CheerSong(title: "안타", lyrics: "", audioFileName: ".mp3"),
+//      ],
+//      jerseyNumber: 0, name: "구자욱", position: "좌타수", battingOrder: 1),
+//    selectedTheme: .SS, startingMembers: []
+//  )
+//  .environmentObject(ThemeManager())
+////  .environmentObject(DIContainer())  // ⬅️ Router 포함
+//  .modelContainer(for: [Team.self, Player.self, CheerSong.self], inMemory: true)
+//}

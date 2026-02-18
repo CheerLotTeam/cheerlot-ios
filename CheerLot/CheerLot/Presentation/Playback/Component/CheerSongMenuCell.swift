@@ -24,8 +24,8 @@ struct CheerSongMenuCell: View {
   }
 }
 
-#Preview {
-  CheerSongMenuCell(
-    cheerSong: CheerSong(title: "기본 응원가", lyrics: "랄라라", audioFileName: "basic.mp3"),
-    selectedTheme: .SS)
-}
+//#Preview {
+//  CheerSongMenuCell(
+//    cheerSong: CheerSong(title: "기본 응원가", lyrics: "랄라라", audioFileName: "basic.mp3"),
+//    selectedTheme: .SS)
+//}

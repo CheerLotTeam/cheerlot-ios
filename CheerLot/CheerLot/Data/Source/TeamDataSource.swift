@@ -21,6 +21,33 @@ struct TeamDataSource {
     case samsung = "SAMSUNG"
     case ssg = "SSG"
   }
+    
+  private static let codeMapping: [(teamCode: TeamCode, apiCode: APICode)] = [
+    (.doosan, .doosan),
+    (.hanwha, .hanwha),
+    (.kia, .kia),
+    (.kiwoom, .kiwoom),
+    (.kt, .kt),
+    (.lg, .lg),
+    (.lotte, .lotte),
+    (.nc, .nc),
+    (.samsung, .samsung),
+    (.ssg, .ssg)
+  ]
+    
+  /// APICode (서버 전용, 내부에서만 사용)
+  private enum APICode: String {
+    case doosan = "ob"
+    case hanwha = "hh"
+    case kia = "ht"
+    case kiwoom = "wo"
+    case kt = "kt"
+    case lg = "lg"
+    case lotte = "lt"
+    case nc = "nc"
+    case samsung = "ss"
+    case ssg = "sk"
+  }
 
   /// TeamCode → TeamEntity 변환
   static func toEntity(_ code: TeamCode) -> TeamInfo {
@@ -40,7 +67,7 @@ struct TeamDataSource {
         shortName: "한화",
         longName: "한화 이글스",
         englishFullName: "HANWHA EAGLES",
-        slogan: "RIDE THE STORM"
+        slogan: "Ride The Storm"
       )
 
     case .lg:
@@ -49,7 +76,7 @@ struct TeamDataSource {
         shortName: "LG",
         longName: "LG 트윈스",
         englishFullName: "LG TWINS",
-        slogan: "무적 LG! 끝까지 TWINS!"
+        slogan: "승리를 향해, 하나의 트윈스"
       )
 
     case .lotte:
@@ -58,7 +85,7 @@ struct TeamDataSource {
         shortName: "롯데",
         longName: "롯데 자이언츠",
         englishFullName: "LOTTE GIANTS",
-        slogan: "투혼투지! 승리를 위한 전진"
+        slogan: "Aim High"
       )
 
     case .nc:
@@ -67,7 +94,7 @@ struct TeamDataSource {
         shortName: "NC",
         longName: "NC 다이노스",
         englishFullName: "NC DINOS",
-        slogan: "거침없이 가자 LIGHT, NOW!"
+        slogan: "거침없이 가자!"
       )
 
     case .ssg:
@@ -76,7 +103,7 @@ struct TeamDataSource {
         shortName: "SSG",
         longName: "SSG 랜더스",
         englishFullName: "SSG LANDERS",
-        slogan: "NO LIMITS, AMAZING LANDERS"
+        slogan: "No Limits, Amazing Landers"
       )
 
     case .doosan:
@@ -85,7 +112,7 @@ struct TeamDataSource {
         shortName: "두산",
         longName: "두산 베어스",
         englishFullName: "DOOSAN BEARS",
-        slogan: "HUSTLE DOOGETHER"
+        slogan: "Time to MOVE ON"
       )
 
     case .kt:
@@ -94,7 +121,7 @@ struct TeamDataSource {
         shortName: "KT",
         longName: "KT 위즈",
         englishFullName: "KT WIZ",
-        slogan: "UP! GREAT KT"
+        slogan: "UP! Great KT"
       )
 
     case .kiwoom:
@@ -112,26 +139,19 @@ struct TeamDataSource {
         shortName: "KIA",
         longName: "기아 타이거즈",
         englishFullName: "KIA TIGERS",
-        slogan: "압도하라! V13 ALWAYS"
+        slogan: "압도하라! V13"
       )
     }
   }
 
-  static func toAPICode(_ teamId: String) -> String? {
-    let normalizedId = teamId.uppercased()
-
-    switch normalizedId {
-    case "DOOSAN": return "ob"
-    case "HANWHA": return "hh"
-    case "KIA": return "ht"
-    case "KIWOOM": return "wo"
-    case "KT": return "kt"
-    case "LG": return "lg"
-    case "LOTTE": return "lt"
-    case "NC": return "nc"
-    case "SAMSUNG": return "ss"
-    case "SSG": return "sk"
-    default: return nil
-    }
+  /// teamId → 서버 api code (서버 호출용)
+  static func toAPICode(_ code: TeamCode) -> String {
+    codeMapping.first { $0.teamCode == code }!.apiCode.rawValue
+  }
+    
+  /// 서버 api code → teamId (마이그레이션용)
+  static func toTeamId(_ apiCode: String) -> TeamCode? {
+    let lower = apiCode.lowercased()
+    return codeMapping.first { $0.apiCode.rawValue == lower }?.teamCode
   }
 }

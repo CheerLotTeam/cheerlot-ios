@@ -11,7 +11,7 @@ struct TeamSelectSheetView: View {
   //  @Binding var selectedTheme: Theme
   @Environment(\.dismiss) private var dismiss
   @EnvironmentObject private var themeManager: ThemeManager
-  let viewModel = TeamRoasterViewModel.shared
+//  let viewModel = TeamRoasterViewModel.shared
   var screenName: String = LoggerEvent.View.editTeamV
   var onComplete: (() -> Void)?
 

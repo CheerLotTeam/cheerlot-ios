@@ -9,13 +9,10 @@ import SwiftUI
 
 /// 팀별 Asset 리소스를 관리하는 VO
 final class TeamAssetVO {
-  let team: TeamInfo
-
   private let assetPrefix: String
 
-  init(team: TeamInfo) {
-    self.team = team
-    self.assetPrefix = Self.getAssetPrefix(for: team.id.value)
+  init(_ teamId: TeamID) {
+    self.assetPrefix = Self.getAssetPrefix(for: teamId.value)
   }
 
   // MARK: - Colors
@@ -23,8 +20,8 @@ final class TeamAssetVO {
     Color.teamColors(for: assetPrefix)
   }()
 
-  var primary: Color { colors.primary }
-  var secondary: Color { colors.secondary }
+  var primaryColor: Color { colors.primary }
+  var secondaryColor: Color { colors.secondary }
 
   lazy var primaryPalette: Color.TeamPrimaryPalette = {
     Color.teamPrimaryPalette(for: assetPrefix)
