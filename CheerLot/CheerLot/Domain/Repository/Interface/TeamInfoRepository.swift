@@ -9,8 +9,8 @@ import Foundation
 
 protocol TeamInfoRepository {
   /// 특정 팀 기본 정보 조회
-  func fetchTeamInfo(_ teamId: TeamID) throws -> TeamInfo
+  func fetchTeamInfo(_ teamId: TeamID) -> TeamInfo?
 
   /// 모든 팀 기본 정보 조회
-  func fetchAllTeamInfo() -> [TeamInfo]
+  func fetchAllTeamsInfo() -> [TeamInfo]
 }
