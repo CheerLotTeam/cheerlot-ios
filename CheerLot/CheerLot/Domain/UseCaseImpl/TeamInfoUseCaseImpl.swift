@@ -9,7 +9,7 @@ import Foundation
 
 final class TeamInfoUseCaseImpl: TeamInfoUseCase {
     
-    let teamInfoRepository: TeamInfoRepository
+    private let teamInfoRepository: TeamInfoRepository
     
     init(teamInfoRepository: TeamInfoRepository) {
         self.teamInfoRepository = teamInfoRepository

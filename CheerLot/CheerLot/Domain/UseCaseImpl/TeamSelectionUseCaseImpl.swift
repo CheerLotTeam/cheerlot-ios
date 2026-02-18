@@ -9,7 +9,7 @@ import Foundation
 
 final class TeamSelectionUseCaseImpl: TeamSelectionUseCase {
     
-    let teamSelectionRepository: TeamSelectionRepository
+    private let teamSelectionRepository: TeamSelectionRepository
     
     init(teamSelectionRepository: TeamSelectionRepository) {
         self.teamSelectionRepository = teamSelectionRepository

@@ -22,6 +22,19 @@ struct TeamDataSource {
     case ssg = "SSG"
   }
     
+  private static let codeMapping: [(teamCode: TeamCode, apiCode: APICode)] = [
+    (.doosan, .doosan),
+    (.hanwha, .hanwha),
+    (.kia, .kia),
+    (.kiwoom, .kiwoom),
+    (.kt, .kt),
+    (.lg, .lg),
+    (.lotte, .lotte),
+    (.nc, .nc),
+    (.samsung, .samsung),
+    (.ssg, .ssg)
+  ]
+    
   /// APICode (서버 전용, 내부에서만 사용)
   private enum APICode: String {
     case doosan = "ob"
@@ -133,34 +146,12 @@ struct TeamDataSource {
 
   /// teamId → 서버 api code (서버 호출용)
   static func toAPICode(_ code: TeamCode) -> String {
-    switch code {
-    case .doosan:  return APICode.doosan.rawValue
-    case .hanwha:  return APICode.hanwha.rawValue
-    case .kia:     return APICode.kia.rawValue
-    case .kiwoom:  return APICode.kiwoom.rawValue
-    case .kt:      return APICode.kt.rawValue
-    case .lg:      return APICode.lg.rawValue
-    case .lotte:   return APICode.lotte.rawValue
-    case .nc:      return APICode.nc.rawValue
-    case .samsung: return APICode.samsung.rawValue
-    case .ssg:     return APICode.ssg.rawValue
-    }
+    codeMapping.first { $0.teamCode == code }!.apiCode.rawValue
   }
     
-    /// 서버 api code → teamId (마이그레이션용)
+  /// 서버 api code → teamId (마이그레이션용)
   static func toTeamId(_ apiCode: String) -> TeamCode? {
-    guard let api = APICode(rawValue: apiCode.lowercased()) else { return nil }
-      switch api {
-      case .doosan:  return .doosan
-      case .hanwha:  return .hanwha
-      case .kia:     return .kia
-      case .kiwoom:  return .kiwoom
-      case .kt:      return .kt
-      case .lg:      return .lg
-      case .lotte:   return .lotte
-      case .nc:      return .nc
-      case .samsung: return .samsung
-      case .ssg:     return .ssg
-    }
+    let lower = apiCode.lowercased()
+    return codeMapping.first { $0.apiCode.rawValue == lower }?.teamCode
   }
 }

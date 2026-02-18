@@ -9,14 +9,18 @@ import SwiftUI
 
 struct TeamSelectView: View {
     
-    @State var viewModel: TeamSelectViewModel
+    @State private var viewModel: TeamSelectViewModel
+    
+    init(viewModel: TeamSelectViewModel) {
+      _viewModel = State(initialValue: viewModel)
+    }
     
     var body: some View {
         VStack(spacing: 15) {
             header
                 .padding(.bottom, 10)
             
-            TeamListGrid
+            teamListGrid
             
             completeButton
         }
@@ -34,11 +38,13 @@ extension TeamSelectView {
             .foregroundStyle(.grayBlack)
     }
     
-    private var TeamListGrid: some View {
+    private var teamListGrid: some View {
         GeometryReader { geometry in
             let rowCount = ceil(Double(viewModel.teamVOList.count) / 2.0)
-            let totalSpacing = 9 * (rowCount - 1)
-            let cellHeight = (geometry.size.height - totalSpacing) / rowCount
+            let totalSpacing = max(0, 9 * (rowCount - 1))
+            let cellHeight = rowCount > 0
+                ? (geometry.size.height - totalSpacing) / rowCount
+                : 0
             
             LazyVGrid(columns: viewModel.columns, spacing: 9) {
                 ForEach(viewModel.teamVOList) { team in

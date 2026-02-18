@@ -26,7 +26,7 @@ enum CheerLotSchemaV3: VersionedSchema {
 //    var lineupVersion: Int = -1
 //    var playersVersion: Int = -1
 
-    @Relationship(deleteRule: .cascade, inverse: \Player.team) var teamMemeberList: [Player]?
+    @Relationship(deleteRule: .cascade, inverse: \Player.team) var teamMemberList: [Player]?
 
     init(
       teamId: String,
@@ -35,7 +35,7 @@ enum CheerLotSchemaV3: VersionedSchema {
       starterPitcherName: String? = nil,
       lastGameDate: String? = nil,
       isSeasonEnded: Bool = false,
-      teamMemeberList: [Player]? = nil
+      teamMemberList: [Player]? = nil
     ) {
       self.teamId = teamId
       self.hasTodayGame = hasTodayGame
@@ -43,12 +43,12 @@ enum CheerLotSchemaV3: VersionedSchema {
       self.starterPitcherName = starterPitcherName
       self.lastGameDate = lastGameDate
       self.isSeasonEnded = isSeasonEnded
-      self.teamMemeberList = teamMemeberList
+      self.teamMemberList = teamMemberList
     }
   }
 
   @Model
-  final class Player: Hashable {
+  final class Player {
     @Attribute(.unique, originalName: "themeRaw") var playerId: String
     var name: String
     var backNumber: Int
@@ -84,7 +84,7 @@ enum CheerLotSchemaV3: VersionedSchema {
   }
 
   @Model
-  final class CheerSong: Hashable {
+  final class CheerSong {
     @Attribute(.unique) var cheerSongId: String
     var title: String
     var lyrics: String
@@ -93,13 +93,12 @@ enum CheerLotSchemaV3: VersionedSchema {
     @Relationship var player: Player?
 
     init(
-      playerId: String,
       title: String,
       lyrics: String,
       audioUrl: String,
       player: Player? = nil
     ) {
-      self.cheerSongId = "\(playerId)_\(title)"
+      self.cheerSongId = "\(player?.playerId ?? "unknown")_\(title)"
       self.title = title
       self.lyrics = lyrics
       self.audioUrl = audioUrl

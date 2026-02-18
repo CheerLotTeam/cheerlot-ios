@@ -9,7 +9,7 @@ import Foundation
 import SwiftData
 
 final class LocalStorage {
-    let modelContainer = {
+    lazy var modelContainer = {
         let schema = Schema([
             Team.self,
             Player.self,

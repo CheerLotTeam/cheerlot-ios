@@ -36,7 +36,6 @@ final class TeamSelectionRepositoryImpl: TeamSelectionRepository {
     func updateSelectedTeam(_ teamId: TeamID) {
         sharedDefaults.set(teamId.value, forKey: Keys.selectedTeamId)
         sharedDefaults.set(true, forKey: Keys.hasSelectedTeam)
-        sharedDefaults.synchronize()
         
         NotificationCenter.default.post(
             name: .teamSelected,
@@ -51,7 +50,6 @@ final class TeamSelectionRepositoryImpl: TeamSelectionRepository {
     func deleteSelectedTeam() {
         sharedDefaults.removeObject(forKey: Keys.selectedTeamId)
         sharedDefaults.set(false, forKey: Keys.hasSelectedTeam)
-        sharedDefaults.synchronize()
     }
 }
 
