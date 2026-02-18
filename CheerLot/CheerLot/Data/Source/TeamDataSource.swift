@@ -21,6 +21,20 @@ struct TeamDataSource {
     case samsung = "SAMSUNG"
     case ssg = "SSG"
   }
+    
+  /// APICode (서버 전용, 내부에서만 사용)
+  private enum APICode: String {
+    case doosan = "ob"
+    case hanwha = "hh"
+    case kia = "ht"
+    case kiwoom = "wo"
+    case kt = "kt"
+    case lg = "lg"
+    case lotte = "lt"
+    case nc = "nc"
+    case samsung = "ss"
+    case ssg = "sk"
+  }
 
   /// TeamCode → TeamEntity 변환
   static func toEntity(_ code: TeamCode) -> TeamInfo {
@@ -117,21 +131,36 @@ struct TeamDataSource {
     }
   }
 
-  static func toAPICode(_ teamId: String) -> String? {
-    let normalizedId = teamId.uppercased()
-
-    switch normalizedId {
-    case "DOOSAN": return "ob"
-    case "HANWHA": return "hh"
-    case "KIA": return "ht"
-    case "KIWOOM": return "wo"
-    case "KT": return "kt"
-    case "LG": return "lg"
-    case "LOTTE": return "lt"
-    case "NC": return "nc"
-    case "SAMSUNG": return "ss"
-    case "SSG": return "sk"
-    default: return nil
+  /// teamId → 서버 api code (서버 호출용)
+  static func toAPICode(_ code: TeamCode) -> String {
+    switch code {
+    case .doosan:  return APICode.doosan.rawValue
+    case .hanwha:  return APICode.hanwha.rawValue
+    case .kia:     return APICode.kia.rawValue
+    case .kiwoom:  return APICode.kiwoom.rawValue
+    case .kt:      return APICode.kt.rawValue
+    case .lg:      return APICode.lg.rawValue
+    case .lotte:   return APICode.lotte.rawValue
+    case .nc:      return APICode.nc.rawValue
+    case .samsung: return APICode.samsung.rawValue
+    case .ssg:     return APICode.ssg.rawValue
+    }
+  }
+    
+    /// 서버 api code → teamId (마이그레이션용)
+  static func toTeamId(_ apiCode: String) -> TeamCode? {
+    guard let api = APICode(rawValue: apiCode.lowercased()) else { return nil }
+      switch api {
+      case .doosan:  return .doosan
+      case .hanwha:  return .hanwha
+      case .kia:     return .kia
+      case .kiwoom:  return .kiwoom
+      case .kt:      return .kt
+      case .lg:      return .lg
+      case .lotte:   return .lotte
+      case .nc:      return .nc
+      case .samsung: return .samsung
+      case .ssg:     return .ssg
     }
   }
 }
