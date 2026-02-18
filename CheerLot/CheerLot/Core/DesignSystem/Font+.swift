@@ -185,12 +185,21 @@ extension TypeStyle {
   )
 
   // MARK: - Pretendard
-  /// Bold 28pt
+  /// Bold 28pt, lineHeight 1.3%
   public static let B1 = TypeStyle(
     font: Font.Pretendard.bold.swiftUIFont(size: 28),
     uiFont: Font.Pretendard.bold.uiFont(size: 28),
     size: 28,
     lineHeight: 1.3,
+    letterSpacing: -0.04
+  )
+
+  /// Bold 28pt,  lineHeight 1.6%
+  public static let B1_1 = TypeStyle(
+    font: Font.Pretendard.bold.swiftUIFont(size: 28),
+    uiFont: Font.Pretendard.bold.uiFont(size: 28),
+    size: 28,
+    lineHeight: 1.6,
     letterSpacing: -0.04
   )
 

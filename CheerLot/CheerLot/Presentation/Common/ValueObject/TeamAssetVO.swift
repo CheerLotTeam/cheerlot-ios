@@ -15,7 +15,7 @@ final class TeamAssetVO {
 
   init(team: TeamInfo) {
     self.team = team
-    self.assetPrefix = Self.getAssetPrefix(for: team.id)
+    self.assetPrefix = Self.getAssetPrefix(for: team.id.value)
   }
 
   // MARK: - Colors

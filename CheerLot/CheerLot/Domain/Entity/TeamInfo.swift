@@ -7,25 +7,33 @@
 
 import Foundation
 
-/// Team 정보
+/// Team 기본 정보
 struct TeamInfo: Identifiable, Hashable, Equatable {
-  let id: String
-  let shortName: String
-  let longName: String
-  let englishFullName: String
-  let slogan: String
+    let id: TeamID
+    let shortName: String
+    let longName: String
+    let englishFullName: String
+    let slogan: String
+    
+    init(id: TeamID, shortName: String, longName: String, englishFullName: String, slogan: String) {
+        self.id = id
+        self.shortName = shortName
+        self.longName = longName
+        self.englishFullName = englishFullName
+        self.slogan = slogan
+    }
+}
 
-  init(
-    id: String,
-    shortName: String,
-    longName: String,
-    englishFullName: String,
-    slogan: String
-  ) {
-    self.id = id
-    self.shortName = shortName
-    self.longName = longName
-    self.englishFullName = englishFullName
-    self.slogan = slogan
-  }
+struct TeamID: Hashable, Codable {
+    let value: String
+    
+    init(_ value: String) {
+        self.value = value
+    }
+}
+
+extension TeamID: ExpressibleByStringLiteral {
+    init(stringLiteral value: String) {
+        self.init(value)
+    }
 }
