@@ -13,6 +13,7 @@ struct TeamCard: View {
   // MARK: - Properties
 
   let asset: TeamMembersAssetVO
+  let team: TeamInfo
 
   // MARK: - Body
 
@@ -47,7 +48,7 @@ extension TeamCard {
   /// 팀 카드 텍스트 모음
   private var textContents: some View {
     VStack(alignment: .center, spacing: 4) {
-      Text(asset.base.team.englishFullName)
+      Text(team.englishFullName)
         .font(.T2)
         .foregroundStyle(.grayWhite)
         .shadow(
@@ -57,7 +58,7 @@ extension TeamCard {
           y: 1
         )
 
-      Text(asset.base.team.slogan)
+      Text(team.slogan)
         .font(.M5)
         .foregroundStyle(asset.cardSubtitleColor)
     }
@@ -70,8 +71,8 @@ extension TeamCard {
   TeamCard(
     asset: TeamMembersAssetVO(
       base: TeamAssetVO(
-        team: TeamDataSource.toEntity(.samsung)
+        TeamDataSource.toEntity(.samsung).id
       )
-    )
+    ), team: TeamDataSource.toEntity(.samsung)
   )
 }

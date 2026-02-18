@@ -49,7 +49,7 @@ struct PlayButton: View {
     },
     asset: TeamMembersAssetVO(
       base: TeamAssetVO(
-        team: TeamDataSource.toEntity(.samsung)
+        TeamDataSource.toEntity(.samsung).id
       )
     )
   )
