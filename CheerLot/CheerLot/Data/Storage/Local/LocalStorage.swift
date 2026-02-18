@@ -13,7 +13,7 @@ final class LocalStorage {
         let schema = Schema([
             Team.self,
             Player.self,
-            CheerSong.self,
+            CheerSong.self
         ])
         
         let configuration = ModelConfiguration(
@@ -33,5 +33,3 @@ final class LocalStorage {
         }
     }()
 }
-
-// TODO: - DataMigrationService 위치 찾기
