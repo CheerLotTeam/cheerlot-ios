@@ -51,8 +51,7 @@ extension MainTabView {
     Group {
       switch tab {
       case .lineup:
-        // MARK: - 해당 뷰로 교체
-        Color.clear
+        LineupView(asset: LineupAssetVO(base: TeamAssetVO(TeamDataSource.toEntity(.samsung).id)))
 
       case .teamMembers:
         // MARK: - 해당 뷰로 교체

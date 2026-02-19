@@ -50,7 +50,7 @@ extension TeamMembersView {
   private var header: some View {
     VStack(alignment: .center, spacing: 12) {
         TeamCard(asset: asset, team: team)
-      infoPlayRow
+        infoPlayRow
     }
   }
 
