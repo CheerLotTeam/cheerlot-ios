@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+// Legacy -> TeamSelectCell로 교체했습니다.
 struct TeamBtn: View {
   let theme: Theme
   let isSelected: Bool

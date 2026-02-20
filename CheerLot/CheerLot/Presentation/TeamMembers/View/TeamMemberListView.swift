@@ -17,7 +17,7 @@ struct TeamMemberListView: View {
   @State private var showCheerSongSheet = false
   @State private var selectedPlayerForSheet: Player?
 
-  let viewModel = TeamRoasterViewModel.shared
+//  let viewModel = TeamRoasterViewModel.shared
   var screenName: String = LoggerEvent.View.mainRoasterV
 
   var body: some View {
@@ -30,7 +30,7 @@ struct TeamMemberListView: View {
     }
     .listStyle(.plain)
     .refreshable {
-      await viewModel.fetchTeamPlayers(for: themeManager.currentTheme.rawValue.uppercased())
+//      await viewModel.fetchTeamPlayers(for: themeManager.currentTheme.rawValue.uppercased())
     }
     .sheet(item: $selectedPlayerForSheet) { selectedPlayer in
       CheerSongMenuSheetView(
@@ -63,7 +63,7 @@ struct TeamMemberListView: View {
       selectedTheme: themeManager.currentTheme,
       memberName: player.wrappedValue.name,
       hasSong: hasSong,
-      backNumber: player.wrappedValue.jerseyNumber
+      backNumber: 1
     )
     /// touch 영역 cell 전체로
     .contentShape(Rectangle())

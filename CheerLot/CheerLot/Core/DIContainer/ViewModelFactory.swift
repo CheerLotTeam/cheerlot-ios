@@ -13,10 +13,13 @@ final class ViewModelFactory {
     
     private init() {}
     
+    // MARK: - Onboarding
+    func createTeamSelectViewModel() -> TeamSelectViewModel {
+        TeamSelectViewModel()
+    }
+    
     // MARK: - Lineup
-//    func createLineupViewModel(team: TeamInfo) -> LineupViewModel {
-//        LineupViewModel()
-//    }
+
     
     // MARK: - Playback
 }

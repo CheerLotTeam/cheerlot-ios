@@ -23,12 +23,12 @@ struct TeamMembersAssetVO {
 
   /// 팀 Primary 컬러
   var primaryColor: Color {
-    base.primary
+    base.primaryColor
   }
 
   /// 팀 Secondary 컬러
   var secondaryColor: Color {
-    base.secondary
+    base.secondaryColor
   }
 
   // MARK: - Team Card
