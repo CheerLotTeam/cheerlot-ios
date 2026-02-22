@@ -9,49 +9,49 @@ import SwiftUI
 
 struct AppCoordinatorContainer<Content: View>: View {
 
-    @State private var coordinator = AppCoordinator()
-    let content: () -> Content
+  @State private var coordinator = AppCoordinator()
+  let content: () -> Content
 
-    var body: some View {
-        NavigationStack(path: $coordinator.paths) {
-            content()
-                .navigationDestination(for: MainRoute.self) { route in
-                    coordinator.buildView(for: route)
-                }
+  var body: some View {
+    NavigationStack(path: $coordinator.paths) {
+      content()
+        .navigationDestination(for: MainRoute.self) { route in
+          coordinator.buildView(for: route)
         }
-        .modal(item: $coordinator.modal) { route in
-            coordinator.buildModalView(for: route)
-        }
-        .environment(coordinator)
     }
+    .modal(item: $coordinator.modal) { route in
+      coordinator.buildModalView(for: route)
+    }
+    .environment(coordinator)
+  }
 }
 
 // MARK: - Modal Modifier Extension
 struct ModalModifier<Item: Identifiable, ModalContent: View>: ViewModifier {
-    
-    @Binding var item: Item?
-    let content: (Item) -> ModalContent
-    
-    func body(content mainContent: Content) -> some View {
-        if let item = item as? ModalRoute {
-            switch item.presentationStyle {
-            case .sheet:
-                return AnyView(
-                    mainContent
-                        .sheet(item: $item) { route in
-                            self.content(route)
-                        }
-                )
-            case .fullScreen:
-                return AnyView(
-                    mainContent
-                        .fullScreenCover(item: $item) { route in
-                            self.content(route)
-                        }
-                )
+
+  @Binding var item: Item?
+  let content: (Item) -> ModalContent
+
+  func body(content mainContent: Content) -> some View {
+    if let item = item as? ModalRoute {
+      switch item.presentationStyle {
+      case .sheet:
+        return AnyView(
+          mainContent
+            .sheet(item: $item) { route in
+              self.content(route)
             }
-        } else {
-            return AnyView(mainContent)
-        }
+        )
+      case .fullScreen:
+        return AnyView(
+          mainContent
+            .fullScreenCover(item: $item) { route in
+              self.content(route)
+            }
+        )
+      }
+    } else {
+      return AnyView(mainContent)
     }
+  }
 }

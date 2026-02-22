@@ -274,7 +274,7 @@ extension TypeStyle {
     lineHeight: 1.3,
     letterSpacing: -0.04
   )
-    
+
   /// SemiBold 20pt_lineupName
   public static let SB5_lineupName = TypeStyle(
     font: Font.Pretendard.semibold.swiftUIFont(size: 20),
@@ -382,7 +382,7 @@ extension TypeStyle {
     lineHeight: 1.3,
     letterSpacing: -0.04
   )
-    
+
   /// Medium 12pt_Game State
   public static let M5_gameState = TypeStyle(
     font: Font.Pretendard.medium.swiftUIFont(size: 12),
@@ -391,7 +391,7 @@ extension TypeStyle {
     lineHeight: 1.2,
     letterSpacing: 0
   )
-    
+
   /// Medium 12pt_position
   public static let M5_position = TypeStyle(
     font: Font.Pretendard.medium.swiftUIFont(size: 12),
@@ -400,7 +400,7 @@ extension TypeStyle {
     lineHeight: 1.0,
     letterSpacing: -0.05
   )
-    
+
   /// Medium 10pt
   public static let M6 = TypeStyle(
     font: Font.Pretendard.medium.swiftUIFont(size: 10),

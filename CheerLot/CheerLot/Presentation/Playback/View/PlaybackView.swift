@@ -125,5 +125,5 @@ extension PlaybackView {
 }
 
 #Preview {
-    PlaybackView(asset: TeamAssetVO(TeamDataSource.toEntity(.samsung).id))
+  PlaybackView(asset: TeamAssetVO(TeamDataSource.toEntity(.samsung).id))
 }

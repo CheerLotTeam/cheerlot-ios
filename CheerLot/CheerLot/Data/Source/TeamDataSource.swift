@@ -21,7 +21,7 @@ struct TeamDataSource {
     case samsung = "SAMSUNG"
     case ssg = "SSG"
   }
-    
+
   /// APICode (서버 전용, TeamDataSource 내부에서만 사용)
   private enum APICode: String {
     case doosan = "ob"
@@ -131,19 +131,19 @@ struct TeamDataSource {
     }
   }
 
-    /// teamId → 서버 api code (서버 호출용)
-    static func toAPICode(_ code: TeamCode) -> String {
-        switch code {
-        case .doosan:  return APICode.doosan.rawValue
-        case .hanwha:  return APICode.hanwha.rawValue
-        case .kia:     return APICode.kia.rawValue
-        case .kiwoom:  return APICode.kiwoom.rawValue
-        case .kt:      return APICode.kt.rawValue
-        case .lg:      return APICode.lg.rawValue
-        case .lotte:   return APICode.lotte.rawValue
-        case .nc:      return APICode.nc.rawValue
-        case .samsung: return APICode.samsung.rawValue
-        case .ssg:     return APICode.ssg.rawValue
-        }
+  /// teamId → 서버 api code (서버 호출용)
+  static func toAPICode(_ code: TeamCode) -> String {
+    switch code {
+    case .doosan: return APICode.doosan.rawValue
+    case .hanwha: return APICode.hanwha.rawValue
+    case .kia: return APICode.kia.rawValue
+    case .kiwoom: return APICode.kiwoom.rawValue
+    case .kt: return APICode.kt.rawValue
+    case .lg: return APICode.lg.rawValue
+    case .lotte: return APICode.lotte.rawValue
+    case .nc: return APICode.nc.rawValue
+    case .samsung: return APICode.samsung.rawValue
+    case .ssg: return APICode.ssg.rawValue
     }
+  }
 }

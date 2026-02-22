@@ -10,16 +10,16 @@ import SwiftUI
 
 @main
 struct CheerLotApp: App {
-    
-    @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
-    
-    init() {
-        DIContainer.shared.assemble()
+
+  @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
+
+  init() {
+    DIContainer.shared.assemble()
+  }
+
+  var body: some Scene {
+    WindowGroup {
+      RootViewSwitcher()
     }
-    
-    var body: some Scene {
-        WindowGroup {
-            RootViewSwitcher()
-        }
-    }
+  }
 }

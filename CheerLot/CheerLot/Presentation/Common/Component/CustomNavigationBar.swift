@@ -20,7 +20,8 @@ enum NavigationBarItem {
 
 struct ToolBarItemBuilder {
   static func buildItem(for item: NavigationBarItem, placement: ToolbarItemPlacement)
-    -> some ToolbarContent {
+    -> some ToolbarContent
+  {
     ToolbarItem(placement: placement) {
       buildView(for: item)
     }

@@ -9,7 +9,7 @@ import SwiftUI
 
 struct TeamMemberListView: View {
   //  @EnvironmentObject var router: NavigationRouter
-//  @EnvironmentObject var container: DIContainer
+  //  @EnvironmentObject var container: DIContainer
   @EnvironmentObject private var themeManager: ThemeManager
   @Binding var teamMembers: [Player]
 
@@ -17,7 +17,7 @@ struct TeamMemberListView: View {
   @State private var showCheerSongSheet = false
   @State private var selectedPlayerForSheet: Player?
 
-//  let viewModel = TeamRoasterViewModel.shared
+  //  let viewModel = TeamRoasterViewModel.shared
   var screenName: String = LoggerEvent.View.mainRoasterV
 
   var body: some View {
@@ -30,29 +30,29 @@ struct TeamMemberListView: View {
     }
     .listStyle(.plain)
     .refreshable {
-//      await viewModel.fetchTeamPlayers(for: themeManager.currentTheme.rawValue.uppercased())
+      //      await viewModel.fetchTeamPlayers(for: themeManager.currentTheme.rawValue.uppercased())
     }
-//    .sheet(item: $selectedPlayerForSheet) { selectedPlayer in
-//      CheerSongMenuSheetView(
-//        player: selectedPlayer,
-//        selectedTheme: themeManager.currentTheme,
-//        startingMembers: teamMembers
-//      )
-//      .presentationDetents([
-//        .height(
-//          CGFloat((selectedPlayer.cheerSongList?.count ?? 0))
-//            * DynamicLayout.dynamicValuebyHeight(78.6)
-//            + DynamicLayout.dynamicValuebyHeight(76.7)
-//        )
-//      ])
-//    }
+    //    .sheet(item: $selectedPlayerForSheet) { selectedPlayer in
+    //      CheerSongMenuSheetView(
+    //        player: selectedPlayer,
+    //        selectedTheme: themeManager.currentTheme,
+    //        startingMembers: teamMembers
+    //      )
+    //      .presentationDetents([
+    //        .height(
+    //          CGFloat((selectedPlayer.cheerSongList?.count ?? 0))
+    //            * DynamicLayout.dynamicValuebyHeight(78.6)
+    //            + DynamicLayout.dynamicValuebyHeight(76.7)
+    //        )
+    //      ])
+    //    }
 
-//    .overlay(alignment: .bottom) {
-//      CustomToastMessageView(message: "아직 개인 응원가가 없어요")
-//        .opacity(showToastMessage ? 1 : 0)
-//        .animation(.easeInOut, value: showToastMessage)
-//        .padding(.bottom, DynamicLayout.dynamicValuebyHeight(15))
-//    }
+    //    .overlay(alignment: .bottom) {
+    //      CustomToastMessageView(message: "아직 개인 응원가가 없어요")
+    //        .opacity(showToastMessage ? 1 : 0)
+    //        .animation(.easeInOut, value: showToastMessage)
+    //        .padding(.bottom, DynamicLayout.dynamicValuebyHeight(15))
+    //    }
   }
 
   @ViewBuilder
@@ -83,8 +83,8 @@ struct TeamMemberListView: View {
           // 1개:  바로 재생
           if let song = cheerSongs.first {
             let index = teamIndexFor(player: player.wrappedValue, song: song)
-//            container.navigationRouter.push(
-//              to: .playCheerSong(players: teamMembers, startIndex: index))
+            //            container.navigationRouter.push(
+            //              to: .playCheerSong(players: teamMembers, startIndex: index))
           }
         default:
           // 2개 이상: 시트 열기
@@ -104,12 +104,12 @@ struct TeamMemberListView: View {
               cell: LoggerEvent.CellEvent.cheerSongTapped,
               index: song.id
             )
-//            container.navigationRouter.push(
-//              to:
-//                .playCheerSong(
-//                  players: [player.wrappedValue],
-//                  startIndex: index
-//                ))
+            //            container.navigationRouter.push(
+            //              to:
+            //                .playCheerSong(
+            //                  players: [player.wrappedValue],
+            //                  startIndex: index
+            //                ))
           } label: {
             Label(song.title, systemImage: "play.fill")
           }

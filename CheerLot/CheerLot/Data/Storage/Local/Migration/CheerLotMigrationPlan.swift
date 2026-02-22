@@ -11,9 +11,9 @@ import SwiftData
 enum CheerLotMigrationPlan: SchemaMigrationPlan {
   static var schemas: [any VersionedSchema.Type] {
     [
-        CheerLotSchemaV1.self,
-        CheerLotSchemaV2.self,
-        CheerLotSchemaV3.self
+      CheerLotSchemaV1.self,
+      CheerLotSchemaV2.self,
+      CheerLotSchemaV3.self,
     ]
   }
 
@@ -47,31 +47,31 @@ enum CheerLotMigrationPlan: SchemaMigrationPlan {
         try context.save()
       }
     )
-    
-    static let migrateV2toV3 = MigrationStage.custom(
-        fromVersion: CheerLotSchemaV2.self,
-        toVersion: CheerLotSchemaV3.self,
-        willMigrate: { context in
-            // Team, Player, CheerSong 전부 삭제
-            try context.fetch(FetchDescriptor<CheerLotSchemaV2.Team>())
-                .forEach { context.delete($0) }
-            try context.fetch(FetchDescriptor<CheerLotSchemaV2.Player>())
-                .forEach { context.delete($0) }
-            try context.fetch(FetchDescriptor<CheerLotSchemaV2.CheerSong>())
-                .forEach { context.delete($0) }
-            try context.save()
-        },
-        didMigrate: { context in
-            // V3 기준으로 Team 새로 insert (신규 설치와 동일한 흐름)
-            for code in TeamDataSource.TeamCode.allCases {
-              let team = CheerLotSchemaV3.Team(
-                teamId: code.rawValue,
-                hasTodayGame: false,
-                isSeasonEnded: false
-              )
-              context.insert(team)
-            }
-            try context.save()
-        }
-    )
+
+  static let migrateV2toV3 = MigrationStage.custom(
+    fromVersion: CheerLotSchemaV2.self,
+    toVersion: CheerLotSchemaV3.self,
+    willMigrate: { context in
+      // Team, Player, CheerSong 전부 삭제
+      try context.fetch(FetchDescriptor<CheerLotSchemaV2.Team>())
+        .forEach { context.delete($0) }
+      try context.fetch(FetchDescriptor<CheerLotSchemaV2.Player>())
+        .forEach { context.delete($0) }
+      try context.fetch(FetchDescriptor<CheerLotSchemaV2.CheerSong>())
+        .forEach { context.delete($0) }
+      try context.save()
+    },
+    didMigrate: { context in
+      // V3 기준으로 Team 새로 insert (신규 설치와 동일한 흐름)
+      for code in TeamDataSource.TeamCode.allCases {
+        let team = CheerLotSchemaV3.Team(
+          teamId: code.rawValue,
+          hasTodayGame: false,
+          isSeasonEnded: false
+        )
+        context.insert(team)
+      }
+      try context.save()
+    }
+  )
 }

@@ -11,7 +11,7 @@ struct AppInfoTextPageView: View {
   let title: String
   let text: String
 
-//  @EnvironmentObject var container: DIContainer
+  //  @EnvironmentObject var container: DIContainer
 
   var body: some View {
     VStack(spacing: DynamicLayout.dynamicValuebyHeight(15)) {
@@ -30,7 +30,7 @@ struct AppInfoTextPageView: View {
     .customNavigation(
       title: "\(title)",
       leadingAction: {
-       
+
       }
     )
     .onAppear {

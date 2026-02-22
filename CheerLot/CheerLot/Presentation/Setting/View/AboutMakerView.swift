@@ -10,7 +10,7 @@ import SwiftUI
 struct AboutMakerView: View {
   var screenName: String = LoggerEvent.View.aboutMakerV
 
-//  @EnvironmentObject var container: DIContainer
+  //  @EnvironmentObject var container: DIContainer
 
   var body: some View {
     VStack(spacing: DynamicLayout.dynamicValuebyHeight(10)) {
@@ -27,7 +27,7 @@ struct AboutMakerView: View {
     .customNavigation(
       title: "만든 사람들",
       leadingAction: {
-//        container.navigationRouter.pop()
+        //        container.navigationRouter.pop()
       }
     )
     .onAppear {

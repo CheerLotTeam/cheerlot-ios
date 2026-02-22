@@ -36,19 +36,19 @@ struct CustomToastMessageView: View {
     .transition(.opacity.animation(.easeInOut(duration: 0.3)))
     .zIndex(999)
     .onAppear {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.3) {
-            withAnimation {
-                isPresented = false
-            }
+      DispatchQueue.main.asyncAfter(deadline: .now() + 1.3) {
+        withAnimation {
+          isPresented = false
         }
+      }
     }
   }
 }
 
 #Preview {
-    CustomToastMessageView(
-        message: "아직 개인 응원가가 없어요",
-        showCaution: true,
-        isPresented: .constant(true)
-    )
+  CustomToastMessageView(
+    message: "아직 개인 응원가가 없어요",
+    showCaution: true,
+    isPresented: .constant(true)
+  )
 }
