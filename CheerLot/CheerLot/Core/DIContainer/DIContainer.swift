@@ -77,32 +77,30 @@ extension DIContainer {
   private func assembleService() {
     registerSingleton(AudioPlaybackService.self) {
       AudioPlaybackService()
-      
-  private func assembleService() {
-    registerSingleton(AudioPlaybackService.self) {
-      AudioPlaybackService()
-      
-    private func assembleRepositories() {
-        registerSingleton(TeamSelectionRepository.self) {
-            TeamSelectionRepositoryImpl()
-        }
-        
-        registerSingleton(TeamInfoRepository.self) {
-            TeamInfoRepositoryImpl()
-        }
+    }
+  }
+  
+  private func assembleRepositories() {
+    registerSingleton(TeamSelectionRepository.self) {
+      TeamSelectionRepositoryImpl()
     }
     
-    private func assembleUseCases() {
-        register(TeamSelectionUseCase.self) { container in
-            TeamSelectionUseCaseImpl(
-                teamSelectionRepository: container.resolve(TeamSelectionRepository.self)
-            )
-        }
-        
-        register(TeamInfoUseCase.self) { container in
-            TeamInfoUseCaseImpl(
-                teamInfoRepository: container.resolve(TeamInfoRepository.self)
-            )
-        }
+    registerSingleton(TeamInfoRepository.self) {
+      TeamInfoRepositoryImpl()
     }
+  }
+  
+  private func assembleUseCases() {
+    register(TeamSelectionUseCase.self) { container in
+      TeamSelectionUseCaseImpl(
+        teamSelectionRepository: container.resolve(TeamSelectionRepository.self)
+      )
+    }
+    
+    register(TeamInfoUseCase.self) { container in
+      TeamInfoUseCaseImpl(
+        teamInfoRepository: container.resolve(TeamInfoRepository.self)
+      )
+    }
+  }
 }

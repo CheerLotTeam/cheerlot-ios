@@ -23,7 +23,11 @@ enum ModalRoute: Identifiable {
   
   // FullScreen 스타일
   case lineupPlayback
-  case basePlayback(song: CheerSongInfo, playerName: String)
+  case basePlayback(
+    teamId: TeamID,
+    song: CheerSongInfo,
+    playerName: String
+  )
   
   var id: String {
     String(describing: self)
@@ -58,9 +62,17 @@ extension AppCoordinator {
       Color.clear
     case let .lineupPlayback:
       Color.clear
-    case let .basePlayback(song, playerName):
-      let vm = factory.createPlaybackViewModel(song: song, playerName: playerName, audioPlayer: audioPlayer)
-      PlaybackView(asset: TeamAssetVO(team: TeamDataSource.toEntity(.kia)), viewModel: vm)
+    case let .basePlayback(teamId, song, playerName):
+      let vm = factory.createPlaybackViewModel(
+        song: song,
+        playerName: playerName,
+        audioPlayer: audioPlayer
+      )
+      
+      PlaybackView(
+        asset: TeamAssetVO(teamId),
+        viewModel: vm
+      )
     }
   }
 }

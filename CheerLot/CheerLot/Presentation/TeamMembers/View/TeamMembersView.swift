@@ -13,14 +13,11 @@ struct TeamMembersView: View {
   // MARK: - Properties
   private let asset: TeamMembersAssetVO
   private let team: TeamInfo
-
+  
   @State private var viewModel: TeamMembersViewModel
   
   // MARK: - Init
-  init(team: TeamInfo,
-       asset: TeamMembersAssetVO
-       viewModel: TeamMembersViewModel
-       ) {
+  init(team: TeamInfo, asset: TeamMembersAssetVO, viewModel: TeamMembersViewModel) {
     self.team = team
     self.asset = asset
     self.viewModel = viewModel
@@ -54,7 +51,7 @@ extension TeamMembersView {
   /// 상단 헤더 영역 (TeamCard + infoPlayRow)
   private var header: some View {
     VStack(alignment: .center, spacing: 12) {
-        TeamCard(asset: asset, team: team)
+      TeamCard(asset: asset, team: team)
       infoPlayRow
     }
   }

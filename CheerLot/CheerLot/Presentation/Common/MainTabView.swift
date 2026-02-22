@@ -68,7 +68,7 @@ struct MainTabView: View {
     .fullScreenCover(isPresented: $isPlayerExpanded) {
       if let song = audioPlayer.nowPlaying {
         PlaybackView(
-          asset: TeamAssetVO(team: team),
+          asset: asset,
           viewModel: ViewModelFactory.shared.createPlaybackViewModel(
             song: song,
             playerName: song.playerId.value,
@@ -91,8 +91,9 @@ extension MainTabView {
         Color.clear
         
       case .teamMembers:
-        let asset = TeamMembersAssetVO(base: TeamAssetVO(team: team))
+        let asset = TeamMembersAssetVO(base: TeamAssetVO(team.id))
         TeamMembersView(
+          team: team,
           asset: asset,
           viewModel: ViewModelFactory.shared.createTeamMembersViewModel(
             team: team,

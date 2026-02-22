@@ -24,41 +24,17 @@ struct RootViewSwitcher: View {
 }
 
 extension RootViewSwitcher {
-    @ViewBuilder
-    private var content: some View {
-        switch appState {
-        case .splash:
-            SplashView()
-                .task {
-                    await handleSplash()
-                }
-            
-        case .onboarding:
-            TeamSelectView(viewModel: teamSelectViewModel)
-                .onReceive(
-                    NotificationCenter.default.publisher(for: .teamSelected)
-                ) { notification in
-                    if let team = notification.object as? TeamInfo {
-                        appState = .main(team: team)
-                    }
-                }
-            
-        case .main(let team):
-            AppCoordinatorContainer(team: team, audioPlayer: audioPlayer)
-                .transition(.opacity)
-                .id(team.id)
-                .onReceive(
-                    NotificationCenter.default.publisher(for: .teamSelected)
-                ) { notification in
-                    // 팀 재선택 시
-                    if let newTeam = notification.object as? TeamInfo {
-                        appState = .main(team: newTeam)
-                    }
-                }
+  @ViewBuilder
+  private var content: some View {
+    switch appState {
+    case .splash:
+      SplashView()
+        .task {
+          await handleSplash()
         }
       
     case .onboarding:
-      TeamSelectView()
+      TeamSelectView(viewModel: teamSelectViewModel)
         .onReceive(
           NotificationCenter.default.publisher(for: .teamSelected)
         ) { notification in
@@ -66,19 +42,18 @@ extension RootViewSwitcher {
             appState = .main(team: team)
           }
         }
-        
-        // 3. 최소 스플래시 시간
-        try? await Task.sleep(nanoseconds: 1_250_000_000)
-        
-        // 4. 팀 선택 여부 확인
-        let useCase = DIContainer.shared.resolve(TeamSelectionUseCase.self)
-        
-        if useCase.hasSelectedTeam() {
-            if let team = useCase.getCurrentTeam() {
-                appState = .main(team: team)
-            }
-        } else {
-            appState = .onboarding
+      
+    case .main(let team):
+      AppCoordinatorContainer(team: team, audioPlayer: audioPlayer)
+        .transition(.opacity)
+        .id(team.id)
+        .onReceive(
+          NotificationCenter.default.publisher(for: .teamSelected)
+        ) { notification in
+          // 팀 재선택 시
+          if let newTeam = notification.object as? TeamInfo {
+            appState = .main(team: newTeam)
+          }
         }
     }
   }
@@ -99,11 +74,8 @@ extension RootViewSwitcher {
     let useCase = DIContainer.shared.resolve(TeamSelectionUseCase.self)
     
     if useCase.hasSelectedTeam() {
-      do {
-        let team = try useCase.getCurrentTeam()
+      if let team = useCase.getCurrentTeam() {
         appState = .main(team: team)
-      } catch {
-        appState = .onboarding
       }
     } else {
       appState = .onboarding
