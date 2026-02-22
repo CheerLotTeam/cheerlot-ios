@@ -15,7 +15,6 @@ struct TeamMembersView: View {
   private let team: TeamInfo
 
   @State private var viewModel: TeamMembersViewModel
-  @Environment(AppCoordinator.self) private var coordinator
   
   // MARK: - Init
   init(team: TeamInfo,
