@@ -21,7 +21,6 @@ final class ViewModelFactory {
     // MARK: - Lineup
 
     
-    // MARK: - Playback
   // MARK: - TeamMembers
   func createTeamMembersViewModel(team: TeamInfo, audioPlayer: AudioPlaybackService) -> TeamMembersViewModel {
     TeamMembersViewModel(audioPlayer: audioPlayer)

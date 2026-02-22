@@ -78,6 +78,10 @@ extension DIContainer {
     registerSingleton(AudioPlaybackService.self) {
       AudioPlaybackService()
       
+  private func assembleService() {
+    registerSingleton(AudioPlaybackService.self) {
+      AudioPlaybackService()
+      
     private func assembleRepositories() {
         registerSingleton(TeamSelectionRepository.self) {
             TeamSelectionRepositoryImpl()
@@ -101,5 +105,4 @@ extension DIContainer {
             )
         }
     }
-  }
 }

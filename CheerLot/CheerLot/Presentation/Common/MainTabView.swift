@@ -63,7 +63,6 @@ struct MainTabView: View {
     .onChange(of: selectedTab) { _, newValue in
       if newValue == .lineup {
         audioPlayer.pause()
-        //        expandMiniPlayer = false
       }
     }
     .fullScreenCover(isPresented: $isPlayerExpanded) {
