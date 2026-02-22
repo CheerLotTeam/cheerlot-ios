@@ -36,7 +36,7 @@ struct CustomToastMessageView: View {
     .transition(.opacity.animation(.easeInOut(duration: 0.3)))
     .zIndex(999)
     .onAppear {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.3) {
             withAnimation {
                 isPresented = false
             }
