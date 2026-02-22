@@ -40,11 +40,11 @@ extension LineupMemberCell {
     private var textContents: some View {
         HStack(alignment: .bottom, spacing: 8) {
             Text(name)
-                .font(.SB5)
+                .font(.SB5_lineupName)
                 .foregroundStyle(.grayWhite)
             
             Text("\(position),\(batThrow)")
-                .font(.M5)
+                .font(.M5_position)
                 .foregroundStyle(asset.positionTextColor)
         }
     }

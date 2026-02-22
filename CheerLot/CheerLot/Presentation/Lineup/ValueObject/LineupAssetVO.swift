@@ -69,7 +69,7 @@ struct LineupAssetVO {
         base.primaryPalette.color300
     }
     
-    /// 라인업 카드 리스트 라인 컬러
+    /// 라인업 카드 listRowSeparator 컬러
     var listLineColor: Color {
         base.primaryPalette.color300
     }
