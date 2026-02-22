@@ -13,7 +13,6 @@ struct TeamMembersView: View {
   // MARK: - Properties
   private let asset: TeamMembersAssetVO
   @State private var viewModel: TeamMembersViewModel
-  @Environment(AppCoordinator.self) private var coordinator
   
   // MARK: - Init
   init(asset: TeamMembersAssetVO, viewModel: TeamMembersViewModel) {
