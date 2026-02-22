@@ -8,12 +8,12 @@
 import Foundation
 
 final class TeamMembersViewModel {
-  
+
   private let audioPlayer: AudioPlaybackService
-  
+
   // 지금은 mockMembers를 VM이 소유 (나중에 UseCase로 교체)
   let members: [Member]
-  
+
   init(
     audioPlayer: AudioPlaybackService,
     members: [Member] = TeamMembersViewModel.mockMembers
@@ -21,7 +21,7 @@ final class TeamMembersViewModel {
     self.audioPlayer = audioPlayer
     self.members = members
   }
-  
+
   func didTapMember(_ member: Member) {
     guard member.hasSong else { return }
 
@@ -36,7 +36,7 @@ final class TeamMembersViewModel {
 
     audioPlayer.play(song)
   }
-  
+
   func didTapPlayAll() {
     // TODO: 전체 재생 로직
   }
@@ -64,7 +64,7 @@ extension TeamMembersViewModel {
     Member(name: "박선수", backNumber: 10, hasSong: true),
     Member(name: "김선수", backNumber: 23, hasSong: true),
     Member(name: "이선수", backNumber: 7, hasSong: false),
-    Member(name: "박선수", backNumber: 10, hasSong: true)
+    Member(name: "박선수", backNumber: 10, hasSong: true),
   ]
 }
 

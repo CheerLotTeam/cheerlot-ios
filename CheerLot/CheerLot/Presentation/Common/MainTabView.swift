@@ -12,38 +12,38 @@ enum TabKey {
 }
 
 struct MainTabView: View {
-  
+
   // MARK: - Properties
   let team: TeamInfo
   let audioPlayer: AudioPlaybackService
-  
+
   @State private var selectedTab: TabKey = .lineup
   @State private var isPlayerExpanded: Bool = false
-  
+
   @Namespace private var animation
-  
+
   private var asset: TeamAssetVO {
-      TeamAssetVO(team.id)
+    TeamAssetVO(team.id)
   }
-  
+
   private var showMiniPlayer: Bool {
     selectedTab != .lineup && audioPlayer.nowPlaying != nil
   }
-  
+
   // MARK: - Init
   init(team: TeamInfo, audioPlayer: AudioPlaybackService) {
     self.team = team
     self.audioPlayer = audioPlayer
-    
+
     // TabBar 스타일 설정
     let appearance = UITabBarAppearance()
     appearance.configureWithOpaqueBackground()
     appearance.backgroundColor = .white
-    
+
     UITabBar.appearance().standardAppearance = appearance
     UITabBar.appearance().scrollEdgeAppearance = appearance
   }
-  
+
   // MARK: - Body
   var body: some View {
     Group {
@@ -89,7 +89,7 @@ extension MainTabView {
       case .lineup:
         // MARK: - 해당 뷰로 교체
         Color.clear
-        
+
       case .teamMembers:
         let asset = TeamMembersAssetVO(base: TeamAssetVO(team.id))
         TeamMembersView(
@@ -100,47 +100,47 @@ extension MainTabView {
             audioPlayer: audioPlayer
           )
         )
-        
+
       case .search:
         // MARK: - 해당 뷰로 교체
         Color.clear
       }
     }
   }
-  
+
   @available(iOS 26.0, *)
   private var modernTabView: some View {
     TabView(selection: $selectedTab) {
       Tab("라인업", systemImage: "baseball.diamond.bases", value: .lineup) {
         tabContent(for: .lineup)
       }
-      
+
       Tab("전체선수", systemImage: "person.2.fill", value: .teamMembers) {
         tabContent(for: .teamMembers)
       }
-      
+
       Tab(value: .search, role: .search) {
         tabContent(for: .search)
       }
     }
   }
-  
+
   private var legacyTabView: some View {
     TabView(selection: $selectedTab) {
       Tab("라인업", systemImage: "baseball.diamond.bases", value: .lineup) {
         tabContent(for: .lineup)
       }
-      
+
       Tab("전체선수", systemImage: "person.2.fill", value: .teamMembers) {
         tabContent(for: .teamMembers)
       }
-      
+
       Tab("검색", systemImage: "magnifyingglass", value: .search) {
         tabContent(for: .search)
       }
     }
   }
-  
+
   @ViewBuilder
   private var miniPlayerBar: some View {
     if let song = audioPlayer.nowPlaying {
@@ -152,7 +152,7 @@ extension MainTabView {
           isPlayerExpanded.toggle()
         },
         onPlayPause: { audioPlayer.toggle() },
-        onNext: { /* TODO: 다음 곡 */ }
+        onNext: { /* TODO: 다음 곡 */  }
       )
       .matchedTransitionSource(id: "AUDIOPLAYER", in: animation)
       .padding(.horizontal, 20)
@@ -162,6 +162,9 @@ extension MainTabView {
 }
 
 #Preview {
-  MainTabView(team: TeamDataSource.toEntity(.samsung), audioPlayer: DIContainer.shared.resolve(AudioPlaybackService.self))
-    .environment(AppCoordinator())
+  MainTabView(
+    team: TeamDataSource.toEntity(.samsung),
+    audioPlayer: DIContainer.shared.resolve(AudioPlaybackService.self)
+  )
+  .environment(AppCoordinator())
 }

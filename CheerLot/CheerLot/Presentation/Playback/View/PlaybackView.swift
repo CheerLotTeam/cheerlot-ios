@@ -9,17 +9,17 @@ import SwiftUI
 
 /// 전체 전수 명단에서 응원가를 재생하면 보여지는 뷰입니다.
 struct PlaybackView: View {
-  
+
   // MARK: - Properties
   let asset: TeamAssetVO
-  
+
   @State var viewModel: PlaybackViewModel
-  
+
   init(asset: TeamAssetVO, viewModel: PlaybackViewModel) {
     self.asset = asset
     self.viewModel = viewModel
   }
-  
+
   // MARK: - Body
   var body: some View {
     VStack(spacing: 14) {
@@ -44,20 +44,20 @@ extension PlaybackView {
       footer
     }
   }
-  
+
   /// 선수 이름 + 응원가 종류
   private var header: some View {
     VStack(spacing: .zero) {
       Text(viewModel.playerName)
         .font(.B3)
         .foregroundStyle(.grayWhite)
-      
+
       Text(viewModel.title)
         .font(.SB8)
         .foregroundStyle(.gray200)
     }
   }
-  
+
   /// 가사뷰
   private var content: some View {
     ScrollView(showsIndicators: true) {
@@ -70,7 +70,7 @@ extension PlaybackView {
     }
     .padding(.horizontal, 24)
   }
-  
+
   /// 재생바 + 컨트롤뷰
   private var footer: some View {
     VStack(spacing: 20) {
@@ -80,7 +80,7 @@ extension PlaybackView {
     .padding(.horizontal, 20)
     .padding(.bottom, 36)
   }
-  
+
   /// 재생바
   private var progressView: some View {
     VStack(spacing: 8) {
@@ -89,7 +89,7 @@ extension PlaybackView {
         maxValue: viewModel.duration,
         onSeek: { viewModel.seek(to: $0) }
       )
-      
+
       HStack {
         Text(viewModel.progress.asTimeString)
         Spacer()
@@ -100,7 +100,7 @@ extension PlaybackView {
       .padding(.bottom, 4)
     }
   }
-  
+
   /// 컨트롤
   private var controlView: some View {
     HStack(spacing: 44) {
@@ -114,7 +114,7 @@ extension PlaybackView {
       playbackButton("forward.fill")
     }
   }
-  
+
   /// 같은 버튼 스타일을 씌우기 위한 함수
   private func playbackButton(
     _ systemName: String,

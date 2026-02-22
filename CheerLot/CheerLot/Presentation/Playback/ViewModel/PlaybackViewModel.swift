@@ -84,17 +84,17 @@ final class PlaybackViewModel {
 
 // MARK: - Private Helpers
 
-private extension PlaybackViewModel {
+extension PlaybackViewModel {
 
   /// 서비스 -> UI 상태 동기화
-  func syncFromService() {
+  fileprivate func syncFromService() {
     isPlaying = audioPlayer.isPlaying
     progress = audioPlayer.currentTime
     duration = max(audioPlayer.duration, 1)
   }
 
   /// 진행 상태를 주기적으로 업데이트
-  func startObservingTime() {
+  fileprivate func startObservingTime() {
     guard timeObserver == nil else { return }
 
     timeObserver = audioPlayer.observeTime(every: 0.5, queue: .main) { [weak self] _ in
@@ -104,7 +104,7 @@ private extension PlaybackViewModel {
   }
 
   /// observer 해제
-  func stopObservingTime() {
+  fileprivate func stopObservingTime() {
     if let token = timeObserver {
       audioPlayer.removeObserver(token)
       timeObserver = nil

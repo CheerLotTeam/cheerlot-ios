@@ -8,15 +8,15 @@
 import Foundation
 
 protocol TeamSelectionRepository {
-    /// 현재 선택된 팀 조회
-    func fetchCurrentTeam() -> TeamInfo?
-    
-    /// 팀 선택
-    func updateSelectedTeam(_ teamId: TeamID)
-    
-    /// 팀 선택 여부 조회
-    func fetchHasSelectedTeam() -> Bool
-    
-    /// 팀 선택 초기화
-    func deleteSelectedTeam()
+  /// 현재 선택된 팀 조회
+  func fetchCurrentTeam() -> TeamInfo?
+
+  /// 팀 선택
+  func updateSelectedTeam(_ teamId: TeamID)
+
+  /// 팀 선택 여부 조회
+  func fetchHasSelectedTeam() -> Bool
+
+  /// 팀 선택 초기화
+  func deleteSelectedTeam()
 }

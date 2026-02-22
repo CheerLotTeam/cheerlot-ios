@@ -5,14 +5,14 @@
 //  Created by 이승진 on 2/10/26.
 //
 
-import WidgetKit
 import SwiftUI
+import WidgetKit
 
 @main
 struct WidgetCheerLotBundle: WidgetBundle {
-    var body: some Widget {
-        WidgetCheerLot()
-        WidgetCheerLotControl()
-        WidgetCheerLotLiveActivity()
-    }
+  var body: some Widget {
+    WidgetCheerLot()
+    WidgetCheerLotControl()
+    WidgetCheerLotLiveActivity()
+  }
 }

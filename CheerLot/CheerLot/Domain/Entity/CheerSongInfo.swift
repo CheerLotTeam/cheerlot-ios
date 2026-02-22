@@ -8,9 +8,9 @@
 import Foundation
 
 struct CheerSongInfo: Identifiable, Hashable, Equatable {
-    let id: Int
-    let playerId: PlayerID
-    let title: String
-    let lyrics: String
-    let audioURL: String
+  let id: Int
+  let playerId: PlayerID
+  let title: String
+  let lyrics: String
+  let audioURL: String
 }

@@ -8,24 +8,25 @@
 import Foundation
 
 final class ViewModelFactory {
-    
-    static let shared = ViewModelFactory()
-    
-    private init() {}
-    
-    // MARK: - Onboarding
-    func createTeamSelectViewModel() -> TeamSelectViewModel {
-        TeamSelectViewModel()
-    }
-    
-    // MARK: - Lineup
 
-    
+  static let shared = ViewModelFactory()
+
+  private init() {}
+
+  // MARK: - Onboarding
+  func createTeamSelectViewModel() -> TeamSelectViewModel {
+    TeamSelectViewModel()
+  }
+
+  // MARK: - Lineup
+
   // MARK: - TeamMembers
-  func createTeamMembersViewModel(team: TeamInfo, audioPlayer: AudioPlaybackService) -> TeamMembersViewModel {
+  func createTeamMembersViewModel(team: TeamInfo, audioPlayer: AudioPlaybackService)
+    -> TeamMembersViewModel
+  {
     TeamMembersViewModel(audioPlayer: audioPlayer)
   }
-  
+
   // MARK: - Playback
   func createPlaybackViewModel(
     song: CheerSongInfo,

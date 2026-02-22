@@ -6,8 +6,8 @@
 //
 
 import AVFoundation
-import Observation
 import MediaPlayer
+import Observation
 
 @Observable
 /// 앱 전역 오디오 재생을 담당하는 서비스
@@ -42,7 +42,8 @@ final class AudioPlaybackService {
     nowPlaying = song
 
     if song.audioURL.hasPrefix("http"),
-       let url = URL(string: song.audioURL) {
+      let url = URL(string: song.audioURL)
+    {
       play(url)
       return
     }
@@ -118,9 +119,9 @@ final class AudioPlaybackService {
 }
 
 // MARK: - Setup
-private extension AudioPlaybackService {
+extension AudioPlaybackService {
 
-  func setupSession() {
+  fileprivate func setupSession() {
     let session = AVAudioSession.sharedInstance()
     do {
       try session.setCategory(.playback, mode: .default)
@@ -130,7 +131,7 @@ private extension AudioPlaybackService {
     }
   }
 
-  func setupRemoteCommands() {
+  fileprivate func setupRemoteCommands() {
     guard !remoteConfigured else { return }
     remoteConfigured = true
 
@@ -167,10 +168,12 @@ extension AudioPlaybackService {
 
   func playBundle(_ fileName: String) {
     let name = (fileName as NSString).deletingPathExtension
-    let ext = (fileName as NSString).pathExtension.isEmpty ? "mp3" : (fileName as NSString).pathExtension
+    let ext =
+      (fileName as NSString).pathExtension.isEmpty ? "mp3" : (fileName as NSString).pathExtension
 
     guard let url = Bundle.main.url(forResource: name, withExtension: ext) else {
-      assertionFailure("번들에서 \(name).\(ext) 파일을 찾지 못했습니다. Target Membership / Copy Bundle Resources 확인")
+      assertionFailure(
+        "번들에서 \(name).\(ext) 파일을 찾지 못했습니다. Target Membership / Copy Bundle Resources 확인")
       isPlaying = false
       return
     }
@@ -180,25 +183,26 @@ extension AudioPlaybackService {
 }
 
 // MARK: - Now Playing
-private extension AudioPlaybackService {
+extension AudioPlaybackService {
 
-  func startNowPlayingTick() {
+  fileprivate func startNowPlayingTick() {
     guard nowPlayingTick == nil else { return }
 
     let interval = CMTime(seconds: 1, preferredTimescale: 600)
-    nowPlayingTick = player.addPeriodicTimeObserver(forInterval: interval, queue: .main) { [weak self] _ in
+    nowPlayingTick = player.addPeriodicTimeObserver(forInterval: interval, queue: .main) {
+      [weak self] _ in
       self?.syncNowPlaying()
     }
   }
 
-  func stopNowPlayingTick() {
+  fileprivate func stopNowPlayingTick() {
     if let token = nowPlayingTick {
       player.removeTimeObserver(token)
       nowPlayingTick = nil
     }
   }
 
-  func syncNowPlaying() {
+  fileprivate func syncNowPlaying() {
     guard let song = nowPlaying else { return }
 
     var info = MPNowPlayingInfoCenter.default().nowPlayingInfo ?? [:]
@@ -211,7 +215,7 @@ private extension AudioPlaybackService {
     MPNowPlayingInfoCenter.default().nowPlayingInfo = info
   }
 
-  func clearNowPlaying() {
+  fileprivate func clearNowPlaying() {
     MPNowPlayingInfoCenter.default().nowPlayingInfo = nil
   }
 }

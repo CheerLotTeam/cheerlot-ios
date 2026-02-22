@@ -9,18 +9,18 @@ import SwiftUI
 
 /// MainTabView에 종속되는 미니플레이어입니다.
 struct MiniPlayerView: View {
-  
+
   // MARK: - Properties
   let playerName: String
   let title: String
   let isPlaying: Bool
-  
+
   let onTap: () -> Void
   let onPlayPause: () -> Void
   let onNext: () -> Void
-  
+
   private let layout = MiniPlayerLayout.current
-  
+
   // MARK: - Body
   var body: some View {
     HStack {
@@ -61,14 +61,14 @@ extension MiniPlayerView {
         )
     }
   }
-  
+
   /// 응원가 정보
   private var cheerSongInfo: some View {
     HStack(spacing: 8) {
       RoundedRectangle(cornerRadius: layout.imageCornerRadius)
         .fill(.gray)
         .frame(width: layout.imageSize, height: layout.imageSize)
-      
+
       VStack(alignment: .leading, spacing: .zero) {
         Text(playerName)
           .font(.SB9)
@@ -81,7 +81,7 @@ extension MiniPlayerView {
       }
     }
   }
-  
+
   /// 버튼 모음
   private var controlContents: some View {
     HStack(spacing: layout.controlSpacing) {
@@ -94,7 +94,7 @@ extension MiniPlayerView {
           .frame(width: layout.iconWidth)
       }
       .buttonStyle(.plain)
-      
+
       Button {
         onNext()
       } label: {
@@ -120,7 +120,7 @@ private struct MiniPlayerLayout {
   let imageCornerRadius: CGFloat
   let controlSpacing: CGFloat
   let iconWidth: CGFloat
-  
+
   static var current: MiniPlayerLayout {
     if #available(iOS 26, *) {
       return .init(

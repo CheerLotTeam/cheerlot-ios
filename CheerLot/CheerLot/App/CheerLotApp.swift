@@ -10,17 +10,19 @@ import SwiftUI
 
 @main
 struct CheerLotApp: App {
-    
-    @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
-    
-    init() {
-        DIContainer.shared.assemble()
+
+  @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
+
+  init() {
+    DIContainer.shared.assemble()
+  }
+
+  var body: some Scene {
+    WindowGroup {
+      //            RootViewSwitcher()
+      AppCoordinatorContainer(
+        team: TeamDataSource.toEntity(.kia),
+        audioPlayer: DIContainer.shared.resolve(AudioPlaybackService.self))
     }
-    
-    var body: some Scene {
-        WindowGroup {
-//            RootViewSwitcher()
-          AppCoordinatorContainer(team: TeamDataSource.toEntity(.kia), audioPlayer: DIContainer.shared.resolve(AudioPlaybackService.self))
-        }
-    }
+  }
 }
