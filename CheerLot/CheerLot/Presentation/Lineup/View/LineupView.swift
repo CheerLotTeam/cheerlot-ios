@@ -9,6 +9,9 @@ import SwiftUI
 
 struct LineupView: View {
     let asset: LineupAssetVO
+    let gameInfo: GameStatus
+    // TODO: - UserDefaults로 저장할 것.
+    @State private var showLineup: Bool = false
     
     // MARK: - Layout Constants
     private let teamNameHeight: CGFloat = 44.5
@@ -49,6 +52,14 @@ struct LineupView: View {
         let availableHeight = listHeight(cardHeight: cardHeight) - totalSeparatorHeight
         return max(0, availableHeight / CGFloat(mockMembers.count))
     }
+    
+    private func noGameMessage(for status: GameStatus) -> String {
+        switch status {
+        case .offDay:      return "오늘은 경기가 없는 날이에요"
+        case .seasonEnded: return "다음 시즌 준비중이에요"
+        case .playingToday: return ""
+        }
+    }
 }
 
 extension LineupView {
@@ -76,13 +87,23 @@ extension LineupView {
     }
     
     private func contents(cardHeight: CGFloat, cardWidth: CGFloat) -> some View {
-        VStack(spacing: cardSpacing) {
-            teamName
-            matchInfo
-            lineupList(cardHeight: cardHeight, cardWidth: cardWidth)
+        ZStack {
+            VStack(spacing: cardSpacing) {
+                teamName
+                matchInfo
+                
+                if gameInfo == .playingToday || showLineup {
+                    lineupList(cardHeight: cardHeight, cardWidth: cardWidth)
+                }
+            }
+            .padding(.top, cardTopPadding)
+            .padding(.bottom, cardBottomPadding)
+            .frame(maxHeight: .infinity, alignment: .top) // header 상단 고정
+            
+            if gameInfo != .playingToday && !showLineup {
+                hasNoGameView(status: gameInfo)
+            }
         }
-        .padding(.top, cardTopPadding)
-        .padding(.bottom, cardBottomPadding)
     }
     
     private var teamName: some View {
@@ -153,6 +174,39 @@ extension LineupView {
         .clipShape(Rectangle())
         .contentShape(Rectangle())
     }
+    
+    private func hasNoGameView(status: GameStatus) -> some View {
+        VStack(spacing: 24) {
+            Spacer()
+            
+            Text(noGameMessage(for: status))
+                .font(.M3)
+                .foregroundStyle(asset.positionTextColor)
+            
+            Button {
+                showLineup = true
+            } label: {
+                Text("최근 경기 라인업 보기")
+                    .font(.SB8)
+                    .foregroundStyle(.grayWhite)
+                    .padding(.vertical, 6)
+                    .padding(.horizontal, 10)
+                    .background(
+                        ZStack {
+                            asset.primaryColor
+                            asset.lastestGameButtonGradient.opacity(0.2)
+                            asset.positionTextColor.opacity(0.2)
+                        }
+                    )
+                    .clipShape(RoundedRectangle(cornerRadius: 12))
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 12)
+                            .strokeBorder(asset.lastestGameButtonStrokeColor, lineWidth: 1.5)
+                    )
+            }
+            Spacer()
+        }
+    }
 }
 
 // TODO: 이후 지울 예정
@@ -179,6 +233,6 @@ private let mockMembers: [Member] = [
 
 #Preview {
     NavigationStack {
-        LineupView(asset: LineupAssetVO(base: TeamAssetVO(TeamDataSource.toEntity(.samsung).id)))
+        LineupView(asset: LineupAssetVO(base: TeamAssetVO(TeamDataSource.toEntity(.samsung).id)), gameInfo: .offDay)
     }
 }

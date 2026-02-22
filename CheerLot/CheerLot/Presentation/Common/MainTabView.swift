@@ -53,7 +53,7 @@ extension MainTabView {
     switch tab {
     case .lineup:
         AppCoordinatorContainer {
-            LineupView(asset: LineupAssetVO(base: TeamAssetVO(TeamDataSource.toEntity(.samsung).id)))
+            LineupView(asset: LineupAssetVO(base: TeamAssetVO(TeamDataSource.toEntity(.samsung).id)), gameInfo: .offDay)
         }
 
     case .teamMembers:

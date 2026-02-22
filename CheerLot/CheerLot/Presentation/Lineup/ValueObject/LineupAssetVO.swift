@@ -44,9 +44,26 @@ struct LineupAssetVO {
       )
     }
     
+    /// 최근 경기  버튼 그라데이션
+    var lastestGameButtonGradient: LinearGradient {
+        LinearGradient(
+            colors: [
+                base.primaryPalette.color300,
+                base.primaryPalette.color600
+            ],
+            startPoint: .top,
+            endPoint: .bottom
+        )
+    }
+    
     /// 카드 스트로크 컬러
     var cardStrokeColor: Color {
         base.primaryPalette.color200
+    }
+    
+    /// 최근 경기 버튼 스트로크 컬러
+    var lastestGameButtonStrokeColor: Color {
+        base.primaryPalette.color300
     }
 
     /// 카드 텍스트 그림자 컬러
