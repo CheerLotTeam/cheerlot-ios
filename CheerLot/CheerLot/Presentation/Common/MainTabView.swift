@@ -85,7 +85,7 @@ extension MainTabView {
                 tabContent(for: .search)
             }
         }
-        .tint(asset.primaryColor)
+        .tint(asset.secondaryColor)
     }
     
     private var legacyTabView: some View {
@@ -102,7 +102,7 @@ extension MainTabView {
                 tabContent(for: .search)
             }
         }
-        .tint(asset.primaryColor)
+        .tint(asset.secondaryColor)
     }
 }
 
