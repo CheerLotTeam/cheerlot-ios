@@ -63,11 +63,11 @@ extension TeamSelectView {
         } label: {
             Text("완료")
                 .font(.SB6)
-                .foregroundColor(viewModel.isButtonEnabled ? .grayWhite : .gray400)
+                .foregroundStyle(viewModel.isButtonEnabled ? .grayWhite : .gray400)
                 .frame(maxWidth: .infinity)
                 .frame(height: 56)
                 .background(viewModel.isButtonEnabled ? .gray900 : .gray100)
-                .cornerRadius(35)
+                .clipShape(RoundedRectangle(cornerRadius: 35))
         }
         .disabled(!viewModel.isButtonEnabled)
     }
