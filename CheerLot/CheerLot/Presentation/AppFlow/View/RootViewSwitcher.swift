@@ -43,7 +43,7 @@ extension RootViewSwitcher {
                 }
             
         case .main(let team):
-            AppCoordinatorContainer(team: team)
+            MainTabView(team: team)
                 .transition(.opacity)
                 .id(team.id)
                 .onReceive(

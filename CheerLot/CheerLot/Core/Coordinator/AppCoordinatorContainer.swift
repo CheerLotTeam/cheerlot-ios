@@ -7,15 +7,14 @@
 
 import SwiftUI
 
-struct AppCoordinatorContainer: View {
-    
-    let team: TeamInfo
-    
+struct AppCoordinatorContainer<Content: View>: View {
+
     @State private var coordinator = AppCoordinator()
-    
+    let content: () -> Content
+
     var body: some View {
         NavigationStack(path: $coordinator.paths) {
-            MainTabView(team: team)
+            content()
                 .navigationDestination(for: MainRoute.self) { route in
                     coordinator.buildView(for: route)
                 }

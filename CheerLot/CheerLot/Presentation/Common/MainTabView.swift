@@ -47,63 +47,63 @@ struct MainTabView: View {
 }
 
 extension MainTabView {
+
+  @ViewBuilder
   private func tabContent(for tab: TabKey) -> some View {
-    Group {
-      switch tab {
-      case .lineup:
-        LineupView(asset: LineupAssetVO(base: TeamAssetVO(TeamDataSource.toEntity(.samsung).id)))
+    switch tab {
+    case .lineup:
+        AppCoordinatorContainer {
+            LineupView(asset: LineupAssetVO(base: TeamAssetVO(TeamDataSource.toEntity(.samsung).id)))
+        }
 
-      case .teamMembers:
-        // MARK: - 해당 뷰로 교체
-        Color.clear
+    case .teamMembers:
+      // MARK: - 해당 뷰로 교체
+        AppCoordinatorContainer {
+            Color.clear
+        }
 
-      case .search:
-        // MARK: - 해당 뷰로 교체
-        Color.clear
-      }
+    case .search:
+      // MARK: - 해당 뷰로 교체
+        AppCoordinatorContainer {
+            Color.clear
+        }
     }
   }
 
-  @available(iOS 26.0, *)
-  private var modernTabView: some View {
-    TabView(selection: $selectedTab) {
-      Tab("라인업", systemImage: "baseball.diamond.bases", value: .lineup) {
-        tabContent(for: .lineup)
-      }
-
-      Tab("전체선수", systemImage: "person.2.fill", value: .teamMembers) {
-        tabContent(for: .teamMembers)
-      }
-
-      Tab(value: .search, role: .search) {
-        tabContent(for: .search)
-      }
+    @available(iOS 26.0, *)
+    private var modernTabView: some View {
+        TabView(selection: $selectedTab) {
+            Tab("라인업", systemImage: "baseball.diamond.bases", value: .lineup) {
+                tabContent(for: .lineup)
+            }
+            
+            Tab("전체선수", systemImage: "person.2.fill", value: .teamMembers) {
+                tabContent(for: .teamMembers)
+            }
+            
+            Tab(value: .search, role: .search) {
+                tabContent(for: .search)
+            }
+        }
+        .tint(asset.primaryColor)
     }
-    .tint(asset.primaryColor)
-    .tabBarMinimizeBehavior(.onScrollDown)
-    .tabViewBottomAccessory {
-      if showMiniPlayer {
-        // MARK: - 미니 플레이어바
-      }
+    
+    private var legacyTabView: some View {
+        TabView(selection: $selectedTab) {
+            Tab("라인업", systemImage: "baseball.diamond.bases", value: .lineup) {
+                tabContent(for: .lineup)
+            }
+            
+            Tab("전체선수", systemImage: "person.2.fill", value: .teamMembers) {
+                tabContent(for: .teamMembers)
+            }
+            
+            Tab("검색", systemImage: "magnifyingglass", value: .search) {
+                tabContent(for: .search)
+            }
+        }
+        .tint(asset.primaryColor)
     }
-  }
-
-  private var legacyTabView: some View {
-    TabView(selection: $selectedTab) {
-      Tab("라인업", systemImage: "baseball.diamond.bases", value: .lineup) {
-        tabContent(for: .lineup)
-      }
-
-      Tab("전체선수", systemImage: "person.2.fill", value: .teamMembers) {
-        tabContent(for: .teamMembers)
-      }
-
-      Tab("검색", systemImage: "magnifyingglass", value: .search) {
-        tabContent(for: .search)
-      }
-    }
-    .tint(asset.primaryColor)
-  }
 }
 
 #Preview {
