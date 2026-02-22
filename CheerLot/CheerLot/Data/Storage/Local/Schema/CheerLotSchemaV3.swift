@@ -49,7 +49,7 @@ enum CheerLotSchemaV3: VersionedSchema {
 
   @Model
   final class Player {
-    @Attribute(.unique, originalName: "themeRaw") var playerId: String
+    @Attribute(.unique) var playerId: String
     var name: String
     var backNumber: Int
     var position: String
