@@ -12,6 +12,7 @@ struct LineupView: View {
     let gameInfo: GameStatus
     // TODO: - UserDefaults로 저장할 것.
     @State private var showLineup: Bool = false
+//    @Environment private var coordinator: AppCoordinator()
     
     // MARK: - Layout Constants
     private let teamNameHeight: CGFloat = 44.5

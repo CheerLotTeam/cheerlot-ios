@@ -32,20 +32,20 @@ struct TeamMemberListView: View {
     .refreshable {
 //      await viewModel.fetchTeamPlayers(for: themeManager.currentTheme.rawValue.uppercased())
     }
-    .sheet(item: $selectedPlayerForSheet) { selectedPlayer in
-      CheerSongMenuSheetView(
-        player: selectedPlayer,
-        selectedTheme: themeManager.currentTheme,
-        startingMembers: teamMembers
-      )
-      .presentationDetents([
-        .height(
-          CGFloat((selectedPlayer.cheerSongList?.count ?? 0))
-            * DynamicLayout.dynamicValuebyHeight(78.6)
-            + DynamicLayout.dynamicValuebyHeight(76.7)
-        )
-      ])
-    }
+//    .sheet(item: $selectedPlayerForSheet) { selectedPlayer in
+//      CheerSongMenuSheetView(
+//        player: selectedPlayer,
+//        selectedTheme: themeManager.currentTheme,
+//        startingMembers: teamMembers
+//      )
+//      .presentationDetents([
+//        .height(
+//          CGFloat((selectedPlayer.cheerSongList?.count ?? 0))
+//            * DynamicLayout.dynamicValuebyHeight(78.6)
+//            + DynamicLayout.dynamicValuebyHeight(76.7)
+//        )
+//      ])
+//    }
 
 //    .overlay(alignment: .bottom) {
 //      CustomToastMessageView(message: "아직 개인 응원가가 없어요")
