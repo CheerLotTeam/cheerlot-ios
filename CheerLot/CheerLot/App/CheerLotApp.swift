@@ -19,7 +19,8 @@ struct CheerLotApp: App {
     
     var body: some Scene {
         WindowGroup {
-            RootViewSwitcher()
+//            RootViewSwitcher()
+          AppCoordinatorContainer(team: TeamDataSource.toEntity(.kia), audioPlayer: DIContainer.shared.resolve(AudioPlaybackService.self))
         }
     }
 }
