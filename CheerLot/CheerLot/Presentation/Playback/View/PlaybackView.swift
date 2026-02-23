@@ -13,7 +13,7 @@ struct PlaybackView: View {
   // MARK: - Properties
   let asset: TeamAssetVO
 
-  @State var viewModel: PlaybackViewModel
+  @State private var viewModel: PlaybackViewModel
 
   init(asset: TeamAssetVO, viewModel: PlaybackViewModel) {
     self.asset = asset
