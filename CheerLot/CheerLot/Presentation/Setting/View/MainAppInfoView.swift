@@ -10,7 +10,7 @@ import SwiftUI
 
 struct MainAppInfoView: View {
 
-//  @EnvironmentObject var container: DIContainer
+  //  @EnvironmentObject var container: DIContainer
   @State private var showTeamSelectSheet = false
   @State var showSafari = false
   @State private var shouldPopToRoot = false
@@ -42,14 +42,14 @@ struct MainAppInfoView: View {
     .customNavigation(
       title: "앱 정보",
       leadingAction: {
-//        container.navigationRouter.pop()
+        //        container.navigationRouter.pop()
       }
     )
     .sheet(
       isPresented: $showTeamSelectSheet,
       onDismiss: {
         if shouldPopToRoot {
-//          container.navigationRouter.popToRootView()
+          //          container.navigationRouter.popToRootView()
           shouldPopToRoot = false
         }
       }
@@ -98,12 +98,12 @@ struct MainAppInfoView: View {
               AnalyticsLogger.logCellClick(
                 screen: screenName, cell: LoggerEvent.CellEvent.appInfoMenuCellTapped,
                 index: menu.id)
-                if menu == .reportBug {
-                    showSafari = true
-                    //              } else if let route = menu.route {
-                    //                container.navigationRouter.push(to: route)
-                    //              }
-                }
+              if menu == .reportBug {
+                showSafari = true
+                //              } else if let route = menu.route {
+                //                container.navigationRouter.push(to: route)
+                //              }
+              }
             }
         }
         .listRowSeparator(.hidden)

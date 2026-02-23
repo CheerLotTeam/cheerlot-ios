@@ -13,43 +13,56 @@ struct PlaybackView: View {
   // MARK: - Properties
   let asset: TeamAssetVO
 
-  // TODO: - 지울 예정 (UI 목적)
-  @State private var isPlaying: Bool = false
-  @State private var currentTime: Double = 30
-  private let duration: Double = 90
+  @State private var viewModel: PlaybackViewModel
+
+  init(asset: TeamAssetVO, viewModel: PlaybackViewModel) {
+    self.asset = asset
+    self.viewModel = viewModel
+  }
 
   // MARK: - Body
   var body: some View {
+    VStack(spacing: 14) {
+      Capsule()
+        .fill(.gray200.opacity(0.6))
+        .frame(width: 60, height: 5)
+      mainView
+    }
+    .padding(.top, 60)
+    .background(asset.primaryColor)
+    .ignoresSafeArea()
+    .onAppear { viewModel.onAppear() }
+    .onDisappear { viewModel.onDisappear() }
+  }
+}
+
+extension PlaybackView {
+  private var mainView: some View {
     VStack(spacing: 40) {
       header
       content
       footer
     }
-    .background(asset.primaryColor)
-    .ignoresSafeArea()
   }
-}
 
-extension PlaybackView {
   /// 선수 이름 + 응원가 종류
   private var header: some View {
     VStack(spacing: .zero) {
-      Text("김지찬")
+      Text(viewModel.playerName)
         .font(.B3)
         .foregroundStyle(.grayWhite)
 
-      Text("기본 응원가")
+      Text(viewModel.title)
         .font(.SB8)
         .foregroundStyle(.gray200)
     }
-    .padding(.top, 90)
   }
 
   /// 가사뷰
   private var content: some View {
     ScrollView(showsIndicators: true) {
       LazyVStack(alignment: .leading) {
-        Text("하이하이하이하이\n하이하이\n하이")
+        Text(viewModel.lyrics)
       }
       .multilineTextAlignment(.leading)
       .font(.B1_1)
@@ -72,15 +85,15 @@ extension PlaybackView {
   private var progressView: some View {
     VStack(spacing: 8) {
       PlaybackSeekBar(
-        value: $currentTime,
-        maxValue: duration,
-        onSeek: { _ in }
+        value: $viewModel.progress,
+        maxValue: viewModel.duration,
+        onSeek: { viewModel.seek(to: $0) }
       )
 
       HStack {
-        Text("00:00")
+        Text(viewModel.progress.asTimeString)
         Spacer()
-        Text("01:30")
+        Text(viewModel.duration.asTimeString)
       }
       .font(.M5)
       .foregroundStyle(.gray300)
@@ -93,10 +106,10 @@ extension PlaybackView {
     HStack(spacing: 44) {
       playbackButton("backward.fill")
       playbackButton(
-        isPlaying ? "pause.fill" : "play.fill",
+        viewModel.isPlaying ? "pause.fill" : "play.fill",
         center: true
       ) {
-        isPlaying.toggle()
+        viewModel.togglePlayback()
       }
       playbackButton("forward.fill")
     }
@@ -122,8 +135,4 @@ extension PlaybackView {
     }
     .buttonStyle(PlaybackButtonStyle(size: 56))
   }
-}
-
-#Preview {
-    PlaybackView(asset: TeamAssetVO(TeamDataSource.toEntity(.samsung).id))
 }

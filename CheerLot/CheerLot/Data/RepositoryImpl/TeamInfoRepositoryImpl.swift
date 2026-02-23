@@ -13,7 +13,7 @@ final class TeamInfoRepositoryImpl: TeamInfoRepository {
     let normalizedId = teamId.value.uppercased()
 
     guard let teamCode = TeamDataSource.TeamCode(rawValue: normalizedId) else { return nil }
-      
+
     return TeamDataSource.toEntity(teamCode)
   }
 

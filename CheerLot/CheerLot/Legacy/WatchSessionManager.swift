@@ -55,26 +55,26 @@ final class WatchSessionManager: NSObject, WCSessionDelegate {
     _ session: WCSession, activationDidCompleteWith activationState: WCSessionActivationState,
     error: Error?
   ) {
-//    guard activationState == .activated else { return }
-//    // 테마
-//    sendTheme(ThemeManager.shared.currentTheme)
-//    // 선발 선수 명단
-//    let rosterVM = TeamRoasterViewModel.shared
-//    let playerDTOs = rosterVM.players.map { player in
-//      PlayerWatchDto(
-//        cheerSongList: (player.cheerSongList ?? []).map {
-//          CheerSongWatchDto(
-//            title: $0.title,
-//            lyrics: $0.lyrics,
-//            audioFileName: $0.audioFileName
-//          )
-//        }, id: player.id, jerseyNumber: player.jerseyNumber, name: player.name,
-//        position: player.position,
-//        battingOrder: player.battingOrder)
-//    }
-//    sendPlayerList(playerDTOs)
-//    // 대진 날짜
-//    sendLastUpdated(rosterVM.lastUpdated)
+    //    guard activationState == .activated else { return }
+    //    // 테마
+    //    sendTheme(ThemeManager.shared.currentTheme)
+    //    // 선발 선수 명단
+    //    let rosterVM = TeamRoasterViewModel.shared
+    //    let playerDTOs = rosterVM.players.map { player in
+    //      PlayerWatchDto(
+    //        cheerSongList: (player.cheerSongList ?? []).map {
+    //          CheerSongWatchDto(
+    //            title: $0.title,
+    //            lyrics: $0.lyrics,
+    //            audioFileName: $0.audioFileName
+    //          )
+    //        }, id: player.id, jerseyNumber: player.jerseyNumber, name: player.name,
+    //        position: player.position,
+    //        battingOrder: player.battingOrder)
+    //    }
+    //    sendPlayerList(playerDTOs)
+    //    // 대진 날짜
+    //    sendLastUpdated(rosterVM.lastUpdated)
 
   }
 

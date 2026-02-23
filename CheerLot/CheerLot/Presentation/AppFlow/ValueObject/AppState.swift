@@ -6,7 +6,7 @@
 //
 
 enum AppState: Equatable {
-    case splash
-    case onboarding
-    case main(team: TeamInfo)
+  case splash
+  case onboarding
+  case main(team: TeamInfo)
 }

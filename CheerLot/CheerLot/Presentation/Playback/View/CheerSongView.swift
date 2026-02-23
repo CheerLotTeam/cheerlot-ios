@@ -15,7 +15,7 @@ struct CheerSongView: View {
   let theme: Theme = ThemeManager.shared.currentTheme
   var screenName: String = LoggerEvent.View.playCheerSongV
 
-//  @EnvironmentObject var container: DIContainer
+  //  @EnvironmentObject var container: DIContainer
   @Bindable var viewModel: CheerSongViewModel = .init()
   @State private var networkMonitor = NetworkMonitor()
   @State private var showNetworkAlert = false
@@ -39,7 +39,7 @@ struct CheerSongView: View {
     //    .ignoresSafeArea(.all)
     .navigationBarBackButtonHidden(true)
     .customNavigation(
-      leadingAction: { },
+      leadingAction: {},
       whiteStyle: true
     )
     .onAppear {

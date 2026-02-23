@@ -9,7 +9,7 @@ import SwiftUI
 
 struct CheerSongMenuSheetView: View {
 
-//  @EnvironmentObject var container: DIContainer
+  //  @EnvironmentObject var container: DIContainer
   @Environment(\.dismiss) private var dismiss
 
   let player: Player
@@ -81,10 +81,10 @@ struct CheerSongMenuSheetView: View {
               return
             }
 
-//            container.navigationRouter.push(
-//              to:
-//                .playCheerSong(players: startingMembers, startIndex: startIndex)
-//            )
+            //            container.navigationRouter.push(
+            //              to:
+            //                .playCheerSong(players: startingMembers, startIndex: startIndex)
+            //            )
           }
       }
 

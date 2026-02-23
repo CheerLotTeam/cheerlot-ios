@@ -31,6 +31,7 @@ struct TeamCard: View {
         .resizable()
         .scaledToFill()
         .opacity(0.5)
+        .blendMode(.softLight)
 
       /// 텍스트 모음
       textContents
