@@ -128,7 +128,7 @@ extension LineupView {
         .font(.M5_gameState)
 
       HStack(spacing: 2) {
-        Image(systemName: "p.circle.fill")
+        Image(.pitcher)
           .resizable()
           .frame(width: 12, height: 12)
           .scaledToFit()
@@ -214,7 +214,7 @@ extension LineupView {
 }
 
 // TODO: 이후 지울 예정
-private struct Member: Identifiable {
+private struct LineupMember: Identifiable {
   let id = UUID()
   let battingOrder: Int
   let name: String
@@ -223,16 +223,16 @@ private struct Member: Identifiable {
   let hasSong: Bool
 }
 
-private let mockMembers: [Member] = [
-  Member(battingOrder: 1, name: "김선수", position: "포지션", batThrow: "좌타", hasSong: true),
-  Member(battingOrder: 2, name: "이선수", position: "포지션", batThrow: "좌타", hasSong: false),
-  Member(battingOrder: 3, name: "박선수", position: "포지션", batThrow: "좌타", hasSong: true),
-  Member(battingOrder: 4, name: "최선수", position: "포지션", batThrow: "좌타", hasSong: true),
-  Member(battingOrder: 5, name: "김선수", position: "포지션", batThrow: "좌타", hasSong: false),
-  Member(battingOrder: 6, name: "이선수", position: "포지션", batThrow: "좌타", hasSong: true),
-  Member(battingOrder: 7, name: "박선수", position: "포지션", batThrow: "좌타", hasSong: true),
-  Member(battingOrder: 8, name: "김선수", position: "포지션", batThrow: "좌타", hasSong: false),
-  Member(battingOrder: 9, name: "최선수", position: "포지션", batThrow: "좌타", hasSong: true),
+private let mockMembers: [LineupMember] = [
+    LineupMember(battingOrder: 1, name: "김선수", position: "포지션", batThrow: "좌타", hasSong: true),
+    LineupMember(battingOrder: 2, name: "이선수", position: "포지션", batThrow: "좌타", hasSong: false),
+    LineupMember(battingOrder: 3, name: "박선수", position: "포지션", batThrow: "좌타", hasSong: true),
+    LineupMember(battingOrder: 4, name: "최선수", position: "포지션", batThrow: "좌타", hasSong: true),
+    LineupMember(battingOrder: 5, name: "김선수", position: "포지션", batThrow: "좌타", hasSong: false),
+    LineupMember(battingOrder: 6, name: "이선수", position: "포지션", batThrow: "좌타", hasSong: true),
+    LineupMember(battingOrder: 7, name: "박선수", position: "포지션", batThrow: "좌타", hasSong: true),
+    LineupMember(battingOrder: 8, name: "김선수", position: "포지션", batThrow: "좌타", hasSong: false),
+    LineupMember(battingOrder: 9, name: "최선수", position: "포지션", batThrow: "좌타", hasSong: true),
 ]
 
 #Preview {
