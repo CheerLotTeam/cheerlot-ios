@@ -26,13 +26,13 @@ extension ChangePlayerSelectCell {
   private var buttonContents: some View {
     Text("김선수")
       .font(.SB5)
-      .foregroundStyle(isSelected ? player.primaryColor : .grayBlack)
+      .foregroundStyle(isSelected ? player.primaryColor : .gray500)
       .frame(maxWidth: .infinity, maxHeight: .infinity)
       .background(
         RoundedRectangle(cornerRadius: 8)
           .fill(isSelected ? player.selectedCellFillColor : .grayWhite)
           .shadow(
-            color: player.cellShadowColor,
+            color: isSelected ? player.cellShadowColor : .gray500.opacity(0.15),
             radius: 4,
             x: 0,
             y: 0
