@@ -10,8 +10,6 @@ import SwiftUI
 struct AppCoordinatorContainer<Content: View>: View {
 
   let content: () -> Content
-  let team: TeamInfo
-  let audioPlayer: AudioPlaybackService
 
   @State private var coordinator = AppCoordinator()
 
@@ -24,7 +22,7 @@ struct AppCoordinatorContainer<Content: View>: View {
     }
     .environment(coordinator)
     .modal(item: $coordinator.modal) { route in
-      coordinator.buildModalView(for: route, audioPlayer: audioPlayer)
+      coordinator.buildModalView(for: route)
     }
   }
 }

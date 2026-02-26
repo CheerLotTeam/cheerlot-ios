@@ -46,8 +46,10 @@ enum ModalRoute: Identifiable {
 extension AppCoordinator {
   @ViewBuilder
 
-  func buildModalView(for route: ModalRoute, audioPlayer: AudioPlaybackService) -> some View {
+  func buildModalView(for route: ModalRoute) -> some View {
     let factory = ViewModelFactory.shared
+    let audioPlayer = DIContainer.shared.resolve(
+        AudioPlaybackService.self)
 
     // TODO: - View 넣기
     switch route {
