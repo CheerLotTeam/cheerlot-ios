@@ -20,5 +20,19 @@ final class ViewModelFactory {
 
   // MARK: - Lineup
 
+  // MARK: - TeamMembers
+  func createTeamMembersViewModel(team: TeamInfo, audioPlayer: AudioPlaybackService)
+    -> TeamMembersViewModel
+  {
+    TeamMembersViewModel(audioPlayer: audioPlayer)
+  }
+
   // MARK: - Playback
+  func createPlaybackViewModel(
+    song: CheerSongInfo,
+    playerName: String,
+    audioPlayer: AudioPlaybackService
+  ) -> PlaybackViewModel {
+    PlaybackViewModel(song: song, playerName: playerName, audioPlayer: audioPlayer)
+  }
 }

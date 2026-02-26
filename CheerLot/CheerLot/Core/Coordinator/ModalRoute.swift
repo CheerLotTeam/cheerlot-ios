@@ -23,7 +23,11 @@ enum ModalRoute: Identifiable {
 
   // FullScreen 스타일
   case lineupPlayback
-  case basePlayback
+  case basePlayback(
+    teamId: TeamID,
+    song: CheerSongInfo,
+    playerName: String
+  )
 
   var id: String {
     String(describing: self)
@@ -41,8 +45,9 @@ enum ModalRoute: Identifiable {
 
 extension AppCoordinator {
   @ViewBuilder
-  func buildModalView(for route: ModalRoute) -> some View {
-    //        let factory = ViewModelFactory.shared
+
+  func buildModalView(for route: ModalRoute, audioPlayer: AudioPlaybackService) -> some View {
+    let factory = ViewModelFactory.shared
 
     // TODO: - View 넣기
     switch route {
@@ -58,8 +63,17 @@ extension AppCoordinator {
       Color.clear
     case let .lineupPlayback:
       Color.clear
-    case let .basePlayback:
-      Color.clear
+    case let .basePlayback(teamId, song, playerName):
+      let vm = factory.createPlaybackViewModel(
+        song: song,
+        playerName: playerName,
+        audioPlayer: audioPlayer
+      )
+
+      PlaybackView(
+        asset: TeamAssetVO(teamId),
+        viewModel: vm
+      )
     }
   }
 }

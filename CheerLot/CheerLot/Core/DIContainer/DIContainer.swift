@@ -67,24 +67,20 @@ final class DIContainer {
 
   /// 모든 의존성 조립
   func assemble() {
+    assembleService()
     assembleRepositories()
     assembleUseCases()
   }
 }
 
 extension DIContainer {
-  private func assembleRepositories() {
-    registerSingleton(LocalStorage.self) {
-      LocalStorage()
+  private func assembleService() {
+    registerSingleton(AudioPlaybackService.self) {
+      AudioPlaybackService()
     }
+  }
 
-    // ModelContainer를 사용하는 repository에 LocalStorage를 resolve하여 주입 예시
-    //        registerSingleton(TeamRepository.self) {
-    //            let storage = self.resolve(LocalStorage.self)
-    //            // mainContext는 Main Actor에서 접근 보장
-    //            return TeamRepositoryImpl(modelContainer: storage.modelContainer)
-    //        }
-
+  private func assembleRepositories() {
     registerSingleton(TeamSelectionRepository.self) {
       TeamSelectionRepositoryImpl()
     }

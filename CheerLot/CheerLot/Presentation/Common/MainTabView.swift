@@ -13,35 +13,71 @@ enum TabKey {
 
 struct MainTabView: View {
 
+  // MARK: - Properties
   let team: TeamInfo
+  let audioPlayer: AudioPlaybackService
+
   @State private var selectedTab: TabKey = .lineup
+  @State private var isPlayerExpanded: Bool = false
+
+  @Namespace private var animation
 
   private var asset: TeamAssetVO {
     TeamAssetVO(team.id)
   }
 
   private var showMiniPlayer: Bool {
-    selectedTab != .lineup
+    selectedTab != .lineup && audioPlayer.nowPlaying != nil
   }
 
-  init(team: TeamInfo) {
+  // MARK: - Init
+  init(team: TeamInfo, audioPlayer: AudioPlaybackService) {
     self.team = team
+    self.audioPlayer = audioPlayer
 
     // TabBar 스타일 설정
     let appearance = UITabBarAppearance()
     appearance.configureWithOpaqueBackground()
-    appearance.backgroundColor = .white.withAlphaComponent(0.75)
+    appearance.backgroundColor = .white
 
     UITabBar.appearance().standardAppearance = appearance
     UITabBar.appearance().scrollEdgeAppearance = appearance
   }
 
+  // MARK: - Body
   var body: some View {
-    if #available(iOS 26.0, *) {
-      modernTabView
-    } else {
-      // MARK: - 미니 플레이어바
-      legacyTabView
+    Group {
+      if #available(iOS 26.0, *) {
+        modernTabView
+      } else {
+        legacyTabView
+      }
+    }
+    .tint(asset.primaryColor)
+    .safeAreaInset(edge: .bottom, spacing: 0) {
+      if showMiniPlayer {
+        miniPlayerBar
+          .padding(.bottom, 50)
+      }
+    }
+    .onChange(of: selectedTab) { _, newValue in
+      if newValue == .lineup {
+        audioPlayer.pause()
+      }
+    }
+    .fullScreenCover(isPresented: $isPlayerExpanded) {
+      if let song = audioPlayer.nowPlaying {
+        PlaybackView(
+          asset: asset,
+          viewModel: ViewModelFactory.shared.createPlaybackViewModel(
+            song: song,
+            playerName: song.playerId.value,
+            audioPlayer: audioPlayer
+          )
+        )
+        .navigationTransition(.zoom(sourceID: "AUDIOPLAYER", in: animation))
+        .ignoresSafeArea()
+      }
     }
   }
 }
@@ -58,11 +94,18 @@ extension MainTabView {
           gameInfo: .offDay)
       }
 
-    case .teamMembers:
-      // MARK: - 해당 뷰로 교체
-      AppCoordinatorContainer {
-        Color.clear
-      }
+      case .teamMembers:
+        let asset = TeamMembersAssetVO(base: TeamAssetVO(team.id))
+        AppCoordinatorContainer {
+            TeamMembersView(
+                team: team,
+                asset: asset,
+                viewModel: ViewModelFactory.shared.createTeamMembersViewModel(
+                    team: team,
+                    audioPlayer: audioPlayer
+                )
+            )
+        }
 
     case .search:
       // MARK: - 해당 뷰로 교체
@@ -106,8 +149,31 @@ extension MainTabView {
     }
     .tint(asset.secondaryColor)
   }
+
+  @ViewBuilder
+  private var miniPlayerBar: some View {
+    if let song = audioPlayer.nowPlaying {
+      MiniPlayerView(
+        playerName: song.playerId.value,  // MARK: - PlayerInfo.name으로 교체 예정
+        title: song.title,
+        isPlaying: audioPlayer.isPlaying,
+        onTap: {
+          isPlayerExpanded.toggle()
+        },
+        onPlayPause: { audioPlayer.toggle() },
+        onNext: { /* TODO: 다음 곡 */  }
+      )
+      .matchedTransitionSource(id: "AUDIOPLAYER", in: animation)
+      .padding(.horizontal, 20)
+      .padding(.vertical, 8)
+    }
+  }
 }
 
 #Preview {
-  MainTabView(team: TeamDataSource.toEntity(.samsung))
+  MainTabView(
+    team: TeamDataSource.toEntity(.samsung),
+    audioPlayer: DIContainer.shared.resolve(AudioPlaybackService.self)
+  )
+  .environment(AppCoordinator())
 }

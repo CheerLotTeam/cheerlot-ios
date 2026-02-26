@@ -10,6 +10,8 @@ import SwiftUI
 struct RootViewSwitcher: View {
 
   @State private var appState: AppState = .splash
+  @State private var audioPlayer: AudioPlaybackService = DIContainer.shared.resolve(
+    AudioPlaybackService.self)
   @State private var teamSelectViewModel = ViewModelFactory.shared.createTeamSelectViewModel()
 
   // TODO: - 분리 예정
@@ -43,7 +45,7 @@ extension RootViewSwitcher {
         }
 
     case .main(let team):
-      MainTabView(team: team)
+      MainTabView(team: team, audioPlayer: audioPlayer)
         .transition(.opacity)
         .id(team.id)
         .onReceive(

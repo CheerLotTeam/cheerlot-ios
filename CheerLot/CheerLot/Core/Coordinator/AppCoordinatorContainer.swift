@@ -9,8 +9,11 @@ import SwiftUI
 
 struct AppCoordinatorContainer<Content: View>: View {
 
-  @State private var coordinator = AppCoordinator()
   let content: () -> Content
+  let team: TeamInfo
+  let audioPlayer: AudioPlaybackService
+
+  @State private var coordinator = AppCoordinator()
 
   var body: some View {
     NavigationStack(path: $coordinator.paths) {
@@ -19,10 +22,10 @@ struct AppCoordinatorContainer<Content: View>: View {
           coordinator.buildView(for: route)
         }
     }
-    .modal(item: $coordinator.modal) { route in
-      coordinator.buildModalView(for: route)
-    }
     .environment(coordinator)
+    .modal(item: $coordinator.modal) { route in
+      coordinator.buildModalView(for: route, audioPlayer: audioPlayer)
+    }
   }
 }
 
