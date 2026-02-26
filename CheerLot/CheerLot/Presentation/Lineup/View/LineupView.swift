@@ -224,15 +224,15 @@ private struct LineupMember: Identifiable {
 }
 
 private let mockMembers: [LineupMember] = [
-    LineupMember(battingOrder: 1, name: "김선수", position: "포지션", batThrow: "좌타", hasSong: true),
-    LineupMember(battingOrder: 2, name: "이선수", position: "포지션", batThrow: "좌타", hasSong: false),
-    LineupMember(battingOrder: 3, name: "박선수", position: "포지션", batThrow: "좌타", hasSong: true),
-    LineupMember(battingOrder: 4, name: "최선수", position: "포지션", batThrow: "좌타", hasSong: true),
-    LineupMember(battingOrder: 5, name: "김선수", position: "포지션", batThrow: "좌타", hasSong: false),
-    LineupMember(battingOrder: 6, name: "이선수", position: "포지션", batThrow: "좌타", hasSong: true),
-    LineupMember(battingOrder: 7, name: "박선수", position: "포지션", batThrow: "좌타", hasSong: true),
-    LineupMember(battingOrder: 8, name: "김선수", position: "포지션", batThrow: "좌타", hasSong: false),
-    LineupMember(battingOrder: 9, name: "최선수", position: "포지션", batThrow: "좌타", hasSong: true),
+  LineupMember(battingOrder: 1, name: "김선수", position: "포지션", batThrow: "좌타", hasSong: true),
+  LineupMember(battingOrder: 2, name: "이선수", position: "포지션", batThrow: "좌타", hasSong: false),
+  LineupMember(battingOrder: 3, name: "박선수", position: "포지션", batThrow: "좌타", hasSong: true),
+  LineupMember(battingOrder: 4, name: "최선수", position: "포지션", batThrow: "좌타", hasSong: true),
+  LineupMember(battingOrder: 5, name: "김선수", position: "포지션", batThrow: "좌타", hasSong: false),
+  LineupMember(battingOrder: 6, name: "이선수", position: "포지션", batThrow: "좌타", hasSong: true),
+  LineupMember(battingOrder: 7, name: "박선수", position: "포지션", batThrow: "좌타", hasSong: true),
+  LineupMember(battingOrder: 8, name: "김선수", position: "포지션", batThrow: "좌타", hasSong: false),
+  LineupMember(battingOrder: 9, name: "최선수", position: "포지션", batThrow: "좌타", hasSong: true),
 ]
 
 #Preview {

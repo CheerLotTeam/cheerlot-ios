@@ -49,7 +49,7 @@ extension AppCoordinator {
   func buildModalView(for route: ModalRoute) -> some View {
     let factory = ViewModelFactory.shared
     let audioPlayer = DIContainer.shared.resolve(
-        AudioPlaybackService.self)
+      AudioPlaybackService.self)
 
     // TODO: - View 넣기
     switch route {

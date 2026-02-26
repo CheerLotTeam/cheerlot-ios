@@ -94,18 +94,18 @@ extension MainTabView {
           gameInfo: .offDay)
       }
 
-      case .teamMembers:
-        let asset = TeamMembersAssetVO(base: TeamAssetVO(team.id))
-        AppCoordinatorContainer {
-            TeamMembersView(
-                team: team,
-                asset: asset,
-                viewModel: ViewModelFactory.shared.createTeamMembersViewModel(
-                    team: team,
-                    audioPlayer: audioPlayer
-                )
-            )
-        }
+    case .teamMembers:
+      let asset = TeamMembersAssetVO(base: TeamAssetVO(team.id))
+      AppCoordinatorContainer {
+        TeamMembersView(
+          team: team,
+          asset: asset,
+          viewModel: ViewModelFactory.shared.createTeamMembersViewModel(
+            team: team,
+            audioPlayer: audioPlayer
+          )
+        )
+      }
 
     case .search:
       // MARK: - 해당 뷰로 교체
