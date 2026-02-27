@@ -7,23 +7,22 @@
 
 import SwiftUI
 
-struct AppCoordinatorContainer: View {
+struct AppCoordinatorContainer<Content: View>: View {
 
-  let team: TeamInfo
-  let audioPlayer: AudioPlaybackService
+  let content: () -> Content
 
   @State private var coordinator = AppCoordinator()
 
   var body: some View {
     NavigationStack(path: $coordinator.paths) {
-      MainTabView(team: team, audioPlayer: audioPlayer)
+      content()
         .navigationDestination(for: MainRoute.self) { route in
           coordinator.buildView(for: route)
         }
     }
     .environment(coordinator)
     .modal(item: $coordinator.modal) { route in
-      coordinator.buildModalView(for: route, audioPlayer: audioPlayer)
+      coordinator.buildModalView(for: route)
     }
   }
 }

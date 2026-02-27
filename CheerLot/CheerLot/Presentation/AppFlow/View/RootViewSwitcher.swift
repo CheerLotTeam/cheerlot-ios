@@ -45,7 +45,7 @@ extension RootViewSwitcher {
         }
 
     case .main(let team):
-      AppCoordinatorContainer(team: team, audioPlayer: audioPlayer)
+      MainTabView(team: team, audioPlayer: audioPlayer)
         .transition(.opacity)
         .id(team.id)
         .onReceive(

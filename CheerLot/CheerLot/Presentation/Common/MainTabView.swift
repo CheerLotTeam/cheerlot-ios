@@ -83,15 +83,20 @@ struct MainTabView: View {
 }
 
 extension MainTabView {
-  private func tabContent(for tab: TabKey) -> some View {
-    Group {
-      switch tab {
-      case .lineup:
-        // MARK: - 해당 뷰로 교체
-        Color.clear
 
-      case .teamMembers:
-        let asset = TeamMembersAssetVO(base: TeamAssetVO(team.id))
+  @ViewBuilder
+  private func tabContent(for tab: TabKey) -> some View {
+    switch tab {
+    case .lineup:
+      AppCoordinatorContainer {
+        LineupView(
+          asset: LineupAssetVO(base: TeamAssetVO(TeamDataSource.toEntity(.samsung).id)),
+          gameInfo: .offDay)
+      }
+
+    case .teamMembers:
+      let asset = TeamMembersAssetVO(base: TeamAssetVO(team.id))
+      AppCoordinatorContainer {
         TeamMembersView(
           team: team,
           asset: asset,
@@ -100,9 +105,11 @@ extension MainTabView {
             audioPlayer: audioPlayer
           )
         )
+      }
 
-      case .search:
-        // MARK: - 해당 뷰로 교체
+    case .search:
+      // MARK: - 해당 뷰로 교체
+      AppCoordinatorContainer {
         Color.clear
       }
     }
@@ -123,6 +130,7 @@ extension MainTabView {
         tabContent(for: .search)
       }
     }
+    .tint(asset.secondaryColor)
   }
 
   private var legacyTabView: some View {
@@ -139,6 +147,7 @@ extension MainTabView {
         tabContent(for: .search)
       }
     }
+    .tint(asset.secondaryColor)
   }
 
   @ViewBuilder
