@@ -108,9 +108,8 @@ extension MainTabView {
       }
 
     case .search:
-      // MARK: - 해당 뷰로 교체
       AppCoordinatorContainer {
-        Color.clear
+        SearchView(asset: SearchAssetVO(base: TeamAssetVO(TeamDataSource.toEntity(.samsung).id)))
       }
     }
   }
