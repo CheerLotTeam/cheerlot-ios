@@ -29,7 +29,7 @@ final class TeamRemoteRepositoryImpl: TeamRemoteRepository {
                     
                 case .failure(let error):
                     continuation.resume(
-                        throwing: NetworkError.moyaError(error, api: .team(.matchInfo))
+                        throwing: NetworkError.moyaError(error, api: .team(.gameInfo))
                     )
                 }
             }

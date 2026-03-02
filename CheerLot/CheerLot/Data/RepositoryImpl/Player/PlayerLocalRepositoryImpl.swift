@@ -8,33 +8,29 @@
 import Foundation
 import SwiftData
 
-final class PlayerLocalRepositoryImpl: PlayerLocalRepository {
-    private let modelContext: ModelContext
-    
-    init(modelContext: ModelContext) {
-        self.modelContext = modelContext
-    }
-    
+@ModelActor
+actor PlayerLocalRepositoryImpl: PlayerLocalRepository {
     func fetchPlayer(_ playerId: PlayerID) throws -> PlayerInfo? {
         guard let player = try findPlayer(playerId: playerId) else {
-            throw RepositoryError.notFound
+            throw LocalStorageError.notFound
         }
         return player.toEntity()
     }
     
     func fetchAllPlayers(_ teamId: TeamID) throws -> [PlayerInfo] {
+        let teamIdValue = teamId.value
         let descriptor = FetchDescriptor<Player>(
-            predicate: #Predicate { $0.team?.teamId == teamId.value }
+            predicate: #Predicate { $0.team?.teamId == teamIdValue }
         )
         do {
             let data = try modelContext.fetch(descriptor)
             return data.map { $0.toEntity() }
         } catch {
-            throw RepositoryError.fetchError
+            throw LocalStorageError.fetchError
         }
     }
     
-    func createPlayer(_ entity: PlayerInfo, teamId: TeamID) throws {
+    func createPlayer(_ entity: PlayerInfo, _ teamId: TeamID) throws {
         let team = try fetchTeam(teamId: teamId)
         let playerModel = createPlayerModel(from: entity, team: team)
         modelContext.insert(playerModel)
@@ -50,7 +46,7 @@ final class PlayerLocalRepositoryImpl: PlayerLocalRepository {
         try modelContext.save()
     }
     
-    func createAllPlayers(_ entities: [PlayerInfo], teamId: TeamID) throws {
+    func createAllPlayers(_ entities: [PlayerInfo], _ teamId: TeamID) throws {
         let team = try fetchTeam(teamId: teamId)
         
         for entity in entities {
@@ -71,7 +67,7 @@ final class PlayerLocalRepositoryImpl: PlayerLocalRepository {
     
     func updatePlayer(_ entity: PlayerInfo) throws {
         guard let model = try findPlayer(playerId: entity.id) else {
-            throw RepositoryError.notFound
+            throw LocalStorageError.notFound
         }
         
         model.name = entity.name
@@ -98,15 +94,16 @@ final class PlayerLocalRepositoryImpl: PlayerLocalRepository {
     
     func deletePlayer(_ playerId: PlayerID) throws {
         guard let model = try findPlayer(playerId: playerId) else {
-            throw RepositoryError.notFound
+            throw LocalStorageError.notFound
         }
         modelContext.delete(model)
         try modelContext.save()
     }
     
     func deleteAllPlayers(_ teamId: TeamID) throws {
+        let teamIdValue = teamId.value
         let descriptor = FetchDescriptor<Player>(
-            predicate: #Predicate { $0.team?.teamId == teamId.value }
+            predicate: #Predicate { $0.team?.teamId == teamIdValue }
         )
         let models = try modelContext.fetch(descriptor)
         models.forEach { modelContext.delete($0) }
@@ -120,7 +117,7 @@ extension PlayerLocalRepositoryImpl {
             predicate: #Predicate { $0.teamId == teamId.value }
         )
         guard let team = try modelContext.fetch(descriptor).first else {
-            throw RepositoryError.notFound
+            throw LocalStorageError.notFound
         }
         return team
     }
@@ -132,7 +129,7 @@ extension PlayerLocalRepositoryImpl {
         do {
             return try modelContext.fetch(descriptor).first
         } catch {
-            throw RepositoryError.fetchError
+            throw LocalStorageError.fetchError
         }
     }
     

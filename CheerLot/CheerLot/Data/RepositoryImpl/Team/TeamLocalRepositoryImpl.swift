@@ -8,23 +8,18 @@
 import Foundation
 import SwiftData
 
-final class TeamLocalRepositoryImpl: TeamLocalRepository {
-    private let modelContext: ModelContext
-    
-    init(modelContext: ModelContext) {
-        self.modelContext = modelContext
-    }
-    
+@ModelActor
+actor TeamLocalRepositoryImpl: TeamLocalRepository {
     func fetchTeam(_ teamId: TeamID) throws -> TeamState? {
         guard let team = try findTeam(teamId: teamId) else {
-            throw RepositoryError.notFound
+            throw LocalStorageError.notFound
         }
         return team.toEntity()
     }
     
     func updateTeam(_ team: TeamState) throws {
         guard let data = try findTeam(teamId: team.teamId) else {
-            throw RepositoryError.notFound
+            throw LocalStorageError.notFound
         }
         
         updateModelFromEntity(model: data, entity: team)
@@ -44,7 +39,7 @@ extension TeamLocalRepositoryImpl {
         do {
             return try modelContext.fetch(descriptor).first
         } catch {
-            throw RepositoryError.fetchError
+            throw LocalStorageError.fetchError
         }
     }
     
