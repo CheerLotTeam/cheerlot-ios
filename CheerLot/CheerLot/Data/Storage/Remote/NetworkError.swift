@@ -9,9 +9,19 @@ import Foundation
 import Moya
 
 enum APIType {
-  case lineup
-  case players
-  case version
+  case player(PlayerAPIType)
+  case team(TeamAPIType)
+  
+  enum PlayerAPIType {
+    case lineup
+    case playerDetail
+    case allPlayers
+  }
+  
+  enum TeamAPIType {
+    case matchInfo
+    case versions
+  }
 }
 
 enum NetworkError: Error {
@@ -34,7 +44,7 @@ enum NetworkError: Error {
     case .decodingError:
       return "데이터 형식이 올바르지 않습니다."
 
-    case .moyaError(let moyaError, let api):
+    case .moyaError(let moyaError, _):
       switch moyaError {
       case .underlying(let nsError as NSError, _):
         switch nsError.code {
@@ -47,16 +57,15 @@ enum NetworkError: Error {
         }
 
       case .statusCode(let response):
+        // 서버 에러 메시지 파싱
+        if let serverMessage = parseServerErrorMessage(from: response.data) {
+            return serverMessage
+        }
+          
+        // 파싱 실패 시 상태 코드별 기본 메시지
         switch response.statusCode {
-        case 404:
-          switch api {
-          case .lineup:
-            return "선수 명단 정보를 찾을 수 없습니다."
-          case .players:
-            return "선수 정보를 불러올 수 없습니다."
-          case .version:
-            return "버전 정보를 불러올 수 없습니다."
-          }
+        case 400...499:
+          return "요청을 처리할 수 없습니다."
         case 500...599:
           return "서버에 일시적인 문제가 발생했습니다."
         default:
@@ -67,5 +76,14 @@ enum NetworkError: Error {
         return "네트워크 요청 중 오류가 발생했습니다."
       }
     }
+  }
+    
+  /// 서버 에러 응답에서 메시지 추출
+  private func parseServerErrorMessage(from data: Data) -> String? {
+    guard let errorResponse = try? JSONDecoder().decode(ServerErrorResponseDTO.self, from: data),
+      !errorResponse.message.isEmpty else {
+        return nil
+      }
+      return errorResponse.message
   }
 }
