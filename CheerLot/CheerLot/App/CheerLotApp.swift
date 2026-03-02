@@ -14,6 +14,11 @@ struct CheerLotApp: App {
   @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
 
   init() {
+      Task {
+          let initializer = AppInitializer(modelContainer: LocalStorage.shared.modelContainer)
+          await initializer.initialize()
+      }
+      
     DIContainer.shared.assemble()
   }
 
