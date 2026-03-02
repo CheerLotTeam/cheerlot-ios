@@ -7,8 +7,9 @@
 
 import Foundation
 
+/// 응원가 정보
 struct CheerSongInfo: Identifiable, Hashable, Equatable {
-  let id: Int
+  let id: String
   let playerId: PlayerID
   let title: String
   let lyrics: String
