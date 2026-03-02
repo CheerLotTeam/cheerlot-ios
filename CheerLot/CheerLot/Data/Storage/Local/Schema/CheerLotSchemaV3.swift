@@ -23,8 +23,8 @@ enum CheerLotSchemaV3: VersionedSchema {
     var starterPitcherName: String?
     var lastGameDate: String?
     var isSeasonEnded: Bool
-    //    var lineupVersion: Int = -1
-    //    var playersVersion: Int = -1
+    var lineupVersion: Int = -1
+    var playersVersion: Int = -1
 
     @Relationship(deleteRule: .cascade, inverse: \Player.team) var teamMemberList: [Player]?
 
