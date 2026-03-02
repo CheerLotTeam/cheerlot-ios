@@ -9,14 +9,14 @@ import SwiftUI
 
 struct LineupView: View {
   let asset: LineupAssetVO
-  let gameInfo: GameStatus
+  let gameStatus: GameStatus
   // TODO: - UserDefaults로 저장할 것.
   @State private var showLineup: Bool = false
   //    @Environment private var coordinator: AppCoordinator()
 
   // MARK: - Layout Constants
   private let teamNameHeight: CGFloat = 44.5
-  private let matchInfoHeight: CGFloat = 26.5
+  private let gameInfoHeight: CGFloat = 26.5
   private let cardTopPadding: CGFloat = 20
   private let cardBottomPadding: CGFloat = 10
   private let cardSpacing: CGFloat = 8
@@ -47,7 +47,7 @@ struct LineupView: View {
   private func listHeight(cardHeight: CGFloat) -> CGFloat {
     max(
       0,
-      cardHeight - teamNameHeight - matchInfoHeight - cardTopPadding - cardBottomPadding
+      cardHeight - teamNameHeight - gameInfoHeight - cardTopPadding - cardBottomPadding
         - cardSpacing * 2)
   }
 
@@ -94,9 +94,9 @@ extension LineupView {
     ZStack {
       VStack(spacing: cardSpacing) {
         teamName
-        matchInfo
+        gameInfo
 
-        if gameInfo == .playingToday || showLineup {
+        if gameStatus == .playingToday || showLineup {
           lineupList(cardHeight: cardHeight, cardWidth: cardWidth)
         }
       }
@@ -104,8 +104,8 @@ extension LineupView {
       .padding(.bottom, cardBottomPadding)
       .frame(maxHeight: .infinity, alignment: .top)  // header 상단 고정
 
-      if gameInfo != .playingToday && !showLineup {
-        hasNoGameView(status: gameInfo)
+      if gameStatus != .playingToday && !showLineup {
+        hasNoGameView(status: gameStatus)
       }
     }
   }
@@ -122,7 +122,7 @@ extension LineupView {
       )
   }
 
-  private var matchInfo: some View {
+  private var gameInfo: some View {
     HStack(spacing: 8) {
       Text("12월 12일 | 삼성 vs 기아")
         .font(.M5_gameState)
@@ -139,7 +139,7 @@ extension LineupView {
     }
     .padding(.horizontal, 10)
     .padding(.vertical, 6)
-    .background(Capsule().fill(asset.matchInfoBgColor))
+    .background(Capsule().fill(asset.gameInfoBgColor))
     .foregroundColor(.grayWhite)
   }
 
@@ -239,6 +239,6 @@ private let mockMembers: [LineupMember] = [
   NavigationStack {
     LineupView(
       asset: LineupAssetVO(base: TeamAssetVO(TeamDataSource.toEntity(.samsung).id)),
-      gameInfo: .offDay)
+      gameStatus: .offDay)
   }
 }

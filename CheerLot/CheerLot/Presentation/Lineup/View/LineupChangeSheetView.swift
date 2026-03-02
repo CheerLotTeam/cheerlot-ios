@@ -71,10 +71,10 @@ extension LineupChangeSheetView {
 #Preview {
   let cheerSongs: [CheerSongInfo] = [
     CheerSongInfo(
-      id: 1, playerId: "1", title: "구자욱 응원가 1", lyrics: "가사 1",
+      id: "1", playerId: "1", title: "구자욱 응원가 1", lyrics: "가사 1",
       audioURL: "https://example.com/1.mp3"),
     CheerSongInfo(
-      id: 2, playerId: "1", title: "구자욱 응원가 2", lyrics: "가사 2",
+      id: "2", playerId: "1", title: "구자욱 응원가 2", lyrics: "가사 2",
       audioURL: "https://example.com/2.mp3"),
   ]
 
@@ -86,7 +86,6 @@ extension LineupChangeSheetView {
     position: "좌익수",
     batThrow: "좌타",
     battingOrder: 1,
-    isStarter: true,
     cheerSongs: cheerSongs
   )
 

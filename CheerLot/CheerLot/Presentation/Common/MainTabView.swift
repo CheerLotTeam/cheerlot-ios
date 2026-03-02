@@ -91,7 +91,7 @@ extension MainTabView {
       AppCoordinatorContainer {
         LineupView(
           asset: LineupAssetVO(base: TeamAssetVO(TeamDataSource.toEntity(.samsung).id)),
-          gameInfo: .offDay)
+          gameStatus: .offDay)
       }
 
     case .teamMembers:

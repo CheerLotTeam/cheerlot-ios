@@ -27,7 +27,7 @@ final class TeamMembersViewModel {
 
     /// 테스트
     let song = CheerSongInfo(
-      id: 1,
+      id: "1",
       playerId: PlayerID("박찬호"),
       title: "기본 응원가",
       lyrics: "치고 달려라\n멀리 높이 더 빨리\n뜨거운 열정을 담아",

@@ -98,14 +98,14 @@ extension View {
   }
 
   /// leading에 cancel 버튼과 center에 경기 정보를 가지는 toolbar 확장 메서드
-  func toolBar_matchInfo(
+  func toolBar_gameInfo(
     date: String,
     teams: String,
     onClose: @escaping () -> Void
   ) -> some View {
     customToolBar(
       leftItem: .close(action: onClose),
-      centerItem: .matchInfo(date: date, teams: teams)
+      centerItem: .gameInfo(date: date, teams: teams)
     )
   }
 
