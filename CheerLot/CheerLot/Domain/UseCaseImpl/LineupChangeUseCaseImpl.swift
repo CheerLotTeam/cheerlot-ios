@@ -14,14 +14,6 @@ final class LineupChangeUseCaseImpl: LineupChangeUseCase {
         self.playerLocalRepository = playerLocalRepository
     }
     
-    func getCurrentLineup(teamId: TeamID) async throws -> [PlayerInfo] {
-        let allPlayers = try await playerLocalRepository.fetchAllPlayers(teamId)
-    
-        return allPlayers
-            .filter { $0.battingOrder != nil }
-            .sorted { ($0.battingOrder ?? 0) < ($1.battingOrder ?? 0) }
-    }
-    
     func getBenchPlayers(teamId: TeamID) async throws -> [PlayerInfo] {
         let allPlayers = try await playerLocalRepository.fetchAllPlayers(teamId)
         
@@ -29,7 +21,6 @@ final class LineupChangeUseCaseImpl: LineupChangeUseCase {
             .filter { $0.battingOrder == nil }
     }
     
-    // MARK: - 교체
     func swapPlayers(
         lineupPlayer: PlayerInfo,
         benchPlayer: PlayerInfo,
@@ -51,7 +42,7 @@ final class LineupChangeUseCaseImpl: LineupChangeUseCase {
         // 타순 교환
         let lineupPlayerOrder = lineupPlayer.battingOrder!
         
-        // 1. 라인업 선수 → 벤치로 (타순 제거)
+        // 라인업 선수 → 벤치로 (타순 제거)
         let demotedPlayer = PlayerInfo(
             id: lineupPlayer.id,
             teamId: lineupPlayer.teamId,
@@ -64,7 +55,7 @@ final class LineupChangeUseCaseImpl: LineupChangeUseCase {
         )
         try await playerLocalRepository.updatePlayer(demotedPlayer)
         
-        // 2. 벤치 선수 → 라인업으로 (타순 부여)
+        // 벤치 선수 → 라인업으로 (타순 부여)
         let promotedPlayer = PlayerInfo(
             id: benchPlayer.id,
             teamId: benchPlayer.teamId,

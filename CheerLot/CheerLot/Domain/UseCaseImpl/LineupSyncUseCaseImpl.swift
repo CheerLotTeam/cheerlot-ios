@@ -25,18 +25,26 @@ final class LineupSyncUseCaseImpl: LineupSyncUseCase {
         self.playerRemoteRepository = playerRemoteRepository
     }
     
+    func getCurrentLineup(teamId: TeamID) async throws -> [PlayerInfo] {
+        let allPlayers = try await playerLocalRepository.fetchAllPlayers(teamId)
+        
+        return allPlayers
+            .filter { $0.battingOrder != nil }
+            .sorted { ($0.battingOrder ?? 0) < ($1.battingOrder ?? 0) }
+    }
+    
     func syncIfNeeded(teamId: TeamID) async throws {
-        // 1. 서버 버전 확인
+        // 서버 버전 확인
         let serverVersions = try await teamRemoteRepository.fetchVersions(teamId)
         
-        // 2. 로컬 버전 확인
+        // 로컬 버전 확인
         guard let localTeam = try await teamLocalRepository.fetchTeam(teamId) else {
             // 로컬에 없으면 무조건 동기화
             try await forceSync(teamId: teamId)
             return
         }
         
-        // 3. 버전 비교
+        // 버전 비교
         if localTeam.versionInfo.lineupVersion != serverVersions.lineupVersion {
             try await performSync(teamId: teamId, newVersion: serverVersions.lineupVersion)
         }
@@ -47,16 +55,16 @@ final class LineupSyncUseCaseImpl: LineupSyncUseCase {
         try await performSync(teamId: teamId, newVersion: serverVersions.lineupVersion)
     }
     
-    // MARK: - Private
+    // MARK: - Private Method
     
     private func performSync(teamId: TeamID, newVersion: Int) async throws {
-        // 1. 서버 라인업 가져오기
+        // 서버 라인업 가져오기
         let serverLineup = try await playerRemoteRepository.fetchLineup(teamId)
         
-        // 2. 로컬 선수들 조회
+        // 로컬 선수들 조회
         let localPlayers = try await playerLocalRepository.fetchAllPlayers(teamId)
         
-        // 3. 기존 라인업 선수들의 타순 제거
+        // 기존 라인업 선수들의 타순 제거
         for localPlayer in localPlayers where localPlayer.battingOrder != nil {
             let updatedPlayer = PlayerInfo(
                 id: localPlayer.id,
@@ -71,7 +79,7 @@ final class LineupSyncUseCaseImpl: LineupSyncUseCase {
             try await playerLocalRepository.updatePlayer(updatedPlayer)
         }
         
-        // 4. 새 라인업 선수들에게 타순 부여
+        // 새 라인업 선수들에게 타순 부여
         for lineupPlayer in serverLineup {
             if let localPlayer = try await playerLocalRepository.fetchPlayer(lineupPlayer.id) {
                 // 이미 있는 선수 → 타순만 업데이트
@@ -92,7 +100,7 @@ final class LineupSyncUseCaseImpl: LineupSyncUseCase {
             }
         }
         
-        // 5. 팀 버전 업데이트
+        // 팀 버전 업데이트
         try await updateLineupVersion(teamId: teamId, version: newVersion)
     }
     

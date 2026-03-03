@@ -19,18 +19,25 @@ final class TeamGameInfoSyncUseCaseImpl: TeamGameInfoSyncUseCase {
         self.teamRemoteRepository = teamRemoteRepository
     }
     
+    func getGameInfo(teamId: TeamID) async throws -> TeamGameInfo {
+        guard let teamData = try await teamLocalRepository.fetchTeam(teamId) else {
+            throw LocalStorageError.notFound
+        }
+        return teamData.gameInfo
+    }
+    
     func syncIfNeeded(teamId: TeamID) async throws {
-        // 1. 서버 버전 확인
+        // 서버 버전 확인
         let serverVersions = try await teamRemoteRepository.fetchVersions(teamId)
         
-        // 2. 로컬 버전 확인
+        // 로컬 버전 확인
         guard let localTeam = try await teamLocalRepository.fetchTeam(teamId) else {
             // 로컬에 없으면 무조건 동기화
             try await forceSync(teamId: teamId)
             return
         }
         
-        // 3. 버전 비교 (lineupVersion 또는 playersVersion 중 하나라도 다르면 경기 정보도 바뀐 것)
+        // 버전 비교 (lineupVersion 또는 playersVersion 중 하나라도 다르면 경기 정보도 바뀐 것)
         let hasVersionChanged = localTeam.versionInfo.lineupVersion != serverVersions.lineupVersion ||
         localTeam.versionInfo.playersVersion != serverVersions.playersVersion
         
@@ -43,19 +50,21 @@ final class TeamGameInfoSyncUseCaseImpl: TeamGameInfoSyncUseCase {
         try await performSync(teamId: teamId)
     }
     
+    // MARK: - Private Method
+    
     private func performSync(teamId: TeamID) async throws {
-        // 1. 서버에서 최신 정보 가져오기
+        // 서버에서 최신 정보 가져오기
         let gameInfo = try await teamRemoteRepository.fetchGameInfo(teamId)
         let versionInfo = try await teamRemoteRepository.fetchVersions(teamId)
         
-        // 2. TeamData 생성
+        // TeamData 생성
         let teamData = TeamState(
             teamId: teamId,
             gameInfo: gameInfo,
             versionInfo: versionInfo
         )
         
-        // 3. 로컬에 업데이트
+        // 로컬에 업데이트
         try await teamLocalRepository.updateTeam(teamData)
     }
 }
