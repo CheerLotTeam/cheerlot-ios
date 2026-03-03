@@ -14,7 +14,9 @@ struct SettingsMenuCard: View {
   var body: some View {
     VStack(spacing: .zero) {
       ForEach(titles.indices, id: \.self) { idx in
-        Button { onTap(idx) } label: {
+        Button {
+          onTap(idx)
+        } label: {
           HStack {
             Text(titles[idx])
               .font(.M3)

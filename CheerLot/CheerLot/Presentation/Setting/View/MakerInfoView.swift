@@ -21,7 +21,7 @@ struct MakerInfoView: View {
           serviceInfoTap(menus[index])
         }
       )
-      
+
       Spacer()
     }
     .padding(.horizontal, 20)

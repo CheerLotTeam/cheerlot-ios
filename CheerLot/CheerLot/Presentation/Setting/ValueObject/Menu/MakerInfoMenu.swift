@@ -10,9 +10,9 @@ import SwiftUI
 enum MakerInfoMenu: String, CaseIterable, Identifiable {
   case instagram = "쳐랏 인스타그램"
   case goToReview = "개발자 응원하기"
-  
+
   var id: String { self.rawValue }
-  
+
   var url: String {
     switch self {
     case .instagram: return Constants.instagramURL

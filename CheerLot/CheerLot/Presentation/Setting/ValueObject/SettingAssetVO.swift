@@ -30,7 +30,7 @@ struct SettingAssetVO {
   var secondaryColor: Color {
     base.secondaryColor
   }
-  
+
   var teamColor200: Color {
     base.primaryPalette.color200
   }
@@ -43,7 +43,7 @@ struct SettingAssetVO {
       colors: [
         base.primaryPalette.color200,
         base.primaryPalette.color200,
-        base.primaryPalette.color600
+        base.primaryPalette.color600,
       ],
       startPoint: .top,
       endPoint: .bottom

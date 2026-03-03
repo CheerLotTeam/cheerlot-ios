@@ -9,13 +9,13 @@ import SwiftUI
 
 /// 설정 화면 입니다.
 struct SettingView: View {
-  
+
   // MARK: - Properties
   let asset: SettingAssetVO
   let team: TeamInfo
-  
+
   @State private var isTeamIconSelected: Bool = false
-  
+
   // MARK: - Body
   var body: some View {
     ScrollView {
@@ -26,7 +26,7 @@ struct SettingView: View {
       }
       .padding(.horizontal, 20)
     }
-    .navigationBar_backWithTitle(title: "설정") { }
+    .navigationBar_backWithTitle(title: "설정") {}
   }
 }
 
@@ -37,21 +37,22 @@ extension SettingView {
       Text("나의 팀")
         .font(.SB8)
         .foregroundStyle(.gray500)
-      
-      TeamCardButton(action: {
-        print("팀 카드 버튼입니다.")
-      }, asset: asset, team: team)
+
+      TeamCardButton(
+        action: {
+          print("팀 카드 버튼입니다.")
+        }, asset: asset, team: team)
     }
     .padding(.bottom, 20)
   }
-  
+
   /// 앱 아이콘 설정
   private var appIconContent: some View {
     VStack(alignment: .leading, spacing: 6) {
       Text("앱 아이콘")
         .font(.SB8)
         .foregroundStyle(.gray500)
-      
+
       appIconButtonGroup
         .background(
           RoundedRectangle(cornerRadius: 20)
@@ -60,7 +61,7 @@ extension SettingView {
     }
     .padding(.bottom, 20)
   }
-  
+
   /// 앱 아이콘 선택 버튼 모음
   private var appIconButtonGroup: some View {
     HStack {
@@ -77,16 +78,16 @@ extension SettingView {
             .clipShape(RoundedRectangle(cornerRadius: 14))
             .saturation(isTeamIconSelected ? 0 : 1)
             .opacity(isTeamIconSelected ? 0.55 : 1)
-          
+
           Text("기본")
             .font(.SB9)
             .foregroundStyle(isTeamIconSelected ? .gray300 : asset.primaryColor)
         }
       }
       .buttonStyle(.plain)
-      
+
       Spacer()
-      
+
       Button {
         withAnimation(.easeInOut(duration: 0.2)) {
           isTeamIconSelected = true
@@ -97,14 +98,14 @@ extension SettingView {
             RoundedRectangle(cornerRadius: 14)
               .fill(isTeamIconSelected ? asset.primaryColor : .gray300)
               .frame(width: 64, height: 64)
-            
+
             Image(.teamAppIcon)
               .resizable()
               .scaledToFit()
               .frame(width: 54, height: 44)
           }
           .frame(width: 64, height: 64)
-          
+
           Text("팀")
             .font(.SB9)
             .foregroundStyle(isTeamIconSelected ? asset.primaryColor : .gray300)
@@ -115,14 +116,14 @@ extension SettingView {
     .padding(.vertical, 10)
     .padding(.horizontal, 60)
   }
-  
+
   /// 지원 섹션
   private var supportContent: some View {
     VStack(alignment: .leading, spacing: 6) {
       Text("지원")
         .font(.SB8)
         .foregroundStyle(.gray500)
-      
+
       SettingsMenuCard(
         titles: supportMenus.map(\.rawValue),
         onTap: { index in
@@ -140,18 +141,18 @@ extension SettingView {
   private var supportMenus: [SupportInfoMenu] {
     SupportInfoMenu.allCases
   }
-  
+
   /// 지원 메뉴 탭 처리
   private func supportTap(_ menu: SupportInfoMenu) {
     switch menu {
     case .serviceIntro:
       // coordinator.paths.append(.serviceInfo)
       print("서비스 소개로 이동")
-      
+
     case .cheerlotTeam:
       // coordinator.paths.append(.makerInfo)
       print("쳐랏 팀으로 이동")
-      
+
     case .reportBug:
       // coordinator.modal = .inquiry
       print("문의하기 시트 열기")
