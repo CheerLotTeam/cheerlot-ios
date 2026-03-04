@@ -20,7 +20,7 @@ struct LineupGameInfoVO: Equatable {
     opponentTeamInfo: TeamInfo?,
     gameInfo: TeamGameInfo
   ) {
-    self.teamName = teamInfo.longName
+    self.teamName = teamInfo.shortName
     self.teamEnglishName = teamInfo.englishFullName
 
     // YYYY-MM-DD → M월 d일
