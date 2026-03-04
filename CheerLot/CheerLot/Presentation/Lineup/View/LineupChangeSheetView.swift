@@ -8,29 +8,64 @@
 import SwiftUI
 
 struct LineupChangeSheetView: View {
-  let player: PlayerInfo
-  let asset: LineupChangeAssetVO
-  //      @Environment private var coordinator: AppCoordinator()
-
-  let columns = [
-    GridItem(.flexible(), spacing: 23),
-    GridItem(.flexible(), spacing: 23),
-  ]
+  @State private var viewModel: LineupChangeViewModel
+  @Environment(AppCoordinator.self) private var coordinator
+    let onComplete: () -> Void
+    
+    init(viewModel: LineupChangeViewModel, onComplete: @escaping () -> Void) {
+        _viewModel = State(initialValue: viewModel)
+        self.onComplete = onComplete
+    }
 
   var body: some View {
     VStack(spacing: 18) {
       header
         .padding(.top, 18)
 
-      playerListGrid
+        if let asset = viewModel.asset {
+            playerListGrid(asset: asset)
+        } else {
+            Color.clear
+        }
     }
     .toolBar_editMode(
       title: "선발 라인업"
     ) {
-      //                coordinator.dismissModal()
+        coordinator.dismissModal()
     } onCheck: {
-      // TODO: - 선수교체 로직
-      //                coordinator.dismissModal()
+        Task {
+            let success = await viewModel.swapPlayers()
+            if success {
+                onComplete()
+                coordinator.dismissModal()
+            }
+        }
+    }
+    .disabled(viewModel.isSwapping)
+    .overlay {
+        if viewModel.isLoading || viewModel.isSwapping {
+            ProgressView()
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .background(.ultraThinMaterial)
+        }
+    }
+    .task {
+        await viewModel.onAppear()
+    }
+    .alert("오류", isPresented: .constant(viewModel.errorMessage != nil)) {
+        Button("다시 시도") {
+            viewModel.errorMessage = nil
+            Task {
+                await viewModel.onAppear()
+            }
+        }
+        Button("취소", role: .cancel) {
+            viewModel.errorMessage = nil
+        }
+    } message: {
+        if let error = viewModel.errorMessage {
+            Text(error)
+        }
     }
   }
 }
@@ -42,21 +77,22 @@ extension LineupChangeSheetView {
         .font(.M3)
         .foregroundStyle(.gray300)
 
-      Text(player.name)
+        Text(viewModel.lineupPlayer.name)
         .font(.B3)
         .foregroundStyle(.grayBlack)
     }
   }
 
-  private var playerListGrid: some View {
+  private func playerListGrid(asset: LineupChangeAssetVO) -> some View {
     ScrollView {
-      LazyVGrid(columns: columns, spacing: 20) {
-        ForEach(0..<30, id: \.self) { _ in
+      LazyVGrid(columns: viewModel.columns, spacing: 20) {
+        ForEach(viewModel.benchPlayers) { player in
           ChangePlayerSelectCell(
-            player: LineupChangeAssetVO(base: TeamAssetVO(TeamDataSource.toEntity(.samsung).id)),
-            isSelected: true,
+            player: player,
+            asset: asset,
+            isSelected: viewModel.isSelected(player),
             action: {
-              // viewModel.select(player.id)
+               viewModel.selectPlayer(player)
             }
           )
           .frame(height: 60)
@@ -69,27 +105,5 @@ extension LineupChangeSheetView {
 }
 
 #Preview {
-  let cheerSongs: [CheerSongInfo] = [
-    CheerSongInfo(
-      id: "1", playerId: "1", title: "구자욱 응원가 1", lyrics: "가사 1",
-      audioURL: "https://example.com/1.mp3"),
-    CheerSongInfo(
-      id: "2", playerId: "1", title: "구자욱 응원가 2", lyrics: "가사 2",
-      audioURL: "https://example.com/2.mp3"),
-  ]
-
-  let player = PlayerInfo(
-    id: "1",
-    teamId: "samsung",
-    name: "구자욱",
-    backNumber: 8,
-    position: "좌익수",
-    batThrow: "좌타",
-    battingOrder: 1,
-    cheerSongs: cheerSongs
-  )
-
-  LineupChangeSheetView(
-    player: player,
-    asset: LineupChangeAssetVO(base: TeamAssetVO(TeamDataSource.toEntity(.samsung).id)))
+  
 }

@@ -8,7 +8,8 @@
 import SwiftUI
 
 struct ChangePlayerSelectCell: View {
-  let player: LineupChangeAssetVO
+    let player: LineupPlayerVO
+    let asset: LineupChangeAssetVO
   let isSelected: Bool
   let action: () -> Void
 
@@ -24,15 +25,15 @@ struct ChangePlayerSelectCell: View {
 
 extension ChangePlayerSelectCell {
   private var buttonContents: some View {
-    Text("김선수")
+    Text("\(player.name)")
       .font(.SB5)
-      .foregroundStyle(isSelected ? player.primaryColor : .gray500)
+      .foregroundStyle(isSelected ? asset.primaryColor : .gray500)
       .frame(maxWidth: .infinity, maxHeight: .infinity)
       .background(
         RoundedRectangle(cornerRadius: 8)
-          .fill(isSelected ? player.selectedCellFillColor : .grayWhite)
+          .fill(isSelected ? asset.selectedCellFillColor : .grayWhite)
           .shadow(
-            color: isSelected ? player.cellShadowColor : .gray500.opacity(0.15),
+            color: isSelected ? asset.cellShadowColor : .gray500.opacity(0.15),
             radius: 4,
             x: 0,
             y: 0
@@ -41,17 +42,9 @@ extension ChangePlayerSelectCell {
       .overlay(
         RoundedRectangle(cornerRadius: 8)
           .strokeBorder(
-            isSelected ? player.selectedCellStrokeColor : .grayWhite,
+            isSelected ? asset.selectedCellStrokeColor : .grayWhite,
             lineWidth: 1.5
           )
       )
   }
-}
-
-#Preview {
-  ChangePlayerSelectCell(
-    player: LineupChangeAssetVO(base: TeamAssetVO(TeamDataSource.toEntity(.samsung).id)),
-    isSelected: true,
-    action: {
-    })
 }
