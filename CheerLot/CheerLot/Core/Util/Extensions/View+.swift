@@ -147,7 +147,8 @@ extension View {
     onChangePlayer: @escaping () -> Void,
     onSelectSong: @escaping (CheerSongVO) -> Void
   ) -> some View {
-      self.modifier(LineupCellActionsModifier(
+    self.modifier(
+      LineupCellActionsModifier(
         player: player,
         onChangePlayer: onChangePlayer,
         onSelectSong: onSelectSong

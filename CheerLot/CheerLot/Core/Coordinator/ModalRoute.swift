@@ -61,24 +61,24 @@ extension AppCoordinator {
     // TODO: - View 넣기
     switch route {
     case let .cheerSongList(asset, player, lineupPlayers):
-        CheerSongMenuSheetView(
-            asset: asset,
-            player: player,
-            lineupPlayers: lineupPlayers,
-        )
-        .presentationDetents([.height(CGFloat((player.cheerSongs.count)) * 77 + 83)])
-        .presentationDragIndicator(.visible)
+      CheerSongMenuSheetView(
+        asset: asset,
+        player: player,
+        lineupPlayers: lineupPlayers,
+      )
+      .presentationDetents([.height(CGFloat((player.cheerSongs.count)) * 77 + 83)])
+      .presentationDragIndicator(.visible)
     case let .lineupChange(lineupPlayer, onComplete):
-        let vm = factory.createLineupChangeViewModel(
-            lineupPlayer
-        )
-        
-        LineupChangeSheetView(
-            viewModel: vm,
-            onComplete: onComplete
-        )
-        .presentationDetents([.large])
-        .presentationDragIndicator(.hidden)
+      let vm = factory.createLineupChangeViewModel(
+        lineupPlayer
+      )
+
+      LineupChangeSheetView(
+        viewModel: vm,
+        onComplete: onComplete
+      )
+      .presentationDetents([.large])
+      .presentationDragIndicator(.hidden)
     case let .teamChange:
       Color.clear
     case let .inquiry:

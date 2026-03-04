@@ -16,15 +16,15 @@ enum PlayerAPI {
 
 extension PlayerAPI: APITargetType {
   var baseURL: URL {
-      return URL(string: API.playerURL)!
+    return URL(string: API.playerURL)!
   }
-    
+
   var path: String {
     switch self {
     case .getLineup(let teamCode):
       return "/team/\(teamCode)"
     case .getPlayer(let playerCode):
-        return "/\(playerCode)"
+      return "/\(playerCode)"
     case .getAllPlayers(let teamCode):
       return "/team/\(teamCode)"
     }
@@ -40,7 +40,7 @@ extension PlayerAPI: APITargetType {
   var task: Task {
     switch self {
     case .getLineup:
-        return .requestParameters(parameters: ["role": "starter"], encoding: URLEncoding.queryString)
+      return .requestParameters(parameters: ["role": "starter"], encoding: URLEncoding.queryString)
     case .getPlayer, .getAllPlayers:
       return .requestPlain
     }

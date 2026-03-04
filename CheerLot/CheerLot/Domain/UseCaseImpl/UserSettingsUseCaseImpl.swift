@@ -8,21 +8,21 @@
 import Foundation
 
 final class UserSettingsUseCaseImpl: UserSettingsUseCase {
-    private let userSettingsRepository: UserSettingsRepository
-    
-    init(userSettingsRepository: UserSettingsRepository) {
-        self.userSettingsRepository = userSettingsRepository
-    }
+  private let userSettingsRepository: UserSettingsRepository
 
-    func getShowRecentLineup() -> Bool {
-        userSettingsRepository.getShowRecentLineup()
-    }
-    
-    func setShowRecentLineup(_ value: Bool) {
-        userSettingsRepository.setShowRecentLineup(value)
-    }
-    
-    func resetShowRecentLineup() {
-        userSettingsRepository.resetShowRecentLineup()
-    }
+  init(userSettingsRepository: UserSettingsRepository) {
+    self.userSettingsRepository = userSettingsRepository
+  }
+
+  func getShowRecentLineup() -> Bool {
+    userSettingsRepository.getShowRecentLineup()
+  }
+
+  func setShowRecentLineup(_ value: Bool) {
+    userSettingsRepository.setShowRecentLineup(value)
+  }
+
+  func resetShowRecentLineup() {
+    userSettingsRepository.resetShowRecentLineup()
+  }
 }

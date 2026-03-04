@@ -105,58 +105,58 @@ enum CheerLotSchemaV3: VersionedSchema {
 }
 
 extension Team {
-    func toEntity() -> TeamState {
-        let status: GameStatus
-        
-        if self.isSeasonEnded {
-            status = .seasonEnded
-        } else if self.hasTodayGame {
-            status = .playingToday
-        } else {
-            status = .offDay
-        }
-        
-        return TeamState(
-            teamId: TeamID(self.teamId),
-            gameInfo: TeamGameInfo(
-                id: TeamID(self.teamId),
-                status: status,
-                opponent: self.opponentTeamId.map { TeamID($0) },
-                starterPitcherName: self.starterPitcherName,
-                lastGameDate: self.lastGameDate
-            ),
-            versionInfo: TeamVersionInfo(
-                id: TeamID(self.teamId),
-                lineupVersion: self.lineupVersion,
-                playersVersion: self.playersVersion
-            )
-        )
+  func toEntity() -> TeamState {
+    let status: GameStatus
+
+    if self.isSeasonEnded {
+      status = .seasonEnded
+    } else if self.hasTodayGame {
+      status = .playingToday
+    } else {
+      status = .offDay
     }
+
+    return TeamState(
+      teamId: TeamID(self.teamId),
+      gameInfo: TeamGameInfo(
+        id: TeamID(self.teamId),
+        status: status,
+        opponent: self.opponentTeamId.map { TeamID($0) },
+        starterPitcherName: self.starterPitcherName,
+        lastGameDate: self.lastGameDate
+      ),
+      versionInfo: TeamVersionInfo(
+        id: TeamID(self.teamId),
+        lineupVersion: self.lineupVersion,
+        playersVersion: self.playersVersion
+      )
+    )
+  }
 }
 
 extension Player {
-    func toEntity() -> PlayerInfo {
-        return PlayerInfo(
-            id: PlayerID(self.playerId),
-            teamId:  TeamID(self.team?.teamId ?? ""),
-            name: self.name,
-            backNumber: self.backNumber,
-            position: self.position,
-            batThrow: self.batThrow,
-            battingOrder: self.battingOrder,
-            cheerSongs: cheerSongList?.map { $0.toEntity() } ?? []
-        )
-    }
+  func toEntity() -> PlayerInfo {
+    return PlayerInfo(
+      id: PlayerID(self.playerId),
+      teamId: TeamID(self.team?.teamId ?? ""),
+      name: self.name,
+      backNumber: self.backNumber,
+      position: self.position,
+      batThrow: self.batThrow,
+      battingOrder: self.battingOrder,
+      cheerSongs: cheerSongList?.map { $0.toEntity() } ?? []
+    )
+  }
 }
 
 extension CheerSong {
-    func toEntity() -> CheerSongInfo {
-        return CheerSongInfo(
-            id: self.cheerSongId,
-            playerId: PlayerID(player?.playerId ?? ""),
-            title: self.title,
-            lyrics: self.lyrics,
-            audioURL: self.audioUrl
-        )
-    }
+  func toEntity() -> CheerSongInfo {
+    return CheerSongInfo(
+      id: self.cheerSongId,
+      playerId: PlayerID(player?.playerId ?? ""),
+      title: self.title,
+      lyrics: self.lyrics,
+      audioURL: self.audioUrl
+    )
+  }
 }

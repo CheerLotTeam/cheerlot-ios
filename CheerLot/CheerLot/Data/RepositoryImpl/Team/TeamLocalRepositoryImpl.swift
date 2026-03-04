@@ -10,56 +10,56 @@ import SwiftData
 
 @ModelActor
 actor TeamLocalRepositoryImpl: TeamLocalRepository {
-    func fetchTeam(_ teamId: TeamID) throws -> TeamState? {
-        guard let team = try findTeam(teamId: teamId) else {
-            throw LocalStorageError.notFound
-        }
-        return team.toEntity()
+  func fetchTeam(_ teamId: TeamID) throws -> TeamState? {
+    guard let team = try findTeam(teamId: teamId) else {
+      throw LocalStorageError.notFound
     }
-    
-    func updateTeam(_ team: TeamState) throws {
-        guard let data = try findTeam(teamId: team.teamId) else {
-            throw LocalStorageError.notFound
-        }
-        
-        updateModelFromEntity(model: data, entity: team)
-        try modelContext.save()
+    return team.toEntity()
+  }
+
+  func updateTeam(_ team: TeamState) throws {
+    guard let data = try findTeam(teamId: team.teamId) else {
+      throw LocalStorageError.notFound
     }
-    
-    func teamExists(_ teamId: TeamID) throws -> Bool {
-        return try fetchTeam(teamId) != nil
-    }
+
+    updateModelFromEntity(model: data, entity: team)
+    try modelContext.save()
+  }
+
+  func teamExists(_ teamId: TeamID) throws -> Bool {
+    return try fetchTeam(teamId) != nil
+  }
 }
 
 extension TeamLocalRepositoryImpl {
-    private func findTeam(teamId: TeamID) throws -> Team? {
-        let predicate = #Predicate<Team> { $0.teamId == teamId.value}
-        let descriptor = FetchDescriptor(predicate: predicate)
-        
-        do {
-            return try modelContext.fetch(descriptor).first
-        } catch {
-            throw LocalStorageError.fetchError
-        }
+  private func findTeam(teamId: TeamID) throws -> Team? {
+    let predicate = #Predicate<Team> { $0.teamId == teamId.value }
+    let descriptor = FetchDescriptor(predicate: predicate)
+
+    do {
+      return try modelContext.fetch(descriptor).first
+    } catch {
+      throw LocalStorageError.fetchError
     }
-    
-    private func updateModelFromEntity(model: Team, entity: TeamState) {
-        switch entity.gameInfo.status {
-        case .playingToday:
-            model.hasTodayGame = true
-            model.isSeasonEnded = false
-        case .offDay:
-            model.hasTodayGame = false
-            model.isSeasonEnded = false
-        case .seasonEnded:
-            model.hasTodayGame = false
-            model.isSeasonEnded = true
-        }
-        
-        model.opponentTeamId = entity.gameInfo.opponent?.value
-        model.starterPitcherName = entity.gameInfo.starterPitcherName
-        model.lastGameDate = entity.gameInfo.lastGameDate
-        model.lineupVersion = entity.versionInfo.lineupVersion
-        model.playersVersion = entity.versionInfo.playersVersion
+  }
+
+  private func updateModelFromEntity(model: Team, entity: TeamState) {
+    switch entity.gameInfo.status {
+    case .playingToday:
+      model.hasTodayGame = true
+      model.isSeasonEnded = false
+    case .offDay:
+      model.hasTodayGame = false
+      model.isSeasonEnded = false
+    case .seasonEnded:
+      model.hasTodayGame = false
+      model.isSeasonEnded = true
     }
+
+    model.opponentTeamId = entity.gameInfo.opponent?.value
+    model.starterPitcherName = entity.gameInfo.starterPitcherName
+    model.lastGameDate = entity.gameInfo.lastGameDate
+    model.lineupVersion = entity.versionInfo.lineupVersion
+    model.playersVersion = entity.versionInfo.playersVersion
+  }
 }

@@ -9,10 +9,10 @@ import Foundation
 import SwiftData
 
 final class LocalStorage {
-    static let shared = LocalStorage()
-    
-    private init() {}
-    
+  static let shared = LocalStorage()
+
+  private init() {}
+
   lazy var modelContainer = {
     let schema = Schema([
       Team.self,

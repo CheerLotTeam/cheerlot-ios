@@ -74,7 +74,7 @@ final class DIContainer {
 }
 
 extension DIContainer {
-    
+
   private func assembleService() {
     registerSingleton(AudioPlaybackService.self) {
       AudioPlaybackService()
@@ -82,10 +82,10 @@ extension DIContainer {
   }
 
   private func assembleRepositories() {
-      registerSingleton(UserSettingsRepository.self) {
-          UserSettingsRepositoryImpl()
-      }
-      
+    registerSingleton(UserSettingsRepository.self) {
+      UserSettingsRepositoryImpl()
+    }
+
     registerSingleton(TeamSelectionRepository.self) {
       TeamSelectionRepositoryImpl()
     }
@@ -93,31 +93,31 @@ extension DIContainer {
     registerSingleton(TeamInfoRepository.self) {
       TeamInfoRepositoryImpl()
     }
-      
-      registerSingleton(TeamLocalRepository.self) {
-          TeamLocalRepositoryImpl(modelContainer: LocalStorage.shared.modelContainer)
-      }
-      
-      registerSingleton(TeamRemoteRepository.self) {
-          TeamRemoteRepositoryImpl()
-      }
-      
-      registerSingleton(PlayerLocalRepository.self) {
-          PlayerLocalRepositoryImpl(modelContainer: LocalStorage.shared.modelContainer)
-      }
-      
-      registerSingleton(PlayerRemoteRepository.self) {
-          PlayerRemoteRepositoryImpl()
-      }
+
+    registerSingleton(TeamLocalRepository.self) {
+      TeamLocalRepositoryImpl(modelContainer: LocalStorage.shared.modelContainer)
+    }
+
+    registerSingleton(TeamRemoteRepository.self) {
+      TeamRemoteRepositoryImpl()
+    }
+
+    registerSingleton(PlayerLocalRepository.self) {
+      PlayerLocalRepositoryImpl(modelContainer: LocalStorage.shared.modelContainer)
+    }
+
+    registerSingleton(PlayerRemoteRepository.self) {
+      PlayerRemoteRepositoryImpl()
+    }
   }
 
   private func assembleUseCases() {
-      register(UserSettingsUseCase.self) { container in
-          UserSettingsUseCaseImpl(
-            userSettingsRepository: container.resolve(UserSettingsRepository.self)
-        )
-      }
-      
+    register(UserSettingsUseCase.self) { container in
+      UserSettingsUseCaseImpl(
+        userSettingsRepository: container.resolve(UserSettingsRepository.self)
+      )
+    }
+
     register(TeamSelectionUseCase.self) { container in
       TeamSelectionUseCaseImpl(
         teamSelectionRepository: container.resolve(TeamSelectionRepository.self)
@@ -129,35 +129,35 @@ extension DIContainer {
         teamInfoRepository: container.resolve(TeamInfoRepository.self)
       )
     }
-      
-      register(TeamPlayersSyncUseCase.self) { container in
-          TeamPlayersSyncUseCaseImpl(
-            teamLocalRepository: container.resolve(TeamLocalRepository.self),
-            teamRemoteRepository: container.resolve(TeamRemoteRepository.self),
-            playerLocalRepository: container.resolve(PlayerLocalRepository.self),
-            playerRemoteRepository: container.resolve(PlayerRemoteRepository.self)
-          )
-      }
-      
-      register(LineupSyncUseCase.self) { container in
-          LineupSyncUseCaseImpl(
-            teamLocalRepository: container.resolve(TeamLocalRepository.self),
-            teamRemoteRepository: container.resolve(TeamRemoteRepository.self),
-            playerLocalRepository: container.resolve(PlayerLocalRepository.self),
-            playerRemoteRepository: container.resolve(PlayerRemoteRepository.self),
-            userSettingsRepository: container.resolve(UserSettingsRepository.self)
-          )
-      }
-      
-      register(TeamGameInfoSyncUseCase.self) { container in
-          TeamGameInfoSyncUseCaseImpl(
-            teamLocalRepository: container.resolve(TeamLocalRepository.self),
-            teamRemoteRepository: container.resolve(TeamRemoteRepository.self)
-          )
-      }
-      
-      register(LineupChangeUseCase.self) { container in
-          LineupChangeUseCaseImpl(playerLocalRepository: container.resolve(PlayerLocalRepository.self))
-      }
+
+    register(TeamPlayersSyncUseCase.self) { container in
+      TeamPlayersSyncUseCaseImpl(
+        teamLocalRepository: container.resolve(TeamLocalRepository.self),
+        teamRemoteRepository: container.resolve(TeamRemoteRepository.self),
+        playerLocalRepository: container.resolve(PlayerLocalRepository.self),
+        playerRemoteRepository: container.resolve(PlayerRemoteRepository.self)
+      )
+    }
+
+    register(LineupSyncUseCase.self) { container in
+      LineupSyncUseCaseImpl(
+        teamLocalRepository: container.resolve(TeamLocalRepository.self),
+        teamRemoteRepository: container.resolve(TeamRemoteRepository.self),
+        playerLocalRepository: container.resolve(PlayerLocalRepository.self),
+        playerRemoteRepository: container.resolve(PlayerRemoteRepository.self),
+        userSettingsRepository: container.resolve(UserSettingsRepository.self)
+      )
+    }
+
+    register(TeamGameInfoSyncUseCase.self) { container in
+      TeamGameInfoSyncUseCaseImpl(
+        teamLocalRepository: container.resolve(TeamLocalRepository.self),
+        teamRemoteRepository: container.resolve(TeamRemoteRepository.self)
+      )
+    }
+
+    register(LineupChangeUseCase.self) { container in
+      LineupChangeUseCaseImpl(playerLocalRepository: container.resolve(PlayerLocalRepository.self))
+    }
   }
 }

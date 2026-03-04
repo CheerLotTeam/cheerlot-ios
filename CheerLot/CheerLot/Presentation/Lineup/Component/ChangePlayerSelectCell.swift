@@ -8,8 +8,8 @@
 import SwiftUI
 
 struct ChangePlayerSelectCell: View {
-    let player: LineupPlayerVO
-    let asset: LineupChangeAssetVO
+  let player: LineupPlayerVO
+  let asset: LineupChangeAssetVO
   let isSelected: Bool
   let action: () -> Void
 

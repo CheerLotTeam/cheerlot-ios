@@ -14,10 +14,10 @@ enum TeamAPI {
 }
 
 extension TeamAPI: APITargetType {
-    var baseURL: URL {
-        return URL(string: API.teamURL)!
-    }
-    
+  var baseURL: URL {
+    return URL(string: API.teamURL)!
+  }
+
   var path: String {
     switch self {
     case .getTeamGameInfo(let teamCode):

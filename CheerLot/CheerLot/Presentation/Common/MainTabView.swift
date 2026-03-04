@@ -91,7 +91,7 @@ extension MainTabView {
     case .lineup:
       AppCoordinatorContainer {
         LineupView(
-            viewModel: lineupViewModel
+          viewModel: lineupViewModel
         )
       }
 

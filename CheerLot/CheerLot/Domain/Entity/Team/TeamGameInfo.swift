@@ -32,4 +32,3 @@ enum GameStatus {
   case offDay
   case seasonEnded
 }
-

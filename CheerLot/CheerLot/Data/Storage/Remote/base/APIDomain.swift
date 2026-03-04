@@ -8,7 +8,7 @@
 import Foundation
 
 public struct API {
-    public static let baseURL = Config.apiURL
-    public static let playerURL = "\(baseURL)/players"
-    public static let teamURL = "\(baseURL)/teams"
+  public static let baseURL = Config.apiURL
+  public static let playerURL = "\(baseURL)/players"
+  public static let teamURL = "\(baseURL)/teams"
 }

@@ -8,22 +8,22 @@
 import Foundation
 
 final class UserSettingsRepositoryImpl: UserSettingsRepository {
-    
-    private let userDefaults: UserDefaults
-    
-    init(userDefaults: UserDefaults = .standard) {
-        self.userDefaults = userDefaults
-    }
-    
-    func getShowRecentLineup() -> Bool {
-        userDefaults.bool(forKey: UserDefaultsKey.showRecentLineup)
-    }
-    
-    func setShowRecentLineup(_ value: Bool) {
-        userDefaults.set(value, forKey: UserDefaultsKey.showRecentLineup)
-    }
-    
-    func resetShowRecentLineup() {
-        userDefaults.set(false, forKey: UserDefaultsKey.showRecentLineup)
-    }
+
+  private let userDefaults: UserDefaults
+
+  init(userDefaults: UserDefaults = .standard) {
+    self.userDefaults = userDefaults
+  }
+
+  func getShowRecentLineup() -> Bool {
+    userDefaults.bool(forKey: UserDefaultsKey.showRecentLineup)
+  }
+
+  func setShowRecentLineup(_ value: Bool) {
+    userDefaults.set(value, forKey: UserDefaultsKey.showRecentLineup)
+  }
+
+  func resetShowRecentLineup() {
+    userDefaults.set(false, forKey: UserDefaultsKey.showRecentLineup)
+  }
 }

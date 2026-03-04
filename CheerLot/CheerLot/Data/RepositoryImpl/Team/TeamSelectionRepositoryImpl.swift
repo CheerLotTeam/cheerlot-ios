@@ -20,7 +20,9 @@ final class TeamSelectionRepositoryImpl: TeamSelectionRepository {
 
   func fetchCurrentTeam() -> TeamInfo? {
     // 1. UserDefaults에서 TeamID 가져오기
-    guard let teamId = sharedDefaults.string(forKey: UserDefaultsKey.selectedTeamId) else { return nil }
+    guard let teamId = sharedDefaults.string(forKey: UserDefaultsKey.selectedTeamId) else {
+      return nil
+    }
 
     // 2. TeamCode로 변환
     guard let teamCode = TeamDataSource.TeamCode(rawValue: teamId) else { return nil }

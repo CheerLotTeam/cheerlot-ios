@@ -11,13 +11,13 @@ import Moya
 enum APIType {
   case player(PlayerAPIType)
   case team(TeamAPIType)
-  
+
   enum PlayerAPIType {
     case lineup
     case playerDetail
     case allPlayers
   }
-  
+
   enum TeamAPIType {
     case gameInfo
     case versions
@@ -59,9 +59,9 @@ enum NetworkError: Error {
       case .statusCode(let response):
         // 서버 에러 메시지 파싱
         if let serverMessage = parseServerErrorMessage(from: response.data) {
-            return serverMessage
+          return serverMessage
         }
-          
+
         // 파싱 실패 시 상태 코드별 기본 메시지
         switch response.statusCode {
         case 400...499:
@@ -77,13 +77,14 @@ enum NetworkError: Error {
       }
     }
   }
-    
+
   /// 서버 에러 응답에서 메시지 추출
   private func parseServerErrorMessage(from data: Data) -> String? {
     guard let errorResponse = try? JSONDecoder().decode(ServerErrorResponseDTO.self, from: data),
-      !errorResponse.message.isEmpty else {
-        return nil
-      }
-      return errorResponse.message
+      !errorResponse.message.isEmpty
+    else {
+      return nil
+    }
+    return errorResponse.message
   }
 }

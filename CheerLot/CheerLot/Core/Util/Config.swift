@@ -21,11 +21,11 @@ enum Config {
     }
     return apiURL
   }()
-    
-    static let streamAudioURL: String = {
-        guard let apiURL = infoDictionary["STREAM_AUDIO_URL"] as? String else {
-            fatalError()
-        }
-        return apiURL
-    }()
+
+  static let streamAudioURL: String = {
+    guard let apiURL = infoDictionary["STREAM_AUDIO_URL"] as? String else {
+      fatalError()
+    }
+    return apiURL
+  }()
 }

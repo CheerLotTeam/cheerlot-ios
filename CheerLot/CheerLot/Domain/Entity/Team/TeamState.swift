@@ -8,7 +8,7 @@
 import Foundation
 
 struct TeamState {
-    let teamId: TeamID
-    var gameInfo: TeamGameInfo
-    var versionInfo: TeamVersionInfo
+  let teamId: TeamID
+  var gameInfo: TeamGameInfo
+  var versionInfo: TeamVersionInfo
 }
