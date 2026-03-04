@@ -11,13 +11,19 @@ import Moya
 final class PlayerRemoteRepositoryImpl: PlayerRemoteRepository {
     private let provider: MoyaProvider<PlayerAPI>
     
-    init(provider: MoyaProvider<PlayerAPI> = MoyaProvider<PlayerAPI>()) {
-        self.provider = provider
+    init() {
+        self.provider = NetworkProvider.shared.createProvider()
     }
     
     func fetchLineup(_ teamId: TeamID) async throws -> [PlayerInfo] {
+        let normalizedId = teamId.value.uppercased()
+        guard let teamCode = TeamDataSource.TeamCode(rawValue: normalizedId) else {
+            throw LocalStorageError.invalidData
+        }
+        let apiTeamCode = TeamDataSource.toAPICode(teamCode)
+        
         return try await withCheckedThrowingContinuation { continuation in
-            provider.request(.getLineup(teamCode: teamId.value)) { result in
+            provider.request(.getLineup(teamCode: apiTeamCode)) { result in
                 switch result {
                 case .success(let response):
                     do {
@@ -58,8 +64,14 @@ final class PlayerRemoteRepositoryImpl: PlayerRemoteRepository {
     }
     
     func fetchAllPlayers(_ teamId: TeamID) async throws -> [PlayerInfo] {
+        let normalizedId = teamId.value.uppercased()
+        guard let teamCode = TeamDataSource.TeamCode(rawValue: normalizedId) else {
+            throw LocalStorageError.invalidData
+        }
+        let apiTeamCode = TeamDataSource.toAPICode(teamCode)
+        
         return try await withCheckedThrowingContinuation { continuation in
-            provider.request(.getAllPlayers(teamCode: teamId.value)) { result in
+            provider.request(.getAllPlayers(teamCode: apiTeamCode)) { result in
                 switch result {
                 case .success(let response):
                     do {

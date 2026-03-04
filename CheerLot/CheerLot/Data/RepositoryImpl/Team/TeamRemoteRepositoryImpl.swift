@@ -11,13 +11,19 @@ import Moya
 final class TeamRemoteRepositoryImpl: TeamRemoteRepository {
     private let provider: MoyaProvider<TeamAPI>
     
-    init(provider: MoyaProvider<TeamAPI> = MoyaProvider<TeamAPI>()) {
-        self.provider = provider
+    init() {
+        self.provider = NetworkProvider.shared.createProvider()
     }
     
     func fetchGameInfo(_ teamId: TeamID) async throws -> TeamGameInfo {
+        let normalizedId = teamId.value.uppercased()
+        guard let teamCode = TeamDataSource.TeamCode(rawValue: normalizedId) else {
+            throw LocalStorageError.invalidData
+        }
+        let apiTeamCode = TeamDataSource.toAPICode(teamCode)
+        
         return try await withCheckedThrowingContinuation { continuation in
-            provider.request(.getTeamGameInfo(teamCode: teamId.value)) { result in
+            provider.request(.getTeamGameInfo(teamCode: apiTeamCode)) { result in
                 switch result {
                 case .success(let response):
                     do {
@@ -37,8 +43,14 @@ final class TeamRemoteRepositoryImpl: TeamRemoteRepository {
     }
     
     func fetchVersions(_ teamId: TeamID) async throws -> TeamVersionInfo {
+        let normalizedId = teamId.value.uppercased()
+        guard let teamCode = TeamDataSource.TeamCode(rawValue: normalizedId) else {
+            throw LocalStorageError.invalidData
+        }
+        let apiTeamCode = TeamDataSource.toAPICode(teamCode)
+        
         return try await withCheckedThrowingContinuation { continuation in
-            provider.request(.getTeamVersions(teamCode: teamId.value)) { result in
+            provider.request(.getTeamVersions(teamCode: apiTeamCode)) { result in
                 switch result {
                 case .success(let response):
                     do {
