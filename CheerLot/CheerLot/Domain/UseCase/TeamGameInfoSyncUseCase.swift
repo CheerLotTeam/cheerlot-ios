@@ -9,11 +9,11 @@ import Foundation
 
 protocol TeamGameInfoSyncUseCase {
     /// 경기 정보 조회
-    func getGameInfo(teamId: TeamID) async throws -> TeamGameInfo
+    func getGameInfo(_ teamId: TeamID) async throws -> TeamGameInfo
     
     /// 경기 정보 동기화 (버전 확인 후 필요시만)
-    func syncIfNeeded(teamId: TeamID) async throws
+    func syncIfNeeded(_ teamId: TeamID) async throws
     
     /// 강제 경기 정보 동기화
-    func forceSync(teamId: TeamID) async throws
+    func forceSync(_ teamId: TeamID) async throws
 }

@@ -12,20 +12,23 @@ final class LineupSyncUseCaseImpl: LineupSyncUseCase {
     private let teamRemoteRepository: TeamRemoteRepository
     private let playerLocalRepository: PlayerLocalRepository
     private let playerRemoteRepository: PlayerRemoteRepository
+    private let userSettingsRepository: UserSettingsRepository
     
     init(
         teamLocalRepository: TeamLocalRepository,
         teamRemoteRepository: TeamRemoteRepository,
         playerLocalRepository: PlayerLocalRepository,
-        playerRemoteRepository: PlayerRemoteRepository
+        playerRemoteRepository: PlayerRemoteRepository,
+        userSettingsRepository: UserSettingsRepository
     ) {
         self.teamLocalRepository = teamLocalRepository
         self.teamRemoteRepository = teamRemoteRepository
         self.playerLocalRepository = playerLocalRepository
         self.playerRemoteRepository = playerRemoteRepository
+        self.userSettingsRepository = userSettingsRepository
     }
     
-    func getCurrentLineup(teamId: TeamID) async throws -> [PlayerInfo] {
+    func getCurrentLineup(_ teamId: TeamID) async throws -> [PlayerInfo] {
         let allPlayers = try await playerLocalRepository.fetchAllPlayers(teamId)
         
         return allPlayers
@@ -33,31 +36,33 @@ final class LineupSyncUseCaseImpl: LineupSyncUseCase {
             .sorted { ($0.battingOrder ?? 0) < ($1.battingOrder ?? 0) }
     }
     
-    func syncIfNeeded(teamId: TeamID) async throws {
+    func syncIfNeeded(_ teamId: TeamID) async throws {
         // 서버 버전 확인
         let serverVersions = try await teamRemoteRepository.fetchVersions(teamId)
         
         // 로컬 버전 확인
         guard let localTeam = try await teamLocalRepository.fetchTeam(teamId) else {
             // 로컬에 없으면 무조건 동기화
-            try await forceSync(teamId: teamId)
+            try await forceSync(teamId)
             return
         }
         
         // 버전 비교
         if localTeam.versionInfo.lineupVersion != serverVersions.lineupVersion {
-            try await performSync(teamId: teamId, newVersion: serverVersions.lineupVersion)
+            userSettingsRepository.resetShowRecentLineup()
+            try await performSync(teamId, serverVersions.lineupVersion)
         }
     }
     
-    func forceSync(teamId: TeamID) async throws {
+    func forceSync(_ teamId: TeamID) async throws {
         let serverVersions = try await teamRemoteRepository.fetchVersions(teamId)
-        try await performSync(teamId: teamId, newVersion: serverVersions.lineupVersion)
+        userSettingsRepository.resetShowRecentLineup()
+        try await performSync(teamId, serverVersions.lineupVersion)
     }
     
     // MARK: - Private Method
     
-    private func performSync(teamId: TeamID, newVersion: Int) async throws {
+    private func performSync(_ teamId: TeamID, _ newVersion: Int) async throws {
         // 서버 라인업 가져오기
         let serverLineup = try await playerRemoteRepository.fetchLineup(teamId)
         
@@ -101,10 +106,10 @@ final class LineupSyncUseCaseImpl: LineupSyncUseCase {
         }
         
         // 팀 버전 업데이트
-        try await updateLineupVersion(teamId: teamId, version: newVersion)
+        try await updateLineupVersion(teamId, newVersion)
     }
     
-    private func updateLineupVersion(teamId: TeamID, version: Int) async throws {
+    private func updateLineupVersion(_ teamId: TeamID, _ version: Int) async throws {
         guard let localTeam = try await teamLocalRepository.fetchTeam(teamId) else {
             throw LocalStorageError.notFound
         }

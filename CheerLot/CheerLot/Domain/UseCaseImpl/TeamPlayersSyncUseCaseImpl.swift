@@ -25,35 +25,35 @@ final class TeamPlayersSyncUseCaseImpl: TeamPlayersSyncUseCase {
         self.playerRemoteRepository = playerRemoteRepository
     }
     
-    func getAllPlayers(teamId: TeamID) async throws -> [PlayerInfo] {
+    func getAllPlayers(_ teamId: TeamID) async throws -> [PlayerInfo] {
         try await playerLocalRepository.fetchAllPlayers(teamId)
     }
     
-    func syncIfNeeded(teamId: TeamID) async throws {
+    func syncIfNeeded(_ teamId: TeamID) async throws {
         // 서버 버전 확인
         let serverVersions = try await teamRemoteRepository.fetchVersions(teamId)
         
         // 로컬 버전 확인
         guard let localTeam = try await teamLocalRepository.fetchTeam(teamId) else {
             // 로컬에 없으면 무조건 동기화
-            try await forceSync(teamId: teamId)
+            try await forceSync(teamId)
             return
         }
         
         // 버전 비교
         if localTeam.versionInfo.playersVersion != serverVersions.playersVersion {
-            try await performSync(teamId: teamId, newVersion: serverVersions.playersVersion)
+            try await performSync(teamId, serverVersions.playersVersion)
         }
     }
     
-    func forceSync(teamId: TeamID) async throws {
+    func forceSync(_ teamId: TeamID) async throws {
         let serverVersions = try await teamRemoteRepository.fetchVersions(teamId)
-        try await performSync(teamId: teamId, newVersion: serverVersions.playersVersion)
+        try await performSync(teamId, serverVersions.playersVersion)
     }
     
     // MARK: - Private Method
     
-    private func performSync(teamId: TeamID, newVersion: Int) async throws {
+    private func performSync(_ teamId: TeamID, _ newVersion: Int) async throws {
         // 서버에서 전체 선수 가져오기
         let allPlayers = try await playerRemoteRepository.fetchAllPlayers(teamId)
         
@@ -64,10 +64,10 @@ final class TeamPlayersSyncUseCaseImpl: TeamPlayersSyncUseCase {
         try await playerLocalRepository.createAllPlayers(allPlayers, teamId)
         
         // 팀 버전 업데이트
-        try await updatePlayersVersion(teamId: teamId, version: newVersion)
+        try await updatePlayersVersion(teamId, newVersion)
     }
     
-    private func updatePlayersVersion(teamId: TeamID, version: Int) async throws {
+    private func updatePlayersVersion(_ teamId: TeamID, _ version: Int) async throws {
         guard let localTeam = try await teamLocalRepository.fetchTeam(teamId) else {
             throw LocalStorageError.notFound
         }

@@ -14,7 +14,7 @@ final class LineupChangeUseCaseImpl: LineupChangeUseCase {
         self.playerLocalRepository = playerLocalRepository
     }
     
-    func getBenchPlayers(teamId: TeamID) async throws -> [PlayerInfo] {
+    func getBenchPlayers(_ teamId: TeamID) async throws -> [PlayerInfo] {
         let allPlayers = try await playerLocalRepository.fetchAllPlayers(teamId)
         
         return allPlayers
@@ -22,9 +22,9 @@ final class LineupChangeUseCaseImpl: LineupChangeUseCase {
     }
     
     func swapPlayers(
-        lineupPlayer: PlayerInfo,
-        benchPlayer: PlayerInfo,
-        teamId: TeamID
+        _ lineupPlayer: PlayerInfo,
+        _ benchPlayer: PlayerInfo,
+        _ teamId: TeamID
     ) async throws {
         // 검증
         guard lineupPlayer.battingOrder != nil else {

@@ -9,11 +9,11 @@ import Foundation
 
 protocol TeamPlayersSyncUseCase {
     /// 전체 선수 조회
-    func getAllPlayers(teamId: TeamID) async throws -> [PlayerInfo]
+    func getAllPlayers(_ teamId: TeamID) async throws -> [PlayerInfo]
     
     /// 전체 선수 동기화 (버전 확인 후 필요시만)
-    func syncIfNeeded(teamId: TeamID) async throws
+    func syncIfNeeded(_ teamId: TeamID) async throws
     
     /// 강제 전체 선수 동기화
-    func forceSync(teamId: TeamID) async throws
+    func forceSync(_ teamId: TeamID) async throws
 }

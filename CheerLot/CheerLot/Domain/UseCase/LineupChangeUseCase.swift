@@ -9,12 +9,12 @@ import Foundation
 
 protocol LineupChangeUseCase {
     /// 벤치 선수 조회 (타순 없는 선수들)
-    func getBenchPlayers(teamId: TeamID) async throws -> [PlayerInfo]
+    func getBenchPlayers(_ teamId: TeamID) async throws -> [PlayerInfo]
     
     /// 라인업 선수와 벤치 선수 교체
     func swapPlayers(
-        lineupPlayer: PlayerInfo,
-        benchPlayer: PlayerInfo,
-        teamId: TeamID
+        _ lineupPlayer: PlayerInfo,
+        _ benchPlayer: PlayerInfo,
+        _ teamId: TeamID
     ) async throws
 }
