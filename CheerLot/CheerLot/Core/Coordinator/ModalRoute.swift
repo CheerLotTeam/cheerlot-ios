@@ -15,8 +15,15 @@ enum PresentationStyle {
 enum ModalRoute: Identifiable {
   // TODO: - 각 case 마다 넘겨주는 값(파라미터) 재설정
   // Sheet 스타일
-  case cheerSongList
-  case lineupChange
+  case cheerSongList(
+    asset: TeamAssetVO,
+    player: LineupPlayerVO,
+    lineupPlayers: [LineupPlayerVO]
+  )
+  case lineupChange(
+    lineupPlayer: LineupPlayerVO,
+    onComplete: () -> Void
+  )
   case teamChange
   case inquiry
   case servicePage
@@ -53,10 +60,25 @@ extension AppCoordinator {
 
     // TODO: - View 넣기
     switch route {
-    case let .cheerSongList:
-      Color.clear
-    case let .lineupChange:
-      Color.clear
+    case let .cheerSongList(asset, player, lineupPlayers):
+        CheerSongMenuSheetView(
+            asset: asset,
+            player: player,
+            lineupPlayers: lineupPlayers,
+        )
+        .presentationDetents([.height(CGFloat((player.cheerSongs.count)) * 77 + 83)])
+        .presentationDragIndicator(.visible)
+    case let .lineupChange(lineupPlayer, onComplete):
+        let vm = factory.createLineupChangeViewModel(
+            lineupPlayer
+        )
+        
+        LineupChangeSheetView(
+            viewModel: vm,
+            onComplete: onComplete
+        )
+        .presentationDetents([.large])
+        .presentationDragIndicator(.hidden)
     case let .teamChange:
       Color.clear
     case let .inquiry:

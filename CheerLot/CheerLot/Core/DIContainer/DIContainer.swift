@@ -82,6 +82,10 @@ extension DIContainer {
   }
 
   private func assembleRepositories() {
+      registerSingleton(UserSettingsRepository.self) {
+          UserSettingsRepositoryImpl()
+      }
+      
     registerSingleton(TeamSelectionRepository.self) {
       TeamSelectionRepositoryImpl()
     }
@@ -108,6 +112,12 @@ extension DIContainer {
   }
 
   private func assembleUseCases() {
+      register(UserSettingsUseCase.self) { container in
+          UserSettingsUseCaseImpl(
+            userSettingsRepository: container.resolve(UserSettingsRepository.self)
+        )
+      }
+      
     register(TeamSelectionUseCase.self) { container in
       TeamSelectionUseCaseImpl(
         teamSelectionRepository: container.resolve(TeamSelectionRepository.self)
@@ -134,7 +144,8 @@ extension DIContainer {
             teamLocalRepository: container.resolve(TeamLocalRepository.self),
             teamRemoteRepository: container.resolve(TeamRemoteRepository.self),
             playerLocalRepository: container.resolve(PlayerLocalRepository.self),
-            playerRemoteRepository: container.resolve(PlayerRemoteRepository.self)
+            playerRemoteRepository: container.resolve(PlayerRemoteRepository.self),
+            userSettingsRepository: container.resolve(UserSettingsRepository.self)
           )
       }
       

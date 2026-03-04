@@ -19,6 +19,7 @@ struct MainTabView: View {
 
   @State private var selectedTab: TabKey = .lineup
   @State private var isPlayerExpanded: Bool = false
+  @State private var lineupViewModel = ViewModelFactory.shared.createLineupViewModel()
 
   @Namespace private var animation
 
@@ -90,8 +91,8 @@ extension MainTabView {
     case .lineup:
       AppCoordinatorContainer {
         LineupView(
-          asset: LineupAssetVO(base: TeamAssetVO(TeamDataSource.toEntity(.samsung).id)),
-          gameStatus: .offDay)
+            viewModel: lineupViewModel
+        )
       }
 
     case .teamMembers:
