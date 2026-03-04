@@ -8,23 +8,36 @@
 import SwiftUI
 
 struct LineupCellActionsModifier: ViewModifier {
+    let player: LineupPlayerVO
+    let onChangePlayer: () -> Void
+    let onSelectSong: (CheerSongVO) -> Void
+    
   func body(content: Content) -> some View {
     content
       .swipeActions(edge: .trailing) {
         Button {
-          // TODO: - sheet 띄우기
+            onChangePlayer()
         } label: {
           Label("교체", systemImage: "arrow.trianglehead.2.clockwise.rotate.90")
         }
         .tint(.change)
       }
       .contextMenu {
-        Button {
-          // TODO: - sheet 띄우기
-        } label: {
-          Label("교체", systemImage: "arrow.trianglehead.2.clockwise.rotate.90")
-        }
-        // TODO: - 응원가 갯수 따라 ForEach로 버튼 생성
+          Button {
+              onChangePlayer()
+          } label: {
+              Label("교체", systemImage: "arrow.trianglehead.2.clockwise.rotate.90")
+          }
+          
+          if player.hasSong {
+              ForEach(player.cheerSongs) { cheerSong in
+                  Button {
+                      onSelectSong(cheerSong)
+                  } label: {
+                      Label(cheerSong.title, systemImage: "play.fill")
+                  }
+              }
+          }
       }
   }
 }
