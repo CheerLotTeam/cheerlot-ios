@@ -13,11 +13,11 @@ struct TeamGameInfo: Identifiable, Hashable, Equatable {
   var status: GameStatus
   var opponent: TeamID?
   var starterPitcherName: String?
-  var lastGameDate: Date?
+  var lastGameDate: String?
 
   init(
     id: TeamID, status: GameStatus, opponent: TeamID? = nil, starterPitcherName: String? = nil,
-    lastGameDate: Date? = nil
+    lastGameDate: String? = nil
   ) {
     self.id = id
     self.status = status

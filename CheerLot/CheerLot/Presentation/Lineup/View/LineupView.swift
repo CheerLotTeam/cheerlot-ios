@@ -8,15 +8,17 @@
 import SwiftUI
 
 struct LineupView: View {
-  let asset: LineupAssetVO
-  let gameInfo: GameStatus
-  // TODO: - UserDefaults로 저장할 것.
-  @State private var showLineup: Bool = false
-  //    @Environment private var coordinator: AppCoordinator()
+  @State private var viewModel: LineupViewModel
+
+  @Environment(AppCoordinator.self) private var coordinator
+
+  init(viewModel: LineupViewModel) {
+    _viewModel = State(initialValue: viewModel)
+  }
 
   // MARK: - Layout Constants
   private let teamNameHeight: CGFloat = 44.5
-  private let matchInfoHeight: CGFloat = 26.5
+  private let gameInfoHeight: CGFloat = 26.5
   private let cardTopPadding: CGFloat = 20
   private let cardBottomPadding: CGFloat = 10
   private let cardSpacing: CGFloat = 8
@@ -29,16 +31,46 @@ struct LineupView: View {
       let cardHeight = max(0, geo.size.height - safeAreaVerticalPadding * 2)
       let cardWidth = max(0, geo.size.width - safeAreaHorizontalPadding * 2)
 
-      ScrollView {
-        lineupCard(cardHeight: cardHeight, cardWidth: cardWidth)
-      }
-      .frame(width: geo.size.width)
-      .scrollIndicators(.hidden)
-      .refreshable {
-        // TODO: - api 재호출 로직 넣기
+      ZStack {
+        if let asset = viewModel.asset {
+          ScrollView {
+            lineupCard(asset: asset, cardHeight: cardHeight, cardWidth: cardWidth)
+          }
+          .frame(width: geo.size.width)
+          .scrollIndicators(.hidden)
+          .refreshable {
+            await viewModel.refresh()
+          }
+        } else {
+          Color.clear
+        }
+
+        if viewModel.isLoading {
+          ProgressView()
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .background(.ultraThinMaterial)
+        }
       }
       .toolBar_titleWithProfile(title: "선발 라인업") {
-        // coordinator.push(.settings)
+        coordinator.push(.settings)
+      }
+    }
+    .task {
+      await viewModel.onAppear()
+    }
+    .alert("오류", isPresented: .constant(viewModel.errorMessage != nil)) {
+      Button("다시 시도") {
+        viewModel.errorMessage = nil
+        Task {
+          await viewModel.onAppear()
+        }
+      }
+      Button("취소", role: .cancel) {
+        viewModel.errorMessage = nil
+      }
+    } message: {
+      if let error = viewModel.errorMessage {
+        Text(error)
       }
     }
   }
@@ -47,14 +79,14 @@ struct LineupView: View {
   private func listHeight(cardHeight: CGFloat) -> CGFloat {
     max(
       0,
-      cardHeight - teamNameHeight - matchInfoHeight - cardTopPadding - cardBottomPadding
+      cardHeight - teamNameHeight - gameInfoHeight - cardTopPadding - cardBottomPadding
         - cardSpacing * 2)
   }
 
   private func cellHeight(cardHeight: CGFloat) -> CGFloat {
-    let totalSeparatorHeight = separatorHeight * CGFloat(mockMembers.count - 1)
+    let totalSeparatorHeight = separatorHeight * 8
     let availableHeight = listHeight(cardHeight: cardHeight) - totalSeparatorHeight
-    return max(0, availableHeight / CGFloat(mockMembers.count))
+    return max(0, availableHeight / 9)
   }
 
   private func noGameMessage(for status: GameStatus) -> String {
@@ -67,7 +99,9 @@ struct LineupView: View {
 }
 
 extension LineupView {
-  private func lineupCard(cardHeight: CGFloat, cardWidth: CGFloat) -> some View {
+  private func lineupCard(asset: LineupAssetVO, cardHeight: CGFloat, cardWidth: CGFloat)
+    -> some View
+  {
     ZStack {
       asset.primaryColor
 
@@ -80,7 +114,7 @@ extension LineupView {
         .opacity(0.75)
         .blendMode(.softLight)
 
-      contents(cardHeight: cardHeight, cardWidth: cardWidth)
+      contents(asset: asset, cardHeight: cardHeight, cardWidth: cardWidth)
     }
     .frame(width: cardWidth, height: cardHeight)
     .clipShape(RoundedRectangle(cornerRadius: 16))
@@ -90,28 +124,32 @@ extension LineupView {
     )
   }
 
-  private func contents(cardHeight: CGFloat, cardWidth: CGFloat) -> some View {
+  private func contents(asset: LineupAssetVO, cardHeight: CGFloat, cardWidth: CGFloat) -> some View
+  {
     ZStack {
       VStack(spacing: cardSpacing) {
-        teamName
-        matchInfo
 
-        if gameInfo == .playingToday || showLineup {
-          lineupList(cardHeight: cardHeight, cardWidth: cardWidth)
+        if let gameInfo = viewModel.gameInfo {
+          teamName(asset: asset, gameInfo: gameInfo)
+          gameInfoView(asset: asset, gameInfo: gameInfo)
+        }
+
+        if viewModel.shouldShowLineup {
+          lineupList(asset: asset, cardHeight: cardHeight, cardWidth: cardWidth)
         }
       }
       .padding(.top, cardTopPadding)
       .padding(.bottom, cardBottomPadding)
       .frame(maxHeight: .infinity, alignment: .top)  // header 상단 고정
 
-      if gameInfo != .playingToday && !showLineup {
-        hasNoGameView(status: gameInfo)
+      if !viewModel.shouldShowLineup {
+        hasNoGameView(asset: asset, status: viewModel.gameStatus)
       }
     }
   }
 
-  private var teamName: some View {
-    Text("SAMSUNG LIONS")
+  private func teamName(asset: LineupAssetVO, gameInfo: LineupGameInfoVO) -> some View {
+    Text(gameInfo.teamEnglishName)
       .font(.T1)
       .foregroundStyle(.grayWhite)
       .shadow(
@@ -122,43 +160,56 @@ extension LineupView {
       )
   }
 
-  private var matchInfo: some View {
+  private func gameInfoView(asset: LineupAssetVO, gameInfo: LineupGameInfoVO) -> some View {
     HStack(spacing: 8) {
-      Text("12월 12일 | 삼성 vs 기아")
+      Text(gameInfo.gameInfoText)
         .font(.M5_gameState)
 
-      HStack(spacing: 2) {
-        Image(.pitcher)
-          .resizable()
-          .frame(width: 12, height: 12)
-          .scaledToFit()
+      if let starterPitcher = gameInfo.starterPitcher {
+        HStack(spacing: 2) {
+          Image(.pitcher)
+            .resizable()
+            .frame(width: 12, height: 12)
+            .scaledToFit()
 
-        Text("원태인")
-          .font(.B4)
+          Text(starterPitcher)
+            .font(.B4)
+        }
       }
     }
     .padding(.horizontal, 10)
     .padding(.vertical, 6)
-    .background(Capsule().fill(asset.matchInfoBgColor))
+    .background(Capsule().fill(asset.gameInfoBgColor))
     .foregroundColor(.grayWhite)
   }
 
-  private func lineupList(cardHeight: CGFloat, cardWidth: CGFloat) -> some View {
+  private func lineupList(asset: LineupAssetVO, cardHeight: CGFloat, cardWidth: CGFloat)
+    -> some View
+  {
     List {
-      ForEach(Array(mockMembers.enumerated()), id: \.element.id) { index, member in
+      ForEach(Array(viewModel.lineupPlayers.enumerated()), id: \.element.id) { index, player in
         VStack(spacing: 0) {
           LineupMemberCell(
-            asset: asset,
-            battingOrder: member.battingOrder,
-            name: member.name,
-            position: member.position,
-            batThrow: member.batThrow,
-            hasSong: member.hasSong
+            player: player,
+            asset: asset
           )
           .frame(height: cellHeight(cardHeight: cardHeight))
           .padding(.horizontal, 5.5)
+          .onTapGesture {
+            if player.cheerSongs.count >= 2 {
+              coordinator.presentModal(
+                .cheerSongList(
+                  asset: asset.base,
+                  player: player,
+                  lineupPlayers: viewModel.lineupPlayers
+                )
+              )
+            } else if let firstSong = player.cheerSongs.first {
+              goToLineupPlayback()
+            }
+          }
 
-          if index < mockMembers.count - 1 {
+          if index < viewModel.lineupPlayers.count - 1 {
             DashedLine()
               .stroke(style: StrokeStyle(lineWidth: 1, dash: [3]))
               .foregroundColor(asset.listLineColor)
@@ -168,7 +219,22 @@ extension LineupView {
         .listRowSeparator(.hidden)
         .listRowBackground(Color.clear)
         .listRowInsets(EdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 20))
-        .lineupCellActions()
+        .lineupCellActions(
+          player: player,
+          onChangePlayer: {
+            coordinator.presentModal(
+              .lineupChange(
+                lineupPlayer: player,
+                onComplete: {
+                  Task {
+                    await viewModel.refresh()
+                  }
+                }))
+          },
+          onSelectSong: { cheerSong in
+            goToLineupPlayback()
+          }
+        )
       }
     }
     .frame(width: cardWidth, height: listHeight(cardHeight: cardHeight))
@@ -179,7 +245,7 @@ extension LineupView {
     .contentShape(Rectangle())
   }
 
-  private func hasNoGameView(status: GameStatus) -> some View {
+  private func hasNoGameView(asset: LineupAssetVO, status: GameStatus) -> some View {
     VStack(spacing: 24) {
       Spacer()
 
@@ -188,7 +254,7 @@ extension LineupView {
         .foregroundStyle(asset.positionTextColor)
 
       Button {
-        showLineup = true
+        viewModel.toggleShowRecentLineup()
       } label: {
         Text("최근 경기 라인업 보기")
           .font(.SB8)
@@ -211,34 +277,8 @@ extension LineupView {
       Spacer()
     }
   }
-}
 
-// TODO: 이후 지울 예정
-private struct LineupMember: Identifiable {
-  let id = UUID()
-  let battingOrder: Int
-  let name: String
-  let position: String
-  let batThrow: String
-  let hasSong: Bool
-}
-
-private let mockMembers: [LineupMember] = [
-  LineupMember(battingOrder: 1, name: "김선수", position: "포지션", batThrow: "좌타", hasSong: true),
-  LineupMember(battingOrder: 2, name: "이선수", position: "포지션", batThrow: "좌타", hasSong: false),
-  LineupMember(battingOrder: 3, name: "박선수", position: "포지션", batThrow: "좌타", hasSong: true),
-  LineupMember(battingOrder: 4, name: "최선수", position: "포지션", batThrow: "좌타", hasSong: true),
-  LineupMember(battingOrder: 5, name: "김선수", position: "포지션", batThrow: "좌타", hasSong: false),
-  LineupMember(battingOrder: 6, name: "이선수", position: "포지션", batThrow: "좌타", hasSong: true),
-  LineupMember(battingOrder: 7, name: "박선수", position: "포지션", batThrow: "좌타", hasSong: true),
-  LineupMember(battingOrder: 8, name: "김선수", position: "포지션", batThrow: "좌타", hasSong: false),
-  LineupMember(battingOrder: 9, name: "최선수", position: "포지션", batThrow: "좌타", hasSong: true),
-]
-
-#Preview {
-  NavigationStack {
-    LineupView(
-      asset: LineupAssetVO(base: TeamAssetVO(TeamDataSource.toEntity(.samsung).id)),
-      gameInfo: .offDay)
+  private func goToLineupPlayback() {
+    // TODO: - LineupPlayback으로 넘기기
   }
 }

@@ -19,6 +19,13 @@ final class ViewModelFactory {
   }
 
   // MARK: - Lineup
+  func createLineupViewModel() -> LineupViewModel {
+    LineupViewModel()
+  }
+
+  func createLineupChangeViewModel(_ lineupPlayer: LineupPlayerVO) -> LineupChangeViewModel {
+    LineupChangeViewModel(lineupPlayer)
+  }
 
   // MARK: - TeamMembers
   func createTeamMembersViewModel(team: TeamInfo, audioPlayer: AudioPlaybackService)

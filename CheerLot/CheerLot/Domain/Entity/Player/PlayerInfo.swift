@@ -16,13 +16,11 @@ struct PlayerInfo: Identifiable, Hashable, Equatable {
   var position: String?
   var batThrow: String?
   var battingOrder: Int?
-  var isStarter: Bool
   var cheerSongs: [CheerSongInfo]
 
   init(
     id: PlayerID, teamId: TeamID, name: String, backNumber: Int, position: String? = nil,
-    batThrow: String? = nil, battingOrder: Int? = nil, isStarter: Bool,
-    cheerSongs: [CheerSongInfo] = []
+    batThrow: String? = nil, battingOrder: Int? = nil, cheerSongs: [CheerSongInfo] = []
   ) {
     self.id = id
     self.teamId = teamId
@@ -31,7 +29,6 @@ struct PlayerInfo: Identifiable, Hashable, Equatable {
     self.position = position
     self.batThrow = batThrow
     self.battingOrder = battingOrder
-    self.isStarter = isStarter
     self.cheerSongs = cheerSongs
   }
 }

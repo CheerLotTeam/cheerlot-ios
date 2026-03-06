@@ -86,7 +86,7 @@ struct LineupAssetVO {
   }
 
   /// 경기 정보 BG 컬러
-  var matchInfoBgColor: Color {
+  var gameInfoBgColor: Color {
     base.primaryPalette.color500
   }
 

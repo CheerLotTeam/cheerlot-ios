@@ -98,14 +98,14 @@ extension View {
   }
 
   /// leading에 cancel 버튼과 center에 경기 정보를 가지는 toolbar 확장 메서드
-  func toolBar_matchInfo(
+  func toolBar_gameInfo(
     date: String,
     teams: String,
     onClose: @escaping () -> Void
   ) -> some View {
     customToolBar(
       leftItem: .close(action: onClose),
-      centerItem: .matchInfo(date: date, teams: teams)
+      centerItem: .gameInfo(date: date, teams: teams)
     )
   }
 
@@ -142,7 +142,16 @@ extension View {
   }
 
   /// lineupView의 리스트 cellAction(swipe, context menu)을 바로 사용할 수 있는 확장메서드
-  func lineupCellActions() -> some View {
-    self.modifier(LineupCellActionsModifier())
+  func lineupCellActions(
+    player: LineupPlayerVO,
+    onChangePlayer: @escaping () -> Void,
+    onSelectSong: @escaping (CheerSongVO) -> Void
+  ) -> some View {
+    self.modifier(
+      LineupCellActionsModifier(
+        player: player,
+        onChangePlayer: onChangePlayer,
+        onSelectSong: onSelectSong
+      ))
   }
 }

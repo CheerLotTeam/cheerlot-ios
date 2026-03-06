@@ -1,13 +1,13 @@
 //
-//  RepositoryError.swift
+//  LocalStorageError.swift
 //  CheerLot
 //
-//  Created by 이현주 on 2/10/26.
+//  Created by 이현주 on 3/3/26.
 //
 
 import Foundation
 
-enum RepositoryError: LocalizedError {
+enum LocalStorageError: LocalizedError {
   case fetchError
   case notFound
   case invalidData

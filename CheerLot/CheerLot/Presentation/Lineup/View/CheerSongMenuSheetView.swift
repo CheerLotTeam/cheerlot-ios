@@ -9,10 +9,10 @@ import SwiftUI
 
 struct CheerSongMenuSheetView: View {
   let asset: TeamAssetVO
-  let player: PlayerInfo
-  let lineupPlayer: [PlayerInfo]
+  let player: LineupPlayerVO
+  let lineupPlayers: [LineupPlayerVO]
 
-  //  @Environment private var coordinator: AppCoordinator()
+  @Environment(AppCoordinator.self) private var coordinator
 
   var body: some View {
     VStack(spacing: 28) {
@@ -40,14 +40,7 @@ struct CheerSongMenuSheetView: View {
         }
         .contentShape(Rectangle())
         .onTapGesture {
-          //              coordinator.dismissModal()
-
-          let allCheerSongs = lineupPlayer.flatMap { $0.cheerSongs }
-          guard let selectedIndex = allCheerSongs.firstIndex(where: { $0.id == cheerSong.id })
-          else { return }
-
-          // TODO: coordinator로 playback 화면 push
-          // coordinator.presentModal(.playback(player: currentPlayer, songIndex: selectedIndex))
+          handleSongSelection(cheerSong)
         }
       }
       .listRowSeparator(.hidden)
@@ -58,44 +51,25 @@ struct CheerSongMenuSheetView: View {
   }
 }
 
+extension CheerSongMenuSheetView {
+  private func handleSongSelection(_ selectedSong: CheerSongVO) {
+    // 1. 모든 응원가 수집
+    let allCheerSongs = lineupPlayers.flatMap { $0.cheerSongs }
+
+    // 2. 선택된 응원가의 인덱스 찾기
+    guard let selectedIndex = allCheerSongs.firstIndex(where: { $0.id == selectedSong.id }) else {
+      return
+    }
+
+    // 3. Sheet 닫기
+    coordinator.dismissModal()
+
+    // TODO: Playback 화면으로 이동
+    // coordinator.presentModal(.playback(player: playerVO, songIndex: selectedIndex))
+
+  }
+}
+
 #Preview {
-  let cheerSongs: [CheerSongInfo] = [
-    CheerSongInfo(
-      id: 1, playerId: "1", title: "구자욱 응원가 1", lyrics: "가사 1",
-      audioURL: "https://example.com/1.mp3"),
-    CheerSongInfo(
-      id: 2, playerId: "1", title: "구자욱 응원가 2", lyrics: "가사 2",
-      audioURL: "https://example.com/2.mp3"),
-  ]
 
-  let player = PlayerInfo(
-    id: "1",
-    teamId: "samsung",
-    name: "구자욱",
-    backNumber: 8,
-    position: "좌익수",
-    batThrow: "좌타",
-    battingOrder: 1,
-    isStarter: true,
-    cheerSongs: cheerSongs
-  )
-
-  let lineupPlayers: [PlayerInfo] = [
-    player,
-    PlayerInfo(
-      id: "2", teamId: "samsung", name: "이재현", backNumber: 2, position: "유격수", batThrow: "우타",
-      battingOrder: 2, isStarter: true,
-      cheerSongs: [
-        CheerSongInfo(
-          id: 3, playerId: "2", title: "이재현 응원가", lyrics: "가사 3",
-          audioURL: "https://example.com/3.mp3")
-      ]
-    ),
-  ]
-
-  CheerSongMenuSheetView(
-    asset: TeamAssetVO(TeamDataSource.toEntity(.samsung).id),
-    player: player,
-    lineupPlayer: lineupPlayers
-  )
 }

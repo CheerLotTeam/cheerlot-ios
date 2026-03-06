@@ -14,7 +14,7 @@ enum NavigationBarItem {
   case profile(action: () -> Void)
   case largeTitle(String)
   case inlineTitle(String)
-  case matchInfo(date: String, teams: String)
+  case gameInfo(date: String, teams: String)
   case custom(AnyView)
 }
 
@@ -75,7 +75,7 @@ struct ToolBarItemBuilder {
         .font(.SB6)
         .foregroundStyle(.grayBlack)
 
-    case .matchInfo(let date, let teams):
+    case .gameInfo(let date, let teams):
       VStack(alignment: .center, spacing: 0) {
         Text(date)
           .font(.M5)

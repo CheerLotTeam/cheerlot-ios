@@ -23,8 +23,8 @@ enum CheerLotSchemaV3: VersionedSchema {
     var starterPitcherName: String?
     var lastGameDate: String?
     var isSeasonEnded: Bool
-    //    var lineupVersion: Int = -1
-    //    var playersVersion: Int = -1
+    var lineupVersion: Int = -1
+    var playersVersion: Int = -1
 
     @Relationship(deleteRule: .cascade, inverse: \Player.team) var teamMemberList: [Player]?
 
@@ -55,7 +55,6 @@ enum CheerLotSchemaV3: VersionedSchema {
     var position: String
     var batThrow: String
     var battingOrder: Int?
-    var isStarter: Bool
 
     @Relationship(deleteRule: .cascade, inverse: \CheerSong.player) var cheerSongList: [CheerSong]?
     @Relationship var team: Team?
@@ -67,7 +66,6 @@ enum CheerLotSchemaV3: VersionedSchema {
       position: String,
       batThrow: String,
       battingOrder: Int? = nil,
-      isStarter: Bool,
       team: Team? = nil,
       cheerSongList: [CheerSong]? = nil,
     ) {
@@ -77,7 +75,6 @@ enum CheerLotSchemaV3: VersionedSchema {
       self.position = position
       self.batThrow = batThrow
       self.battingOrder = battingOrder
-      self.isStarter = isStarter
       self.team = team
       self.cheerSongList = cheerSongList
     }
@@ -104,5 +101,62 @@ enum CheerLotSchemaV3: VersionedSchema {
       self.audioUrl = audioUrl
       self.player = player
     }
+  }
+}
+
+extension Team {
+  func toEntity() -> TeamState {
+    let status: GameStatus
+
+    if self.isSeasonEnded {
+      status = .seasonEnded
+    } else if self.hasTodayGame {
+      status = .playingToday
+    } else {
+      status = .offDay
+    }
+
+    return TeamState(
+      teamId: TeamID(self.teamId),
+      gameInfo: TeamGameInfo(
+        id: TeamID(self.teamId),
+        status: status,
+        opponent: self.opponentTeamId.map { TeamID($0) },
+        starterPitcherName: self.starterPitcherName,
+        lastGameDate: self.lastGameDate
+      ),
+      versionInfo: TeamVersionInfo(
+        id: TeamID(self.teamId),
+        lineupVersion: self.lineupVersion,
+        playersVersion: self.playersVersion
+      )
+    )
+  }
+}
+
+extension Player {
+  func toEntity() -> PlayerInfo {
+    return PlayerInfo(
+      id: PlayerID(self.playerId),
+      teamId: TeamID(self.team?.teamId ?? ""),
+      name: self.name,
+      backNumber: self.backNumber,
+      position: self.position,
+      batThrow: self.batThrow,
+      battingOrder: self.battingOrder,
+      cheerSongs: cheerSongList?.map { $0.toEntity() } ?? []
+    )
+  }
+}
+
+extension CheerSong {
+  func toEntity() -> CheerSongInfo {
+    return CheerSongInfo(
+      id: self.cheerSongId,
+      playerId: PlayerID(player?.playerId ?? ""),
+      title: self.title,
+      lyrics: self.lyrics,
+      audioURL: self.audioUrl
+    )
   }
 }
