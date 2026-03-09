@@ -16,7 +16,9 @@ struct LineupPlayCard: View {
     var playCardImage: Image? {
         asset.playCardImage(for: battingOrder)
     }
-    @State var isPaused: Bool = false
+    
+    @State private var isPaused: Bool = false
+    @State private var isScrolledToBottom: Bool = false
     
     var body: some View {
         Button {
@@ -45,7 +47,6 @@ extension LineupPlayCard {
             
           cardContents
         }
-//        .frame(width: cardWidth, height: cardHeight)
         .clipShape(RoundedRectangle(cornerRadius: 20))
         .overlay(
           RoundedRectangle(cornerRadius: 20)
@@ -54,17 +55,16 @@ extension LineupPlayCard {
     }
     
     private var cardContents: some View {
-        VStack(alignment: .leading) {
+        VStack {
             headerView
             Spacer(minLength: 55)
             lyricsView
-                .frame(maxHeight: .infinity, alignment: .bottomLeading)
         }
         .padding(.all, 24)
     }
     
     private var headerView: some View {
-        HStack {
+        HStack(alignment: .top) {
             cheerSongInfoView
             
             Spacer()
@@ -77,7 +77,7 @@ extension LineupPlayCard {
                     .resizable()
             }
             .scaledToFit()
-            .frame(width: 16)
+            .frame(width: isPaused ? 13 : 15)
             .foregroundStyle(asset.cardContentsColor)
         }
     }
@@ -103,22 +103,32 @@ extension LineupPlayCard {
     private var lyricsView: some View {
         ViewThatFits(in: .vertical) {
             lyricsText
-                .frame(maxHeight: .infinity, alignment: .bottomLeading)
             
             ScrollView(.vertical) {
                 lyricsText
             }
-//            .scrollIndicators(.visible)
+            .scrollIndicators(.hidden)
+            .onScrollGeometryChange(for: Bool.self) { geo in
+                geo.contentOffset.y >= geo.contentSize.height - geo.containerSize.height - 1
+            } action: { _, isBottom in
+                isScrolledToBottom = isBottom
+            }
             .mask(
-                LinearGradient(
-                    stops: [
-                        .init(color: .black, location: 0),
-                        .init(color: .black, location: 0.85),
-                        .init(color: .clear, location: 1)
-                    ],
-                    startPoint: .top,
-                    endPoint: .bottom
-                )
+                Group {
+                    if isScrolledToBottom {
+                        Color.black  // 완전히 보임
+                    } else {
+                        LinearGradient(
+                            stops: [
+                                .init(color: .black, location: 0),
+                                .init(color: .black, location: 0.85),
+                                .init(color: .clear, location: 1)
+                            ],
+                            startPoint: .top,
+                            endPoint: .bottom
+                        )
+                    }
+                }
             )
         }
     }
@@ -128,10 +138,11 @@ extension LineupPlayCard {
             .font(.SB2)
             .foregroundStyle(.grayWhite)
             .multilineTextAlignment(.leading)
-            .frame(maxWidth: .infinity)
+            .frame(maxWidth: .infinity, alignment: .leading)
     }
 }
 
-//#Preview {
-//    LineupPlayCard()
-//}
+#Preview {
+    LineupPlayCard(asset: LineupPlaybackAssetVO(base: TeamAssetVO(TeamDataSource.toEntity(.samsung).id)), battingOrder: 1, name: "구자욱", title: "기본 응원가", lyrics: "삼성의 심재훈 삼성의 심재훈\n안타를 날!려!버!려! 삼성 심재훈\n삼성의 심재훈 삼성의 심재훈\n홈런을 날!려!버!려! 삼성 심재훈")
+        .frame(width: 337, height: 538)
+}
