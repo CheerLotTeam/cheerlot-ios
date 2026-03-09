@@ -10,9 +10,10 @@ import SwiftUI
 struct LineupPlaybackView: View {
     let asset: LineupPlaybackAssetVO
     let players: [PlayerInfo]
+    let startIndex: Int
     
     @State private var scrollPosition: Int?
-    @State private var itemsArray: [[PlayerInfo]] = []
+    @State private var itemsArray: [[CarouselItem]] = []
     
     private let animationDuration: CGFloat = 0.3
     
@@ -24,15 +25,23 @@ struct LineupPlaybackView: View {
         pageWidth * 1.596
     }
     
+    private var carouselItems: [CarouselItem] {
+        players.flatMap { player in
+            player.cheerSongs.map { song in
+                CarouselItem(id: "\(player.id)-\(song.id)", player: player, cheerSong: song)
+            }
+        }
+    }
+    
     // itemsArray를 평탄화한 전체 아이템
-    private var itemsTemp: [PlayerInfo] {
+    private var itemsTemp: [CarouselItem] {
         itemsArray.flatMap { $0 }
     }
     
     // 현재 실제 players 인덱스 (페이지 인디케이터용)
     private var currentRealIndex: Int {
         guard let scrollPosition else { return 0 }
-        return scrollPosition % players.count
+        return scrollPosition % carouselItems.count
     }
     
     var body: some View {
@@ -57,9 +66,9 @@ extension LineupPlaybackView {
         return ScrollView(.horizontal) {
             LazyHStack(spacing: 0) {
                 ForEach(0..<itemsTemp.count, id: \.self) { index in
-                    let player = itemsTemp[index]
+                    let item = itemsTemp[index]
                     
-                    cardView(player: player, pageHeight: pageHeight)
+                    cardView(item: item, pageHeight: pageHeight)
                         .frame(width: pageWidth)
                         .scrollTransition(.interactive, axis: .horizontal) { content, phase in
                             content
@@ -76,19 +85,19 @@ extension LineupPlaybackView {
         .scrollIndicators(.hidden)
         .onAppear {
             // 3벌로 초기화, 두번째 벌의 첫번째 아이템에서 시작
-            itemsArray = [players, players, players]
-            scrollPosition = players.count
+            itemsArray = [carouselItems, carouselItems, carouselItems]
+            scrollPosition = carouselItems.count + startIndex
         }
         .onChange(of: scrollPosition) {
             guard let scrollPosition else { return }
             
-            let itemCount = players.count
+            let itemCount = carouselItems.count
             
             // 앞쪽 1/3 영역 진입 시 재배치
             if scrollPosition < itemCount {
                 DispatchQueue.main.asyncAfter(deadline: .now() + animationDuration) {
                     itemsArray.removeLast()
-                    itemsArray.insert(players, at: 0)
+                    itemsArray.insert(carouselItems, at: 0)
                     self.scrollPosition = scrollPosition + itemCount
                 }
                 return
@@ -98,7 +107,7 @@ extension LineupPlaybackView {
             if scrollPosition >= itemCount * 2 {
                 DispatchQueue.main.asyncAfter(deadline: .now() + animationDuration) {
                     itemsArray.removeFirst()
-                    itemsArray.append(players)
+                    itemsArray.append(carouselItems)
                     self.scrollPosition = scrollPosition - itemCount
                 }
                 return
@@ -107,20 +116,20 @@ extension LineupPlaybackView {
     }
     
     @ViewBuilder
-    private func cardView(player: PlayerInfo, pageHeight: CGFloat) -> some View {
+    private func cardView(item: CarouselItem, pageHeight: CGFloat) -> some View {
         LineupPlayCard(
             asset: asset,
-            battingOrder: player.battingOrder ?? 0,
-            name: player.name,
-            title: player.cheerSongs.first?.title ?? "",
-            lyrics: player.cheerSongs.first?.lyrics ?? ""
+            battingOrder: item.player.battingOrder ?? 0,
+            name: item.player.name,
+            title: item.cheerSong.title,
+            lyrics: item.cheerSong.lyrics
         )
         .frame(height: pageHeight)
     }
     
     private var pageIndicator: some View {
         HStack(spacing: 8) {
-            ForEach(0..<players.count, id: \.self) { index in
+            ForEach(0..<carouselItems.count, id: \.self) { index in
                 Capsule()
                     .fill(index == currentRealIndex ? asset.pageIndicatorColor : .grayWhite)
                     .frame(width: index == currentRealIndex ? 10 : 8, height: index == currentRealIndex ? 10 : 8)
@@ -128,6 +137,14 @@ extension LineupPlaybackView {
             }
         }
         .padding(.all, 1)
+    }
+}
+
+extension LineupPlaybackView {
+    private struct CarouselItem: Identifiable {
+        let id: String
+        let player: PlayerInfo
+        let cheerSong: CheerSongInfo
     }
 }
 
@@ -142,6 +159,7 @@ extension LineupPlaybackView {
             batThrow: "좌타",
             battingOrder: i,
             cheerSongs: [
+                CheerSongInfo(id: "\(i)", playerId: PlayerID("\(i)"), title: "응원가 \(i)", lyrics: "삼성의 심재훈 삼성의 심재훈\n안타를 날!려!버!려! 삼성 심재훈\n삼성의 심재훈 삼성의 심재훈\n홈런을 날!려!버!려! 삼성 심재훈\n삼성의 심재훈 삼성의 심재훈\n안타를 날!려!버!려! 삼성 심재훈\n삼성의 심재훈 삼성의 심재훈\n홈런을 날!려!버!려! 삼성 심재훈", audioURL: ""),
                 CheerSongInfo(id: "\(i)", playerId: PlayerID("\(i)"), title: "응원가 \(i)", lyrics: "삼성의 심재훈 삼성의 심재훈\n안타를 날!려!버!려! 삼성 심재훈\n삼성의 심재훈 삼성의 심재훈\n홈런을 날!려!버!려! 삼성 심재훈\n삼성의 심재훈 삼성의 심재훈\n안타를 날!려!버!려! 삼성 심재훈\n삼성의 심재훈 삼성의 심재훈\n홈런을 날!려!버!려! 삼성 심재훈", audioURL: "")
             ]
         )
@@ -149,6 +167,6 @@ extension LineupPlaybackView {
     
     LineupPlaybackView(
         asset: LineupPlaybackAssetVO(base: TeamAssetVO(TeamDataSource.toEntity(.samsung).id)),
-        players: players
+        players: players, startIndex: 2
     )
 }
