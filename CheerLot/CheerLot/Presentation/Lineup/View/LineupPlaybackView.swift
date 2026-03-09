@@ -84,8 +84,8 @@ extension LineupPlaybackView {
             
             let itemCount = players.count
             
-            // 첫번째 벌의 마지막 아이템 → 앞에 한 벌 추가, 뒤에서 제거
-            if scrollPosition / itemCount == 0 && scrollPosition % itemCount == itemCount - 1 {
+            // 앞쪽 1/3 영역 진입 시 재배치
+            if scrollPosition < itemCount {
                 DispatchQueue.main.asyncAfter(deadline: .now() + animationDuration) {
                     itemsArray.removeLast()
                     itemsArray.insert(players, at: 0)
@@ -94,8 +94,8 @@ extension LineupPlaybackView {
                 return
             }
             
-            // 마지막 벌의 첫번째 아이템 → 뒤에 한 벌 추가, 앞에서 제거
-            if scrollPosition / itemCount == 2 && scrollPosition % itemCount == 0 {
+            // 뒤쪽 1/3 영역 진입 시 재배치
+            if scrollPosition >= itemCount * 2 {
                 DispatchQueue.main.asyncAfter(deadline: .now() + animationDuration) {
                     itemsArray.removeFirst()
                     itemsArray.append(players)
@@ -136,13 +136,13 @@ extension LineupPlaybackView {
         PlayerInfo(
             id: PlayerID("\(i)"),
             teamId: "samsung",
-            name: "구자욱",
+            name: "심재훈",
             backNumber: i,
             position: "포지션",
             batThrow: "좌타",
             battingOrder: i,
             cheerSongs: [
-                CheerSongInfo(id: "\(i)", playerId: PlayerID("\(i)"), title: "응원가 \(i)", lyrics: "가사 \(i)\n두번째 줄\n세번째 줄", audioURL: "")
+                CheerSongInfo(id: "\(i)", playerId: PlayerID("\(i)"), title: "응원가 \(i)", lyrics: "삼성의 심재훈 삼성의 심재훈\n안타를 날!려!버!려! 삼성 심재훈\n삼성의 심재훈 삼성의 심재훈\n홈런을 날!려!버!려! 삼성 심재훈\n삼성의 심재훈 삼성의 심재훈\n안타를 날!려!버!려! 삼성 심재훈\n삼성의 심재훈 삼성의 심재훈\n홈런을 날!려!버!려! 삼성 심재훈", audioURL: "")
             ]
         )
     }
