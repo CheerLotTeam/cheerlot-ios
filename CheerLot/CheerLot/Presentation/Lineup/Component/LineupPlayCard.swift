@@ -118,15 +118,7 @@ extension LineupPlayCard {
                     if isScrolledToBottom {
                         Color.black  // 완전히 보임
                     } else {
-                        LinearGradient(
-                            stops: [
-                                .init(color: .black, location: 0),
-                                .init(color: .black, location: 0.85),
-                                .init(color: .clear, location: 1)
-                            ],
-                            startPoint: .top,
-                            endPoint: .bottom
-                        )
+                        asset.lyricsScrollMaskGradient
                     }
                 }
             )

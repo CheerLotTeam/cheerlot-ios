@@ -52,10 +52,23 @@ struct LineupPlaybackAssetVO {
         base.primaryPalette.color200.opacity(0),
         base.primaryPalette.color200
       ],
-      startPoint: .top,
+      startPoint: UnitPoint(x: 0.5, y: 0.45),
       endPoint: .bottom
     )
   }
+    
+    /// 가사 스크롤 하단 마스크 그라데이션
+    var lyricsScrollMaskGradient: LinearGradient {
+        LinearGradient(
+            stops: [
+                .init(color: .black, location: 0),
+                .init(color: .black, location: 0.85),
+                .init(color: .clear, location: 1)
+            ],
+            startPoint: .top,
+            endPoint: .bottom
+        )
+    }
 
   /// 카드 스트로크 컬러
   var cardStrokeColor: Color {
