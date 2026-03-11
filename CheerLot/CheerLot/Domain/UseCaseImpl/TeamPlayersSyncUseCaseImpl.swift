@@ -28,20 +28,22 @@ final class TeamPlayersSyncUseCaseImpl: TeamPlayersSyncUseCase {
   func getAllPlayers(_ teamId: TeamID) async throws -> [PlayerInfo] {
     try await playerLocalRepository.fetchAllPlayers(teamId)
   }
-
+  
   func syncIfNeeded(_ teamId: TeamID) async throws {
     // 서버 버전 확인
     let serverVersions = try await teamRemoteRepository.fetchVersions(teamId)
 
-    // 로컬 버전 확인
+    // 로컬 팀 확인
     guard let localTeam = try await teamLocalRepository.fetchTeam(teamId) else {
-      // 로컬에 없으면 무조건 동기화
       try await forceSync(teamId)
       return
     }
+    
+    // 로컬 선수 캐시 확인
+    let localPlayers = try await playerLocalRepository.fetchAllPlayers(teamId)
 
-    // 버전 비교
-    if localTeam.versionInfo.playersVersion != serverVersions.playersVersion {
+    // 서버와 선수 버전이 다르거나 로컬 선수 캐시가 없으면 동기화
+    if localTeam.versionInfo.playersVersion != serverVersions.playersVersion || localPlayers.isEmpty {
       try await performSync(teamId, serverVersions.playersVersion)
     }
   }
