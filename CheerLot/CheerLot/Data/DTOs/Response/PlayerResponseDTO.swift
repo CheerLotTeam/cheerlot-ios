@@ -17,8 +17,8 @@ struct StarterDTO: Decodable {
   let battingOrder: Int
   let playerCode: String
   let name: String
-  let position: String
-  let batThrow: String
+  let position: String?
+  let batThrow: String?
   let backNumber: Int
   let cheerSongs: [CheerSongDTO]
 }
@@ -32,8 +32,8 @@ struct PlayerDTO: Decodable {
   let playerCode: String
   let name: String
   let teamCode: String
-  let position: String
-  let batThrow: String
+  let position: String?
+  let batThrow: String?
   let backNumber: Int
   let battingOrder: Int?
   let cheerSongs: [CheerSongDTO]
@@ -41,13 +41,13 @@ struct PlayerDTO: Decodable {
 
 struct CheerSongDTO: Decodable {
   let title: String
-  let lyrics: String
-  let audioUrl: String
+  let lyrics: String?
+  let audioUrl: String?
 }
 
 extension LineupDTO {
   func toEntity() -> [PlayerInfo] {
-    return players.map { starterDTO in
+    players.map { starterDTO in
       PlayerInfo(
         id: PlayerID(starterDTO.playerCode),
         teamId: TeamID(teamCode),
@@ -66,7 +66,7 @@ extension LineupDTO {
 
 extension AllPlayersDTO {
   func toEntity() -> [PlayerInfo] {
-    return players.map { playerDTO in
+    players.map { playerDTO in
       PlayerInfo(
         id: PlayerID(playerDTO.playerCode),
         teamId: TeamID(playerDTO.teamCode),
@@ -85,16 +85,16 @@ extension AllPlayersDTO {
 
 extension PlayerDTO {
   func toEntity() -> PlayerInfo {
-    return PlayerInfo(
-      id: PlayerID(self.playerCode),
-      teamId: TeamID(self.teamCode),
-      name: self.name,
-      backNumber: self.backNumber,
-      position: self.position,
-      batThrow: self.batThrow,
-      battingOrder: self.battingOrder,
-      cheerSongs: self.cheerSongs.map {
-        $0.toEntity(playerId: PlayerID(self.playerCode))
+    PlayerInfo(
+      id: PlayerID(playerCode),
+      teamId: TeamID(teamCode),
+      name: name,
+      backNumber: backNumber,
+      position: position,
+      batThrow: batThrow,
+      battingOrder: battingOrder,
+      cheerSongs: cheerSongs.map {
+        $0.toEntity(playerId: PlayerID(playerCode))
       }
     )
   }
@@ -102,12 +102,12 @@ extension PlayerDTO {
 
 extension CheerSongDTO {
   func toEntity(playerId: PlayerID) -> CheerSongInfo {
-    return CheerSongInfo(
-      id: "\(playerId)_\(title)",
+    CheerSongInfo(
+      id: "\(playerId.value)_\(title)",
       playerId: playerId,
-      title: self.title,
-      lyrics: self.lyrics,
-      audioURL: self.audioUrl
+      title: title,
+      lyrics: lyrics ?? "",
+      audioURL: audioUrl ?? ""
     )
   }
 }
