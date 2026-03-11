@@ -20,6 +20,7 @@ struct MainTabView: View {
   @State private var selectedTab: TabKey = .lineup
   @State private var isPlayerExpanded: Bool = false
   @State private var lineupViewModel = ViewModelFactory.shared.createLineupViewModel()
+  @State private var teamMembersViewModel = ViewModelFactory.shared.createTeamMembersViewModel()
 
   @Namespace private var animation
 
@@ -101,10 +102,7 @@ extension MainTabView {
         TeamMembersView(
           team: team,
           asset: asset,
-          viewModel: ViewModelFactory.shared.createTeamMembersViewModel(
-            team: team,
-            audioPlayer: audioPlayer
-          )
+          viewModel: teamMembersViewModel
         )
       }
 

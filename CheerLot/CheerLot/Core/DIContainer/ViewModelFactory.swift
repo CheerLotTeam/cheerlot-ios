@@ -35,10 +35,10 @@ final class ViewModelFactory {
   }
 
   // MARK: - TeamMembers
-  func createTeamMembersViewModel(team: TeamInfo, audioPlayer: AudioPlaybackService)
-    -> TeamMembersViewModel
-  {
-    TeamMembersViewModel(audioPlayer: audioPlayer)
+  func createTeamMembersViewModel() -> TeamMembersViewModel {
+    TeamMembersViewModel(
+      audioPlayer: DIContainer.shared.resolve(AudioPlaybackService.self)
+    )
   }
 
   // MARK: - Playback
