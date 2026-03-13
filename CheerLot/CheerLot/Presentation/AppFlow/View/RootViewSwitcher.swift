@@ -13,7 +13,9 @@ struct RootViewSwitcher: View {
   @State private var audioPlayer: AudioPlaybackService = DIContainer.shared.resolve(
     AudioPlaybackService.self)
   @State private var teamSelectViewModel = ViewModelFactory.shared.createTeamSelectViewModel()
-
+  @ObservationIgnored
+  @Injected(TeamSelectionUseCase.self) private var teamSelectionUseCase
+    
   // TODO: - 분리 예정
   @StateObject private var remoteConfigChecker = RemoteConfigChecker()
 
@@ -35,27 +37,23 @@ extension RootViewSwitcher {
         }
 
     case .onboarding:
-      TeamSelectView(viewModel: teamSelectViewModel)
-        .onReceive(
-          NotificationCenter.default.publisher(for: .teamSelected)
-        ) { notification in
-          if let team = notification.object as? TeamInfo {
-            appState = .main(team: team)
-          }
-        }
-
+        TeamSelectView(viewModel: teamSelectViewModel)
+            .onReceive(
+                NotificationCenter.default.publisher(for: .teamSelected)
+            ) { _ in
+                transitionToMain()
+            }
+        
     case .main(let team):
-      MainTabView(team: team, audioPlayer: audioPlayer)
-        .transition(.opacity)
-        .id(team.id)
-        .onReceive(
-          NotificationCenter.default.publisher(for: .teamSelected)
-        ) { notification in
-          // 팀 재선택 시
-          if let newTeam = notification.object as? TeamInfo {
-            appState = .main(team: newTeam)
-          }
-        }
+        MainTabView(team: team, audioPlayer: audioPlayer)
+            .transition(.opacity)
+            .id(team.id)
+            .onReceive(
+                NotificationCenter.default.publisher(for: .teamSelected)
+            ) { _ in
+                // 팀 재선택 시
+                transitionToMain()
+            }
     }
   }
 
@@ -72,16 +70,19 @@ extension RootViewSwitcher {
     try? await Task.sleep(nanoseconds: 1_250_000_000)
 
     // 4. 팀 선택 여부 확인
-    let useCase = DIContainer.shared.resolve(TeamSelectionUseCase.self)
-
-    if useCase.hasSelectedTeam() {
-      if let team = useCase.getCurrentTeam() {
+    if teamSelectionUseCase.hasSelectedTeam() {
+      if let team = teamSelectionUseCase.getCurrentTeam() {
         appState = .main(team: team)
       }
     } else {
       appState = .onboarding
     }
   }
+    
+    private func transitionToMain() {
+        guard let team = teamSelectionUseCase.getCurrentTeam() else { return }
+        appState = .main(team: team)
+    }
 }
 
 #Preview {
