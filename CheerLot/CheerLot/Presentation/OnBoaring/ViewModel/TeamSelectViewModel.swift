@@ -9,15 +9,16 @@ import SwiftUI
 
 @Observable
 final class TeamSelectViewModel {
-  private var teamList: [TeamInfo] = []
-  var selectedTeam: TeamID?
-  var teamVOList: [TeamSelectVO] = []
+  var teams: [TeamSelectVO] = []
+  var selectedTeamId: String?
+    
   var isButtonEnabled: Bool {
-    selectedTeam != nil
+    selectedTeamId != nil
   }
+    
   let columns = [
     GridItem(.flexible(), spacing: 17),
-    GridItem(.flexible(), spacing: 17),
+    GridItem(.flexible(), spacing: 17)
   ]
 
   @ObservationIgnored
@@ -31,21 +32,17 @@ final class TeamSelectViewModel {
   }
 
   func loadTeams() {
-    teamList = teamInfoUseCase.getAllTeamsInfo()
-    teamVOList = teamList.map { TeamSelectVO(team: $0) }
+    let teamEntities = teamInfoUseCase.getAllTeamsInfo()
+    teams = teamEntities.map { TeamSelectVO(from: $0) }
   }
 
-  func select(_ id: TeamID) {
-    selectedTeam = id
+  func select(_ teamId: String) {
+    selectedTeamId = teamId
   }
 
   func complete() {
-    guard let selectedTeam else { return }
-    teamSelectionUseCase.selectTeam(selectedTeam)
-
-    // TeamID -> TeamInfo 변환
-    if let team = teamList.first(where: { $0.id == selectedTeam }) {
-      NotificationCenter.default.post(name: .teamSelected, object: team)
-    }
+    guard let selectedTeamId = selectedTeamId else { return }
+    teamSelectionUseCase.selectTeam(TeamID(selectedTeamId))
+    NotificationCenter.default.post(name: .teamSelected, object: selectedTeamId)
   }
 }

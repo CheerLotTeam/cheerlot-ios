@@ -40,7 +40,7 @@ extension TeamSelectView {
 
   private var teamListGrid: some View {
     GeometryReader { geometry in
-      let rowCount = ceil(Double(viewModel.teamVOList.count) / 2.0)
+      let rowCount = ceil(Double(viewModel.teams.count) / 2.0)
       let totalSpacing = max(0, 9 * (rowCount - 1))
       let cellHeight =
         rowCount > 0
@@ -48,8 +48,8 @@ extension TeamSelectView {
         : 0
 
       LazyVGrid(columns: viewModel.columns, spacing: 9) {
-        ForEach(viewModel.teamVOList) { team in
-          TeamSelectCell(team: team, isSelected: viewModel.selectedTeam == team.id) {
+        ForEach(viewModel.teams) { team in
+            TeamSelectCell(team: team, isSelected: viewModel.selectedTeamId == team.id) {
             viewModel.select(team.id)
           }
           .frame(height: cellHeight)
