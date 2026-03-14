@@ -24,22 +24,37 @@ extension AppCoordinator {
 
   @ViewBuilder
   func buildView(for route: MainRoute) -> some View {
-    //        let factory = ViewModelFactory.shared
-
+    let factory = ViewModelFactory.shared
+    
     // TODO: - View 넣기
     switch route {
     case .settings:
-      Color.clear
+      let viewModel = factory.createSettingViewModel(coordinator: self)
+      SettingView(viewModel: viewModel)
+      
     case .serviceInfo:
-      Color.clear
+      ServiceInfoView()
+      
     case .makerInfo:
-      Color.clear
+      MakerInfoView()
+      
     case .termsOfService:
-      Color.clear
+      ServiceAppInfoView(
+        title: "이용약관",
+        text: Constants.AppInfo.termsOfService
+      )
+      
     case .privacyPolicy:
-      Color.clear
+      ServiceAppInfoView(
+        title: "개인정보처리방침",
+        text: Constants.AppInfo.privacyPolicy
+      )
+      
     case .copyright:
-      Color.clear
+      ServiceAppInfoView(
+        title: "저작권 법적고지",
+        text: Constants.AppInfo.copyrightPolicy
+      )
     }
   }
 }
