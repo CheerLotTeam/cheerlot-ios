@@ -49,7 +49,7 @@ final class ViewModelFactory {
   ) -> PlaybackViewModel {
     PlaybackViewModel(song: song, playerName: playerName, audioPlayer: audioPlayer)
   }
-  
+
   // MARK: - Setting
   func createSettingViewModel(coordinator: AppCoordinator) -> SettingViewModel {
     SettingViewModel(coordinator: coordinator)

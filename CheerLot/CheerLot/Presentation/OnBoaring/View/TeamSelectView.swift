@@ -8,12 +8,12 @@
 import SwiftUI
 
 struct TeamSelectView: View {
-  
+
   @State private var viewModel: TeamSelectViewModel
-  
+
   let onClose: (() -> Void)?
   let onCompleteForChange: (() -> Void)?
-  
+
   init(
     viewModel: TeamSelectViewModel,
     onClose: (() -> Void)? = nil,
@@ -23,14 +23,14 @@ struct TeamSelectView: View {
     self.onClose = onClose
     self.onCompleteForChange = onCompleteForChange
   }
-  
+
   var body: some View {
     VStack(spacing: 15) {
       header
         .padding(.bottom, 10)
-      
+
       teamListGrid
-      
+
       if viewModel.mode.showsBottomButton {
         completeButton
       }
@@ -52,13 +52,13 @@ struct TeamSelectView: View {
           }
           .tint(.grayBlack)
         }
-        
+
         ToolbarItem(placement: .principal) {
           Text(viewModel.mode.navigationTitle)
             .font(.SB6)
             .foregroundStyle(.grayBlack)
         }
-        
+
         ToolbarItem(placement: .topBarTrailing) {
           Button {
             viewModel.complete()
@@ -81,16 +81,16 @@ extension TeamSelectView {
       .font(viewModel.mode == .onboarding ? .SB4 : .M3)
       .foregroundStyle(viewModel.mode == .onboarding ? .grayBlack : .gray300)
   }
-  
+
   private var teamListGrid: some View {
     GeometryReader { geometry in
       let rowCount = ceil(Double(viewModel.teamVOList.count) / 2.0)
       let totalSpacing = max(0, 9 * (rowCount - 1))
       let cellHeight =
-      rowCount > 0
-      ? (geometry.size.height - totalSpacing) / rowCount
-      : 0
-      
+        rowCount > 0
+        ? (geometry.size.height - totalSpacing) / rowCount
+        : 0
+
       LazyVGrid(columns: viewModel.columns, spacing: 9) {
         ForEach(viewModel.teamVOList) { team in
           TeamSelectCell(team: team, isSelected: viewModel.selectedTeam == team.id) {
@@ -101,7 +101,7 @@ extension TeamSelectView {
       }
     }
   }
-  
+
   private var completeButton: some View {
     Button {
       viewModel.complete()

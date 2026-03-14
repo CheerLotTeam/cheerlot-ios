@@ -10,7 +10,7 @@ import Foundation
 final class UserSettingsRepositoryImpl: UserSettingsRepository {
 
   private let userDefaults: UserDefaults
-  
+
   private enum Key {
     static let showRecentLineup = "show_recent_lineup"
     static let appIconMode = "app_icon_mode"
@@ -31,7 +31,7 @@ final class UserSettingsRepositoryImpl: UserSettingsRepository {
   func resetShowRecentLineup() {
     userDefaults.set(false, forKey: UserDefaultsKey.showRecentLineup)
   }
-  
+
   func getAppIconMode() -> AppIconMode {
     guard
       let rawValue = userDefaults.string(forKey: Key.appIconMode),

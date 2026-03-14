@@ -11,7 +11,7 @@ import SwiftUI
 struct MakerInfoView: View {
   @Environment(AppCoordinator.self) private var coordinator
   @Environment(\.openURL) private var openURL
-  
+
   // MARK: - Body
   var body: some View {
     VStack {

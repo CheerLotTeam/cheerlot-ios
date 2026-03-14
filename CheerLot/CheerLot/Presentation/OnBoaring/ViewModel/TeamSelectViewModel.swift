@@ -10,18 +10,18 @@ import SwiftUI
 @Observable
 final class TeamSelectViewModel {
   let mode: TeamSelectMode
-  
+
   private var teamList: [TeamInfo] = []
   var selectedTeam: TeamID?
   var teamVOList: [TeamSelectVO] = []
-  
+
   var isButtonEnabled: Bool {
     selectedTeam != nil
   }
-  
+
   let columns = [
     GridItem(.flexible(), spacing: 17),
-    GridItem(.flexible(), spacing: 17)
+    GridItem(.flexible(), spacing: 17),
   ]
 
   @ObservationIgnored

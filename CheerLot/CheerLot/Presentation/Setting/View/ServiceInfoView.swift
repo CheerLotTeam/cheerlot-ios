@@ -10,7 +10,7 @@ import SwiftUI
 /// 서비스 소개 화면입니다.
 struct ServiceInfoView: View {
   @Environment(AppCoordinator.self) private var coordinator
-  
+
   // MARK: - Properties
   private var policyMenus: [ServiceInfoMenu] {
     [.termsOfService, .privacyPolicy, .copyright]

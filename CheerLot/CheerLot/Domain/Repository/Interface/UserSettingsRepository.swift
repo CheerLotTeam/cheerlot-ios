@@ -16,8 +16,8 @@ protocol UserSettingsRepository {
 
   /// 최신 라인업 보기 설정 값을 false로 초기화한다
   func resetShowRecentLineup()
-  
+
   func getAppIconMode() -> AppIconMode
-  
+
   func setAppIconMode(_ mode: AppIconMode)
 }
