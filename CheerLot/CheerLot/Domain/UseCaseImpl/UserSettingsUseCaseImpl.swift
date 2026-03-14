@@ -25,4 +25,12 @@ final class UserSettingsUseCaseImpl: UserSettingsUseCase {
   func resetShowRecentLineup() {
     userSettingsRepository.resetShowRecentLineup()
   }
+
+  func getAppIconMode() -> AppIconMode {
+    userSettingsRepository.getAppIconMode()
+  }
+
+  func setAppIconMode(_ mode: AppIconMode) {
+    userSettingsRepository.setAppIconMode(mode)
+  }
 }
