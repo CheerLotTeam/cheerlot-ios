@@ -9,6 +9,7 @@ import SwiftUI
 
 /// 팀 내 선수를 검색할 수 있는 화면입니다.
 struct SearchView: View {
+  @Environment(AppCoordinator.self) private var coordinator
 
   // MARK: - Properties
 
@@ -57,7 +58,7 @@ struct SearchView: View {
       }
     }
     .toolBar_titleWithProfile(title: "검색") {
-      // coordinator.push(.settings)
+      coordinator.push(.settings)
     }
     .searchable(text: $query, prompt: "검색어를 입력해주세요")
   }
