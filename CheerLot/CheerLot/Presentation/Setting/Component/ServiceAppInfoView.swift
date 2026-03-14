@@ -32,4 +32,5 @@ struct ServiceAppInfoView: View {
 
 #Preview {
   ServiceAppInfoView(title: "이용약관", text: "")
+    .environment(AppCoordinator())
 }

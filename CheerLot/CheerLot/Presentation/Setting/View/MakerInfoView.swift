@@ -51,4 +51,5 @@ extension MakerInfoView {
 
 #Preview {
   MakerInfoView()
+    .environment(AppCoordinator())
 }
