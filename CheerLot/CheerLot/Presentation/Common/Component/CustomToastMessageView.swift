@@ -32,7 +32,7 @@ struct CustomToastMessageView: View {
         .fill(Color.black.opacity(0.8))
     )
     .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
-    .padding(.bottom, UIScreen.main.bounds.height * 0.12)
+    .padding(.bottom, UIScreen.height * 0.12)
     .transition(.opacity.animation(.easeInOut(duration: 0.3)))
     .zIndex(999)
     .onAppear {
