@@ -717,6 +717,7 @@
 		CF703EA32DE8297A00330888 /* Debug configuration for PBXNativeTarget "CheerLot" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = "cheerlot_icon_ss cheerlot_icon_lg cheerlot_icon_kt cheerlot_icon_lt cheerlot_icon_nc cheerlot_icon_ob cheerlot_icon_sk cheerlot_icon_hh cheerlot_icon_ht cheerlot_icon_wo";
 				ASSETCATALOG_COMPILER_APPICON_NAME = cheerlot_icon_default;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
@@ -764,6 +765,7 @@
 		CF703EA42DE8297A00330888 /* Release configuration for PBXNativeTarget "CheerLot" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = "cheerlot_icon_ss cheerlot_icon_lg cheerlot_icon_kt cheerlot_icon_lt cheerlot_icon_nc cheerlot_icon_ob cheerlot_icon_sk cheerlot_icon_hh cheerlot_icon_ht cheerlot_icon_wo";
 				ASSETCATALOG_COMPILER_APPICON_NAME = cheerlot_icon_default;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
