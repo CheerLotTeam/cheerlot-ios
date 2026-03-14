@@ -9,7 +9,8 @@ import SwiftUI
 
 /// 전체 선수 화면입니다.
 struct TeamMembersView: View {
-
+  @Environment(AppCoordinator.self) private var coordinator
+  
   // MARK: - Properties
   private let asset: TeamMembersAssetVO
   private let team: TeamInfo
@@ -43,6 +44,9 @@ struct TeamMembersView: View {
         }
       }
       .padding(.horizontal, 20)
+      .toolBar_titleWithProfile(title: "전체 선수") {
+        coordinator.push(.settings)
+      }
     }
   }
 }
