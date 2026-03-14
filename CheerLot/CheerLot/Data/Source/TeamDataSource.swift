@@ -146,4 +146,13 @@ struct TeamDataSource {
     case .ssg: return APICode.ssg.rawValue
     }
   }
+  
+  /// TeamID → 서버 api code
+  static func toAPICode(_ teamID: TeamID) -> String {
+    guard let teamCode = TeamCode(rawValue: teamID.value) else {
+      assertionFailure("Unknown TeamID: \(teamID.value)")
+      return APICode.samsung.rawValue
+    }
+    return toAPICode(teamCode)
+  }
 }
