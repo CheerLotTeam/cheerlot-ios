@@ -12,7 +12,7 @@ struct RootViewSwitcher: View {
   @State private var appState: AppState = .splash
   @State private var audioPlayer: AudioPlaybackService = DIContainer.shared.resolve(
     AudioPlaybackService.self)
-  @State private var teamSelectViewModel = ViewModelFactory.shared.createTeamSelectViewModel()
+  @State private var teamSelectViewModel = ViewModelFactory.shared.createTeamSelectViewModel(mode: .onboarding)
 
   // TODO: - 분리 예정
   @StateObject private var remoteConfigChecker = RemoteConfigChecker()
