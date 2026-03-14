@@ -24,10 +24,10 @@ enum ModalRoute: Identifiable {
     lineupPlayer: LineupPlayerVO,
     onComplete: () -> Void
   )
-  case teamChange
+  case teamChange(selectedTeam: TeamID)
   case inquiry
   case servicePage
-
+  
   // FullScreen 스타일
   case lineupPlayback
   case basePlayback(
@@ -35,11 +35,16 @@ enum ModalRoute: Identifiable {
     song: CheerSongInfo,
     playerName: String
   )
-
+  
   var id: String {
-    String(describing: self)
+    switch self {
+    case let .teamChange(selectedTeam):
+      return "teamChange_\(selectedTeam)"
+    default:
+      return String(describing: self)
+    }
   }
-
+  
   var presentationStyle: PresentationStyle {
     switch self {
     case .cheerSongList, .lineupChange, .teamChange, .inquiry, .servicePage:
@@ -52,12 +57,10 @@ enum ModalRoute: Identifiable {
 
 extension AppCoordinator {
   @ViewBuilder
-
   func buildModalView(for route: ModalRoute) -> some View {
     let factory = ViewModelFactory.shared
-    let audioPlayer = DIContainer.shared.resolve(
-      AudioPlaybackService.self)
-
+    let audioPlayer = DIContainer.shared.resolve(AudioPlaybackService.self)
+    
     // TODO: - View 넣기
     switch route {
     case let .cheerSongList(asset, player, lineupPlayers):
@@ -79,8 +82,22 @@ extension AppCoordinator {
       )
       .presentationDetents([.large])
       .presentationDragIndicator(.hidden)
-    case let .teamChange:
-      Color.clear
+    case let .teamChange(selectedTeam):
+      NavigationStack {
+        TeamSelectView(
+          viewModel: factory.createTeamSelectViewModel(
+            mode: .change,
+            initialSelectedTeam: selectedTeam
+          ),
+          onClose: {
+            self.dismissModal()
+          },
+          onCompleteForChange: {
+            self.dismissModal()
+          }
+        )
+      }
+      .presentationDragIndicator(.visible)
     case let .inquiry:
       Color.clear
     case let .servicePage:
@@ -93,7 +110,7 @@ extension AppCoordinator {
         playerName: playerName,
         audioPlayer: audioPlayer
       )
-
+      
       PlaybackView(
         asset: TeamAssetVO(teamId),
         viewModel: vm
