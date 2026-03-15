@@ -39,7 +39,7 @@ struct LineupView: View {
           .frame(width: geo.size.width)
           .scrollIndicators(.hidden)
           .refreshable {
-            await viewModel.refresh()
+            await viewModel.loadData()
           }
         } else {
           Color.clear
@@ -227,7 +227,7 @@ extension LineupView {
                 lineupPlayer: player,
                 onComplete: {
                   Task {
-                    await viewModel.refresh()
+                    await viewModel.loadData()
                   }
                 }))
           },
