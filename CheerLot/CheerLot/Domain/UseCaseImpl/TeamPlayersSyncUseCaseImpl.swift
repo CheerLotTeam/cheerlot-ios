@@ -39,9 +39,12 @@ final class TeamPlayersSyncUseCaseImpl: TeamPlayersSyncUseCase {
       try await forceSync(teamId)
       return
     }
+      
+    // 로컬 선수 존재 확인
+    let localPlayers = try await playerLocalRepository.fetchAllPlayers(teamId)
 
-    // 버전 비교
-    if localTeam.versionInfo.playersVersion != serverVersions.playersVersion {
+    // 로컬 선수 데이터가 비어 있거나 버전이 다를경우 동기화
+    if localPlayers.isEmpty || localTeam.versionInfo.playersVersion != serverVersions.playersVersion {
       try await performSync(teamId, serverVersions.playersVersion)
     }
   }
