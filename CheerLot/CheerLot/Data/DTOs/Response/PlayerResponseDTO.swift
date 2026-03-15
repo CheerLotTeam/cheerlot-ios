@@ -17,8 +17,8 @@ struct StarterDTO: Decodable {
   let battingOrder: Int
   let playerCode: String
   let name: String
-  let position: String
-  let batThrow: String
+  let position: String?
+  let batThrow: String?
   let backNumber: Int
   let cheerSongs: [CheerSongDTO]
 }
@@ -32,8 +32,8 @@ struct PlayerDTO: Decodable {
   let playerCode: String
   let name: String
   let teamCode: String
-  let position: String
-  let batThrow: String
+  let position: String?
+  let batThrow: String?
   let backNumber: Int
   let battingOrder: Int?
   let cheerSongs: [CheerSongDTO]
