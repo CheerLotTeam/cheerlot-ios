@@ -156,4 +156,42 @@ extension View {
         onSelectSong: onSelectSong
       ))
   }
+    
+    /// 에러메시지 알럿을 띄우는 확장메서드
+    func errorAlert(
+        errorMessage: Binding<String?>
+    ) -> some View {
+        modifier(
+            ErrorAlertModifier(
+                errorMessage: errorMessage
+            )
+        )
+    }
+    
+    /// 에러메시지와 재시도 알럿을 띄우는 확장메서드
+    func errorWithRetryAlert(
+        errorMessage: Binding<String?>,
+        onRetry: @escaping () async -> Void
+    ) -> some View {
+        modifier(
+            ErrorAlertWithRetryModifier(
+            errorMessage: errorMessage,
+            onRetry: onRetry)
+        )
+    }
+    
+    /// 커스텀 토스트 메시지 뷰를 띄울 수 있는 확장메서드
+    func toastMessage(
+        isPresented: Binding<Bool>,
+        message: String,
+        showCaution: Bool = true
+    ) -> some View {
+        modifier(
+            CustomToastModifier(
+                isPresented: isPresented,
+                message: message,
+                showCaution: showCaution
+            )
+        )
+    }
 }
