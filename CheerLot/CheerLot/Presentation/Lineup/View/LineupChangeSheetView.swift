@@ -54,21 +54,12 @@ struct LineupChangeSheetView: View {
     .task {
       await viewModel.onAppear()
     }
-    .alert("오류", isPresented: .constant(viewModel.errorMessage != nil)) {
-      Button("다시 시도") {
-        viewModel.errorMessage = nil
-        Task {
-          await viewModel.onAppear()
-        }
-      }
-      Button("취소", role: .cancel) {
-        viewModel.errorMessage = nil
-      }
-    } message: {
-      if let error = viewModel.errorMessage {
-        Text(error)
-      }
-    }
+    .errorAlert(errorMessage: $viewModel.errorMessage)
+    .toastMessage(
+        isPresented: $viewModel.showToast,
+        message: viewModel.toastMessage,
+        showCaution: false
+    )
   }
 }
 

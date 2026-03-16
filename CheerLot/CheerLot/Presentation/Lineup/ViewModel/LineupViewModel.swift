@@ -19,6 +19,8 @@ final class LineupViewModel {
 
   var isLoading = false
   var errorMessage: String?
+  var showToast = false
+  var toastMessage = ""
 
   var showRecentLineup: Bool = false {
     didSet {
@@ -46,7 +48,6 @@ final class LineupViewModel {
 
   @ObservationIgnored
   @Injected(TeamInfoUseCase.self) private var teamInfoUseCase
-
     
  @ObservationIgnored
  @Injected(LineupManagementUseCase.self) private var lineupManagementUseCase
@@ -61,10 +62,8 @@ final class LineupViewModel {
       
     currentTeamId = teamInfo.id.value
 
-//    await syncData()
     await loadData()
     showRecentLineup = userSettingsUseCase.getShowRecentLineup()
-//    await loadData()
   }
     
     func toggleShowRecentLineup() {
@@ -74,6 +73,7 @@ final class LineupViewModel {
     func loadData() async {
         guard let teamId = currentTeamId else { return }
         
+        guard !isLoading else { return }
         isLoading = true
         errorMessage = nil
         
@@ -87,6 +87,11 @@ final class LineupViewModel {
             isLoading = false
             errorMessage = "데이터를 불러올 수 없습니다: \(error.localizedDescription)"
         }
+    }
+    
+    func showNoSongToast() {
+        toastMessage = "아직 개인 응원가가 없어요"
+        showToast = true
     }
     
     // MARK: - Private
