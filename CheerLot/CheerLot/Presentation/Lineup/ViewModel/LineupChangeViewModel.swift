@@ -90,7 +90,7 @@ final class LineupChangeViewModel {
 
     } catch {
       isSwapping = false
-      errorMessage = "선수 교체 실패: \(error.localizedDescription)"
+      errorMessage = "선수 교체 실패: \(error.userMessage)"
       return false
     }
   }
@@ -115,7 +115,7 @@ final class LineupChangeViewModel {
       isLoading = false
     } catch {
       isLoading = false
-      errorMessage = "벤치 선수를 불러올 수 없습니다: \(error.localizedDescription)"
+      errorMessage = "벤치 선수를 불러올 수 없습니다: \(error.userMessage)"
     }
   }
 }

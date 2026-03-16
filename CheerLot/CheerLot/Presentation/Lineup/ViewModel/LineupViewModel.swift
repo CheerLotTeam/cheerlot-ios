@@ -85,7 +85,7 @@ final class LineupViewModel {
             isLoading = false
         } catch {
             isLoading = false
-            errorMessage = "데이터를 불러올 수 없습니다: \(error.localizedDescription)"
+            errorMessage = "데이터를 불러올 수 없습니다: \(error.userMessage)"
         }
     }
     
