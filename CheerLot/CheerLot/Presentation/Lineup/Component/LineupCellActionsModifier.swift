@@ -18,7 +18,7 @@ struct LineupCellActionsModifier: ViewModifier {
         Button {
           onChangePlayer()
         } label: {
-          Label("교체", systemImage: "arrow.trianglehead.2.clockwise.rotate.90")
+          Image(.changeIcon)
         }
         .tint(.change)
       }
