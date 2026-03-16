@@ -133,14 +133,6 @@ extension View {
     )
   }
 
-  /// Modal 표시 (Sheet 또는 FullScreen 자동 결정)
-  func modal<Item: Identifiable, Content: View>(
-    item: Binding<Item?>,
-    @ViewBuilder content: @escaping (Item) -> Content
-  ) -> some View {
-    self.modifier(ModalModifier(item: item, content: content))
-  }
-
   /// lineupView의 리스트 cellAction(swipe, context menu)을 바로 사용할 수 있는 확장메서드
   func lineupCellActions(
     player: LineupPlayerVO,
