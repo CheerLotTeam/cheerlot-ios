@@ -18,37 +18,39 @@ struct LineupChangeSheetView: View {
   }
 
   var body: some View {
-    VStack(spacing: 18) {
-      header
-        .padding(.top, 18)
-
-      if let asset = viewModel.asset {
-        playerListGrid(asset: asset)
-      } else {
-        Color.clear
+      NavigationStack {
+          VStack(spacing: 18) {
+              header
+                .padding(.top, 10)
+              
+              if let asset = viewModel.asset {
+                  playerListGrid(asset: asset)
+              } else {
+                  Color.clear
+              }
+          }
+          .toolBar_editMode(
+            title: "선발 라인업"
+          ) {
+              coordinator.dismissModal()
+          } onCheck: {
+              Task {
+                  let success = await viewModel.swapPlayers()
+                  if success {
+                      onComplete()
+                      coordinator.dismissModal()
+                  }
+              }
+          }
+          .disabled(viewModel.isSwapping)
+          .overlay {
+              if viewModel.isLoading || viewModel.isSwapping {
+                  ProgressView()
+                      .frame(maxWidth: .infinity, maxHeight: .infinity)
+                      .background(.ultraThinMaterial)
+              }
+          }
       }
-    }
-    .toolBar_editMode(
-      title: "선발 라인업"
-    ) {
-      coordinator.dismissModal()
-    } onCheck: {
-      Task {
-        let success = await viewModel.swapPlayers()
-        if success {
-          onComplete()
-          coordinator.dismissModal()
-        }
-      }
-    }
-    .disabled(viewModel.isSwapping)
-    .overlay {
-      if viewModel.isLoading || viewModel.isSwapping {
-        ProgressView()
-          .frame(maxWidth: .infinity, maxHeight: .infinity)
-          .background(.ultraThinMaterial)
-      }
-    }
     .task {
       await viewModel.onAppear()
     }
@@ -102,8 +104,4 @@ extension LineupChangeSheetView {
     }
     .scrollIndicators(.hidden)
   }
-}
-
-#Preview {
-
 }

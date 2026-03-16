@@ -57,11 +57,18 @@ extension View {
       .toolbar {
         if let leftItem {
           if #available(iOS 26.0, *) {
-            ToolBarItemBuilder.buildItem(
-              for: leftItem,
-              placement: .topBarLeading
-            )
-            .sharedBackgroundVisibility(.hidden)
+              if case .largeTitle = leftItem {
+                  ToolBarItemBuilder.buildItem(
+                    for: leftItem,
+                    placement: .topBarLeading
+                  )
+                  .sharedBackgroundVisibility(.hidden)
+              } else {
+                  ToolBarItemBuilder.buildItem(
+                    for: leftItem,
+                    placement: .topBarLeading
+                  )
+              }
           } else {
             ToolBarItemBuilder.buildItem(
               for: leftItem,
@@ -107,6 +114,7 @@ extension View {
       leftItem: .close(action: onClose),
       centerItem: .gameInfo(date: date, teams: teams)
     )
+    .navigationBarTitleDisplayMode(.inline)
   }
 
   /// leading에 back 버튼과 center에 inlineTitle을 가지는 toolbar 확장 메서드
@@ -118,6 +126,7 @@ extension View {
       leftItem: .back(action: onBack),
       centerItem: .inlineTitle(title)
     )
+    .navigationBarTitleDisplayMode(.inline)
   }
 
   /// leading에 cancel 버튼과 center에 inlineTitle, trailing에 check 버튼을 가지는 toolbar 확장 메서드
@@ -131,6 +140,7 @@ extension View {
       centerItem: .inlineTitle(title),
       rightItem: .check(action: onCheck)
     )
+    .navigationBarTitleDisplayMode(.inline)
   }
 
   /// lineupView의 리스트 cellAction(swipe, context menu)을 바로 사용할 수 있는 확장메서드
