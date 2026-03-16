@@ -134,8 +134,8 @@ final class LineupManagementUseCaseImpl: LineupManagementUseCase {
                     teamId: localPlayer.teamId,
                     name: localPlayer.name,
                     backNumber: localPlayer.backNumber,
-                    position: localPlayer.position,
-                    batThrow: localPlayer.batThrow,
+                    position: lineupPlayer.position,
+                    batThrow: lineupPlayer.batThrow,
                     battingOrder: lineupPlayer.battingOrder,
                     cheerSongs: localPlayer.cheerSongs
                 )

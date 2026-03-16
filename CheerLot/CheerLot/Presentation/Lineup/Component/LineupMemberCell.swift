@@ -14,9 +14,11 @@ struct LineupMemberCell: View {
 
   var body: some View {
     HStack(spacing: 12) {
-      Text("\(player.battingOrder)")
-        .font(.M0)
-        .foregroundStyle(asset.battingOrderTextColor)
+        if let battingOrder = player.battingOrder {
+            Text("\(battingOrder)")
+                .font(.M0)
+                .foregroundStyle(asset.battingOrderTextColor)
+        }
 
       textContents
 
@@ -39,7 +41,7 @@ extension LineupMemberCell {
         .font(.SB5_lineupName)
         .foregroundStyle(.grayWhite)
 
-      Text("\(player.position),\(player.batThrow)")
+      Text(player.batThrow.isEmpty ? player.position : "\(player.position), \(player.batThrow)")
         .font(.M5_position)
         .foregroundStyle(asset.positionTextColor)
     }

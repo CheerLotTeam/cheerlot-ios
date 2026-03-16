@@ -13,14 +13,14 @@ struct PlayerInfo: Identifiable, Hashable, Equatable {
   let teamId: TeamID
   let name: String
   let backNumber: Int
-  var position: String?
-  var batThrow: String?
+  var position: String
+  var batThrow: String
   var battingOrder: Int?
   var cheerSongs: [CheerSongInfo]
 
   init(
-    id: PlayerID, teamId: TeamID, name: String, backNumber: Int, position: String? = nil,
-    batThrow: String? = nil, battingOrder: Int? = nil, cheerSongs: [CheerSongInfo] = []
+    id: PlayerID, teamId: TeamID, name: String, backNumber: Int, position: String,
+    batThrow: String, battingOrder: Int? = nil, cheerSongs: [CheerSongInfo] = []
   ) {
     self.id = id
     self.teamId = teamId

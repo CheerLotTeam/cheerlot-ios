@@ -53,8 +53,8 @@ extension LineupDTO {
         teamId: TeamID(teamCode),
         name: starterDTO.name,
         backNumber: starterDTO.backNumber,
-        position: starterDTO.position,
-        batThrow: starterDTO.batThrow,
+        position: starterDTO.position ?? "교체선수",
+        batThrow: starterDTO.batThrow ?? "",
         battingOrder: starterDTO.battingOrder,
         cheerSongs: starterDTO.cheerSongs.map {
           $0.toEntity(playerId: PlayerID(starterDTO.playerCode))
@@ -72,8 +72,8 @@ extension AllPlayersDTO {
         teamId: TeamID(playerDTO.teamCode),
         name: playerDTO.name,
         backNumber: playerDTO.backNumber,
-        position: playerDTO.position,
-        batThrow: playerDTO.batThrow,
+        position: playerDTO.position ?? "교체선수",
+        batThrow: playerDTO.batThrow ?? "",
         battingOrder: playerDTO.battingOrder,
         cheerSongs: playerDTO.cheerSongs.map {
           $0.toEntity(playerId: PlayerID(playerDTO.playerCode))
@@ -90,8 +90,8 @@ extension PlayerDTO {
       teamId: TeamID(self.teamCode),
       name: self.name,
       backNumber: self.backNumber,
-      position: self.position,
-      batThrow: self.batThrow,
+      position: self.position ?? "교체선수",
+      batThrow: self.batThrow ?? "",
       battingOrder: self.battingOrder,
       cheerSongs: self.cheerSongs.map {
         $0.toEntity(playerId: PlayerID(self.playerCode))

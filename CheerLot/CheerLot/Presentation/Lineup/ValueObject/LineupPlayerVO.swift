@@ -8,7 +8,7 @@
 struct LineupPlayerVO: Identifiable, Equatable {
   let id: String
   let teamId: String
-  let battingOrder: Int
+  let battingOrder: Int?
   let name: String
   let backNumber: Int
   let position: String
@@ -19,11 +19,11 @@ struct LineupPlayerVO: Identifiable, Equatable {
   init(from entity: PlayerInfo) {
     self.id = entity.id.value
     self.teamId = entity.teamId.value
-    self.battingOrder = entity.battingOrder ?? 0
+    self.battingOrder = entity.battingOrder
     self.name = entity.name
     self.backNumber = entity.backNumber
-    self.position = entity.position ?? ""
-    self.batThrow = entity.batThrow ?? ""
+    self.position = entity.position
+    self.batThrow = entity.batThrow
     self.hasSong = !entity.cheerSongs.isEmpty
     self.cheerSongs = entity.cheerSongs.map { CheerSongVO(from: $0) }
   }

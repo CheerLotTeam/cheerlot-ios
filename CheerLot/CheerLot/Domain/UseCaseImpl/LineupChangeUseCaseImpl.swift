@@ -16,10 +16,12 @@ final class LineupChangeUseCaseImpl: LineupChangeUseCase {
 
   func getBenchPlayers(_ teamId: TeamID) async throws -> [PlayerInfo] {
     let allPlayers = try await playerLocalRepository.fetchAllPlayers(teamId)
+      
+    let benchPlayers = allPlayers
+        .filter { $0.battingOrder == nil }
+        .sorted { ($0.name) < ($1.name) }
 
-    return
-      allPlayers
-      .filter { $0.battingOrder == nil }
+    return benchPlayers
   }
 
   func swapPlayers(
