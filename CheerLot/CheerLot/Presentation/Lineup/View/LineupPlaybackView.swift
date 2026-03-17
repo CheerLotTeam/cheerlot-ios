@@ -42,6 +42,7 @@ struct LineupPlaybackView: View {
     // 현재 실제 players 인덱스 (페이지 인디케이터용)
     private var currentRealIndex: Int {
         guard let scrollPosition else { return 0 }
+        guard !carouselItems.isEmpty else { return 0 }
         return scrollPosition % carouselItems.count
     }
     
