@@ -106,7 +106,7 @@ extension LineupView {
         .opacity(0.75)
         .blendMode(.softLight)
 
-      contents(asset: asset, cardHeight: cardHeight, cardWidth: cardWidth)
+      cardContents(asset: asset, cardHeight: cardHeight, cardWidth: cardWidth)
     }
     .frame(width: cardWidth, height: cardHeight)
     .clipShape(RoundedRectangle(cornerRadius: 16))
@@ -116,7 +116,7 @@ extension LineupView {
     )
   }
 
-  private func contents(asset: LineupAssetVO, cardHeight: CGFloat, cardWidth: CGFloat) -> some View
+  private func cardContents(asset: LineupAssetVO, cardHeight: CGFloat, cardWidth: CGFloat) -> some View
   {
     ZStack {
       VStack(spacing: cardSpacing) {
