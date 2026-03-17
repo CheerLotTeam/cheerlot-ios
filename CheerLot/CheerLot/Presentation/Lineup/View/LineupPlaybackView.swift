@@ -16,7 +16,7 @@ struct LineupPlaybackView: View {
   @State private var itemsArray: [[CarouselItem]] = []
   @State private var isRebalancing: Bool = false
 
-  private let animationDuration: CGFloat = 0.3
+  private let animationDuration: TimeInterval = 0.3
 
   private var pageWidth: CGFloat {
     UIScreen.width - 56

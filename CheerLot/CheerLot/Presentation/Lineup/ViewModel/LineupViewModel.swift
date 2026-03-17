@@ -60,6 +60,7 @@ final class LineupViewModel {
       return
     }
 
+    asset = LineupAssetVO(base: TeamAssetVO(teamInfo.id))
     currentTeamId = teamInfo.id.value
 
     await loadData()
@@ -96,9 +97,7 @@ final class LineupViewModel {
 
   // MARK: - Private
   private func convertToVO(data: LineupData, teamId: String) {
-    guard let teamInfo = teamInfoUseCase.getTeamInfo(TeamID(teamId)) else {
-      return
-    }
+    guard let teamInfo = teamInfoUseCase.getTeamInfo(TeamID(teamId)) else { return }
 
     // 상대팀 정보 조회
     let opponentTeamInfo = data.opponentTeamId.flatMap {
@@ -114,8 +113,5 @@ final class LineupViewModel {
 
     // Lineup Players VO 변환
     lineupPlayers = data.lineupPlayers.map { LineupPlayerVO(from: $0) }
-
-    // Asset 생성
-    asset = LineupAssetVO(base: TeamAssetVO(TeamID(teamId)))
   }
 }

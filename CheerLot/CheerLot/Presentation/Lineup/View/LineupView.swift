@@ -48,7 +48,7 @@ struct LineupView: View {
         if viewModel.isLoading {
           ProgressView()
             .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .background(.ultraThinMaterial)
+            .background(.white)
         }
       }
       .toolBar_titleWithProfile(title: "선발 라인업") {

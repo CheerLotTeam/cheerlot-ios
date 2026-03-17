@@ -55,6 +55,7 @@ extension RootViewSwitcher {
     }
   }
 
+  @MainActor
   private func handleConfigCheck() async {
     // Remote Config 체크
     await remoteConfigChecker.fetchRemoteConfig()
@@ -71,6 +72,7 @@ extension RootViewSwitcher {
     checkAndTransition()
   }
 
+  @MainActor
   private func handleAnimationComplete() {
     isAnimationComplete = true
     checkAndTransition()

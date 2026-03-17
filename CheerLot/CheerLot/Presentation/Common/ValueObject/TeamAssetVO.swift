@@ -30,28 +30,6 @@ final class TeamAssetVO {
   lazy var secondaryPalette: Color.TeamSecondaryPalette = {
     Color.teamSecondaryPalette(for: assetPrefix)
   }()
-
-  // MARK: - Background Images (후에 교체 요망)
-  lazy var mainTopBackground: Image = {
-    Image("\(assetPrefix)_mainTopBG")
-  }()
-
-  lazy var changeTopBackground: Image = {
-    Image("\(assetPrefix)_changeTopBG")
-  }()
-
-  // MARK: - Cheer Song Images (후에 교체 요망)
-  lazy var cheerSongHatImage: Image = {
-    Image("\(assetPrefix)_hat")
-  }()
-
-  lazy var cheerSongBackground: Image = {
-    Image("\(assetPrefix)_cheerSongBG")
-  }()
-
-  lazy var watchListBackground: Image = {
-    Image("\(assetPrefix)_listBG")
-  }()
 }
 
 extension TeamAssetVO {
