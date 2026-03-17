@@ -14,7 +14,9 @@ struct RootViewSwitcher: View {
   @State private var isAnimationComplete = false
   @State private var audioPlayer: AudioPlaybackService = DIContainer.shared.resolve(
     AudioPlaybackService.self)
-  @State private var teamSelectViewModel = ViewModelFactory.shared.createTeamSelectViewModel()
+  @State private var teamSelectViewModel = ViewModelFactory.shared.createTeamSelectViewModel(
+    mode: .onboarding)
+  
   @ObservationIgnored
   @Injected(TeamSelectionUseCase.self) private var teamSelectionUseCase
 

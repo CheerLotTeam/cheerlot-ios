@@ -9,6 +9,12 @@ import SwiftUI
 
 /// 서비스 소개 화면입니다.
 struct ServiceInfoView: View {
+  @Environment(AppCoordinator.self) private var coordinator
+
+  // MARK: - Properties
+  private var policyMenus: [ServiceInfoMenu] {
+    [.termsOfService, .privacyPolicy, .copyright]
+  }
 
   // MARK: - Body
   var body: some View {
@@ -19,12 +25,14 @@ struct ServiceInfoView: View {
       Spacer()
     }
     .padding(.horizontal, 20)
+    .toolbar(.hidden, for: .tabBar)
     .navigationBar_backWithTitle(title: "서비스 소개") {
-      // 네비게이션 연결
+      coordinator.pop()
     }
   }
 }
 
+// MARK: - Section
 extension ServiceInfoView {
   /// 대표 페이지
   private var mainPageContent: some View {
@@ -36,7 +44,7 @@ extension ServiceInfoView {
       SettingsMenuCard(
         titles: [ServiceInfoMenu.mainPage.rawValue],
         onTap: { _ in
-          serviceInfoTap(.mainPage)
+          didTapServiceInfoMenu(.mainPage)
         }
       )
     }
@@ -53,43 +61,30 @@ extension ServiceInfoView {
         titles: policyMenus.map(\.rawValue),
         onTap: { index in
           guard policyMenus.indices.contains(index) else { return }
-          serviceInfoTap(policyMenus[index])
+          didTapServiceInfoMenu(policyMenus[index])
         }
       )
     }
   }
 }
 
-// MARK: - 이후 옮길 예정
+// MARK: - Actions
 extension ServiceInfoView {
-
-  /// 서비스 약관
-  private var policyMenus: [ServiceInfoMenu] {
-    [.termsOfService, .privacyPolicy, .copyright]
-  }
-
-  /// 메뉴 탭 처리
-  private func serviceInfoTap(_ menu: ServiceInfoMenu) {
+  private func didTapServiceInfoMenu(_ menu: ServiceInfoMenu) {
     switch menu {
     case .mainPage:
-      // coordinator.modal = .servicePage
-      print("대표 페이지 열기")
-
+      coordinator.presentModal(.servicePage)
     case .termsOfService:
-      // coordinator.paths.append(.termsOfService)
-      print("이용약관 화면으로 이동")
-
+      coordinator.push(.termsOfService)
     case .privacyPolicy:
-      // coordinator.paths.append(.privacyPolicy)
-      print("개인정보처리방침 화면으로 이동")
-
+      coordinator.push(.privacyPolicy)
     case .copyright:
-      // coordinator.paths.append(.copyright)
-      print("저작권 법적고지 화면으로 이동")
+      coordinator.push(.copyright)
     }
   }
 }
 
 #Preview {
   ServiceInfoView()
+    .environment(AppCoordinator())
 }

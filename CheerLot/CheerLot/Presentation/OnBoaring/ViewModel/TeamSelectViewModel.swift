@@ -11,6 +11,7 @@ import SwiftUI
 final class TeamSelectViewModel {
   var teams: [TeamSelectVO] = []
   var selectedTeamId: String?
+  let mode: TeamSelectMode
 
   var isButtonEnabled: Bool {
     selectedTeamId != nil
@@ -27,7 +28,12 @@ final class TeamSelectViewModel {
   @ObservationIgnored
   @Injected(TeamSelectionUseCase.self) private var teamSelectionUseCase
 
-  init() {
+  init(
+    mode: TeamSelectMode,
+    initialSelectedTeam: TeamID? = nil
+  ) {
+    self.mode = mode
+    self.selectedTeam = initialSelectedTeam
     loadTeams()
   }
 
