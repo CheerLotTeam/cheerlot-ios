@@ -101,15 +101,15 @@ struct LineupPlaybackAssetVO {
     
     /// 1~9 battingOrder에 따라 사용하는 카드 BG
     private let playCardImages: [Image] = [
-        Image("playCard1"),
-        Image("playCard2"),
-        Image("playCard3"),
-        Image("playCard4"),
-        Image("playCard5"),
-        Image("playCard6"),
-        Image("playCard7"),
-        Image("playCard8"),
-        Image("playCard9")
+        Image(.playCard1),
+        Image(.playCard2),
+        Image(.playCard3),
+        Image(.playCard4),
+        Image(.playCard5),
+        Image(.playCard6),
+        Image(.playCard7),
+        Image(.playCard8),
+        Image(.playCard9)
     ]
     
     /// battingOrder에 따른 카드 BG 추출 함수
