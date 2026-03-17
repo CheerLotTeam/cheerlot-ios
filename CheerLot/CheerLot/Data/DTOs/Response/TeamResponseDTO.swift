@@ -23,7 +23,7 @@ struct TeamVersionsDTO: Decodable {
 }
 
 extension TeamGameDTO {
-  func toEntity() -> TeamGameInfo {
+  func toEntity() throws -> TeamGameInfo {
     let status: GameStatus
 
     if self.isSeasonEnded {
@@ -33,15 +33,16 @@ extension TeamGameDTO {
     } else {
       status = .offDay
     }
-
-    let teamId: TeamID = {
-      let teamCode = TeamDataSource.fromAPICode(self.teamCode)
-      return TeamID(teamCode.rawValue)
-    }()
+      
+      guard let code = TeamDataSource.fromAPICode(teamCode) else {
+          throw LocalStorageError.invalidData
+      }
+      let teamId = TeamID(code.rawValue)
 
     let opponentTeamId: TeamID? = {
-      guard let opponentCode = self.opponentTeamCode else { return nil }
-      let opponentTeamCode = TeamDataSource.fromAPICode(opponentCode)
+      guard let opponentCode = self.opponentTeamCode,
+            let opponentTeamCode = TeamDataSource.fromAPICode(opponentCode)
+      else { return nil }
       return TeamID(opponentTeamCode.rawValue)
     }()
 

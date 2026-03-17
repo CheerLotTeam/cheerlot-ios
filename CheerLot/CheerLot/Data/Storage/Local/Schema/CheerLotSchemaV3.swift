@@ -135,9 +135,9 @@ extension CheerLotSchemaV3.Team {
 }
 
 extension CheerLotSchemaV3.Player {
-  func toEntity() -> PlayerInfo {
+  func toEntity() throws -> PlayerInfo {
     guard let teamId = self.team?.teamId, !teamId.isEmpty else {
-      preconditionFailure("Player \(self.playerId) has no valid teamId")
+      throw LocalStorageError.invalidData
     }
 
     return PlayerInfo(
@@ -148,15 +148,15 @@ extension CheerLotSchemaV3.Player {
       position: self.position,
       batThrow: self.batThrow,
       battingOrder: self.battingOrder,
-      cheerSongs: cheerSongList?.map { $0.toEntity() } ?? []
+      cheerSongs: try cheerSongList?.map { try $0.toEntity() } ?? []
     )
   }
 }
 
 extension CheerLotSchemaV3.CheerSong {
-  func toEntity() -> CheerSongInfo {
+  func toEntity() throws -> CheerSongInfo {
     guard let playerId = self.player?.playerId, !playerId.isEmpty else {
-      preconditionFailure("CheerSong \(self.cheerSongId) has no valid playerId")
+      throw LocalStorageError.invalidData
     }
 
     return CheerSongInfo(

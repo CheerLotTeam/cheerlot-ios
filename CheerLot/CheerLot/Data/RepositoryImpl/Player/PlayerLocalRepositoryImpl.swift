@@ -10,21 +10,21 @@ import SwiftData
 
 @ModelActor
 actor PlayerLocalRepositoryImpl: PlayerLocalRepository {
-  func fetchPlayer(_ playerId: PlayerID) throws -> PlayerInfo? {
+  func fetchPlayer(_ playerId: PlayerID) async throws -> PlayerInfo? {
     guard let player = try findPlayer(playerId: playerId) else {
       return nil
     }
-    return player.toEntity()
+    return try player.toEntity()
   }
 
-  func fetchAllPlayers(_ teamId: TeamID) throws -> [PlayerInfo] {
+  func fetchAllPlayers(_ teamId: TeamID) async throws -> [PlayerInfo] {
     let teamIdValue = teamId.value
     let descriptor = FetchDescriptor<Player>(
       predicate: #Predicate { $0.team?.teamId == teamIdValue }
     )
     do {
       let data = try modelContext.fetch(descriptor)
-      return data.map { $0.toEntity() }
+      return try data.map { try $0.toEntity() }
     } catch {
       throw LocalStorageError.fetchError
     }
@@ -41,7 +41,7 @@ actor PlayerLocalRepositoryImpl: PlayerLocalRepository {
     }
   }
 
-  func createPlayer(_ entity: PlayerInfo, _ teamId: TeamID) throws {
+  func createPlayer(_ entity: PlayerInfo, _ teamId: TeamID) async throws {
     let team = try fetchTeam(teamId: teamId)
     let playerModel = createPlayerModel(from: entity, team: team)
     modelContext.insert(playerModel)
@@ -55,7 +55,7 @@ actor PlayerLocalRepositoryImpl: PlayerLocalRepository {
     }
   }
 
-  func createAllPlayers(_ entities: [PlayerInfo], _ teamId: TeamID) throws {
+  func createAllPlayers(_ entities: [PlayerInfo], _ teamId: TeamID) async throws {
     let team = try fetchTeam(teamId: teamId)
 
     for entity in entities {
@@ -72,7 +72,7 @@ actor PlayerLocalRepositoryImpl: PlayerLocalRepository {
     }
   }
 
-  func updatePlayer(_ entity: PlayerInfo) throws {
+  func updatePlayer(_ entity: PlayerInfo) async throws {
     guard let model = try findPlayer(playerId: entity.id) else {
       throw LocalStorageError.notFound
     }
@@ -97,14 +97,14 @@ actor PlayerLocalRepositoryImpl: PlayerLocalRepository {
     }
   }
 
-  func deletePlayer(_ playerId: PlayerID) throws {
+  func deletePlayer(_ playerId: PlayerID) async throws {
     guard let model = try findPlayer(playerId: playerId) else {
       throw LocalStorageError.notFound
     }
     modelContext.delete(model)
   }
 
-  func deleteAllPlayers(_ teamId: TeamID) throws {
+  func deleteAllPlayers(_ teamId: TeamID) async throws {
     let teamIdValue = teamId.value
     let descriptor = FetchDescriptor<Player>(
       predicate: #Predicate { $0.team?.teamId == teamIdValue }

@@ -71,11 +71,9 @@ final class LineupManagementUseCaseImpl: LineupManagementUseCase {
   private func forceSync(_ teamId: TeamID) async throws {
     let serverVersions = try await teamRemoteRepository.fetchVersions(teamId)
 
-    async let gameInfoSync: Void = syncGameInfo(teamId)
-    async let playersSync: Void = syncPlayers(teamId, newVersion: serverVersions.playersVersion)
-    async let lineupSync: Void = syncLineup(teamId, newVersion: serverVersions.lineupVersion)
-
-    _ = try await (gameInfoSync, playersSync, lineupSync)
+    try await syncGameInfo(teamId)
+    try await syncPlayers(teamId, newVersion: serverVersions.playersVersion)
+    try await syncLineup(teamId, newVersion: serverVersions.lineupVersion)
   }
 
   // MARK: - Private Methods - Individual Sync
@@ -108,8 +106,6 @@ final class LineupManagementUseCaseImpl: LineupManagementUseCase {
   }
 
   private func syncLineup(_ teamId: TeamID, newVersion: Int) async throws {
-    userSettingsRepository.resetShowRecentLineup()
-
     let serverLineup = try await playerRemoteRepository.fetchLineup(teamId)
 
     let localPlayers = try await playerLocalRepository.fetchAllPlayers(teamId)
@@ -149,6 +145,7 @@ final class LineupManagementUseCaseImpl: LineupManagementUseCase {
     }
 
     try await updateLineupVersion(teamId, newVersion)
+    userSettingsRepository.resetShowRecentLineup()
   }
 
   // MARK: - Private Methods - Data Fetch

@@ -48,6 +48,7 @@ struct CheerSongMenuSheetView: View {
       .listRowInsets(EdgeInsets())
     }
     .listStyle(.plain)
+    .scrollContentBackground(.hidden)
     .scrollDisabled(true)
   }
 }

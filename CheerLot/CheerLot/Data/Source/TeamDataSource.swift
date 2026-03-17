@@ -147,8 +147,10 @@ struct TeamDataSource {
     }
   }
 
-    static func fromAPICode(_ apiCode: String) -> TeamCode {
-        let normalized = apiCode.lowercased()
+    static func fromAPICode(_ apiCode: String) -> TeamCode? {
+        let normalized = apiCode
+          .trimmingCharacters(in: .whitespacesAndNewlines)
+          .lowercased()
         
         switch normalized {
         case APICode.doosan.rawValue: return .doosan
@@ -161,7 +163,7 @@ struct TeamDataSource {
         case APICode.nc.rawValue: return .nc
         case APICode.samsung.rawValue: return .samsung
         case APICode.ssg.rawValue: return .ssg
-        default: return .samsung
+        default: return nil
         }
     }
 

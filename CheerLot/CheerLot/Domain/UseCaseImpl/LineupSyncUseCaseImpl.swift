@@ -89,7 +89,7 @@ final class LineupSyncUseCaseImpl: LineupSyncUseCase {
       // 새 라인업 선수들에게 타순 부여
       for lineupPlayer in serverLineup {
         if let localPlayer = try await playerLocalRepository.fetchPlayer(lineupPlayer.id) {
-          // 이미 있는 선수 → 타순만 업데이트
+          // 이미 있는 선수 → battingOrder, position, batThrow만 업데이트
           let updatedPlayer = PlayerInfo(
             id: localPlayer.id,
             teamId: localPlayer.teamId,

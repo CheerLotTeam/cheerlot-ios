@@ -35,8 +35,10 @@ final class AppCoordinator {
   func presentModal(_ route: ModalRoute) {
     switch route.presentationStyle {
     case .sheet:
+      presentedFullScreen = nil
       presentedSheet = route
     case .fullScreen:
+      presentedSheet = nil
       presentedFullScreen = route
     }
   }

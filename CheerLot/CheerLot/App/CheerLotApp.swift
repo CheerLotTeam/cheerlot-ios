@@ -37,10 +37,6 @@ struct CheerLotApp: App {
         Button("다시 시도") {
           Task { await bootstrap() }
         }
-        Button("취소", role: .cancel) {
-          // 그냥 계속 진행
-          isBootstrapped = true
-        }
       } message: {
         Text(errorMessage)
       }
