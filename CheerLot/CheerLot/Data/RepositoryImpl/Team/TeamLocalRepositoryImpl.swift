@@ -12,7 +12,7 @@ import SwiftData
 actor TeamLocalRepositoryImpl: TeamLocalRepository {
   func fetchTeam(_ teamId: TeamID) throws -> TeamState? {
     guard let team = try findTeam(teamId: teamId) else {
-      throw LocalStorageError.notFound
+      return nil
     }
     return team.toEntity()
   }
@@ -27,7 +27,7 @@ actor TeamLocalRepositoryImpl: TeamLocalRepository {
   }
 
   func teamExists(_ teamId: TeamID) throws -> Bool {
-    return try fetchTeam(teamId) != nil
+    return try findTeam(teamId: teamId) != nil
   }
 }
 

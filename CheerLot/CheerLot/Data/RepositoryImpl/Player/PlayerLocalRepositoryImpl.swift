@@ -12,7 +12,7 @@ import SwiftData
 actor PlayerLocalRepositoryImpl: PlayerLocalRepository {
   func fetchPlayer(_ playerId: PlayerID) throws -> PlayerInfo? {
     guard let player = try findPlayer(playerId: playerId) else {
-      throw LocalStorageError.notFound
+      return nil
     }
     return player.toEntity()
   }
@@ -72,8 +72,8 @@ actor PlayerLocalRepositoryImpl: PlayerLocalRepository {
 
     model.name = entity.name
     model.backNumber = entity.backNumber
-    model.position = entity.position ?? ""
-    model.batThrow = entity.batThrow ?? ""
+    model.position = entity.position
+    model.batThrow = entity.batThrow
     model.battingOrder = entity.battingOrder
 
     // CheerSong은 기존 삭제 후, 새로 추가
@@ -138,8 +138,8 @@ extension PlayerLocalRepositoryImpl {
       playerId: entity.id.value,
       name: entity.name,
       backNumber: entity.backNumber,
-      position: entity.position ?? "",
-      batThrow: entity.batThrow ?? "",
+      position: entity.position,
+      batThrow: entity.batThrow,
       battingOrder: entity.battingOrder
     )
     player.team = team

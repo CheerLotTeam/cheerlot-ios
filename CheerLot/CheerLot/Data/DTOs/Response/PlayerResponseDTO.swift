@@ -103,7 +103,7 @@ extension PlayerDTO {
 extension CheerSongDTO {
   func toEntity(playerId: PlayerID) -> CheerSongInfo {
     return CheerSongInfo(
-      id: "\(playerId)_\(title)",
+      id: "\(playerId.value)_\(title)",
       playerId: playerId,
       title: self.title,
       lyrics: self.lyrics,
