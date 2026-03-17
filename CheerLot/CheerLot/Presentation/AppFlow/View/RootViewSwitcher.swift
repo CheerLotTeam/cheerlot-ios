@@ -16,7 +16,7 @@ struct RootViewSwitcher: View {
     AudioPlaybackService.self)
   @State private var teamSelectViewModel = ViewModelFactory.shared.createTeamSelectViewModel(
     mode: .onboarding)
-  
+
   @ObservationIgnored
   @Injected(TeamSelectionUseCase.self) private var teamSelectionUseCase
 

@@ -147,25 +147,26 @@ struct TeamDataSource {
     }
   }
 
-    static func fromAPICode(_ apiCode: String) -> TeamCode? {
-        let normalized = apiCode
-          .trimmingCharacters(in: .whitespacesAndNewlines)
-          .lowercased()
-        
-        switch normalized {
-        case APICode.doosan.rawValue: return .doosan
-        case APICode.hanwha.rawValue: return .hanwha
-        case APICode.kia.rawValue: return .kia
-        case APICode.kiwoom.rawValue: return .kiwoom
-        case APICode.kt.rawValue: return .kt
-        case APICode.lg.rawValue: return .lg
-        case APICode.lotte.rawValue: return .lotte
-        case APICode.nc.rawValue: return .nc
-        case APICode.samsung.rawValue: return .samsung
-        case APICode.ssg.rawValue: return .ssg
-        default: return nil
-        }
+  static func fromAPICode(_ apiCode: String) -> TeamCode? {
+    let normalized =
+      apiCode
+      .trimmingCharacters(in: .whitespacesAndNewlines)
+      .lowercased()
+
+    switch normalized {
+    case APICode.doosan.rawValue: return .doosan
+    case APICode.hanwha.rawValue: return .hanwha
+    case APICode.kia.rawValue: return .kia
+    case APICode.kiwoom.rawValue: return .kiwoom
+    case APICode.kt.rawValue: return .kt
+    case APICode.lg.rawValue: return .lg
+    case APICode.lotte.rawValue: return .lotte
+    case APICode.nc.rawValue: return .nc
+    case APICode.samsung.rawValue: return .samsung
+    case APICode.ssg.rawValue: return .ssg
+    default: return nil
     }
+  }
 
   /// TeamID → 서버 api code
   static func toAPICode(_ teamID: TeamID) -> String {

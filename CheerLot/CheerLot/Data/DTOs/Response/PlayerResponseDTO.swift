@@ -46,8 +46,8 @@ struct CheerSongDTO: Decodable {
 }
 
 private enum PlayerFieldDefaults {
-    static let unknownPosition: String = "교체선수"
-    static let unknownBatThrow: String = ""
+  static let unknownPosition: String = "교체선수"
+  static let unknownBatThrow: String = ""
 }
 
 extension LineupDTO {

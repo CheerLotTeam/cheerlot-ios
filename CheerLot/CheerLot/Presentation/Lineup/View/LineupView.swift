@@ -116,7 +116,8 @@ extension LineupView {
     )
   }
 
-  private func cardContents(asset: LineupAssetVO, cardHeight: CGFloat, cardWidth: CGFloat) -> some View
+  private func cardContents(asset: LineupAssetVO, cardHeight: CGFloat, cardWidth: CGFloat)
+    -> some View
   {
     ZStack {
       VStack(spacing: cardSpacing) {

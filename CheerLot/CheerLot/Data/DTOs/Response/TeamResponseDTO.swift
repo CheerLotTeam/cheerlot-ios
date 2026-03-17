@@ -33,15 +33,15 @@ extension TeamGameDTO {
     } else {
       status = .offDay
     }
-      
-      guard let code = TeamDataSource.fromAPICode(teamCode) else {
-          throw LocalStorageError.invalidData
-      }
-      let teamId = TeamID(code.rawValue)
+
+    guard let code = TeamDataSource.fromAPICode(teamCode) else {
+      throw LocalStorageError.invalidData
+    }
+    let teamId = TeamID(code.rawValue)
 
     let opponentTeamId: TeamID? = {
       guard let opponentCode = self.opponentTeamCode,
-            let opponentTeamCode = TeamDataSource.fromAPICode(opponentCode)
+        let opponentTeamCode = TeamDataSource.fromAPICode(opponentCode)
       else { return nil }
       return TeamID(opponentTeamCode.rawValue)
     }()
