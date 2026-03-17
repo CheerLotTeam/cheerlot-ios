@@ -71,13 +71,13 @@ extension LineupPlayCard {
             
             Group {
                 isPaused
-                ? Image(systemName: "pause.fill")
+                ? Image(systemName: "play.fill")
                     .resizable()
-                : Image(systemName: "play.fill")
+                : Image(systemName: "pause.fill")
                     .resizable()
             }
             .scaledToFit()
-            .frame(width: isPaused ? 13 : 15)
+            .frame(height: isPaused ? 15 : 17)
             .foregroundStyle(asset.cardContentsColor)
         }
     }

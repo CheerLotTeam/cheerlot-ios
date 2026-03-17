@@ -14,6 +14,7 @@ struct LineupPlaybackView: View {
     
     @State private var scrollPosition: Int?
     @State private var itemsArray: [[CarouselItem]] = []
+    @State private var isRebalancing: Bool = false
     
     private let animationDuration: CGFloat = 0.3
     
@@ -69,6 +70,7 @@ extension LineupPlaybackView {
                     let item = itemsTemp[index]
                     
                     cardView(item: item, pageHeight: pageHeight)
+                        .id("\(index)-\(item.id)")
                         .frame(width: pageWidth)
                         .scrollTransition(.interactive, axis: .horizontal) { content, phase in
                             content
@@ -89,26 +91,31 @@ extension LineupPlaybackView {
             scrollPosition = carouselItems.count + startIndex
         }
         .onChange(of: scrollPosition) {
-            guard let scrollPosition else { return }
+            guard let scrollPosition, !isRebalancing else { return }
             
             let itemCount = carouselItems.count
+            guard itemCount > 0 else { return }
             
             // 앞쪽 1/3 영역 진입 시 재배치
             if scrollPosition < itemCount {
+                isRebalancing = true
                 DispatchQueue.main.asyncAfter(deadline: .now() + animationDuration) {
                     itemsArray.removeLast()
                     itemsArray.insert(carouselItems, at: 0)
                     self.scrollPosition = scrollPosition + itemCount
+                    self.isRebalancing = false
                 }
                 return
             }
             
             // 뒤쪽 1/3 영역 진입 시 재배치
             if scrollPosition >= itemCount * 2 {
+                isRebalancing = true
                 DispatchQueue.main.asyncAfter(deadline: .now() + animationDuration) {
                     itemsArray.removeFirst()
                     itemsArray.append(carouselItems)
                     self.scrollPosition = scrollPosition - itemCount
+                    self.isRebalancing = false
                 }
                 return
             }
