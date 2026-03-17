@@ -60,11 +60,13 @@ final class TeamPlayersSyncUseCaseImpl: TeamPlayersSyncUseCase {
     // 서버에서 전체 선수 가져오기
     let allPlayers = try await playerRemoteRepository.fetchAllPlayers(teamId)
 
-    // 로컬 전체 삭제
-    try await playerLocalRepository.deleteAllPlayers(teamId)
-
-    // 새로 저장
-    try await playerLocalRepository.createAllPlayers(allPlayers, teamId)
+      try await playerLocalRepository.performTransaction {
+          // 로컬 전체 삭제
+          try await playerLocalRepository.deleteAllPlayers(teamId)
+          
+          // 새로 저장
+          try await playerLocalRepository.createAllPlayers(allPlayers, teamId)
+      }
 
     // 팀 버전 업데이트
     try await updatePlayersVersion(teamId, newVersion)

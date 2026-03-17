@@ -70,41 +70,43 @@ final class LineupSyncUseCaseImpl: LineupSyncUseCase {
     // 로컬 선수들 조회
     let localPlayers = try await playerLocalRepository.fetchAllPlayers(teamId)
 
-    // 기존 라인업 선수들의 타순 제거
-    for localPlayer in localPlayers where localPlayer.battingOrder != nil {
-      let updatedPlayer = PlayerInfo(
-        id: localPlayer.id,
-        teamId: localPlayer.teamId,
-        name: localPlayer.name,
-        backNumber: localPlayer.backNumber,
-        position: localPlayer.position,
-        batThrow: localPlayer.batThrow,
-        battingOrder: nil,
-        cheerSongs: localPlayer.cheerSongs
-      )
-      try await playerLocalRepository.updatePlayer(updatedPlayer)
-    }
-
-    // 새 라인업 선수들에게 타순 부여
-    for lineupPlayer in serverLineup {
-      if let localPlayer = try await playerLocalRepository.fetchPlayer(lineupPlayer.id) {
-        // 이미 있는 선수 → 타순만 업데이트
-        let updatedPlayer = PlayerInfo(
-          id: localPlayer.id,
-          teamId: localPlayer.teamId,
-          name: localPlayer.name,
-          backNumber: localPlayer.backNumber,
-          position: lineupPlayer.position,
-          batThrow: lineupPlayer.batThrow,
-          battingOrder: lineupPlayer.battingOrder,
-          cheerSongs: localPlayer.cheerSongs
-        )
-        try await playerLocalRepository.updatePlayer(updatedPlayer)
-      } else {
-        // 없는 선수 → 새로 생성
-        try await playerLocalRepository.createPlayer(lineupPlayer, teamId)
+      try await playerLocalRepository.performTransaction {
+          // 기존 라인업 선수들의 타순 제거
+          for localPlayer in localPlayers where localPlayer.battingOrder != nil {
+              let updatedPlayer = PlayerInfo(
+                id: localPlayer.id,
+                teamId: localPlayer.teamId,
+                name: localPlayer.name,
+                backNumber: localPlayer.backNumber,
+                position: localPlayer.position,
+                batThrow: localPlayer.batThrow,
+                battingOrder: nil,
+                cheerSongs: localPlayer.cheerSongs
+              )
+              try await playerLocalRepository.updatePlayer(updatedPlayer)
+          }
+          
+          // 새 라인업 선수들에게 타순 부여
+          for lineupPlayer in serverLineup {
+              if let localPlayer = try await playerLocalRepository.fetchPlayer(lineupPlayer.id) {
+                  // 이미 있는 선수 → 타순만 업데이트
+                  let updatedPlayer = PlayerInfo(
+                    id: localPlayer.id,
+                    teamId: localPlayer.teamId,
+                    name: localPlayer.name,
+                    backNumber: localPlayer.backNumber,
+                    position: lineupPlayer.position,
+                    batThrow: lineupPlayer.batThrow,
+                    battingOrder: lineupPlayer.battingOrder,
+                    cheerSongs: localPlayer.cheerSongs
+                  )
+                  try await playerLocalRepository.updatePlayer(updatedPlayer)
+              } else {
+                  // 없는 선수 → 새로 생성
+                  try await playerLocalRepository.createPlayer(lineupPlayer, teamId)
+              }
+          }
       }
-    }
 
     // 팀 버전 업데이트
     try await updateLineupVersion(teamId, newVersion)

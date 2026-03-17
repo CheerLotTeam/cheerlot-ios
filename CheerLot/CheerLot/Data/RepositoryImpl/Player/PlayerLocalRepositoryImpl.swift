@@ -29,6 +29,17 @@ actor PlayerLocalRepositoryImpl: PlayerLocalRepository {
       throw LocalStorageError.fetchError
     }
   }
+    
+    func performTransaction<T>(_ operation: @Sendable () async throws -> T) async throws -> T {
+        do {
+            let result = try await operation()
+            try modelContext.save()  // 커밋
+            return result
+        } catch {
+            modelContext.rollback()  // 롤백
+            throw error
+        }
+    }
 
   func createPlayer(_ entity: PlayerInfo, _ teamId: TeamID) throws {
     let team = try fetchTeam(teamId: teamId)
@@ -40,10 +51,8 @@ actor PlayerLocalRepositoryImpl: PlayerLocalRepository {
         from: cheerSongEntity,
         player: playerModel
       )
-      modelContext.insert(cheerSongModel)
+        modelContext.insert(cheerSongModel)
     }
-
-    try modelContext.save()
   }
 
   func createAllPlayers(_ entities: [PlayerInfo], _ teamId: TeamID) throws {
@@ -51,18 +60,16 @@ actor PlayerLocalRepositoryImpl: PlayerLocalRepository {
 
     for entity in entities {
       let model = createPlayerModel(from: entity, team: team)
-      modelContext.insert(model)
+        modelContext.insert(model)
 
       for cheerSongEntity in entity.cheerSongs {
         let cheerSongModel = createCheerSongModel(
           from: cheerSongEntity,
           player: model
         )
-        modelContext.insert(cheerSongModel)
+          modelContext.insert(cheerSongModel)
       }
     }
-
-    try modelContext.save()
   }
 
   func updatePlayer(_ entity: PlayerInfo) throws {
@@ -88,8 +95,6 @@ actor PlayerLocalRepositoryImpl: PlayerLocalRepository {
       )
       modelContext.insert(cheerSongModel)
     }
-
-    try modelContext.save()
   }
 
   func deletePlayer(_ playerId: PlayerID) throws {
@@ -97,7 +102,6 @@ actor PlayerLocalRepositoryImpl: PlayerLocalRepository {
       throw LocalStorageError.notFound
     }
     modelContext.delete(model)
-    try modelContext.save()
   }
 
   func deleteAllPlayers(_ teamId: TeamID) throws {
@@ -107,7 +111,6 @@ actor PlayerLocalRepositoryImpl: PlayerLocalRepository {
     )
     let models = try modelContext.fetch(descriptor)
     models.forEach { modelContext.delete($0) }
-    try modelContext.save()
   }
 }
 

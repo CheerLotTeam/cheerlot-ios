@@ -45,30 +45,32 @@ final class LineupChangeUseCaseImpl: LineupChangeUseCase {
     // 타순 교환
     let lineupPlayerOrder = lineupPlayer.battingOrder!
 
-    // 라인업 선수 → 벤치로 (타순 제거)
-    let demotedPlayer = PlayerInfo(
-      id: lineupPlayer.id,
-      teamId: lineupPlayer.teamId,
-      name: lineupPlayer.name,
-      backNumber: lineupPlayer.backNumber,
-      position: lineupPlayer.position,
-      batThrow: lineupPlayer.batThrow,
-      battingOrder: nil,
-      cheerSongs: lineupPlayer.cheerSongs
-    )
-    try await playerLocalRepository.updatePlayer(demotedPlayer)
-
-    // 벤치 선수 → 라인업으로 (타순 부여)
-    let promotedPlayer = PlayerInfo(
-      id: benchPlayer.id,
-      teamId: benchPlayer.teamId,
-      name: benchPlayer.name,
-      backNumber: benchPlayer.backNumber,
-      position: benchPlayer.position,
-      batThrow: benchPlayer.batThrow,
-      battingOrder: lineupPlayerOrder,
-      cheerSongs: benchPlayer.cheerSongs
-    )
-    try await playerLocalRepository.updatePlayer(promotedPlayer)
+      try await playerLocalRepository.performTransaction {
+          // 라인업 선수 → 벤치로 (타순 제거)
+          let demotedPlayer = PlayerInfo(
+            id: lineupPlayer.id,
+            teamId: lineupPlayer.teamId,
+            name: lineupPlayer.name,
+            backNumber: lineupPlayer.backNumber,
+            position: lineupPlayer.position,
+            batThrow: lineupPlayer.batThrow,
+            battingOrder: nil,
+            cheerSongs: lineupPlayer.cheerSongs
+          )
+          try await playerLocalRepository.updatePlayer(demotedPlayer)
+          
+          // 벤치 선수 → 라인업으로 (타순 부여)
+          let promotedPlayer = PlayerInfo(
+            id: benchPlayer.id,
+            teamId: benchPlayer.teamId,
+            name: benchPlayer.name,
+            backNumber: benchPlayer.backNumber,
+            position: benchPlayer.position,
+            batThrow: benchPlayer.batThrow,
+            battingOrder: lineupPlayerOrder,
+            cheerSongs: benchPlayer.cheerSongs
+          )
+          try await playerLocalRepository.updatePlayer(promotedPlayer)
+      }
   }
 }

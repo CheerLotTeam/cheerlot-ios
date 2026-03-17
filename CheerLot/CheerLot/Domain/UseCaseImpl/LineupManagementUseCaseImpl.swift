@@ -100,8 +100,10 @@ final class LineupManagementUseCaseImpl: LineupManagementUseCase {
     private func syncPlayers(_ teamId: TeamID, newVersion: Int) async throws {
         let allPlayers = try await playerRemoteRepository.fetchAllPlayers(teamId)
         
-        try await playerLocalRepository.deleteAllPlayers(teamId)
-        try await playerLocalRepository.createAllPlayers(allPlayers, teamId)
+        try await playerLocalRepository.performTransaction {
+            try await playerLocalRepository.deleteAllPlayers(teamId)
+            try await playerLocalRepository.createAllPlayers(allPlayers, teamId)
+        }
         
         try await updatePlayersVersion(teamId, newVersion)
     }
@@ -113,35 +115,37 @@ final class LineupManagementUseCaseImpl: LineupManagementUseCase {
         
         let localPlayers = try await playerLocalRepository.fetchAllPlayers(teamId)
         
-        for localPlayer in localPlayers where localPlayer.battingOrder != nil {
-            let updatedPlayer = PlayerInfo(
-                id: localPlayer.id,
-                teamId: localPlayer.teamId,
-                name: localPlayer.name,
-                backNumber: localPlayer.backNumber,
-                position: localPlayer.position,
-                batThrow: localPlayer.batThrow,
-                battingOrder: nil,
-                cheerSongs: localPlayer.cheerSongs
-            )
-            try await playerLocalRepository.updatePlayer(updatedPlayer)
-        }
-        
-        for lineupPlayer in serverLineup {
-            if let localPlayer = try await playerLocalRepository.fetchPlayer(lineupPlayer.id) {
+        try await playerLocalRepository.performTransaction {
+            for localPlayer in localPlayers where localPlayer.battingOrder != nil {
                 let updatedPlayer = PlayerInfo(
                     id: localPlayer.id,
                     teamId: localPlayer.teamId,
                     name: localPlayer.name,
                     backNumber: localPlayer.backNumber,
-                    position: lineupPlayer.position,
-                    batThrow: lineupPlayer.batThrow,
-                    battingOrder: lineupPlayer.battingOrder,
+                    position: localPlayer.position,
+                    batThrow: localPlayer.batThrow,
+                    battingOrder: nil,
                     cheerSongs: localPlayer.cheerSongs
                 )
                 try await playerLocalRepository.updatePlayer(updatedPlayer)
-            } else {
-                try await playerLocalRepository.createPlayer(lineupPlayer, teamId)
+            }
+            
+            for lineupPlayer in serverLineup {
+                if let localPlayer = try await playerLocalRepository.fetchPlayer(lineupPlayer.id) {
+                    let updatedPlayer = PlayerInfo(
+                        id: localPlayer.id,
+                        teamId: localPlayer.teamId,
+                        name: localPlayer.name,
+                        backNumber: localPlayer.backNumber,
+                        position: lineupPlayer.position,
+                        batThrow: lineupPlayer.batThrow,
+                        battingOrder: lineupPlayer.battingOrder,
+                        cheerSongs: localPlayer.cheerSongs
+                    )
+                    try await playerLocalRepository.updatePlayer(updatedPlayer)
+                } else {
+                    try await playerLocalRepository.createPlayer(lineupPlayer, teamId)
+                }
             }
         }
         
