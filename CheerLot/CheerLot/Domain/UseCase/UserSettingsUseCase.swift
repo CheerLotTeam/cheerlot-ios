@@ -16,4 +16,10 @@ protocol UserSettingsUseCase {
 
   /// 최근 라인업 보기 false로 초기화
   func resetShowRecentLineup()
+
+  /// 앱 아이콘 모드 조회
+  func getAppIconMode() -> AppIconMode
+
+  /// 앱 아이콘 모드 저장
+  func setAppIconMode(_ mode: AppIconMode)
 }

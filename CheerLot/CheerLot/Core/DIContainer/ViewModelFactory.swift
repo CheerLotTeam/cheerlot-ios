@@ -7,6 +7,7 @@
 
 import Foundation
 
+@MainActor
 final class ViewModelFactory {
 
   static let shared = ViewModelFactory()
@@ -14,8 +15,14 @@ final class ViewModelFactory {
   private init() {}
 
   // MARK: - Onboarding
-  func createTeamSelectViewModel() -> TeamSelectViewModel {
-    TeamSelectViewModel()
+  func createTeamSelectViewModel(
+    mode: TeamSelectMode,
+    initialSelectedTeam: TeamID? = nil
+  ) -> TeamSelectViewModel {
+    TeamSelectViewModel(
+      mode: mode,
+      initialSelectedTeam: initialSelectedTeam
+    )
   }
 
   // MARK: - Lineup
@@ -41,5 +48,10 @@ final class ViewModelFactory {
     audioPlayer: AudioPlaybackService
   ) -> PlaybackViewModel {
     PlaybackViewModel(song: song, playerName: playerName, audioPlayer: audioPlayer)
+  }
+
+  // MARK: - Setting
+  func createSettingViewModel(coordinator: AppCoordinator) -> SettingViewModel {
+    SettingViewModel(coordinator: coordinator)
   }
 }

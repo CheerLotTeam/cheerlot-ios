@@ -11,8 +11,17 @@ struct TeamSelectView: View {
 
   @State private var viewModel: TeamSelectViewModel
 
-  init(viewModel: TeamSelectViewModel) {
+  let onClose: (() -> Void)?
+  let onCompleteForChange: (() -> Void)?
+
+  init(
+    viewModel: TeamSelectViewModel,
+    onClose: (() -> Void)? = nil,
+    onCompleteForChange: (() -> Void)? = nil
+  ) {
     _viewModel = State(initialValue: viewModel)
+    self.onClose = onClose
+    self.onCompleteForChange = onCompleteForChange
   }
 
   var body: some View {
@@ -22,20 +31,55 @@ struct TeamSelectView: View {
 
       teamListGrid
 
-      completeButton
+      if viewModel.mode.showsBottomButton {
+        completeButton
+      }
     }
     .frame(maxWidth: .infinity, maxHeight: .infinity)
     .padding(.horizontal, 30)
-    .padding(.top, 32)
+    .padding(.top, viewModel.mode == .change ? 20 : 32)
     .padding(.bottom, 12)
+    .navigationTitle(viewModel.mode.navigationTitle)
+    .navigationBarTitleDisplayMode(.inline)
+    .toolbar {
+      if viewModel.mode.showsTopBar {
+        ToolbarItem(placement: .topBarLeading) {
+          Button {
+            onClose?()
+          } label: {
+            Image(systemName: "xmark")
+              .font(.system(size: 14, weight: .semibold))
+          }
+          .tint(.grayBlack)
+        }
+
+        ToolbarItem(placement: .principal) {
+          Text(viewModel.mode.navigationTitle)
+            .font(.SB6)
+            .foregroundStyle(.grayBlack)
+        }
+
+        ToolbarItem(placement: .topBarTrailing) {
+          Button {
+            viewModel.complete()
+            onCompleteForChange?()
+          } label: {
+            Image(systemName: "checkmark")
+              .font(.system(size: 14, weight: .semibold))
+          }
+          .tint(.grayBlack)
+          .disabled(!viewModel.isButtonEnabled)
+        }
+      }
+    }
   }
 }
 
 extension TeamSelectView {
   private var header: some View {
-    Text("응원 팀을 선택해주세요")
-      .font(.SB4)
-      .foregroundStyle(.grayBlack)
+    Text(viewModel.mode.guideText)
+      .font(viewModel.mode == .onboarding ? .SB4 : .M3)
+      .foregroundStyle(viewModel.mode == .onboarding ? .grayBlack : .gray300)
   }
 
   private var teamListGrid: some View {
@@ -75,5 +119,5 @@ extension TeamSelectView {
 }
 
 #Preview {
-  TeamSelectView(viewModel: ViewModelFactory.shared.createTeamSelectViewModel())
+  TeamSelectView(viewModel: ViewModelFactory.shared.createTeamSelectViewModel(mode: .onboarding))
 }
