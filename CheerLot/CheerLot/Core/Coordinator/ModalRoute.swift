@@ -24,7 +24,7 @@ enum ModalRoute: Identifiable {
     lineupPlayer: LineupPlayerVO,
     onComplete: () -> Void
   )
-  case teamChange(selectedTeam: TeamID)
+  case teamChange(selectedTeamId: String)
   case inquiry
   case servicePage
 
@@ -82,12 +82,12 @@ extension AppCoordinator {
       )
       .presentationDetents([.large])
       .presentationDragIndicator(.hidden)
-    case let .teamChange(selectedTeam):
+    case let .teamChange(selectedTeamId):
       NavigationStack {
         TeamSelectView(
           viewModel: factory.createTeamSelectViewModel(
             mode: .change,
-            initialSelectedTeam: selectedTeam
+            initialSelectedTeamId: selectedTeamId
           ),
           onClose: {
             self.dismissModal()

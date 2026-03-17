@@ -30,10 +30,10 @@ final class TeamSelectViewModel {
 
   init(
     mode: TeamSelectMode,
-    initialSelectedTeam: TeamID? = nil
+    initialSelectedTeamId: String? = nil
   ) {
     self.mode = mode
-    self.selectedTeam = initialSelectedTeam
+    self.selectedTeamId = initialSelectedTeamId
     loadTeams()
   }
 

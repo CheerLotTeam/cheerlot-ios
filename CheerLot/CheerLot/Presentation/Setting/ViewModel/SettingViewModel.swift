@@ -59,7 +59,7 @@ final class SettingViewModel {
   }
 
   func didTapTeamCard() {
-    coordinator.presentModal(.teamChange(selectedTeam: currentTeam.id))
+      coordinator.presentModal(.teamChange(selectedTeamId: currentTeam.id.value))
   }
 
   func didTapSupportMenu(_ menu: SupportInfoMenu) {

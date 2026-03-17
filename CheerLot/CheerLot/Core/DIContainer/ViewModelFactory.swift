@@ -17,11 +17,11 @@ final class ViewModelFactory {
   // MARK: - Onboarding
   func createTeamSelectViewModel(
     mode: TeamSelectMode,
-    initialSelectedTeam: TeamID? = nil
+    initialSelectedTeamId: String? = nil
   ) -> TeamSelectViewModel {
     TeamSelectViewModel(
       mode: mode,
-      initialSelectedTeam: initialSelectedTeam
+      initialSelectedTeamId: initialSelectedTeamId
     )
   }
 
