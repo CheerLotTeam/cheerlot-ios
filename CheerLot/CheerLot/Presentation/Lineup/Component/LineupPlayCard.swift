@@ -14,7 +14,7 @@ struct LineupPlayCard: View {
     let title: String
     let lyrics: String
     var playCardImage: Image? {
-        asset.playCardImage(for: battingOrder)
+        asset.playCardBGImage(for: battingOrder)
     }
     
     @State private var isPaused: Bool = false

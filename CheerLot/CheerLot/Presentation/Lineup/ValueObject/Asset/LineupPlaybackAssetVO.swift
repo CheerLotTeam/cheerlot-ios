@@ -100,21 +100,21 @@ struct LineupPlaybackAssetVO {
     }
     
     /// 1~9 battingOrder에 따라 사용하는 카드 BG
-    private let playCardImages: [Image] = [
-        Image(.playCard1),
-        Image(.playCard2),
-        Image(.playCard3),
-        Image(.playCard4),
-        Image(.playCard5),
-        Image(.playCard6),
-        Image(.playCard7),
-        Image(.playCard8),
-        Image(.playCard9)
+    private let playCardBGImages: [Image] = [
+        Image(.playCardBG1),
+        Image(.playCardBG2),
+        Image(.playCardBG3),
+        Image(.playCardBG4),
+        Image(.playCardBG5),
+        Image(.playCardBG6),
+        Image(.playCardBG7),
+        Image(.playCardBG8),
+        Image(.playCardBG9)
     ]
     
     /// battingOrder에 따른 카드 BG 추출 함수
-    func playCardImage(for battingOrder: Int) -> Image? {
-        guard battingOrder > 0, battingOrder <= playCardImages.count else { return nil }
-        return playCardImages[battingOrder - 1]
+    func playCardBGImage(for battingOrder: Int) -> Image? {
+        guard battingOrder > 0, battingOrder <= playCardBGImages.count else { return nil }
+        return playCardBGImages[battingOrder - 1]
     }
 }
