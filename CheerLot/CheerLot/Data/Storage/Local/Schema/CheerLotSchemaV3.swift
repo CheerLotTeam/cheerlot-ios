@@ -136,10 +136,10 @@ extension CheerLotSchemaV3.Team {
 
 extension CheerLotSchemaV3.Player {
   func toEntity() -> PlayerInfo {
-      guard let teamId = self.team?.teamId, !teamId.isEmpty else {
-          preconditionFailure("Player \(self.playerId) has no valid teamId")
-      }
-      
+    guard let teamId = self.team?.teamId, !teamId.isEmpty else {
+      preconditionFailure("Player \(self.playerId) has no valid teamId")
+    }
+
     return PlayerInfo(
       id: PlayerID(self.playerId),
       teamId: TeamID(teamId),
@@ -155,10 +155,10 @@ extension CheerLotSchemaV3.Player {
 
 extension CheerLotSchemaV3.CheerSong {
   func toEntity() -> CheerSongInfo {
-      guard let playerId = self.player?.playerId, !playerId.isEmpty else {
-          preconditionFailure("CheerSong \(self.cheerSongId) has no valid playerId")
-      }
-      
+    guard let playerId = self.player?.playerId, !playerId.isEmpty else {
+      preconditionFailure("CheerSong \(self.cheerSongId) has no valid playerId")
+    }
+
     return CheerSongInfo(
       id: self.cheerSongId,
       playerId: PlayerID(playerId),

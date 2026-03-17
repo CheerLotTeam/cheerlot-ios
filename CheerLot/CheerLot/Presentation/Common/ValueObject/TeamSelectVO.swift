@@ -20,7 +20,7 @@ extension TeamSelectVO {
     self.englishFullName = entity.englishFullName.replacingOccurrences(of: " ", with: "\n")
     self.longName = entity.longName
   }
-    
+
   static func == (lhs: TeamSelectVO, rhs: TeamSelectVO) -> Bool {
     lhs.id == rhs.id
   }

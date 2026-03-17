@@ -8,7 +8,7 @@
 import Foundation
 
 struct LineupData {
-    let gameInfo: TeamGameInfo
-    let lineupPlayers: [PlayerInfo]
-    let opponentTeamId: TeamID?
+  let gameInfo: TeamGameInfo
+  let lineupPlayers: [PlayerInfo]
+  let opponentTeamId: TeamID?
 }

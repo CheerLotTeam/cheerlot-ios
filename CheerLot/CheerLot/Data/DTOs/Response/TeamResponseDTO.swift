@@ -33,17 +33,17 @@ extension TeamGameDTO {
     } else {
       status = .offDay
     }
-      
-      let teamId: TeamID = {
-          let teamCode = TeamDataSource.fromAPICode(self.teamCode)
-          return TeamID(teamCode.rawValue)
-      }()
-      
-      let opponentTeamId: TeamID? = {
-          guard let opponentCode = self.opponentTeamCode else { return nil }
-          let opponentTeamCode = TeamDataSource.fromAPICode(opponentCode)
-          return TeamID(opponentTeamCode.rawValue)
-      }()
+
+    let teamId: TeamID = {
+      let teamCode = TeamDataSource.fromAPICode(self.teamCode)
+      return TeamID(teamCode.rawValue)
+    }()
+
+    let opponentTeamId: TeamID? = {
+      guard let opponentCode = self.opponentTeamCode else { return nil }
+      let opponentTeamCode = TeamDataSource.fromAPICode(opponentCode)
+      return TeamID(opponentTeamCode.rawValue)
+    }()
 
     return TeamGameInfo(
       id: teamId,

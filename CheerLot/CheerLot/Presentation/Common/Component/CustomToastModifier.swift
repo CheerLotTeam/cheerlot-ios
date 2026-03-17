@@ -8,22 +8,22 @@
 import SwiftUI
 
 struct CustomToastModifier: ViewModifier {
-    @Binding var isPresented: Bool
-    let message: String
-    var showCaution: Bool = true
-    
-    func body(content: Content) -> some View {
-        ZStack {
-            content
-            
-            if isPresented {
-                CustomToastMessageView(
-                    message: message,
-                    showCaution: showCaution,
-                    isPresented: $isPresented
-                )
-            }
-        }
-        .animation(.easeInOut(duration: 0.3), value: isPresented)
+  @Binding var isPresented: Bool
+  let message: String
+  var showCaution: Bool = true
+
+  func body(content: Content) -> some View {
+    ZStack {
+      content
+
+      if isPresented {
+        CustomToastMessageView(
+          message: message,
+          showCaution: showCaution,
+          isPresented: $isPresented
+        )
+      }
     }
+    .animation(.easeInOut(duration: 0.3), value: isPresented)
+  }
 }

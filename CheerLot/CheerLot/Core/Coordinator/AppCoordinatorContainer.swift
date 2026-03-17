@@ -22,12 +22,12 @@ struct AppCoordinatorContainer<Content: View>: View {
     }
     .environment(coordinator)
     .sheet(item: $coordinator.presentedSheet) { route in
-        coordinator.buildModalView(for: route)
-            .environment(coordinator)
+      coordinator.buildModalView(for: route)
+        .environment(coordinator)
     }
     .fullScreenCover(item: $coordinator.presentedFullScreen) { route in
-        coordinator.buildModalView(for: route)
-            .environment(coordinator)
+      coordinator.buildModalView(for: route)
+        .environment(coordinator)
     }
   }
 }

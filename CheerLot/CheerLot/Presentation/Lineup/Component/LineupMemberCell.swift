@@ -14,11 +14,11 @@ struct LineupMemberCell: View {
 
   var body: some View {
     HStack(spacing: 12) {
-        if let battingOrder = player.battingOrder {
-            Text("\(battingOrder)")
-                .font(.M0)
-                .foregroundStyle(asset.battingOrderTextColor)
-        }
+      if let battingOrder = player.battingOrder {
+        Text("\(battingOrder)")
+          .font(.M0)
+          .foregroundStyle(asset.battingOrderTextColor)
+      }
 
       textContents
 

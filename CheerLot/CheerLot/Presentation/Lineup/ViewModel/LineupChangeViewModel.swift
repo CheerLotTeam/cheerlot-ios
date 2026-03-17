@@ -94,11 +94,11 @@ final class LineupChangeViewModel {
       return false
     }
   }
-    
-    func showNoSelectMember() {
-        toastMessage = "교체할 선수를 선택해 주세요"
-        showToast = true
-    }
+
+  func showNoSelectMember() {
+    toastMessage = "교체할 선수를 선택해 주세요"
+    showToast = true
+  }
 
   // MARK: - Private
 

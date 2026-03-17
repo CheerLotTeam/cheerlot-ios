@@ -20,42 +20,42 @@ struct CheerLotApp: App {
     DIContainer.shared.assemble()
   }
 
-    var body: some Scene {
-        WindowGroup {
-            Group {
-                if isBootstrapped {
-                    RootViewSwitcher()
-                } else {
-                    Color(.grayWhite)
-                        .ignoresSafeArea()
-                }
-            }
-            .task {
-                await bootstrap()
-            }
-            .alert("초기화 실패", isPresented: $showBootstrapError) {
-                Button("다시 시도") {
-                    Task { await bootstrap() }
-                }
-                Button("취소", role: .cancel) {
-                    // 그냥 계속 진행
-                    isBootstrapped = true
-                }
-            } message: {
-                Text(errorMessage)
-            }
+  var body: some Scene {
+    WindowGroup {
+      Group {
+        if isBootstrapped {
+          RootViewSwitcher()
+        } else {
+          Color(.grayWhite)
+            .ignoresSafeArea()
         }
-    }
-    
-    private func bootstrap() async {
-        do {
-            try await AppInitializer(
-                modelContainer: LocalStorage.shared.modelContainer
-            ).initialize()
-            isBootstrapped = true
-        } catch {
-            errorMessage = "앱을 초기화하는 중 문제가 발생했습니다"
-            showBootstrapError = true
+      }
+      .task {
+        await bootstrap()
+      }
+      .alert("초기화 실패", isPresented: $showBootstrapError) {
+        Button("다시 시도") {
+          Task { await bootstrap() }
         }
+        Button("취소", role: .cancel) {
+          // 그냥 계속 진행
+          isBootstrapped = true
+        }
+      } message: {
+        Text(errorMessage)
+      }
     }
+  }
+
+  private func bootstrap() async {
+    do {
+      try await AppInitializer(
+        modelContainer: LocalStorage.shared.modelContainer
+      ).initialize()
+      isBootstrapped = true
+    } catch {
+      errorMessage = "앱을 초기화하는 중 문제가 발생했습니다"
+      showBootstrapError = true
+    }
+  }
 }

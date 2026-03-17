@@ -15,14 +15,14 @@ final class NetworkProvider {
 
   func createProvider<T: TargetType>() -> MoyaProvider<T> {
     #if DEBUG
-    let plugins: [PluginType] = [
-      NetworkLoggerPlugin(
-        configuration: .init(
-          logOptions: .verbose  // 상세 로그
-        ))
-    ]
+      let plugins: [PluginType] = [
+        NetworkLoggerPlugin(
+          configuration: .init(
+            logOptions: .verbose  // 상세 로그
+          ))
+      ]
     #else
-    let plugins: [PluginType] = []
+      let plugins: [PluginType] = []
     #endif
 
     return MoyaProvider<T>(plugins: plugins)

@@ -49,7 +49,7 @@ extension TeamSelectView {
 
       LazyVGrid(columns: viewModel.columns, spacing: 9) {
         ForEach(viewModel.teams) { team in
-            TeamSelectCell(team: team, isSelected: viewModel.selectedTeamId == team.id) {
+          TeamSelectCell(team: team, isSelected: viewModel.selectedTeamId == team.id) {
             viewModel.select(team.id)
           }
           .frame(height: cellHeight)

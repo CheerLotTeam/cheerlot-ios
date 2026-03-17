@@ -59,11 +59,11 @@ struct LineupView: View {
       await viewModel.onAppear()
     }
     .errorWithRetryAlert(errorMessage: $viewModel.errorMessage) {
-        await viewModel.onAppear()
+      await viewModel.onAppear()
     }
     .toastMessage(
-        isPresented: $viewModel.showToast,
-        message: viewModel.toastMessage
+      isPresented: $viewModel.showToast,
+      message: viewModel.toastMessage
     )
   }
 
@@ -189,11 +189,11 @@ extension LineupView {
           .padding(.horizontal, 5.5)
           .contentShape(Rectangle())
           .onTapGesture {
-              handlePlayerTap(
-                coordinator: coordinator,
-                player: player,
-                asset: asset
-              )
+            handlePlayerTap(
+              coordinator: coordinator,
+              player: player,
+              asset: asset
+            )
           }
 
           if index < viewModel.lineupPlayers.count - 1 {
@@ -263,27 +263,27 @@ extension LineupView {
       Spacer()
     }
   }
-    
-    private func handlePlayerTap(
-        coordinator: AppCoordinator,
-        player: LineupPlayerVO,
-        asset: LineupAssetVO
-    ) {
-        if player.cheerSongs.count >= 2 {
-            coordinator.presentModal(
-                .cheerSongList(
-                    asset: asset.base,
-                    player: player,
-                    lineupPlayers: viewModel.lineupPlayers
-                )
-            )
-        } else if let firstSong = player.cheerSongs.first {
-            // 1곡: 바로 재생
-            goToLineupPlayback()
-        } else {
-            viewModel.showNoSongToast()
-        }
+
+  private func handlePlayerTap(
+    coordinator: AppCoordinator,
+    player: LineupPlayerVO,
+    asset: LineupAssetVO
+  ) {
+    if player.cheerSongs.count >= 2 {
+      coordinator.presentModal(
+        .cheerSongList(
+          asset: asset.base,
+          player: player,
+          lineupPlayers: viewModel.lineupPlayers
+        )
+      )
+    } else if let firstSong = player.cheerSongs.first {
+      // 1곡: 바로 재생
+      goToLineupPlayback()
+    } else {
+      viewModel.showNoSongToast()
     }
+  }
 
   private func goToLineupPlayback() {
     // TODO: - LineupPlayback으로 넘기기

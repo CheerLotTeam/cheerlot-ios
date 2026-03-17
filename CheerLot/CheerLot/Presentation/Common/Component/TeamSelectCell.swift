@@ -12,7 +12,7 @@ struct TeamSelectCell: View {
   let team: TeamSelectVO
   let isSelected: Bool
   let action: () -> Void
-    
+
   private var asset: TeamAssetVO {
     TeamAssetVO(TeamID(team.id))
   }

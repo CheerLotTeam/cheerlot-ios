@@ -31,18 +31,18 @@ final class AppCoordinator {
     paths.removeAll()
   }
 
-    // MARK: - Modal (Sheet + FullScreen)
-    func presentModal(_ route: ModalRoute) {
-        switch route.presentationStyle {
-        case .sheet:
-            presentedSheet = route
-        case .fullScreen:
-            presentedFullScreen = route
-        }
+  // MARK: - Modal (Sheet + FullScreen)
+  func presentModal(_ route: ModalRoute) {
+    switch route.presentationStyle {
+    case .sheet:
+      presentedSheet = route
+    case .fullScreen:
+      presentedFullScreen = route
     }
-    
-    func dismissModal() {
-        presentedSheet = nil
-        presentedFullScreen = nil
-    }
+  }
+
+  func dismissModal() {
+    presentedSheet = nil
+    presentedFullScreen = nil
+  }
 }

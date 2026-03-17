@@ -11,14 +11,14 @@ import SwiftUI
 final class TeamSelectViewModel {
   var teams: [TeamSelectVO] = []
   var selectedTeamId: String?
-    
+
   var isButtonEnabled: Bool {
     selectedTeamId != nil
   }
-    
+
   let columns = [
     GridItem(.flexible(), spacing: 17),
-    GridItem(.flexible(), spacing: 17)
+    GridItem(.flexible(), spacing: 17),
   ]
 
   @ObservationIgnored

@@ -18,47 +18,47 @@ struct LineupChangeSheetView: View {
   }
 
   var body: some View {
-      NavigationStack {
-          VStack(spacing: 18) {
-              header
-                .padding(.top, 10)
-              
-              if let asset = viewModel.asset {
-                  playerListGrid(asset: asset)
-              } else {
-                  Color.clear
-              }
-          }
-          .toolBar_editMode(
-            title: "선발 라인업"
-          ) {
-              coordinator.dismissModal()
-          } onCheck: {
-              Task {
-                  let success = await viewModel.swapPlayers()
-                  if success {
-                      onComplete()
-                      coordinator.dismissModal()
-                  }
-              }
-          }
-          .disabled(viewModel.isSwapping)
-          .overlay {
-              if viewModel.isLoading || viewModel.isSwapping {
-                  ProgressView()
-                      .frame(maxWidth: .infinity, maxHeight: .infinity)
-                      .background(.ultraThinMaterial)
-              }
-          }
+    NavigationStack {
+      VStack(spacing: 18) {
+        header
+          .padding(.top, 10)
+
+        if let asset = viewModel.asset {
+          playerListGrid(asset: asset)
+        } else {
+          Color.clear
+        }
       }
+      .toolBar_editMode(
+        title: "선발 라인업"
+      ) {
+        coordinator.dismissModal()
+      } onCheck: {
+        Task {
+          let success = await viewModel.swapPlayers()
+          if success {
+            onComplete()
+            coordinator.dismissModal()
+          }
+        }
+      }
+      .disabled(viewModel.isSwapping)
+      .overlay {
+        if viewModel.isLoading || viewModel.isSwapping {
+          ProgressView()
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .background(.ultraThinMaterial)
+        }
+      }
+    }
     .task {
       await viewModel.onAppear()
     }
     .errorAlert(errorMessage: $viewModel.errorMessage)
     .toastMessage(
-        isPresented: $viewModel.showToast,
-        message: viewModel.toastMessage,
-        showCaution: false
+      isPresented: $viewModel.showToast,
+      message: viewModel.toastMessage,
+      showCaution: false
     )
   }
 }
