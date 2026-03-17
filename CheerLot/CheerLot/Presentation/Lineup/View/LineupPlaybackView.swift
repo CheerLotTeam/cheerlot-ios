@@ -19,7 +19,7 @@ struct LineupPlaybackView: View {
     private let animationDuration: CGFloat = 0.3
     
     private var pageWidth: CGFloat {
-        UIScreen.main.bounds.width - 56
+        UIScreen.width - 56
     }
     
     private var pageHeight: CGFloat {
@@ -63,7 +63,7 @@ struct LineupPlaybackView: View {
 
 extension LineupPlaybackView {
     private var cardCarouselView: some View {
-        let widthDifference = UIScreen.main.bounds.width - pageWidth
+        let widthDifference = UIScreen.width - pageWidth
         
         return ScrollView(.horizontal) {
             LazyHStack(spacing: 0) {
