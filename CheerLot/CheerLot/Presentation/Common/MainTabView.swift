@@ -20,6 +20,7 @@ struct MainTabView: View {
   @State private var selectedTab: TabKey = .lineup
   @State private var isPlayerExpanded: Bool = false
   @State private var lineupViewModel = ViewModelFactory.shared.createLineupViewModel()
+  @State private var teamMembersViewModel: TeamMembersViewModel
 
   @Namespace private var animation
 
@@ -35,6 +36,12 @@ struct MainTabView: View {
   init(team: TeamInfo, audioPlayer: AudioPlaybackService) {
     self.team = team
     self.audioPlayer = audioPlayer
+    
+    _teamMembersViewModel = State(
+      initialValue: ViewModelFactory.shared.createTeamMembersViewModel(
+        audioPlayer: audioPlayer
+      )
+    )
 
     // TabBar 스타일 설정
     let appearance = UITabBarAppearance()
@@ -72,7 +79,7 @@ struct MainTabView: View {
           asset: asset,
           viewModel: ViewModelFactory.shared.createPlaybackViewModel(
             song: song,
-            playerName: song.playerId.value,
+            playerName: audioPlayer.currentPlayerName ?? song.playerId.value,
             audioPlayer: audioPlayer
           )
         )
@@ -96,15 +103,8 @@ extension MainTabView {
       }
 
     case .teamMembers:
-      let asset = TeamMembersAssetVO(base: TeamAssetVO(team.id))
       AppCoordinatorContainer {
-        TeamMembersView(
-          team: team,
-          asset: asset,
-          viewModel: ViewModelFactory.shared.createTeamMembersViewModel(
-            team: team,
-            audioPlayer: audioPlayer
-          )
+        TeamMembersView(viewModel: teamMembersViewModel
         )
       }
 
@@ -154,14 +154,15 @@ extension MainTabView {
   private var miniPlayerBar: some View {
     if let song = audioPlayer.nowPlaying {
       MiniPlayerView(
-        playerName: song.playerId.value,  // MARK: - PlayerInfo.name으로 교체 예정
+        coverImage: asset.coverImage,
+        playerName: audioPlayer.currentPlayerName ?? song.playerId.value,
         title: song.title,
         isPlaying: audioPlayer.isPlaying,
         onTap: {
           isPlayerExpanded.toggle()
         },
         onPlayPause: { audioPlayer.toggle() },
-        onNext: { /* TODO: 다음 곡 */  }
+        onNext: { audioPlayer.playNext() }
       )
       .matchedTransitionSource(id: "AUDIOPLAYER", in: animation)
       .padding(.horizontal, 20)
