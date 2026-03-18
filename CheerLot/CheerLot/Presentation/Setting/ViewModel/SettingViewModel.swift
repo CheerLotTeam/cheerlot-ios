@@ -6,7 +6,7 @@
 //
 
 import Observation
-import UIKit
+import SwiftUI
 
 @MainActor
 @Observable
@@ -17,8 +17,6 @@ final class SettingViewModel {
   var appIconMode: AppIconMode
 
   // MARK: - Dependencies
-  private let coordinator: AppCoordinator
-
   @ObservationIgnored
   @Injected(TeamSelectionUseCase.self) private var teamSelectionUseCase
 
@@ -26,9 +24,7 @@ final class SettingViewModel {
   @Injected(UserSettingsUseCase.self) private var userSettingsUseCase
 
   // MARK: - Init
-  init(coordinator: AppCoordinator) {
-    self.coordinator = coordinator
-
+  init() {
     let teamSelectionUseCase = DIContainer.shared.resolve(TeamSelectionUseCase.self)
     let userSettingsUseCase = DIContainer.shared.resolve(UserSettingsUseCase.self)
 
@@ -50,26 +46,6 @@ final class SettingViewModel {
     let savedMode = userSettingsUseCase.getAppIconMode()
     if savedMode != appIconMode {
       appIconMode = savedMode
-    }
-  }
-
-  //MARK: - Navigation
-  func didTapBack() {
-    coordinator.pop()
-  }
-
-  func didTapTeamCard() {
-    coordinator.presentModal(.teamChange(selectedTeamId: currentTeam.id.value))
-  }
-
-  func didTapSupportMenu(_ menu: SupportInfoMenu) {
-    switch menu {
-    case .serviceIntro:
-      coordinator.push(.serviceInfo)
-    case .cheerlotTeam:
-      coordinator.push(.makerInfo)
-    case .reportBug:
-      break
     }
   }
 
