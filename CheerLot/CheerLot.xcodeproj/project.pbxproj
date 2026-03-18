@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1F118A362F650E1200EC6DB3 /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = 1F118A352F650E1200EC6DB3 /* Lottie */; };
 		3C465E732DE83430001F15F3 /* SwiftFormat in Frameworks */ = {isa = PBXBuildFile; productRef = 3C465E722DE83430001F15F3 /* SwiftFormat */; };
 		3C465E762DE84A0F001F15F3 /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = 3C465E752DE84A0F001F15F3 /* .swiftlint.yml */; };
 		3C96AB7D2F3B4954007ED0A5 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C96AB7C2F3B4953007ED0A5 /* WidgetKit.framework */; };
@@ -142,6 +143,7 @@
 				3C465E732DE83430001F15F3 /* SwiftFormat in Frameworks */,
 				CF09BDE92E22901C00E11198 /* FirebaseAnalytics in Frameworks */,
 				CF05480E2E895CFB003CCB61 /* FirebaseRemoteConfig in Frameworks */,
+				1F118A362F650E1200EC6DB3 /* Lottie in Frameworks */,
 			);
 		};
 /* End PBXFrameworksBuildPhase section */
@@ -246,6 +248,7 @@
 				CF09BDE82E22901C00E11198 /* FirebaseAnalytics */,
 				CF09BDEA2E22901C00E11198 /* FirebaseCrashlytics */,
 				CF05480D2E895CFB003CCB61 /* FirebaseRemoteConfig */,
+				1F118A352F650E1200EC6DB3 /* Lottie */,
 			);
 			productName = CheerLot;
 			productReference = CF703E942DE8297900330888 /* CheerLot.app */;
@@ -286,6 +289,7 @@
 				CF703F902DE82C5F00330888 /* XCRemoteSwiftPackageReference "Moya" */,
 				3C465E712DE83430001F15F3 /* XCRemoteSwiftPackageReference "swift-format" */,
 				CF09BDE72E22901C00E11198 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				1F118A342F650E1200EC6DB3 /* XCRemoteSwiftPackageReference "lottie-ios" */,
 			);
 			preferredProjectObjectVersion = 90;
 			productRefGroup = CF703E952DE8297900330888 /* Products */;
@@ -848,6 +852,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		1F118A342F650E1200EC6DB3 /* XCRemoteSwiftPackageReference "lottie-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/airbnb/lottie-ios";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 4.6.0;
+			};
+		};
 		3C465E712DE83430001F15F3 /* XCRemoteSwiftPackageReference "swift-format" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/swiftlang/swift-format";
@@ -875,6 +887,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		1F118A352F650E1200EC6DB3 /* Lottie */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1F118A342F650E1200EC6DB3 /* XCRemoteSwiftPackageReference "lottie-ios" */;
+			productName = Lottie;
+		};
 		3C465E722DE83430001F15F3 /* SwiftFormat */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 3C465E712DE83430001F15F3 /* XCRemoteSwiftPackageReference "swift-format" */;

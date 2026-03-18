@@ -57,11 +57,18 @@ extension View {
       .toolbar {
         if let leftItem {
           if #available(iOS 26.0, *) {
-            ToolBarItemBuilder.buildItem(
-              for: leftItem,
-              placement: .topBarLeading
-            )
-            .sharedBackgroundVisibility(.hidden)
+            if case .largeTitle = leftItem {
+              ToolBarItemBuilder.buildItem(
+                for: leftItem,
+                placement: .topBarLeading
+              )
+              .sharedBackgroundVisibility(.hidden)
+            } else {
+              ToolBarItemBuilder.buildItem(
+                for: leftItem,
+                placement: .topBarLeading
+              )
+            }
           } else {
             ToolBarItemBuilder.buildItem(
               for: leftItem,
@@ -107,6 +114,7 @@ extension View {
       leftItem: .close(action: onClose),
       centerItem: .gameInfo(date: date, teams: teams)
     )
+    .navigationBarTitleDisplayMode(.inline)
   }
 
   /// leading에 back 버튼과 center에 inlineTitle을 가지는 toolbar 확장 메서드
@@ -118,6 +126,7 @@ extension View {
       leftItem: .back(action: onBack),
       centerItem: .inlineTitle(title)
     )
+    .navigationBarTitleDisplayMode(.inline)
   }
 
   /// leading에 cancel 버튼과 center에 inlineTitle, trailing에 check 버튼을 가지는 toolbar 확장 메서드
@@ -131,14 +140,7 @@ extension View {
       centerItem: .inlineTitle(title),
       rightItem: .check(action: onCheck)
     )
-  }
-
-  /// Modal 표시 (Sheet 또는 FullScreen 자동 결정)
-  func modal<Item: Identifiable, Content: View>(
-    item: Binding<Item?>,
-    @ViewBuilder content: @escaping (Item) -> Content
-  ) -> some View {
-    self.modifier(ModalModifier(item: item, content: content))
+    .navigationBarTitleDisplayMode(.inline)
   }
 
   /// lineupView의 리스트 cellAction(swipe, context menu)을 바로 사용할 수 있는 확장메서드
@@ -153,5 +155,43 @@ extension View {
         onChangePlayer: onChangePlayer,
         onSelectSong: onSelectSong
       ))
+  }
+
+  /// 에러메시지 알럿을 띄우는 확장메서드
+  func errorAlert(
+    errorMessage: Binding<String?>
+  ) -> some View {
+    modifier(
+      ErrorAlertModifier(
+        errorMessage: errorMessage
+      )
+    )
+  }
+
+  /// 에러메시지와 재시도 알럿을 띄우는 확장메서드
+  func errorWithRetryAlert(
+    errorMessage: Binding<String?>,
+    onRetry: @escaping () async -> Void
+  ) -> some View {
+    modifier(
+      ErrorAlertWithRetryModifier(
+        errorMessage: errorMessage,
+        onRetry: onRetry)
+    )
+  }
+
+  /// 커스텀 토스트 메시지 뷰를 띄울 수 있는 확장메서드
+  func toastMessage(
+    isPresented: Binding<Bool>,
+    message: String,
+    showCaution: Bool = true
+  ) -> some View {
+    modifier(
+      CustomToastModifier(
+        isPresented: isPresented,
+        message: message,
+        showCaution: showCaution
+      )
+    )
   }
 }

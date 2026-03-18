@@ -104,7 +104,7 @@ enum CheerLotSchemaV3: VersionedSchema {
   }
 }
 
-extension Team {
+extension CheerLotSchemaV3.Team {
   func toEntity() -> TeamState {
     let status: GameStatus
 
@@ -134,26 +134,34 @@ extension Team {
   }
 }
 
-extension Player {
-  func toEntity() -> PlayerInfo {
+extension CheerLotSchemaV3.Player {
+  func toEntity() throws -> PlayerInfo {
+    guard let teamId = self.team?.teamId, !teamId.isEmpty else {
+      throw LocalStorageError.invalidData
+    }
+
     return PlayerInfo(
       id: PlayerID(self.playerId),
-      teamId: TeamID(self.team?.teamId ?? ""),
+      teamId: TeamID(teamId),
       name: self.name,
       backNumber: self.backNumber,
       position: self.position,
       batThrow: self.batThrow,
       battingOrder: self.battingOrder,
-      cheerSongs: cheerSongList?.map { $0.toEntity() } ?? []
+      cheerSongs: try cheerSongList?.map { try $0.toEntity() } ?? []
     )
   }
 }
 
-extension CheerSong {
-  func toEntity() -> CheerSongInfo {
+extension CheerLotSchemaV3.CheerSong {
+  func toEntity() throws -> CheerSongInfo {
+    guard let playerId = self.player?.playerId, !playerId.isEmpty else {
+      throw LocalStorageError.invalidData
+    }
+
     return CheerSongInfo(
       id: self.cheerSongId,
-      playerId: PlayerID(player?.playerId ?? ""),
+      playerId: PlayerID(playerId),
       title: self.title,
       lyrics: self.lyrics,
       audioURL: self.audioUrl

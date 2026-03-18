@@ -19,6 +19,8 @@ final class LineupViewModel {
 
   var isLoading = false
   var errorMessage: String?
+  var showToast = false
+  var toastMessage = ""
 
   var showRecentLineup: Bool = false {
     didSet {
@@ -48,13 +50,7 @@ final class LineupViewModel {
   @Injected(TeamInfoUseCase.self) private var teamInfoUseCase
 
   @ObservationIgnored
-  @Injected(TeamGameInfoSyncUseCase.self) private var teamGameInfoSyncUseCase
-
-  @ObservationIgnored
-  @Injected(LineupSyncUseCase.self) private var lineupSyncUseCase
-
-  @ObservationIgnored
-  @Injected(TeamPlayersSyncUseCase.self) private var teamPlayersSyncUseCase
+  @Injected(LineupManagementUseCase.self) private var lineupManagementUseCase
 
   // MARK: - Actions
 
@@ -63,75 +59,59 @@ final class LineupViewModel {
       errorMessage = "선택된 팀이 없습니다"
       return
     }
+
+    asset = LineupAssetVO(base: TeamAssetVO(teamInfo.id))
     currentTeamId = teamInfo.id.value
 
-    await syncData()
-    showRecentLineup = userSettingsUseCase.getShowRecentLineup()
     await loadData()
-  }
-
-  func refresh() async {
-    await syncData()
     showRecentLineup = userSettingsUseCase.getShowRecentLineup()
-    await loadData()
   }
 
   func toggleShowRecentLineup() {
     showRecentLineup = true
   }
 
-  // MARK: - Private
+  func loadData() async {
+    guard let teamId = currentTeamId else { return }
 
-  private func loadData() async {
+    guard !isLoading else { return }
     isLoading = true
     errorMessage = nil
 
     do {
-      // 현재 팀 조회
-      guard let teamInfo = teamSelectionUseCase.getCurrentTeam() else {
-        throw LocalStorageError.notFound
-      }
+      let data = try await lineupManagementUseCase.loadLineup(for: TeamID(teamId))
 
-      // 경기 정보 조회
-      let gameInfoEntity = try await teamGameInfoSyncUseCase.getGameInfo(teamInfo.id)
-
-      // 상대팀 TeamInfo 조회
-      let opponentTeamInfo: TeamInfo?
-      if let opponentTeamId = gameInfoEntity.opponent {
-        opponentTeamInfo = teamInfoUseCase.getTeamInfo(opponentTeamId)
-      } else {
-        opponentTeamInfo = nil
-      }
-
-      // GameInfo VO 변환
-      gameInfo = LineupGameInfoVO(
-        teamInfo: teamInfo,
-        opponentTeamInfo: opponentTeamInfo,
-        gameInfo: gameInfoEntity
-      )
-
-      // 라인업 조회 및 VO 변환
-      let lineupEntities = try await lineupSyncUseCase.getCurrentLineup(teamInfo.id)
-      lineupPlayers = lineupEntities.map { LineupPlayerVO(from: $0) }
-
-      // Asset 생성
-      asset = LineupAssetVO(base: TeamAssetVO(teamInfo.id))
+      convertToVO(data: data, teamId: teamId)
 
       isLoading = false
     } catch {
       isLoading = false
-      errorMessage = "데이터를 불러올 수 없습니다: \(error.localizedDescription)"
+      errorMessage = "데이터를 불러올 수 없습니다: \(error.userMessage)"
     }
   }
 
-  private func syncData() async {
-    guard let teamInfo = currentTeamId else { return }
-    do {
-      try await teamGameInfoSyncUseCase.syncIfNeeded(TeamID(teamInfo))
-      try await teamPlayersSyncUseCase.syncIfNeeded(TeamID(teamInfo))
-      try await lineupSyncUseCase.syncIfNeeded(TeamID(teamInfo))
-    } catch {
-      print("Sync failed: \(error)")
+  func showNoSongToast() {
+    toastMessage = "아직 개인 응원가가 없어요"
+    showToast = true
+  }
+
+  // MARK: - Private
+  private func convertToVO(data: LineupData, teamId: String) {
+    guard let teamInfo = teamInfoUseCase.getTeamInfo(TeamID(teamId)) else { return }
+
+    // 상대팀 정보 조회
+    let opponentTeamInfo = data.opponentTeamId.flatMap {
+      teamInfoUseCase.getTeamInfo($0)
     }
+
+    // GameInfo VO 변환
+    gameInfo = LineupGameInfoVO(
+      teamInfo: teamInfo,
+      opponentTeamInfo: opponentTeamInfo,
+      gameInfo: data.gameInfo
+    )
+
+    // Lineup Players VO 변환
+    lineupPlayers = data.lineupPlayers.map { LineupPlayerVO(from: $0) }
   }
 }

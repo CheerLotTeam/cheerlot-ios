@@ -23,6 +23,8 @@ final class LineupChangeViewModel {
 
   var isLoading = false
   var errorMessage: String?
+  var showToast = false
+  var toastMessage = ""
   var isSwapping = false
 
   var canSwap: Bool {
@@ -65,10 +67,11 @@ final class LineupChangeViewModel {
 
   func swapPlayers() async -> Bool {
     guard let selectedPlayer = selectedPlayer else {
-      errorMessage = "교체할 선수를 선택해주세요"
+      showNoSelectMember()
       return false
     }
 
+    guard !isSwapping else { return false }
     isSwapping = true
     errorMessage = nil
 
@@ -87,14 +90,20 @@ final class LineupChangeViewModel {
 
     } catch {
       isSwapping = false
-      errorMessage = "선수 교체 실패: \(error.localizedDescription)"
+      errorMessage = "선수 교체 실패: \(error.userMessage)"
       return false
     }
+  }
+
+  func showNoSelectMember() {
+    toastMessage = "교체할 선수를 선택해 주세요"
+    showToast = true
   }
 
   // MARK: - Private
 
   private func loadBenchPlayers() async {
+    guard !isLoading else { return }
     isLoading = true
     errorMessage = nil
 
@@ -106,7 +115,7 @@ final class LineupChangeViewModel {
       isLoading = false
     } catch {
       isLoading = false
-      errorMessage = "벤치 선수를 불러올 수 없습니다: \(error.localizedDescription)"
+      errorMessage = "벤치 선수를 불러올 수 없습니다: \(error.userMessage)"
     }
   }
 }

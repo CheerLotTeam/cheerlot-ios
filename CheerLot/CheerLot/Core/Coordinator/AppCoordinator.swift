@@ -11,7 +11,8 @@ import SwiftUI
 @Observable
 final class AppCoordinator {
   var paths: [MainRoute] = []
-  var modal: ModalRoute?
+  var presentedSheet: ModalRoute?
+  var presentedFullScreen: ModalRoute?
 
   init() {}
 
@@ -32,10 +33,18 @@ final class AppCoordinator {
 
   // MARK: - Modal (Sheet + FullScreen)
   func presentModal(_ route: ModalRoute) {
-    modal = route
+    switch route.presentationStyle {
+    case .sheet:
+      presentedFullScreen = nil
+      presentedSheet = route
+    case .fullScreen:
+      presentedSheet = nil
+      presentedFullScreen = route
+    }
   }
 
   func dismissModal() {
-    modal = nil
+    presentedSheet = nil
+    presentedFullScreen = nil
   }
 }

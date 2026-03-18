@@ -9,14 +9,12 @@ import SwiftUI
 
 @Observable
 final class TeamSelectViewModel {
+  var teams: [TeamSelectVO] = []
+  var selectedTeamId: String?
   let mode: TeamSelectMode
 
-  private var teamList: [TeamInfo] = []
-  var selectedTeam: TeamID?
-  var teamVOList: [TeamSelectVO] = []
-
   var isButtonEnabled: Bool {
-    selectedTeam != nil
+    selectedTeamId != nil
   }
 
   let columns = [
@@ -32,29 +30,25 @@ final class TeamSelectViewModel {
 
   init(
     mode: TeamSelectMode,
-    initialSelectedTeam: TeamID? = nil
+    initialSelectedTeamId: String? = nil
   ) {
     self.mode = mode
-    self.selectedTeam = initialSelectedTeam
+    self.selectedTeamId = initialSelectedTeamId
     loadTeams()
   }
 
   func loadTeams() {
-    teamList = teamInfoUseCase.getAllTeamsInfo()
-    teamVOList = teamList.map { TeamSelectVO(team: $0) }
+    let teamEntities = teamInfoUseCase.getAllTeamsInfo()
+    teams = teamEntities.map { TeamSelectVO(from: $0) }
   }
 
-  func select(_ id: TeamID) {
-    selectedTeam = id
+  func select(_ teamId: String) {
+    selectedTeamId = teamId
   }
 
   func complete() {
-    guard let selectedTeam else { return }
-    teamSelectionUseCase.selectTeam(selectedTeam)
-
-    // TeamID -> TeamInfo 변환
-    if let team = teamList.first(where: { $0.id == selectedTeam }) {
-      NotificationCenter.default.post(name: .teamSelected, object: team)
-    }
+    guard let selectedTeamId = selectedTeamId else { return }
+    teamSelectionUseCase.selectTeam(TeamID(selectedTeamId))
+    NotificationCenter.default.post(name: .teamSelected, object: selectedTeamId)
   }
 }

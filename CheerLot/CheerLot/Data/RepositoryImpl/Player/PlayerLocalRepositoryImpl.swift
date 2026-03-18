@@ -10,27 +10,38 @@ import SwiftData
 
 @ModelActor
 actor PlayerLocalRepositoryImpl: PlayerLocalRepository {
-  func fetchPlayer(_ playerId: PlayerID) throws -> PlayerInfo? {
+  func fetchPlayer(_ playerId: PlayerID) async throws -> PlayerInfo? {
     guard let player = try findPlayer(playerId: playerId) else {
-      throw LocalStorageError.notFound
+      return nil
     }
-    return player.toEntity()
+    return try player.toEntity()
   }
 
-  func fetchAllPlayers(_ teamId: TeamID) throws -> [PlayerInfo] {
+  func fetchAllPlayers(_ teamId: TeamID) async throws -> [PlayerInfo] {
     let teamIdValue = teamId.value
     let descriptor = FetchDescriptor<Player>(
       predicate: #Predicate { $0.team?.teamId == teamIdValue }
     )
     do {
       let data = try modelContext.fetch(descriptor)
-      return data.map { $0.toEntity() }
+      return try data.map { try $0.toEntity() }
     } catch {
       throw LocalStorageError.fetchError
     }
   }
 
-  func createPlayer(_ entity: PlayerInfo, _ teamId: TeamID) throws {
+  func performTransaction<T>(_ operation: @Sendable () async throws -> T) async throws -> T {
+    do {
+      let result = try await operation()
+      try modelContext.save()  // 커밋
+      return result
+    } catch {
+      modelContext.rollback()  // 롤백
+      throw error
+    }
+  }
+
+  func createPlayer(_ entity: PlayerInfo, _ teamId: TeamID) async throws {
     let team = try fetchTeam(teamId: teamId)
     let playerModel = createPlayerModel(from: entity, team: team)
     modelContext.insert(playerModel)
@@ -42,11 +53,9 @@ actor PlayerLocalRepositoryImpl: PlayerLocalRepository {
       )
       modelContext.insert(cheerSongModel)
     }
-
-    try modelContext.save()
   }
 
-  func createAllPlayers(_ entities: [PlayerInfo], _ teamId: TeamID) throws {
+  func createAllPlayers(_ entities: [PlayerInfo], _ teamId: TeamID) async throws {
     let team = try fetchTeam(teamId: teamId)
 
     for entity in entities {
@@ -61,19 +70,17 @@ actor PlayerLocalRepositoryImpl: PlayerLocalRepository {
         modelContext.insert(cheerSongModel)
       }
     }
-
-    try modelContext.save()
   }
 
-  func updatePlayer(_ entity: PlayerInfo) throws {
+  func updatePlayer(_ entity: PlayerInfo) async throws {
     guard let model = try findPlayer(playerId: entity.id) else {
       throw LocalStorageError.notFound
     }
 
     model.name = entity.name
     model.backNumber = entity.backNumber
-    model.position = entity.position ?? ""
-    model.batThrow = entity.batThrow ?? ""
+    model.position = entity.position
+    model.batThrow = entity.batThrow
     model.battingOrder = entity.battingOrder
 
     // CheerSong은 기존 삭제 후, 새로 추가
@@ -88,26 +95,22 @@ actor PlayerLocalRepositoryImpl: PlayerLocalRepository {
       )
       modelContext.insert(cheerSongModel)
     }
-
-    try modelContext.save()
   }
 
-  func deletePlayer(_ playerId: PlayerID) throws {
+  func deletePlayer(_ playerId: PlayerID) async throws {
     guard let model = try findPlayer(playerId: playerId) else {
       throw LocalStorageError.notFound
     }
     modelContext.delete(model)
-    try modelContext.save()
   }
 
-  func deleteAllPlayers(_ teamId: TeamID) throws {
+  func deleteAllPlayers(_ teamId: TeamID) async throws {
     let teamIdValue = teamId.value
     let descriptor = FetchDescriptor<Player>(
       predicate: #Predicate { $0.team?.teamId == teamIdValue }
     )
     let models = try modelContext.fetch(descriptor)
     models.forEach { modelContext.delete($0) }
-    try modelContext.save()
   }
 }
 
@@ -138,8 +141,8 @@ extension PlayerLocalRepositoryImpl {
       playerId: entity.id.value,
       name: entity.name,
       backNumber: entity.backNumber,
-      position: entity.position ?? "",
-      batThrow: entity.batThrow ?? "",
+      position: entity.position,
+      batThrow: entity.batThrow,
       battingOrder: entity.battingOrder
     )
     player.team = team

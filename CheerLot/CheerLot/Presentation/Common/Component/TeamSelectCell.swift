@@ -13,6 +13,10 @@ struct TeamSelectCell: View {
   let isSelected: Bool
   let action: () -> Void
 
+  private var asset: TeamAssetVO {
+    TeamAssetVO(TeamID(team.id))
+  }
+
   var body: some View {
     Button {
       action()
@@ -41,12 +45,12 @@ extension TeamSelectCell {
       .frame(maxWidth: .infinity, maxHeight: .infinity)
       .background(
         RoundedRectangle(cornerRadius: 10)
-          .fill(isSelected ? team.asset.primaryColor : .grayWhite)
+          .fill(isSelected ? asset.primaryColor : .grayWhite)
       )
       .overlay(
         RoundedRectangle(cornerRadius: 10)
           .strokeBorder(
-            isSelected ? team.asset.primaryColor : .gray100,
+            isSelected ? asset.primaryColor : .gray100,
             lineWidth: 1
           )
       )

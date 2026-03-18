@@ -19,10 +19,11 @@ struct CheerSongMenuSheetView: View {
       Text(player.name)
         .font(.SB5)
         .foregroundStyle(Color.black)
-        .padding(.top, 23)
+        .padding(.top, 34)
 
       CheerSongListView
     }
+    .background(Color.grayWhite)
   }
 
   private var CheerSongListView: some View {
@@ -47,6 +48,7 @@ struct CheerSongMenuSheetView: View {
       .listRowInsets(EdgeInsets())
     }
     .listStyle(.plain)
+    .scrollContentBackground(.hidden)
     .scrollDisabled(true)
   }
 }

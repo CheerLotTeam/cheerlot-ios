@@ -17,8 +17,8 @@ struct StarterDTO: Decodable {
   let battingOrder: Int
   let playerCode: String
   let name: String
-  let position: String
-  let batThrow: String
+  let position: String?
+  let batThrow: String?
   let backNumber: Int
   let cheerSongs: [CheerSongDTO]
 }
@@ -32,8 +32,8 @@ struct PlayerDTO: Decodable {
   let playerCode: String
   let name: String
   let teamCode: String
-  let position: String
-  let batThrow: String
+  let position: String?
+  let batThrow: String?
   let backNumber: Int
   let battingOrder: Int?
   let cheerSongs: [CheerSongDTO]
@@ -45,6 +45,11 @@ struct CheerSongDTO: Decodable {
   let audioUrl: String
 }
 
+private enum PlayerFieldDefaults {
+  static let unknownPosition: String = "교체선수"
+  static let unknownBatThrow: String = ""
+}
+
 extension LineupDTO {
   func toEntity() -> [PlayerInfo] {
     return players.map { starterDTO in
@@ -53,8 +58,8 @@ extension LineupDTO {
         teamId: TeamID(teamCode),
         name: starterDTO.name,
         backNumber: starterDTO.backNumber,
-        position: starterDTO.position,
-        batThrow: starterDTO.batThrow,
+        position: starterDTO.position ?? PlayerFieldDefaults.unknownPosition,
+        batThrow: starterDTO.batThrow ?? PlayerFieldDefaults.unknownBatThrow,
         battingOrder: starterDTO.battingOrder,
         cheerSongs: starterDTO.cheerSongs.map {
           $0.toEntity(playerId: PlayerID(starterDTO.playerCode))
@@ -72,8 +77,8 @@ extension AllPlayersDTO {
         teamId: TeamID(playerDTO.teamCode),
         name: playerDTO.name,
         backNumber: playerDTO.backNumber,
-        position: playerDTO.position,
-        batThrow: playerDTO.batThrow,
+        position: playerDTO.position ?? PlayerFieldDefaults.unknownPosition,
+        batThrow: playerDTO.batThrow ?? PlayerFieldDefaults.unknownBatThrow,
         battingOrder: playerDTO.battingOrder,
         cheerSongs: playerDTO.cheerSongs.map {
           $0.toEntity(playerId: PlayerID(playerDTO.playerCode))
@@ -90,8 +95,8 @@ extension PlayerDTO {
       teamId: TeamID(self.teamCode),
       name: self.name,
       backNumber: self.backNumber,
-      position: self.position,
-      batThrow: self.batThrow,
+      position: self.position ?? PlayerFieldDefaults.unknownPosition,
+      batThrow: self.batThrow ?? PlayerFieldDefaults.unknownBatThrow,
       battingOrder: self.battingOrder,
       cheerSongs: self.cheerSongs.map {
         $0.toEntity(playerId: PlayerID(self.playerCode))
@@ -103,7 +108,7 @@ extension PlayerDTO {
 extension CheerSongDTO {
   func toEntity(playerId: PlayerID) -> CheerSongInfo {
     return CheerSongInfo(
-      id: "\(playerId)_\(title)",
+      id: "\(playerId.value)_\(title)",
       playerId: playerId,
       title: self.title,
       lyrics: self.lyrics,

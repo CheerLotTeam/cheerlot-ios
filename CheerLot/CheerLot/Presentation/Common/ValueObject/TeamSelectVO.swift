@@ -8,18 +8,20 @@
 import Foundation
 
 struct TeamSelectVO: Identifiable {
-  let id: TeamID
+  let id: String
   let englishFullName: String
   let longName: String
-  let asset: TeamAssetVO
 }
 
 extension TeamSelectVO {
   // Entity -> VO 변환
-  init(team: TeamInfo) {
-    self.id = team.id
-    self.englishFullName = team.englishFullName.replacingOccurrences(of: " ", with: "\n")
-    self.longName = team.longName
-    self.asset = .init(team.id)
+  init(from entity: TeamInfo) {
+    self.id = entity.id.value
+    self.englishFullName = entity.englishFullName.replacingOccurrences(of: " ", with: "\n")
+    self.longName = entity.longName
+  }
+
+  static func == (lhs: TeamSelectVO, rhs: TeamSelectVO) -> Bool {
+    lhs.id == rhs.id
   }
 }

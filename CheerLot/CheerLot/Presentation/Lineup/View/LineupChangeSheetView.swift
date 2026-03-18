@@ -18,55 +18,48 @@ struct LineupChangeSheetView: View {
   }
 
   var body: some View {
-    VStack(spacing: 18) {
-      header
-        .padding(.top, 18)
+    NavigationStack {
+      VStack(spacing: 18) {
+        header
+          .padding(.top, 10)
 
-      if let asset = viewModel.asset {
-        playerListGrid(asset: asset)
-      } else {
-        Color.clear
-      }
-    }
-    .toolBar_editMode(
-      title: "선발 라인업"
-    ) {
-      coordinator.dismissModal()
-    } onCheck: {
-      Task {
-        let success = await viewModel.swapPlayers()
-        if success {
-          onComplete()
-          coordinator.dismissModal()
+        if let asset = viewModel.asset {
+          playerListGrid(asset: asset)
+        } else {
+          Color.clear
         }
       }
-    }
-    .disabled(viewModel.isSwapping)
-    .overlay {
-      if viewModel.isLoading || viewModel.isSwapping {
-        ProgressView()
-          .frame(maxWidth: .infinity, maxHeight: .infinity)
-          .background(.ultraThinMaterial)
+      .toolBar_editMode(
+        title: "선발 라인업"
+      ) {
+        coordinator.dismissModal()
+      } onCheck: {
+        Task {
+          let success = await viewModel.swapPlayers()
+          if success {
+            onComplete()
+            coordinator.dismissModal()
+          }
+        }
+      }
+      .disabled(viewModel.isSwapping)
+      .overlay {
+        if viewModel.isLoading || viewModel.isSwapping {
+          ProgressView()
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .background(.ultraThinMaterial)
+        }
       }
     }
     .task {
       await viewModel.onAppear()
     }
-    .alert("오류", isPresented: .constant(viewModel.errorMessage != nil)) {
-      Button("다시 시도") {
-        viewModel.errorMessage = nil
-        Task {
-          await viewModel.onAppear()
-        }
-      }
-      Button("취소", role: .cancel) {
-        viewModel.errorMessage = nil
-      }
-    } message: {
-      if let error = viewModel.errorMessage {
-        Text(error)
-      }
-    }
+    .errorAlert(errorMessage: $viewModel.errorMessage)
+    .toastMessage(
+      isPresented: $viewModel.showToast,
+      message: viewModel.toastMessage,
+      showCaution: false
+    )
   }
 }
 
@@ -102,8 +95,4 @@ extension LineupChangeSheetView {
     }
     .scrollIndicators(.hidden)
   }
-}
-
-#Preview {
-
 }

@@ -39,7 +39,7 @@ struct LineupView: View {
           .frame(width: geo.size.width)
           .scrollIndicators(.hidden)
           .refreshable {
-            await viewModel.refresh()
+            await viewModel.loadData()
           }
         } else {
           Color.clear
@@ -48,7 +48,7 @@ struct LineupView: View {
         if viewModel.isLoading {
           ProgressView()
             .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .background(.ultraThinMaterial)
+            .background(.white)
         }
       }
       .toolBar_titleWithProfile(title: "선발 라인업") {
@@ -58,21 +58,13 @@ struct LineupView: View {
     .task {
       await viewModel.onAppear()
     }
-    .alert("오류", isPresented: .constant(viewModel.errorMessage != nil)) {
-      Button("다시 시도") {
-        viewModel.errorMessage = nil
-        Task {
-          await viewModel.onAppear()
-        }
-      }
-      Button("취소", role: .cancel) {
-        viewModel.errorMessage = nil
-      }
-    } message: {
-      if let error = viewModel.errorMessage {
-        Text(error)
-      }
+    .errorWithRetryAlert(errorMessage: $viewModel.errorMessage) {
+      await viewModel.onAppear()
     }
+    .toastMessage(
+      isPresented: $viewModel.showToast,
+      message: viewModel.toastMessage
+    )
   }
 
   // MARK: - Height 계산
@@ -124,7 +116,8 @@ extension LineupView {
     )
   }
 
-  private func cardContents(asset: LineupAssetVO, cardHeight: CGFloat, cardWidth: CGFloat) -> some View
+  private func cardContents(asset: LineupAssetVO, cardHeight: CGFloat, cardWidth: CGFloat)
+    -> some View
   {
     ZStack {
       VStack(spacing: cardSpacing) {
@@ -195,18 +188,13 @@ extension LineupView {
           )
           .frame(height: cellHeight(cardHeight: cardHeight))
           .padding(.horizontal, 5.5)
+          .contentShape(Rectangle())
           .onTapGesture {
-            if player.cheerSongs.count >= 2 {
-              coordinator.presentModal(
-                .cheerSongList(
-                  asset: asset.base,
-                  player: player,
-                  lineupPlayers: viewModel.lineupPlayers
-                )
-              )
-            } else if let firstSong = player.cheerSongs.first {
-              goToLineupPlayback()
-            }
+            handlePlayerTap(
+              coordinator: coordinator,
+              player: player,
+              asset: asset
+            )
           }
 
           if index < viewModel.lineupPlayers.count - 1 {
@@ -227,7 +215,7 @@ extension LineupView {
                 lineupPlayer: player,
                 onComplete: {
                   Task {
-                    await viewModel.refresh()
+                    await viewModel.loadData()
                   }
                 }))
           },
@@ -242,7 +230,6 @@ extension LineupView {
     .scrollDisabled(true)
     .scrollContentBackground(.hidden)
     .clipShape(Rectangle())
-    .contentShape(Rectangle())
   }
 
   private func hasNoGameView(asset: LineupAssetVO, status: GameStatus) -> some View {
@@ -275,6 +262,27 @@ extension LineupView {
           )
       }
       Spacer()
+    }
+  }
+
+  private func handlePlayerTap(
+    coordinator: AppCoordinator,
+    player: LineupPlayerVO,
+    asset: LineupAssetVO
+  ) {
+    if player.cheerSongs.count >= 2 {
+      coordinator.presentModal(
+        .cheerSongList(
+          asset: asset.base,
+          player: player,
+          lineupPlayers: viewModel.lineupPlayers
+        )
+      )
+    } else if let firstSong = player.cheerSongs.first {
+      // 1곡: 바로 재생
+      goToLineupPlayback()
+    } else {
+      viewModel.showNoSongToast()
     }
   }
 

@@ -54,7 +54,7 @@ struct TeamDataSource {
         shortName: "한화",
         longName: "한화 이글스",
         englishFullName: "HANWHA EAGLES",
-        slogan: "Ride The Storm"
+        slogan: "BURNING UP"
       )
 
     case .lg:
@@ -72,7 +72,7 @@ struct TeamDataSource {
         shortName: "롯데",
         longName: "롯데 자이언츠",
         englishFullName: "LOTTE GIANTS",
-        slogan: "Aim High"
+        slogan: "투혼투지, GO HIGH"
       )
 
     case .nc:
@@ -81,7 +81,7 @@ struct TeamDataSource {
         shortName: "NC",
         longName: "NC 다이노스",
         englishFullName: "NC DINOS",
-        slogan: "거침없이 가자!"
+        slogan: "거침없이 가자! 위풍당당"
       )
 
     case .ssg:
@@ -99,7 +99,7 @@ struct TeamDataSource {
         shortName: "두산",
         longName: "두산 베어스",
         englishFullName: "DOOSAN BEARS",
-        slogan: "Time to MOVE ON"
+        slogan: "TIME TO MOVE ON"
       )
 
     case .kt:
@@ -108,7 +108,7 @@ struct TeamDataSource {
         shortName: "KT",
         longName: "KT 위즈",
         englishFullName: "KT WIZ",
-        slogan: "UP! Great KT"
+        slogan: "마법의 시작, 위대한 도약! GREAT KT"
       )
 
     case .kiwoom:
@@ -117,7 +117,7 @@ struct TeamDataSource {
         shortName: "키움",
         longName: "키움 히어로즈",
         englishFullName: "KIWOOM HEROES",
-        slogan: "도약 영웅의 서막"
+        slogan: "영웅, 도전, 승리"
       )
 
     case .kia:
@@ -126,7 +126,7 @@ struct TeamDataSource {
         shortName: "KIA",
         longName: "기아 타이거즈",
         englishFullName: "KIA TIGERS",
-        slogan: "압도하라! V13"
+        slogan: "다시, 뜨겁게 ALWAYS KIA TIGERS"
       )
     }
   }
@@ -144,6 +144,27 @@ struct TeamDataSource {
     case .nc: return APICode.nc.rawValue
     case .samsung: return APICode.samsung.rawValue
     case .ssg: return APICode.ssg.rawValue
+    }
+  }
+
+  static func fromAPICode(_ apiCode: String) -> TeamCode? {
+    let normalized =
+      apiCode
+      .trimmingCharacters(in: .whitespacesAndNewlines)
+      .lowercased()
+
+    switch normalized {
+    case APICode.doosan.rawValue: return .doosan
+    case APICode.hanwha.rawValue: return .hanwha
+    case APICode.kia.rawValue: return .kia
+    case APICode.kiwoom.rawValue: return .kiwoom
+    case APICode.kt.rawValue: return .kt
+    case APICode.lg.rawValue: return .lg
+    case APICode.lotte.rawValue: return .lotte
+    case APICode.nc.rawValue: return .nc
+    case APICode.samsung.rawValue: return .samsung
+    case APICode.ssg.rawValue: return .ssg
+    default: return nil
     }
   }
 

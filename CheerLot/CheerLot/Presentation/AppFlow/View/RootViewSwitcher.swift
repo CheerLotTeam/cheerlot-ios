@@ -10,10 +10,15 @@ import SwiftUI
 struct RootViewSwitcher: View {
 
   @State private var appState: AppState = .splash
+  @State private var isConfigCheckComplete = false
+  @State private var isAnimationComplete = false
   @State private var audioPlayer: AudioPlaybackService = DIContainer.shared.resolve(
     AudioPlaybackService.self)
   @State private var teamSelectViewModel = ViewModelFactory.shared.createTeamSelectViewModel(
     mode: .onboarding)
+
+  @ObservationIgnored
+  @Injected(TeamSelectionUseCase.self) private var teamSelectionUseCase
 
   // TODO: - 분리 예정
   @StateObject private var remoteConfigChecker = RemoteConfigChecker()
@@ -22,6 +27,9 @@ struct RootViewSwitcher: View {
     content
       .environmentObject(remoteConfigChecker)
       .animation(.easeInOut(duration: 0.3), value: appState)
+      .onReceive(NotificationCenter.default.publisher(for: .teamSelected)) { _ in
+        transitionToMain()
+      }
   }
 }
 
@@ -30,58 +38,61 @@ extension RootViewSwitcher {
   private var content: some View {
     switch appState {
     case .splash:
-      SplashView()
-        .task {
-          await handleSplash()
-        }
+      SplashView {
+        handleAnimationComplete()
+      }
+      .task {
+        await handleConfigCheck()
+      }
 
     case .onboarding:
       TeamSelectView(viewModel: teamSelectViewModel)
-        .onReceive(
-          NotificationCenter.default.publisher(for: .teamSelected)
-        ) { notification in
-          if let team = notification.object as? TeamInfo {
-            appState = .main(team: team)
-          }
-        }
 
     case .main(let team):
       MainTabView(team: team, audioPlayer: audioPlayer)
         .transition(.opacity)
         .id(team.id)
-        .onReceive(
-          NotificationCenter.default.publisher(for: .teamSelected)
-        ) { notification in
-          // 팀 재선택 시
-          if let newTeam = notification.object as? TeamInfo {
-            appState = .main(team: newTeam)
-          }
-        }
     }
   }
 
-  private func handleSplash() async {
-    // 1. Remote Config 체크
+  @MainActor
+  private func handleConfigCheck() async {
+    // Remote Config 체크
     await remoteConfigChecker.fetchRemoteConfig()
 
-    // 2. 서버 점검 또는 강제 업데이트 필요 시 리턴
+    // 서버 점검 또는 강제 업데이트 필요 시 리턴
     if remoteConfigChecker.isServerChecking || remoteConfigChecker.shouldForceUpdate {
       return
     }
 
-    // 3. 최소 스플래시 시간
-    try? await Task.sleep(nanoseconds: 1_250_000_000)
+    // Config 체크 완료
+    isConfigCheckComplete = true
 
-    // 4. 팀 선택 여부 확인
-    let useCase = DIContainer.shared.resolve(TeamSelectionUseCase.self)
+    // 애니메이션도 완료되었으면 화면 전환
+    checkAndTransition()
+  }
 
-    if useCase.hasSelectedTeam() {
-      if let team = useCase.getCurrentTeam() {
-        appState = .main(team: team)
-      }
+  @MainActor
+  private func handleAnimationComplete() {
+    isAnimationComplete = true
+    checkAndTransition()
+  }
+
+  @MainActor
+  private func checkAndTransition() {
+    guard isConfigCheckComplete && isAnimationComplete else { return }
+
+    if teamSelectionUseCase.hasSelectedTeam() {
+      transitionToMain()
     } else {
       appState = .onboarding
     }
+  }
+
+  @MainActor
+  private func transitionToMain() {
+    guard let team = teamSelectionUseCase.getCurrentTeam() else { return }
+    appState = .main(team: team)
   }
 }
 

@@ -40,8 +40,12 @@ final class TeamPlayersSyncUseCaseImpl: TeamPlayersSyncUseCase {
       return
     }
 
-    // 버전 비교
-    if localTeam.versionInfo.playersVersion != serverVersions.playersVersion {
+    // 로컬 선수 존재 확인
+    let localPlayers = try await playerLocalRepository.fetchAllPlayers(teamId)
+
+    // 로컬 선수 데이터가 비어 있거나 버전이 다를경우 동기화
+    if localPlayers.isEmpty || localTeam.versionInfo.playersVersion != serverVersions.playersVersion
+    {
       try await performSync(teamId, serverVersions.playersVersion)
     }
   }
@@ -57,11 +61,13 @@ final class TeamPlayersSyncUseCaseImpl: TeamPlayersSyncUseCase {
     // 서버에서 전체 선수 가져오기
     let allPlayers = try await playerRemoteRepository.fetchAllPlayers(teamId)
 
-    // 로컬 전체 삭제
-    try await playerLocalRepository.deleteAllPlayers(teamId)
+    try await playerLocalRepository.performTransaction {
+      // 로컬 전체 삭제
+      try await playerLocalRepository.deleteAllPlayers(teamId)
 
-    // 새로 저장
-    try await playerLocalRepository.createAllPlayers(allPlayers, teamId)
+      // 새로 저장
+      try await playerLocalRepository.createAllPlayers(allPlayers, teamId)
+    }
 
     // 팀 버전 업데이트
     try await updatePlayersVersion(teamId, newVersion)

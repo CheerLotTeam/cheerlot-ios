@@ -156,6 +156,16 @@ extension DIContainer {
       )
     }
 
+    register(LineupManagementUseCase.self) { container in
+      LineupManagementUseCaseImpl(
+        teamLocalRepository: container.resolve(TeamLocalRepository.self),
+        teamRemoteRepository: container.resolve(TeamRemoteRepository.self),
+        playerLocalRepository: container.resolve(PlayerLocalRepository.self),
+        playerRemoteRepository: container.resolve(PlayerRemoteRepository.self),
+        userSettingsRepository: container.resolve(UserSettingsRepository.self)
+      )
+    }
+
     register(LineupChangeUseCase.self) { container in
       LineupChangeUseCaseImpl(playerLocalRepository: container.resolve(PlayerLocalRepository.self))
     }

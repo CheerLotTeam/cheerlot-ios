@@ -11,4 +11,5 @@ enum UserDefaultsKey {
   static let selectedTeamId = "selectedTeamId"
   static let hasSelectedTeam = "hasSelectedTeam"
   static let showRecentLineup = "showRecentLineup"
+  static let appIconMode = "appIconMode"
 }

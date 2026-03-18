@@ -5,39 +5,35 @@
 //  Created by 이승진 on 7/10/25.
 //
 
-import AVKit
+import Lottie
 import SwiftUI
 
 /// 앱 실행시 보여주는 스플래시 화면
 struct SplashView: View {
   // TODO: - 분리 예정
   @EnvironmentObject private var remoteConfigChecker: RemoteConfigChecker
-
-  @State private var player = AVPlayer(
-    url: Bundle.main.url(forResource: "splash", withExtension: "mp4")!
-  )
-
-  private enum Constants {
-    static let splashDuration: UInt64 = 1_250_000_000  // 1.25초
-  }
+  let onAnimationComplete: () -> Void
 
   var body: some View {
-    Group {
-      VideoPlayer(player: player)
-        .disabled(true)
-        .overlay(Color.clear)
-        .ignoresSafeArea()
-        .task {
-          player.play()
+    LottieView {
+      try await DotLottieFile.named("cheerlot_splash")
+    }
+    .playing()
+    .animationDidFinish { finished in
+      if finished {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+          onAnimationComplete()
         }
-        // foreground로 복귀할 때마다 checkVersion 함수를 실행
-        .onReceive(
-          NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)
-        ) { _ in
-          Task {
-            await remoteConfigChecker.fetchRemoteConfig()
-          }
-        }
+      }
+    }
+    .ignoresSafeArea()
+    // foreground로 복귀할 때마다 checkVersion 함수를 실행
+    .onReceive(
+      NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)
+    ) { _ in
+      Task {
+        await remoteConfigChecker.fetchRemoteConfig()
+      }
     }
     .alert("최신 업데이트 안내", isPresented: $remoteConfigChecker.shouldForceUpdate) {
       Button("확인") {

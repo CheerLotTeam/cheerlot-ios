@@ -53,7 +53,7 @@ enum NetworkError: Error {
         case NSURLErrorTimedOut:
           return "요청 시간이 초과되었습니다."
         default:
-          return "네트워크 연결 상태 확인 후\n다시 시도해 주세요"
+          return "네트워크 연결 상태 확인 후 다시 시도해 주세요"
         }
 
       case .statusCode(let response):
