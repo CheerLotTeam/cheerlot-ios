@@ -129,7 +129,7 @@ extension TypeStyle {
   /// Lyrics Typo
   public static let LyricsTypo = TypeStyle(
     font: Font.Pretendard.semibold.swiftUIFont(size: 22),
-    uiFont: Font.Pretendard.semibold.swiftUIFont(size: 22),
+    uiFont: Font.Pretendard.semibold.uiFont(size: 22),
     size: 22,
     lineHeight: 1.5,
     letterSpacing: 0
