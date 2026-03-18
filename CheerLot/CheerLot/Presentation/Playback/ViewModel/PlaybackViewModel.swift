@@ -23,9 +23,9 @@ final class PlaybackViewModel {
   var duration: Double = 1
 
   /// UI 표시용 메타 정보
-  let title: String
-  let playerName: String
-  let lyrics: String
+  var title: String
+  var playerName: String
+  var lyrics: String
 
   // MARK: - Dependencies
 
@@ -80,6 +80,16 @@ final class PlaybackViewModel {
     progress = max(seconds, 0)
     duration = max(audioPlayer.duration, 1)
   }
+  
+  func playNext() {
+    audioPlayer.playNext()
+    syncFromService()
+  }
+  
+  func playPrevious() {
+    audioPlayer.playPrevious()
+    syncFromService()
+  }
 }
 
 // MARK: - Private Helpers
@@ -91,6 +101,12 @@ extension PlaybackViewModel {
     isPlaying = audioPlayer.isPlaying
     progress = audioPlayer.currentTime
     duration = max(audioPlayer.duration, 1)
+    
+    if let song = audioPlayer.nowPlaying {
+      title = song.title
+      lyrics = song.lyrics
+      playerName = audioPlayer.currentPlayerName ?? song.playerId.value
+    }
   }
 
   /// 진행 상태를 주기적으로 업데이트
