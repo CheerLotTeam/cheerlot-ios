@@ -35,12 +35,10 @@ final class ViewModelFactory {
   }
 
   // MARK: - TeamMembers
-  func createTeamMembersViewModel(team: TeamInfo, audioPlayer: AudioPlaybackService)
-    -> TeamMembersViewModel
-  {
+  func createTeamMembersViewModel(audioPlayer: AudioPlaybackService) -> TeamMembersViewModel {
     TeamMembersViewModel(audioPlayer: audioPlayer)
   }
-
+  
   // MARK: - Playback
   func createPlaybackViewModel(
     song: CheerSongInfo,
@@ -51,7 +49,7 @@ final class ViewModelFactory {
   }
 
   // MARK: - Setting
-  func createSettingViewModel(coordinator: AppCoordinator) -> SettingViewModel {
-    SettingViewModel(coordinator: coordinator)
+  func createSettingViewModel() -> SettingViewModel {
+    SettingViewModel()
   }
 }
