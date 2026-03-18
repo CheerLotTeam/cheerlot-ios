@@ -17,7 +17,7 @@ struct PlaybackView: View {
 
   init(asset: TeamAssetVO, viewModel: PlaybackViewModel) {
     self.asset = asset
-    self.viewModel = viewModel
+    _viewModel = State(initialValue: viewModel)
   }
 
   // MARK: - Body
@@ -62,7 +62,7 @@ extension PlaybackView {
   private var content: some View {
     ScrollView(showsIndicators: true) {
       LazyVStack(alignment: .leading) {
-        Text(viewModel.lyrics)
+        Text(viewModel.lyrics.replacingOccurrences(of: "\\n", with: "\n"))
       }
       .multilineTextAlignment(.leading)
       .font(.B1_1)
@@ -104,14 +104,18 @@ extension PlaybackView {
   /// 컨트롤
   private var controlView: some View {
     HStack(spacing: 44) {
-      playbackButton("backward.fill")
+      playbackButton("backward.fill") {
+        viewModel.playPrevious()
+      }
       playbackButton(
         viewModel.isPlaying ? "pause.fill" : "play.fill",
         center: true
       ) {
         viewModel.togglePlayback()
       }
-      playbackButton("forward.fill")
+      playbackButton("forward.fill") {
+        viewModel.playNext()
+      }
     }
   }
 
