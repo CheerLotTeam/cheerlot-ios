@@ -38,8 +38,8 @@ enum ModalRoute: Identifiable {
 
   var id: String {
     switch self {
-    case let .teamChange(selectedTeam):
-      return "teamChange_\(selectedTeam)"
+    case let .teamChange(selectedTeamId):
+      return "teamChange_\(selectedTeamId)"
     default:
       return String(describing: self)
     }
