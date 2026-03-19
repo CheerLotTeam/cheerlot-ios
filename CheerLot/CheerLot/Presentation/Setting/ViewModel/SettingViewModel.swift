@@ -42,8 +42,7 @@ final class SettingViewModel {
   // MARK: - Lifecycle
   func onAppear() {
     if let team = teamSelectionUseCase.getCurrentTeam(),
-      team.id != currentTeam.id
-    {
+      team.id != currentTeam.id {
       currentTeam = team
     }
 
@@ -53,7 +52,7 @@ final class SettingViewModel {
     }
   }
 
-  //MARK: - Navigation
+  // MARK: - Navigation
   func didTapBack() {
     coordinator.pop()
   }
@@ -74,7 +73,8 @@ final class SettingViewModel {
   }
 
   // MARK: - Setting Actions
-  func didUpdateSelectedTeam(_ team: TeamInfo) {
+  func didUpdateSelectedTeam() {
+    guard let team = teamSelectionUseCase.getCurrentTeam() else { return }
     currentTeam = team
 
     if appIconMode == .team {
