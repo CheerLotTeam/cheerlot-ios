@@ -21,19 +21,23 @@ struct PlaybackView: View {
   }
 
   // MARK: - Body
-  var body: some View {
-    VStack(spacing: 14) {
-      Capsule()
-        .fill(.gray200.opacity(0.6))
-        .frame(width: 60, height: 5)
-      mainView
+    var body: some View {
+        ZStack {
+            VStack(spacing: 14) {
+                Capsule()
+                    .fill(.gray200.opacity(0.6))
+                    .frame(width: 60, height: 5)
+                mainView
+            }
+            .padding(.top, 60)
+            .background(asset.primaryColor)
+            
+            MetalBackgroundView()
+        }
+        .ignoresSafeArea()
+        .onAppear { viewModel.onAppear() }
+        .onDisappear { viewModel.onDisappear() }
     }
-    .padding(.top, 60)
-    .background(asset.primaryColor)
-    .ignoresSafeArea()
-    .onAppear { viewModel.onAppear() }
-    .onDisappear { viewModel.onDisappear() }
-  }
 }
 
 extension PlaybackView {
