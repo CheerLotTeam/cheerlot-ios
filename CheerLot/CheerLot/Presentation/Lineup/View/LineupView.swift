@@ -220,7 +220,10 @@ extension LineupView {
                 }))
           },
           onSelectSong: { cheerSong in
-            goToLineupPlayback()
+            goToLineupPlayback(
+              player: player,
+              song: cheerSong
+            )
           }
         )
       }
@@ -279,14 +282,32 @@ extension LineupView {
         )
       )
     } else if let firstSong = player.cheerSongs.first {
-      // 1곡: 바로 재생
-      goToLineupPlayback()
+      goToLineupPlayback(
+        player: player,
+        song: firstSong
+      )
     } else {
       viewModel.showNoSongToast()
     }
   }
+  
+  private func goToLineupPlayback(
+    player: LineupPlayerVO,
+    song: CheerSongVO
+  ) {
+    let startIndex = viewModel.lineupPlaybackStartIndex(
+      playerId: player.id,
+      songId: song.id
+    )
 
-  private func goToLineupPlayback() {
-    // TODO: - LineupPlayback으로 넘기기
+    coordinator.presentModal(
+      .lineupPlayback(
+        teamId: TeamID(player.teamId),
+        players: viewModel.lineupPlayers,
+        startIndex: startIndex,
+        gameDate: viewModel.gameInfo?.gameDateText ?? "",
+        teamsText: viewModel.gameInfo?.gameTeamsText ?? ""
+      )
+    )
   }
 }
