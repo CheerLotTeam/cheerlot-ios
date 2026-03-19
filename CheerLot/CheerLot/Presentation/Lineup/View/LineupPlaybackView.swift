@@ -8,13 +8,18 @@
 import SwiftUI
 
 struct LineupPlaybackView: View {
+  @Environment(\.scenePhase) private var scenePhase
+  @Environment(AppCoordinator.self) private var coordinator
+  
   let asset: LineupPlaybackAssetVO
-  let players: [PlayerInfo]
-  let startIndex: Int
+  let gameDate: String
+  let teamsText: String
 
+  @State private var viewModel: LineupPlaybackViewModel
   @State private var scrollPosition: Int?
   @State private var itemsArray: [[CarouselItem]] = []
   @State private var isRebalancing: Bool = false
+  @State private var lastRealIndex: Int?
 
   private let animationDuration: TimeInterval = 0.3
 
@@ -27,7 +32,7 @@ struct LineupPlaybackView: View {
   }
 
   private var carouselItems: [CarouselItem] {
-    players.flatMap { player in
+    viewModel.players.flatMap { player in
       player.cheerSongs.map { song in
         CarouselItem(id: "\(player.id)-\(song.id)", player: player, cheerSong: song)
       }
@@ -45,6 +50,18 @@ struct LineupPlaybackView: View {
     guard !carouselItems.isEmpty else { return 0 }
     return scrollPosition % carouselItems.count
   }
+  
+  init(
+    asset: LineupPlaybackAssetVO,
+    gameDate: String,
+    teamsText: String,
+    viewModel: LineupPlaybackViewModel
+  ) {
+    self.asset = asset
+    self.gameDate = gameDate
+    self.teamsText = teamsText
+    _viewModel = State(initialValue: viewModel)
+  }
 
   var body: some View {
     ZStack {
@@ -58,6 +75,30 @@ struct LineupPlaybackView: View {
         pageIndicator
       }
     }
+    .toolBar_gameInfo(date: gameDate, teams: teamsText, onClose: {
+      viewModel.stopPlayback()
+      coordinator.dismissModal()
+    })
+    .onAppear {
+      viewModel.onAppear()
+      // 3벌로 초기화, 두번째 벌의 첫번째 아이템에서 시작
+      itemsArray = [carouselItems, carouselItems, carouselItems]
+      scrollPosition = carouselItems.count + viewModel.startIndex
+      lastRealIndex = viewModel.startIndex
+    }
+    .onDisappear {
+      viewModel.stopPlayback()
+    }
+    .onChange(of: scenePhase) { _, newPhase in
+      if newPhase != .active {
+        viewModel.pausePlayback()
+      }
+    }
+    .onChange(of: viewModel.currentPlaybackIndex) { _, newValue in
+      guard !carouselItems.isEmpty else { return }
+      scrollPosition = carouselItems.count + newValue
+      lastRealIndex = newValue
+    }
   }
 }
 
@@ -70,14 +111,18 @@ extension LineupPlaybackView {
         ForEach(0..<itemsTemp.count, id: \.self) { index in
           let item = itemsTemp[index]
 
-          cardView(item: item, pageHeight: pageHeight)
-            .id("\(index)-\(item.id)")
-            .frame(width: pageWidth)
-            .scrollTransition(.interactive, axis: .horizontal) { content, phase in
-              content
-                .scaleEffect(phase.isIdentity ? 1.0 : 0.92)
-                .opacity(phase.isIdentity ? 1.0 : 0.3)
-            }
+          cardView(
+            item: item,
+            itemIndex: index % max(carouselItems.count, 1),
+            pageHeight: pageHeight
+          )
+          .id(index)
+          .frame(width: pageWidth)
+          .scrollTransition(.interactive, axis: .horizontal) { content, phase in
+            content
+              .scaleEffect(phase.isIdentity ? 1.0 : 0.92)
+              .opacity(phase.isIdentity ? 1.0 : 0.3)
+          }
         }
       }
       .scrollTargetLayout()
@@ -86,11 +131,6 @@ extension LineupPlaybackView {
     .scrollTargetBehavior(.viewAligned)
     .scrollPosition(id: $scrollPosition, anchor: .center)
     .scrollIndicators(.hidden)
-    .onAppear {
-      // 3벌로 초기화, 두번째 벌의 첫번째 아이템에서 시작
-      itemsArray = [carouselItems, carouselItems, carouselItems]
-      scrollPosition = carouselItems.count + startIndex
-    }
     .onChange(of: scrollPosition) {
       guard let scrollPosition, !isRebalancing else { return }
 
@@ -120,17 +160,31 @@ extension LineupPlaybackView {
         }
         return
       }
+      
+      let realIndex = scrollPosition % itemCount
+      guard lastRealIndex != realIndex else { return }
+      
+      lastRealIndex = realIndex
+      viewModel.didScrollToCard(at: realIndex)
     }
   }
 
   @ViewBuilder
-  private func cardView(item: CarouselItem, pageHeight: CGFloat) -> some View {
+  private func cardView(
+    item: CarouselItem,
+    itemIndex: Int,
+    pageHeight: CGFloat
+  ) -> some View {
     LineupPlayCard(
       asset: asset,
       battingOrder: item.player.battingOrder ?? 0,
       name: item.player.name,
       title: item.cheerSong.title,
-      lyrics: item.cheerSong.lyrics
+      lyrics: item.cheerSong.lyrics,
+      isPlaying: viewModel.isPlaying && currentRealIndex == itemIndex,
+      onTapPlayPause: {
+        viewModel.togglePlayback()
+      }
     )
     .frame(height: pageHeight)
   }
@@ -153,38 +207,41 @@ extension LineupPlaybackView {
 extension LineupPlaybackView {
   private struct CarouselItem: Identifiable {
     let id: String
-    let player: PlayerInfo
-    let cheerSong: CheerSongInfo
+    let player: LineupPlayerVO
+    let cheerSong: CheerSongVO
   }
 }
 
 #Preview {
-  let players: [PlayerInfo] = (1...9).map { i in
-    PlayerInfo(
-      id: PlayerID("\(i)"),
-      teamId: "samsung",
-      name: "심재훈",
-      backNumber: i,
-      position: "포지션",
-      batThrow: "좌타",
-      battingOrder: i,
-      cheerSongs: [
-        CheerSongInfo(
-          id: "\(i)", playerId: PlayerID("\(i)"), title: "응원가 \(i)",
-          lyrics:
-            "삼성의 심재훈 삼성의 심재훈\n안타를 날!려!버!려! 삼성 심재훈\n삼성의 심재훈 삼성의 심재훈\n홈런을 날!려!버!려! 삼성 심재훈\n삼성의 심재훈 삼성의 심재훈\n안타를 날!려!버!려! 삼성 심재훈\n삼성의 심재훈 삼성의 심재훈\n홈런을 날!려!버!려! 삼성 심재훈",
-          audioURL: ""),
-        CheerSongInfo(
-          id: "\(i)", playerId: PlayerID("\(i)"), title: "응원가 \(i)",
-          lyrics:
-            "삼성의 심재훈 삼성의 심재훈\n안타를 날!려!버!려! 삼성 심재훈\n삼성의 심재훈 삼성의 심재훈\n홈런을 날!려!버!려! 삼성 심재훈\n삼성의 심재훈 삼성의 심재훈\n안타를 날!려!버!려! 삼성 심재훈\n삼성의 심재훈 삼성의 심재훈\n홈런을 날!려!버!려! 삼성 심재훈",
-          audioURL: ""),
-      ]
-    )
-  }
-
-  LineupPlaybackView(
-    asset: LineupPlaybackAssetVO(base: TeamAssetVO(TeamDataSource.toEntity(.samsung).id)),
-    players: players, startIndex: 2
-  )
+//  let players: [LineupPlayerVO] = (1...9).map { i in
+//    LineupPlayerVO(
+//      from: PlayerInfo(
+//        id: PlayerID("\(i)"),
+//        teamId: TeamID("samsung"),
+//        name: "심재훈",
+//        backNumber: i,
+//        position: "포지션",
+//        batThrow: "좌타",
+//        battingOrder: i,
+//        cheerSongs: [
+//          CheerSongInfo(
+//            id: "\(i)", playerId: PlayerID("\(i)"), title: "응원가 \(i)",
+//            lyrics:
+//              "삼성의 심재훈 삼성의 심재훈\n안타를 날!려!버!려! 삼성 심재훈\n삼성의 심재훈 삼성의 심재훈\n홈런을 날!려!버!려! 삼성 심재훈\n삼성의 심재훈 삼성의 심재훈\n안타를 날!려!버!려! 삼성 심재훈\n삼성의 심재훈 삼성의 심재훈\n홈런을 날!려!버!려! 삼성 심재훈",
+//            audioURL: ""),
+//          CheerSongInfo(
+//            id: "\(i)", playerId: PlayerID("\(i)"), title: "응원가 \(i)",
+//            lyrics:
+//              "삼성의 심재훈 삼성의 심재훈\n안타를 날!려!버!려! 삼성 심재훈\n삼성의 심재훈 삼성의 심재훈\n홈런을 날!려!버!려! 삼성 심재훈\n삼성의 심재훈 삼성의 심재훈\n안타를 날!려!버!려! 삼성 심재훈\n삼성의 심재훈 삼성의 심재훈\n홈런을 날!려!버!려! 삼성 심재훈",
+//            audioURL: ""),
+//        ]
+//      )
+//    )
+//  }
+//
+//  LineupPlaybackView(
+//    asset: LineupPlaybackAssetVO(base: TeamAssetVO(TeamDataSource.toEntity(.samsung).id)),
+//    players: players,
+//    startIndex: 2
+//  )
 }
