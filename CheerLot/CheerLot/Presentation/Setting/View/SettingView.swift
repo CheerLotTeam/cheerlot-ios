@@ -48,6 +48,7 @@ struct SettingView: View {
       .padding(.top, 12)
       .padding(.bottom, 24)
     }
+    .hideMiniPlayerBar()
     .onAppear {
       viewModel.onAppear()
     }
