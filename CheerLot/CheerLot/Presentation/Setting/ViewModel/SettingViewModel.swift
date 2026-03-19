@@ -42,7 +42,8 @@ final class SettingViewModel {
   // MARK: - Lifecycle
   func onAppear() {
     if let team = teamSelectionUseCase.getCurrentTeam(),
-      team.id != currentTeam.id {
+      team.id != currentTeam.id
+    {
       currentTeam = team
     }
 

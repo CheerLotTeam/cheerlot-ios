@@ -20,17 +20,17 @@ struct LyricsView: View {
         let member = members[index]
         Group {
           if !member.cheerSongs.isEmpty {
-              LyricsScrollView(member: member)
+            LyricsScrollView(member: member)
           } else {
             EmptyCheerSongView
           }
         }
         .toolbar {
-            ToolbarItem(placement: .topBarTrailing) {
-                Text("\(member.name)")
-                    .foregroundStyle(asset.secondaryColor)
-                    .font(.SB7)
-            }
+          ToolbarItem(placement: .topBarTrailing) {
+            Text("\(member.name)")
+              .foregroundStyle(asset.secondaryColor)
+              .font(.SB7)
+          }
         }
         .tag(index)
       }
@@ -45,31 +45,31 @@ struct LyricsView: View {
 }
 
 extension LyricsView {
-    private func LyricsScrollView(member: LineupMemberVO) -> some View {
-        ScrollView {
-          VStack(alignment: .leading, spacing: 20) {
-            ForEach(member.cheerSongs, id: \.id) { song in
-                VStack(spacing: 4) {
-                    if member.cheerSongs.count > 1 {
-                        Text(song.title)
-                            .font(.R3)
-                            .foregroundStyle(.gray300)
-                    }
-
-                    Text(song.lyrics)
-                        .font(.LyricsTypo)
-                        .foregroundStyle(.grayWhite)
-                }
+  private func LyricsScrollView(member: LineupMemberVO) -> some View {
+    ScrollView {
+      VStack(alignment: .leading, spacing: 20) {
+        ForEach(member.cheerSongs, id: \.id) { song in
+          VStack(spacing: 4) {
+            if member.cheerSongs.count > 1 {
+              Text(song.title)
+                .font(.R3)
+                .foregroundStyle(.gray300)
             }
+
+            Text(song.lyrics)
+              .font(.LyricsTypo)
+              .foregroundStyle(.grayWhite)
           }
-          .padding()
         }
+      }
+      .padding()
     }
-    
-    private var EmptyCheerSongView: some View {
-        Text("아직 개인\n응원가가 없어요")
-            .font(.SB6)
-            .foregroundStyle(.grayWhite)
-            .multilineTextAlignment(.center)
-    }
+  }
+
+  private var EmptyCheerSongView: some View {
+    Text("아직 개인\n응원가가 없어요")
+      .font(.SB6)
+      .foregroundStyle(.grayWhite)
+      .multilineTextAlignment(.center)
+  }
 }

@@ -12,7 +12,9 @@ final class WatchTeamRepositoryImpl: WatchTeamRepository {
   private let defaults = UserDefaults.standard
 
   func fetchCurrentTeam() -> TeamInfo? {
-    guard let teamId = defaults.string(forKey: WatchUserDefaultsKey.selectedTeamId) else { return nil }
+    guard let teamId = defaults.string(forKey: WatchUserDefaultsKey.selectedTeamId) else {
+      return nil
+    }
     guard let teamCode = TeamDataSource.TeamCode(rawValue: teamId) else { return nil }
     return TeamDataSource.toEntity(teamCode)
   }

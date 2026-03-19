@@ -24,7 +24,9 @@ final class WatchSyncRepositoryImpl: NSObject, WatchSyncRepository {
   }
 
   func sendLineup(_ players: [PlayerInfo]) {
-    guard let data = try? JSONEncoder().encode(players.map { PlayerSyncDTO(from: $0) }) else { return }
+    guard let data = try? JSONEncoder().encode(players.map { PlayerSyncDTO(from: $0) }) else {
+      return
+    }
     updateContext([WatchContextKey.lineup: data])
   }
 
@@ -33,8 +35,9 @@ final class WatchSyncRepositoryImpl: NSObject, WatchSyncRepository {
   /// 기존 context에 병합하여 업데이트 (덮어쓰기 방지)
   private func updateContext(_ partial: [String: Any]) {
     guard session.activationState == .activated,
-          session.isPaired,
-          session.isWatchAppInstalled else { return }
+      session.isPaired,
+      session.isWatchAppInstalled
+    else { return }
 
     var merged = session.applicationContext
     merged.merge(partial) { _, new in new }

@@ -15,5 +15,5 @@ enum UserDefaultsKey {
 }
 
 enum AppGroup {
-    static let id = "group.shared.CheerLot"
+  static let id = "group.shared.CheerLot"
 }

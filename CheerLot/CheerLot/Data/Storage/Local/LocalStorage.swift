@@ -17,16 +17,16 @@ final class LocalStorage {
     let schema = Schema([
       Team.self,
       Player.self,
-      CheerSong.self
+      CheerSong.self,
     ])
-      
+
     let configuration = ModelConfiguration(
       isStoredInMemoryOnly: false,
       groupContainer: .identifier(AppGroup.id)
     )
 
     do {
-        return try ModelContainer(
+      return try ModelContainer(
         for: schema,
         migrationPlan: CheerLotMigrationPlan.self,
         configurations: configuration

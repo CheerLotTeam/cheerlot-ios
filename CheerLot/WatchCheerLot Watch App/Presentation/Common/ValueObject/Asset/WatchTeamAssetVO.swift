@@ -24,16 +24,16 @@ final class WatchTeamAssetVO {
   var secondaryColor: Color { colors.secondary }
   var bgGradientColor: Color { colors.bgGradient }
 
-    var bgGradient: LinearGradient {
-        LinearGradient(
-            gradient: Gradient(stops: [
-                .init(color: bgGradientColor.opacity(0.0), location: 0.0),
-                .init(color: bgGradientColor, location: 0.8)
-            ]),
-            startPoint: .top,
-            endPoint: .bottom
-        )
-    }
+  var bgGradient: LinearGradient {
+    LinearGradient(
+      gradient: Gradient(stops: [
+        .init(color: bgGradientColor.opacity(0.0), location: 0.0),
+        .init(color: bgGradientColor, location: 0.8),
+      ]),
+      startPoint: .top,
+      endPoint: .bottom
+    )
+  }
 }
 
 extension WatchTeamAssetVO {

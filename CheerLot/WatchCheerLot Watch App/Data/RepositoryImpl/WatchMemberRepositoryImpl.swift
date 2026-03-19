@@ -13,10 +13,11 @@ final class WatchMemberRepositoryImpl: WatchMemberRepository {
 
   func fetchLineupMembers(teamId: TeamID) -> [PlayerInfo] {
     guard let data = defaults.data(forKey: WatchUserDefaultsKey.lineupMembers),
-          let dtos = try? JSONDecoder().decode([PlayerSyncDTO].self, from: data)
+      let dtos = try? JSONDecoder().decode([PlayerSyncDTO].self, from: data)
     else { return [] }
 
-    return dtos
+    return
+      dtos
       .map { $0.toPlayerInfo() }
       .filter { $0.teamId == teamId }
   }
