@@ -16,13 +16,15 @@ protocol AudioPlayer {
   var duration: Double { get }
   var playbackMode: PlaybackMode { get }
   var canSkipManually: Bool { get }
-  
+
   /// 현재 재생 큐에서 재생 중인 곡의 인덱스
   var currentQueueIndex: Int { get }
 
   func play(_ song: CheerSongInfo)
   func play(_ song: CheerSongInfo, playerName: String?, coverImageName: String?)
-  func playQueue(_ songs: [CheerSongInfo], playerNames: [String], startAt index: Int, coverImageName: String?, mode: PlaybackMode)
+  func playQueue(
+    _ songs: [CheerSongInfo], playerNames: [String], startAt index: Int, coverImageName: String?,
+    mode: PlaybackMode)
   func playNext()
   func playPrevious()
   func pause()

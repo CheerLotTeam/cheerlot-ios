@@ -116,7 +116,7 @@ struct SearchView: View {
         .contentShape(Rectangle())
         .onTapGesture {
           guard result.hasSong else { return }
-          
+
           viewModel.didTapResult(result)
           coordinator.presentModal(
             .basePlayback(

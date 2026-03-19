@@ -125,7 +125,7 @@ extension AppCoordinator {
         song: song,
         playerName: playerName
       )
-      
+
       PlaybackView(
         asset: TeamAssetVO(teamId),
         viewModel: vm,

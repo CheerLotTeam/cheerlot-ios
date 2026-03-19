@@ -5,8 +5,8 @@
 //  Created by 이현주 on 2/12/26.
 //
 
-import SwiftUI
 import Observation
+import SwiftUI
 
 @Observable
 final class TeamSelectViewModel {
@@ -28,7 +28,7 @@ final class TeamSelectViewModel {
 
   @ObservationIgnored
   @Injected(TeamSelectionUseCase.self) private var teamSelectionUseCase
-  
+
   @ObservationIgnored
   @Injected(AudioPlaybackUseCase.self) private var audioPlaybackUseCase
 
@@ -52,7 +52,7 @@ final class TeamSelectViewModel {
 
   func complete() {
     guard let selectedTeamId = selectedTeamId else { return }
-    
+
     audioPlaybackUseCase.stop()
     teamSelectionUseCase.selectTeam(TeamID(selectedTeamId))
     NotificationCenter.default.post(name: .teamSelected, object: selectedTeamId)

@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum PlaybackMode{
+enum PlaybackMode {
   case normal
   case search
 }

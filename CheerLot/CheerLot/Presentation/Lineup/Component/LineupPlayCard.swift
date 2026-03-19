@@ -141,7 +141,7 @@ extension LineupPlayCard {
     battingOrder: 1, name: "구자욱", title: "기본 응원가",
     lyrics: "삼성의 심재훈 삼성의 심재훈\n안타를 날!려!버!려! 삼성 심재훈\n삼성의 심재훈 삼성의 심재훈\n홈런을 날!려!버!려! 삼성 심재훈",
     isPlaying: true,
-    onTapPlayPause: { }
+    onTapPlayPause: {}
   )
   .frame(width: 337, height: 538)
 }

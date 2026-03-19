@@ -33,15 +33,15 @@ final class AudioPlaybackUseCaseImpl: AudioPlaybackUseCase {
   var currentTime: Double {
     audioPlayer.currentTime
   }
-  
+
   var currentQueueIndex: Int {
     audioPlayer.currentQueueIndex
   }
-  
+
   var playbackMode: PlaybackMode {
     audioPlayer.playbackMode
   }
-  
+
   var canSkipManually: Bool {
     audioPlayer.canSkipManually
   }

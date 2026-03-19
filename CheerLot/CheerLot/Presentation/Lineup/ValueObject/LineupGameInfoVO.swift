@@ -47,7 +47,7 @@ struct LineupGameInfoVO: Equatable {
       "\(date) | 경기없음"
     }
   }
-  
+
   var gameDateText: String {
     date
   }

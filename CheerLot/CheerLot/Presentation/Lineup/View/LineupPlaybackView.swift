@@ -10,7 +10,7 @@ import SwiftUI
 struct LineupPlaybackView: View {
   @Environment(\.scenePhase) private var scenePhase
   @Environment(AppCoordinator.self) private var coordinator
-  
+
   let asset: LineupPlaybackAssetVO
   let gameDate: String
   let teamsText: String
@@ -50,7 +50,7 @@ struct LineupPlaybackView: View {
     guard !carouselItems.isEmpty else { return 0 }
     return scrollPosition % carouselItems.count
   }
-  
+
   init(
     asset: LineupPlaybackAssetVO,
     gameDate: String,
@@ -75,10 +75,13 @@ struct LineupPlaybackView: View {
         pageIndicator
       }
     }
-    .toolBar_gameInfo(date: gameDate, teams: teamsText, onClose: {
-      viewModel.stopPlayback()
-      coordinator.dismissModal()
-    })
+    .toolBar_gameInfo(
+      date: gameDate, teams: teamsText,
+      onClose: {
+        viewModel.stopPlayback()
+        coordinator.dismissModal()
+      }
+    )
     .onAppear {
       viewModel.onAppear()
       // 3벌로 초기화, 두번째 벌의 첫번째 아이템에서 시작
@@ -160,10 +163,10 @@ extension LineupPlaybackView {
         }
         return
       }
-      
+
       let realIndex = scrollPosition % itemCount
       guard lastRealIndex != realIndex else { return }
-      
+
       lastRealIndex = realIndex
       viewModel.didScrollToCard(at: realIndex)
     }
@@ -213,35 +216,35 @@ extension LineupPlaybackView {
 }
 
 #Preview {
-//  let players: [LineupPlayerVO] = (1...9).map { i in
-//    LineupPlayerVO(
-//      from: PlayerInfo(
-//        id: PlayerID("\(i)"),
-//        teamId: TeamID("samsung"),
-//        name: "심재훈",
-//        backNumber: i,
-//        position: "포지션",
-//        batThrow: "좌타",
-//        battingOrder: i,
-//        cheerSongs: [
-//          CheerSongInfo(
-//            id: "\(i)", playerId: PlayerID("\(i)"), title: "응원가 \(i)",
-//            lyrics:
-//              "삼성의 심재훈 삼성의 심재훈\n안타를 날!려!버!려! 삼성 심재훈\n삼성의 심재훈 삼성의 심재훈\n홈런을 날!려!버!려! 삼성 심재훈\n삼성의 심재훈 삼성의 심재훈\n안타를 날!려!버!려! 삼성 심재훈\n삼성의 심재훈 삼성의 심재훈\n홈런을 날!려!버!려! 삼성 심재훈",
-//            audioURL: ""),
-//          CheerSongInfo(
-//            id: "\(i)", playerId: PlayerID("\(i)"), title: "응원가 \(i)",
-//            lyrics:
-//              "삼성의 심재훈 삼성의 심재훈\n안타를 날!려!버!려! 삼성 심재훈\n삼성의 심재훈 삼성의 심재훈\n홈런을 날!려!버!려! 삼성 심재훈\n삼성의 심재훈 삼성의 심재훈\n안타를 날!려!버!려! 삼성 심재훈\n삼성의 심재훈 삼성의 심재훈\n홈런을 날!려!버!려! 삼성 심재훈",
-//            audioURL: ""),
-//        ]
-//      )
-//    )
-//  }
-//
-//  LineupPlaybackView(
-//    asset: LineupPlaybackAssetVO(base: TeamAssetVO(TeamDataSource.toEntity(.samsung).id)),
-//    players: players,
-//    startIndex: 2
-//  )
+  //  let players: [LineupPlayerVO] = (1...9).map { i in
+  //    LineupPlayerVO(
+  //      from: PlayerInfo(
+  //        id: PlayerID("\(i)"),
+  //        teamId: TeamID("samsung"),
+  //        name: "심재훈",
+  //        backNumber: i,
+  //        position: "포지션",
+  //        batThrow: "좌타",
+  //        battingOrder: i,
+  //        cheerSongs: [
+  //          CheerSongInfo(
+  //            id: "\(i)", playerId: PlayerID("\(i)"), title: "응원가 \(i)",
+  //            lyrics:
+  //              "삼성의 심재훈 삼성의 심재훈\n안타를 날!려!버!려! 삼성 심재훈\n삼성의 심재훈 삼성의 심재훈\n홈런을 날!려!버!려! 삼성 심재훈\n삼성의 심재훈 삼성의 심재훈\n안타를 날!려!버!려! 삼성 심재훈\n삼성의 심재훈 삼성의 심재훈\n홈런을 날!려!버!려! 삼성 심재훈",
+  //            audioURL: ""),
+  //          CheerSongInfo(
+  //            id: "\(i)", playerId: PlayerID("\(i)"), title: "응원가 \(i)",
+  //            lyrics:
+  //              "삼성의 심재훈 삼성의 심재훈\n안타를 날!려!버!려! 삼성 심재훈\n삼성의 심재훈 삼성의 심재훈\n홈런을 날!려!버!려! 삼성 심재훈\n삼성의 심재훈 삼성의 심재훈\n안타를 날!려!버!려! 삼성 심재훈\n삼성의 심재훈 삼성의 심재훈\n홈런을 날!려!버!려! 삼성 심재훈",
+  //            audioURL: ""),
+  //        ]
+  //      )
+  //    )
+  //  }
+  //
+  //  LineupPlaybackView(
+  //    asset: LineupPlaybackAssetVO(base: TeamAssetVO(TeamDataSource.toEntity(.samsung).id)),
+  //    players: players,
+  //    startIndex: 2
+  //  )
 }

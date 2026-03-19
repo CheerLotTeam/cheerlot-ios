@@ -10,31 +10,31 @@ import SwiftUI
 /// 팀별 Asset 리소스를 관리하는 VO
 final class TeamAssetVO {
   private let assetPrefix: String
-  
+
   init(_ teamId: TeamID) {
     self.assetPrefix = Self.getAssetPrefix(for: teamId.value)
   }
-  
+
   // MARK: - Colors
   lazy var colors: Color.TeamColorSet = {
     Color.teamColors(for: assetPrefix)
   }()
-  
+
   var primaryColor: Color { colors.primary }
   var secondaryColor: Color { colors.secondary }
-  
+
   lazy var primaryPalette: Color.TeamPrimaryPalette = {
     Color.teamPrimaryPalette(for: assetPrefix)
   }()
-  
+
   lazy var secondaryPalette: Color.TeamSecondaryPalette = {
     Color.teamSecondaryPalette(for: assetPrefix)
   }()
-  
+
   lazy var coverImageName: String = {
     "\(assetPrefix)_cover"
   }()
-  
+
   lazy var coverImage: Image = {
     Image(coverImageName)
   }()

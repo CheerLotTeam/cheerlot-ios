@@ -79,7 +79,7 @@ extension DIContainer {
     registerSingleton(AudioPlaybackService.self) {
       AudioPlaybackService()
     }
-    
+
     registerSingleton(LineupPlaybackService.self) {
       LineupPlaybackService()
     }
@@ -121,25 +121,25 @@ extension DIContainer {
         audioPlayer: container.resolve(AudioPlaybackService.self)
       )
     }
-    
+
     register(PlayTeamMembersUseCase.self) { container in
       PlayTeamMembersUseCaseImpl(
         audioPlaybackUseCase: container.resolve(AudioPlaybackUseCase.self)
       )
     }
-    
+
     register(PlayLineupSongsUseCase.self) { container in
       PlayLineupSongsUseCaseImpl(
         lineupAudioPlayer: container.resolve(LineupPlaybackService.self)
       )
     }
-    
+
     register(PlaySearchSongsUseCase.self) { container in
       PlaySearchSongsUseCaseImpl(
         audioPlaybackUseCase: container.resolve(AudioPlaybackUseCase.self)
       )
     }
-    
+
     register(UserSettingsUseCase.self) { container in
       UserSettingsUseCaseImpl(
         userSettingsRepository: container.resolve(UserSettingsRepository.self)

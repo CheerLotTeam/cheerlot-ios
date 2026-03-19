@@ -290,7 +290,7 @@ extension LineupView {
       viewModel.showNoSongToast()
     }
   }
-  
+
   private func goToLineupPlayback(
     player: LineupPlayerVO,
     song: CheerSongVO

@@ -13,11 +13,11 @@ struct TeamMembersSongVO: Identifiable {
   let playerName: String
   let backNumber: Int
   let song: CheerSongInfo?
-  
+
   var hasSong: Bool {
     song != nil
   }
-  
+
   var titleText: String? {
     guard let song else { return nil }
     return song.title == "기본 응원가" ? nil : song.title

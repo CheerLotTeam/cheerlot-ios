@@ -13,11 +13,11 @@ struct TeamMembersView: View {
 
   // MARK: - Properties
   @State private var viewModel: TeamMembersViewModel
-  
+
   private var asset: TeamMembersAssetVO {
     TeamMembersAssetVO(base: TeamAssetVO(team.id))
   }
-  
+
   private var team: TeamInfo {
     viewModel.currentTeam
   }
@@ -79,7 +79,7 @@ extension TeamMembersView {
     }
     .padding(.leading, 10)
   }
-  
+
   /// 상태별 컨텐츠 영역
   @ViewBuilder
   private var contents: some View {
@@ -91,19 +91,19 @@ extension TeamMembersView {
       memberListView
     }
   }
-  
-  private var loadingView: some View {
-     ProgressView()
-       .padding(.top, 40)
-   }
 
-   private func errorView(message: String) -> some View {
-     Text(message)
-       .font(.M4)
-       .foregroundStyle(.gray400)
-       .padding(.top, 40)
-   }
-  
+  private var loadingView: some View {
+    ProgressView()
+      .padding(.top, 40)
+  }
+
+  private func errorView(message: String) -> some View {
+    Text(message)
+      .font(.M4)
+      .foregroundStyle(.gray400)
+      .padding(.top, 40)
+  }
+
   /// 선수 목록 뷰
   private var memberListView: some View {
     ForEach(viewModel.rows) { item in

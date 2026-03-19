@@ -36,7 +36,7 @@ struct TeamMembersCell: View {
             .font(.M4)
             .foregroundStyle(.gray300)
         }
-        
+
         Image(systemName: "play.fill")
           .resizable()
           .scaledToFit()

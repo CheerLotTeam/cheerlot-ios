@@ -53,11 +53,11 @@ final class PlayLineupSongsUseCaseImpl: PlayLineupSongsUseCase {
   func playPrevious() {
     lineupAudioPlayer.playPrevious()
   }
-  
+
   func pause() {
     lineupAudioPlayer.pause()
   }
-  
+
   func resume() {
     lineupAudioPlayer.resume()
   }

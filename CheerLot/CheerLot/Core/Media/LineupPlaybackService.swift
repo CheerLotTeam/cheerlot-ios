@@ -5,9 +5,9 @@
 //  Created by 이승진 on 3/19/26.
 //
 
-import Foundation
 import AVFoundation
 import Combine
+import Foundation
 
 final class LineupPlaybackService: LineupAudioPlayer {
 
@@ -77,12 +77,12 @@ final class LineupPlaybackService: LineupAudioPlayer {
     currentSongIndex -= 1
     playCurrentSong()
   }
-  
+
   func pause() {
     player.pause()
     isPlaying = false
   }
-  
+
   func resume() {
     guard player.currentItem != nil else { return }
     player.play()
@@ -130,14 +130,15 @@ final class LineupPlaybackService: LineupAudioPlayer {
 }
 
 // MARK: - Private
-private extension LineupPlaybackService {
-  func playCurrentSong() {
+extension LineupPlaybackService {
+  fileprivate func playCurrentSong() {
     guard songs.indices.contains(currentSongIndex) else { return }
 
     let song = songs[currentSongIndex]
 
     if song.audioURL.hasPrefix("http"),
-       let url = URL(string: song.audioURL) {
+      let url = URL(string: song.audioURL)
+    {
       play(url)
       return
     }
@@ -145,7 +146,7 @@ private extension LineupPlaybackService {
     playBundle(song.audioURL)
   }
 
-  func play(_ url: URL) {
+  fileprivate func play(_ url: URL) {
     endOfTrackCancellable?.cancel()
     endOfTrackCancellable = nil
 
@@ -162,7 +163,7 @@ private extension LineupPlaybackService {
       }
   }
 
-  func playBundle(_ fileName: String) {
+  fileprivate func playBundle(_ fileName: String) {
     let name = (fileName as NSString).deletingPathExtension
     let ext =
       (fileName as NSString).pathExtension.isEmpty ? "mp3" : (fileName as NSString).pathExtension

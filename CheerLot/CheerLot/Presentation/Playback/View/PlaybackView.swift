@@ -57,7 +57,7 @@ extension PlaybackView {
           }
           .onEnded { value in
             let shouldClose = value.translation.height > 100
-            
+
             if shouldClose {
               onClose()
             } else {
@@ -65,7 +65,7 @@ extension PlaybackView {
             }
           }
       )
-   }
+  }
   private var mainView: some View {
     VStack(spacing: 40) {
       header

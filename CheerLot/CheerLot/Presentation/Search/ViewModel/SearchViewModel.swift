@@ -24,7 +24,7 @@ final class SearchViewModel {
 
   @ObservationIgnored
   @Injected(TeamPlayersSyncUseCase.self) private var teamPlayersSyncUseCase
-  
+
   @ObservationIgnored
   @Injected(PlaySearchSongsUseCase.self) private var playSearchSongsUseCase
 
@@ -52,7 +52,8 @@ final class SearchViewModel {
   // MARK: - Lifecycle
   func onAppear() async {
     if let selectedTeam = teamSelectionUseCase.getCurrentTeam(),
-       selectedTeam.id != currentTeam.id {
+      selectedTeam.id != currentTeam.id
+    {
       currentTeam = selectedTeam
     }
 
@@ -78,7 +79,7 @@ final class SearchViewModel {
     query = ""
     results = []
   }
-  
+
   func didTapResult(_ result: SearchResultVO) {
     guard result.hasSong else { return }
 
@@ -111,7 +112,8 @@ final class SearchViewModel {
       return
     }
 
-    results = players
+    results =
+      players
       .compactMap { player in
         guard let range = player.name.range(of: keyword) else { return nil }
         let matchIndex = player.name.distance(from: player.name.startIndex, to: range.lowerBound)

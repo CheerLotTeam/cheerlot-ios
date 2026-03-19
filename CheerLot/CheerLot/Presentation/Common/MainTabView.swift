@@ -29,11 +29,9 @@ struct MainTabView: View {
   private var asset: TeamAssetVO {
     TeamAssetVO(team.id)
   }
-  
+
   private var showMiniPlayer: Bool {
-    selectedTab != .lineup &&
-    audioPlayer.nowPlaying != nil &&
-    !isMiniPlayerHidden
+    selectedTab != .lineup && audioPlayer.nowPlaying != nil && !isMiniPlayerHidden
   }
 
   // MARK: - Init

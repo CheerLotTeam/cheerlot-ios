@@ -30,7 +30,7 @@ struct SettingView: View {
   private var supportMenus: [SupportInfoMenu] {
     SupportInfoMenu.allCases
   }
-  
+
   // MARK: Init
   init(viewModel: SettingViewModel) {
     _viewModel = State(initialValue: viewModel)
@@ -191,7 +191,7 @@ extension SettingView {
 
     case .serviceIntro:
       coordinator.push(.serviceInfo)
-    
+
     case .cheerlotTeam:
       coordinator.push(.makerInfo)
     }

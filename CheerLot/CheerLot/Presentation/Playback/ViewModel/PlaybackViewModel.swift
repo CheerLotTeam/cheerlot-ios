@@ -33,7 +33,7 @@ final class PlaybackViewModel {
 
   /// 진행바 동기화용 observer 토큰
   private var timeObserver: Any?
-  
+
   var canSkipManually: Bool {
     audioPlaybackUseCase.canSkipManually
   }
@@ -82,12 +82,12 @@ final class PlaybackViewModel {
     progress = max(seconds, 0)
     duration = max(audioPlaybackUseCase.duration, 1)
   }
-  
+
   func playNext() {
     audioPlaybackUseCase.playNext()
     syncFromService()
   }
-  
+
   func playPrevious() {
     audioPlaybackUseCase.playPrevious()
     syncFromService()
@@ -103,7 +103,7 @@ extension PlaybackViewModel {
     isPlaying = audioPlaybackUseCase.isPlaying
     progress = audioPlaybackUseCase.currentTime
     duration = max(audioPlaybackUseCase.duration, 1)
-    
+
     if let song = audioPlaybackUseCase.nowPlaying {
       title = song.title
       lyrics = song.lyrics

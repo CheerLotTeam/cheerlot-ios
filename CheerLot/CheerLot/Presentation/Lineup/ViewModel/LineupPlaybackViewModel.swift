@@ -41,32 +41,32 @@ final class LineupPlaybackViewModel {
         (playerName: player.name, song: song.toEntity())
       }
     }
-    
+
     guard !flattenedItems.isEmpty else { return }
-    
+
     if playLineupSongsUseCase.duration > 0 {
       playLineupSongsUseCase.resume()
       isPlaying = playLineupSongsUseCase.isPlaying
       startObservingPlayback()
       return
     }
-    
+
     guard flattenedItems.indices.contains(startIndex) else { return }
-    
+
     let songs = flattenedItems.map(\.song)
     let playerNames = flattenedItems.map(\.playerName)
-    
+
     playLineupSongsUseCase.playQueue(
       songs,
       playerNames: playerNames,
       startAt: startIndex
     )
-    
+
     currentPlaybackIndex = startIndex
     isPlaying = playLineupSongsUseCase.isPlaying
     startObservingPlayback()
   }
-  
+
   func pausePlayback() {
     playLineupSongsUseCase.pause()
     isPlaying = false
@@ -77,7 +77,7 @@ final class LineupPlaybackViewModel {
     playLineupSongsUseCase.stop()
     isPlaying = false
   }
-  
+
   func onDisappear() {
     stopPlayback()
   }
@@ -113,7 +113,7 @@ final class LineupPlaybackViewModel {
       }
     }
   }
-  
+
   private func stopObservingPlayback() {
     if let token = timeObserver {
       playLineupSongsUseCase.removeObserver(token)

@@ -5,11 +5,11 @@
 //  Created by 이승진 on 2/20/26.
 //
 
-import UIKit
 import AVFoundation
 import Combine
 import MediaPlayer
 import Observation
+import UIKit
 
 /// 앱 전역 오디오 재생을 담당하는 서비스
 @Observable
@@ -26,7 +26,7 @@ final class AudioPlaybackService: AudioPlayer {
 
   // RemoteCommand 중복 등록 방지
   private var remoteConfigured = false
-  
+
   // MARK: - Queue
   private var queue: [CheerSongInfo] = []
   private var queuePlayerNames: [String] = []
@@ -38,14 +38,14 @@ final class AudioPlaybackService: AudioPlayer {
   var currentCoverImageName: String?
   var isPlaying: Bool = false
   var playbackMode: PlaybackMode = .normal
-  
+
   var currentQueueIndex: Int {
     currentIndex
   }
-  
+
   var canSkipManually: Bool {
-     playbackMode == .normal && queue.count > 1
-   }
+    playbackMode == .normal && queue.count > 1
+  }
 
   // MARK: - Init
   init() {
@@ -63,21 +63,21 @@ final class AudioPlaybackService: AudioPlayer {
   func play(_ song: CheerSongInfo) {
     play(song, playerName: nil, coverImageName: nil)
   }
-  
+
   func play(_ song: CheerSongInfo, playerName: String?, coverImageName: String?) {
     queue = [song]
     queuePlayerNames = [playerName ?? song.playerId.value]
     currentIndex = 0
     playbackMode = .normal
-    
+
     nowPlaying = song
-    
+
     currentPlayerName = playerName ?? song.playerId.value
     currentCoverImageName = coverImageName
-    
+
     playCurrentSong()
   }
-  
+
   /// 재생큐
   func playQueue(
     _ songs: [CheerSongInfo],
@@ -89,23 +89,23 @@ final class AudioPlaybackService: AudioPlayer {
     guard !songs.isEmpty else { return }
     guard songs.count == playerNames.count else { return }
     guard songs.indices.contains(index) else { return }
-    
+
     queue = songs
     queuePlayerNames = playerNames
     currentIndex = index
     playbackMode = mode
-    
+
     nowPlaying = queue[currentIndex]
     currentPlayerName = queuePlayerNames[currentIndex]
     currentCoverImageName = coverImageName
-    
+
     playCurrentSong()
   }
-  
+
   /// 다음곡
   func playNext() {
     guard !queue.isEmpty else { return }
-    
+
     if currentIndex + 1 < queue.count {
       currentIndex += 1
     } else if playbackMode == .search {
@@ -113,38 +113,39 @@ final class AudioPlaybackService: AudioPlayer {
     } else {
       return
     }
-    
+
     nowPlaying = queue[currentIndex]
     currentPlayerName = queuePlayerNames[currentIndex]
-    
+
     playCurrentSong()
   }
-  
+
   /// 이전곡
   func playPrevious() {
     guard canSkipManually else { return }
     guard !queue.isEmpty else { return }
     guard currentIndex - 1 >= 0 else { return }
-    
+
     currentIndex -= 1
     nowPlaying = queue[currentIndex]
     currentPlayerName = queuePlayerNames[currentIndex]
-    
+
     playCurrentSong()
   }
-  
+
   private func playCurrentSong() {
     guard let song = nowPlaying else { return }
-    
+
     if song.audioURL.hasPrefix("http"),
-       let url = URL(string: song.audioURL) {
+      let url = URL(string: song.audioURL)
+    {
       play(url)
       return
     }
-    
+
     playBundle(song.audioURL)
   }
-  
+
   /// 실제 교체 & 재생
   func play(_ url: URL) {
     // 이전 곡 완료 알림 해제
@@ -165,7 +166,7 @@ final class AudioPlaybackService: AudioPlayer {
       .receive(on: RunLoop.main)
       .sink { [weak self] _ in
         guard let self else { return }
-        
+
         if self.currentIndex + 1 < self.queue.count {
           self.playNext()
         } else if self.playbackMode == .search && !self.queue.isEmpty {
@@ -203,7 +204,7 @@ final class AudioPlaybackService: AudioPlayer {
 
     player.pause()
     player.replaceCurrentItem(with: nil)
-    
+
     queue = []
     queuePlayerNames = []
     currentIndex = 0
@@ -307,27 +308,28 @@ extension AudioPlaybackService {
       self?.toggle()
       return .success
     }
-    
+
     cc.nextTrackCommand.addTarget { [weak self] _ in
       guard let self else { return .commandFailed }
       let before = self.nowPlaying?.id
       self.playNext()
       return self.nowPlaying?.id != before ? .success : .commandFailed
     }
-    
+
     cc.previousTrackCommand.addTarget { [weak self] _ in
       guard let self else { return .commandFailed }
       let before = self.nowPlaying?.id
       self.playPrevious()
       return self.nowPlaying?.id != before ? .success : .commandFailed
     }
-    
+
     cc.changePlaybackPositionCommand.addTarget { [weak self] event in
       guard let self,
-            let event = event as? MPChangePlaybackPositionCommandEvent else {
+        let event = event as? MPChangePlaybackPositionCommandEvent
+      else {
         return .commandFailed
       }
-      
+
       self.seek(event.positionTime)
       return .success
     }
@@ -383,9 +385,10 @@ extension AudioPlaybackService {
     info[MPNowPlayingInfoPropertyPlaybackRate] = isPlaying ? 1.0 : 0.0
     info[MPNowPlayingInfoPropertyPlaybackQueueIndex] = currentIndex
     info[MPNowPlayingInfoPropertyPlaybackQueueCount] = queue.count
-    
+
     if let currentCoverImageName,
-       let image = UIImage(named: currentCoverImageName) {
+      let image = UIImage(named: currentCoverImageName)
+    {
       info[MPMediaItemPropertyArtwork] = MPMediaItemArtwork(boundsSize: image.size) { _ in
         image
       }
