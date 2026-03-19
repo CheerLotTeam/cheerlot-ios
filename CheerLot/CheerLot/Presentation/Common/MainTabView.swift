@@ -19,29 +19,27 @@ struct MainTabView: View {
 
   @State private var selectedTab: TabKey = .lineup
   @State private var isPlayerExpanded: Bool = false
+  @State private var isMiniPlayerHidden: Bool = false
   @State private var lineupViewModel = ViewModelFactory.shared.createLineupViewModel()
-  @State private var teamMembersViewModel: TeamMembersViewModel
+  @State private var teamMembersViewModel = ViewModelFactory.shared.createTeamMembersViewModel()
+  @State private var searchViewModel = ViewModelFactory.shared.createSearchViewModel()
 
   @Namespace private var animation
 
   private var asset: TeamAssetVO {
     TeamAssetVO(team.id)
   }
-
+  
   private var showMiniPlayer: Bool {
-    selectedTab != .lineup && audioPlayer.nowPlaying != nil
+    selectedTab != .lineup &&
+    audioPlayer.nowPlaying != nil &&
+    !isMiniPlayerHidden
   }
 
   // MARK: - Init
   init(team: TeamInfo, audioPlayer: AudioPlaybackService) {
     self.team = team
     self.audioPlayer = audioPlayer
-    
-    _teamMembersViewModel = State(
-      initialValue: ViewModelFactory.shared.createTeamMembersViewModel(
-        audioPlayer: audioPlayer
-      )
-    )
 
     // TabBar 스타일 설정
     let appearance = UITabBarAppearance()
@@ -68,6 +66,9 @@ struct MainTabView: View {
           .padding(.bottom, 50)
       }
     }
+    .onPreferenceChange(MiniPlayerHiddenPreferenceKey.self) { hidden in
+      isMiniPlayerHidden = hidden
+    }
     .onChange(of: selectedTab) { _, newValue in
       if newValue == .lineup {
         audioPlayer.pause()
@@ -79,9 +80,11 @@ struct MainTabView: View {
           asset: asset,
           viewModel: ViewModelFactory.shared.createPlaybackViewModel(
             song: song,
-            playerName: audioPlayer.currentPlayerName ?? song.playerId.value,
-            audioPlayer: audioPlayer
-          )
+            playerName: audioPlayer.currentPlayerName ?? song.playerId.value
+          ),
+          onClose: {
+            isPlayerExpanded = false
+          }
         )
         .navigationTransition(.zoom(sourceID: "AUDIOPLAYER", in: animation))
         .ignoresSafeArea()
@@ -104,13 +107,15 @@ extension MainTabView {
 
     case .teamMembers:
       AppCoordinatorContainer {
-        TeamMembersView(viewModel: teamMembersViewModel
-        )
+        TeamMembersView(viewModel: teamMembersViewModel)
       }
 
     case .search:
       AppCoordinatorContainer {
-        SearchView(asset: SearchAssetVO(base: TeamAssetVO(TeamDataSource.toEntity(.samsung).id)))
+        SearchView(
+          asset: SearchAssetVO(base: TeamAssetVO(team.id)),
+          viewModel: searchViewModel
+        )
       }
     }
   }
@@ -162,7 +167,11 @@ extension MainTabView {
           isPlayerExpanded.toggle()
         },
         onPlayPause: { audioPlayer.toggle() },
-        onNext: { audioPlayer.playNext() }
+        onNext: {
+          if audioPlayer.canSkipManually {
+            audioPlayer.playNext()
+          }
+        }
       )
       .matchedTransitionSource(id: "AUDIOPLAYER", in: animation)
       .padding(.horizontal, 20)
