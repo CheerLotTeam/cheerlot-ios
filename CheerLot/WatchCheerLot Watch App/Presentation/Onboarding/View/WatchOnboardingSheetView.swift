@@ -1,5 +1,5 @@
 //
-//  WatchOnboardingView.swift
+//  WatchOnboardingSheetView.swift
 //  WatchCheerLot Watch App
 //
 //  Created by 이현주 on 3/18/26.
@@ -7,7 +7,9 @@
 
 import SwiftUI
 
-struct WatchOnboardingView: View {
+struct WatchOnboardingSheetView: View {
+    var onDismiss: () -> Void
+
     var body: some View {
       ZStack {
         Rectangle()
@@ -26,12 +28,12 @@ struct WatchOnboardingView: View {
       .safeAreaInset(edge: .bottom) {
           if #available(watchOS 26.0, *) {
               Button("확인") {
-                  print("Button was tapped!")
+                  onDismiss()
               }
               .glassEffect()
           } else {
               Button("확인") {
-                  print("Button was tapped!")
+                  onDismiss()
               }
           }
       }
@@ -39,5 +41,5 @@ struct WatchOnboardingView: View {
 }
 
 #Preview {
-    WatchOnboardingView()
+    WatchOnboardingSheetView(onDismiss: {})
 }
