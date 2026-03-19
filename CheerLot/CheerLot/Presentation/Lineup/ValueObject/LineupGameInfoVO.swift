@@ -47,6 +47,18 @@ struct LineupGameInfoVO: Equatable {
       "\(date) | 경기없음"
     }
   }
+  
+  var gameDateText: String {
+    date
+  }
+
+  var gameTeamsText: String {
+    if let opponent = opponent {
+      "\(teamName) vs \(opponent)"
+    } else {
+      "경기없음"
+    }
+  }
 
   // MARK: - Private
   private static func formatDate(_ dateString: String) -> String {
