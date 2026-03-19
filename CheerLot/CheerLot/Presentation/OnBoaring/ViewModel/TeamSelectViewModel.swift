@@ -28,6 +28,9 @@ final class TeamSelectViewModel {
 
   @ObservationIgnored
   @Injected(TeamSelectionUseCase.self) private var teamSelectionUseCase
+  
+  @ObservationIgnored
+  @Injected(AudioPlaybackUseCase.self) private var audioPlaybackUseCase
 
   init(
     mode: TeamSelectMode,
@@ -49,6 +52,8 @@ final class TeamSelectViewModel {
 
   func complete() {
     guard let selectedTeamId = selectedTeamId else { return }
+    
+    audioPlaybackUseCase.stop()
     teamSelectionUseCase.selectTeam(TeamID(selectedTeamId))
     NotificationCenter.default.post(name: .teamSelected, object: selectedTeamId)
   }
