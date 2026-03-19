@@ -17,21 +17,20 @@ final class LocalStorage {
     let schema = Schema([
       Team.self,
       Player.self,
-      CheerSong.self,
+      CheerSong.self
     ])
-
+      
     let configuration = ModelConfiguration(
-      isStoredInMemoryOnly: false
+      isStoredInMemoryOnly: false,
+      groupContainer: .identifier(AppGroup.id)
     )
 
     do {
-      let container = try ModelContainer(
+        return try ModelContainer(
         for: schema,
         migrationPlan: CheerLotMigrationPlan.self,
         configurations: configuration
       )
-
-      return container
     } catch {
       fatalError("Failed to create ModelContainer: \(error)")
     }
