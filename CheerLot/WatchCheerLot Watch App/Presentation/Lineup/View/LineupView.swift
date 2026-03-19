@@ -8,21 +8,38 @@
 import SwiftUI
 
 struct LineupView: View {
-    @State private var isPresented = true
+    @State private var viewModel: LineupViewModel
+    
+    init(viewModel: LineupViewModel) {
+      _viewModel = State(initialValue: viewModel)
+    }
     
     var body: some View {
         NavigationStack {
             Group {
-                if viewModel.players.isEmpty {
+                if viewModel.lineupMembers.isEmpty {
                     EmptyListView
                 } else {
                     MemberListView
-                        .navigationTitle(viewModel.lastUpdatedDate)
-                        .navigationBarTitleDisplayMode(.automatic)
+                        .toolbar {
+                            ToolbarItem(placement: .topBarLeading) {
+                                Text(viewModel.teamName!)
+                                    .font(.SB6)
+                                    .foregroundStyle(viewModel.asset!.secondaryColor)
+                            }
+                        }
                 }
             }
-            .sheet(isPresented: $isPresented) {
-                WatchOnboardingView()
+            .task {
+                await viewModel.onAppear()
+            }
+            .toolbar(viewModel.isOnboardingPresented ? .hidden : .visible)
+            .overlay {
+                if viewModel.isOnboardingPresented {
+                    WatchOnboardingSheetView {
+                        viewModel.isOnboardingPresented = false
+                    }
+                }
             }
         }
     }
@@ -31,16 +48,18 @@ struct LineupView: View {
 extension LineupView {
     private var MemberListView: some View {
         List {
-          ForEach(viewModel.players, id: \.self) {
-            player in
+          ForEach(viewModel.lineupMembers, id: \.id) {
+            member in
             NavigationLink {
-              LyricsView(players: viewModel.players, initialPlayer: player)
+                LyricsView(members: viewModel.lineupMembers, initialMember: member, asset: viewModel.asset!)
             } label: {
                 HStack(spacing: 6) {
-                    Text("\(player.battingOrder)")
-                        .font(.SB6)
+                    if let battingOrder = member.battingOrder {
+                        Text("\(battingOrder)")
+                            .font(.SB6)
+                    }
                     
-                    Text(player.name)
+                    Text(member.name)
                         .font(.SB7)
                 }
                 .padding(.leading, 7.5)
@@ -51,7 +70,9 @@ extension LineupView {
     
     private var EmptyListView: some View {
         ZStack {
-            // TODO: - 그라디언트 백그라운드
+            viewModel.asset?.bgGradient
+                .opacity(0.2)
+                .ignoresSafeArea(edges: .all)
             
             VStack(spacing: 2) {
                 Text("선수 명단이 없어요")
@@ -64,8 +85,4 @@ extension LineupView {
             }
         }
     }
-}
-
-#Preview {
-    LineupListView()
 }

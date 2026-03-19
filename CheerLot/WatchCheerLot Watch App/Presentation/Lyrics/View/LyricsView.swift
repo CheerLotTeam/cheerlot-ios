@@ -8,29 +8,36 @@
 import SwiftUI
 
 struct LyricsView: View {
-  let players: [PlayerWatchDto]
-  let initialPlayer: PlayerWatchDto
+  let members: [LineupMemberVO]
+  let initialMember: LineupMemberVO
+  let asset: WatchTeamAssetVO
 
   @State private var selectedIndex: Int = 0
 
   var body: some View {
     TabView(selection: $selectedIndex) {
-      ForEach(players.indices, id: \.self) { index in
-        let player = players[index]
+      ForEach(members.indices, id: \.self) { index in
+        let member = members[index]
         Group {
-          if !player.cheerSongList.isEmpty {
-              LyricsScrollView
+          if !member.cheerSongs.isEmpty {
+              LyricsScrollView(member: member)
           } else {
             EmptyCheerSongView
           }
         }
-        .navigationTitle("\(index + 1) \(player.name)")
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                Text("\(member.name)")
+                    .foregroundStyle(asset.secondaryColor)
+                    .font(.SB7)
+            }
+        }
         .tag(index)
       }
     }
     .tabViewStyle(.verticalPage)
     .onAppear {
-      if let index = players.firstIndex(of: initialPlayer) {
+      if let index = members.firstIndex(of: initialMember) {
         selectedIndex = index
       }
     }
@@ -38,12 +45,21 @@ struct LyricsView: View {
 }
 
 extension LyricsView {
-    private var LyricsScrollView: some View {
+    private func LyricsScrollView(member: LineupMemberVO) -> some View {
         ScrollView {
-          VStack(alignment: .leading, spacing: 24) {
-            ForEach(player.cheerSongList, id: \.self) { song in
-              Text(song.lyrics)
-                .lineHeightMultipleAdaptPretend(fontType: .bold, fontSize: 24, lineHeight: 1.5)
+          VStack(alignment: .leading, spacing: 20) {
+            ForEach(member.cheerSongs, id: \.id) { song in
+                VStack(spacing: 4) {
+                    if member.cheerSongs.count > 1 {
+                        Text(song.title)
+                            .font(.R3)
+                            .foregroundStyle(.gray300)
+                    }
+
+                    Text(song.lyrics)
+                        .font(.LyricsTypo)
+                        .foregroundStyle(.grayWhite)
+                }
             }
           }
           .padding()
