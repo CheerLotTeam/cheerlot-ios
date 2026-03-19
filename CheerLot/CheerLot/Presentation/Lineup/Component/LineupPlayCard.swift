@@ -13,16 +13,17 @@ struct LineupPlayCard: View {
   let name: String
   let title: String
   let lyrics: String
+  let isPlaying: Bool
+  let onTapPlayPause: () -> Void
   var playCardImage: Image? {
     asset.playCardBGImage(for: battingOrder)
   }
 
-  @State private var isPaused: Bool = false
   @State private var isScrolledToBottom: Bool = false
 
   var body: some View {
     Button {
-      isPaused.toggle()
+      onTapPlayPause()
     } label: {
       cardView
     }
@@ -70,14 +71,14 @@ extension LineupPlayCard {
       Spacer()
 
       Group {
-        isPaused
-          ? Image(systemName: "play.fill")
+        isPlaying
+          ? Image(systemName: "pause.fill")
             .resizable()
-          : Image(systemName: "pause.fill")
+          : Image(systemName: "play.fill")
             .resizable()
       }
       .scaledToFit()
-      .frame(height: isPaused ? 15 : 17)
+      .frame(height: isPlaying ? 17 : 15)
       .foregroundStyle(asset.cardContentsColor)
     }
   }
@@ -126,7 +127,7 @@ extension LineupPlayCard {
   }
 
   private var lyricsText: some View {
-    Text(lyrics)
+    Text(lyrics.replacingOccurrences(of: "\\n", with: "\n"))
       .font(.SB2)
       .foregroundStyle(.grayWhite)
       .multilineTextAlignment(.leading)
@@ -138,7 +139,9 @@ extension LineupPlayCard {
   LineupPlayCard(
     asset: LineupPlaybackAssetVO(base: TeamAssetVO(TeamDataSource.toEntity(.samsung).id)),
     battingOrder: 1, name: "구자욱", title: "기본 응원가",
-    lyrics: "삼성의 심재훈 삼성의 심재훈\n안타를 날!려!버!려! 삼성 심재훈\n삼성의 심재훈 삼성의 심재훈\n홈런을 날!려!버!려! 삼성 심재훈"
+    lyrics: "삼성의 심재훈 삼성의 심재훈\n안타를 날!려!버!려! 삼성 심재훈\n삼성의 심재훈 삼성의 심재훈\n홈런을 날!려!버!려! 삼성 심재훈",
+    isPlaying: true,
+    onTapPlayPause: {}
   )
   .frame(width: 337, height: 538)
 }

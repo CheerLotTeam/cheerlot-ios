@@ -30,6 +30,14 @@ final class TeamAssetVO {
   lazy var secondaryPalette: Color.TeamSecondaryPalette = {
     Color.teamSecondaryPalette(for: assetPrefix)
   }()
+
+  lazy var coverImageName: String = {
+    "\(assetPrefix)_cover"
+  }()
+
+  lazy var coverImage: Image = {
+    Image(coverImageName)
+  }()
 }
 
 extension TeamAssetVO {

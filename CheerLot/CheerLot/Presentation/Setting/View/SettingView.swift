@@ -9,10 +9,10 @@ import SwiftUI
 
 /// 설정 화면 입니다.
 struct SettingView: View {
+  @Environment(AppCoordinator.self) private var coordinator
 
   // MARK: - Properties
-  let viewModel: SettingViewModel
-
+  @State private var viewModel: SettingViewModel
   @State private var showInquirySafari: Bool = false
 
   private var currentTeam: TeamInfo {
@@ -31,6 +31,11 @@ struct SettingView: View {
     SupportInfoMenu.allCases
   }
 
+  // MARK: Init
+  init(viewModel: SettingViewModel) {
+    _viewModel = State(initialValue: viewModel)
+  }
+
   // MARK: - Body
   var body: some View {
     ScrollView {
@@ -43,11 +48,12 @@ struct SettingView: View {
       .padding(.top, 12)
       .padding(.bottom, 24)
     }
+    .hideMiniPlayerBar()
     .onAppear {
       viewModel.onAppear()
     }
     .navigationBar_backWithTitle(title: "설정") {
-      viewModel.didTapBack()
+      coordinator.pop()
     }
     .toolbar(.hidden, for: .tabBar)
     .sheet(isPresented: $showInquirySafari) {
@@ -72,7 +78,7 @@ extension SettingView {
 
       TeamCardButton(
         action: {
-          viewModel.didTapTeamCard()
+          coordinator.presentModal(.teamChange(selectedTeamId: currentTeam.id.value))
         },
         asset: asset,
         team: currentTeam
@@ -182,8 +188,11 @@ extension SettingView {
     case .reportBug:
       showInquirySafari = true
 
-    case .serviceIntro, .cheerlotTeam:
-      viewModel.didTapSupportMenu(menu)
+    case .serviceIntro:
+      coordinator.push(.serviceInfo)
+
+    case .cheerlotTeam:
+      coordinator.push(.makerInfo)
     }
   }
 }

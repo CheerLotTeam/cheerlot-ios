@@ -12,35 +12,62 @@ struct PlaybackView: View {
 
   // MARK: - Properties
   let asset: TeamAssetVO
+  let onClose: () -> Void
 
   @State private var viewModel: PlaybackViewModel
+  @State private var dragOffsetY: CGFloat = 0
 
-  init(asset: TeamAssetVO, viewModel: PlaybackViewModel) {
+  init(
+    asset: TeamAssetVO,
+    viewModel: PlaybackViewModel,
+    onClose: @escaping () -> Void
+  ) {
     self.asset = asset
-    self.viewModel = viewModel
+    self.onClose = onClose
+    _viewModel = State(initialValue: viewModel)
   }
 
   // MARK: - Body
   var body: some View {
     ZStack {
       VStack(spacing: 14) {
-        Capsule()
-          .fill(.gray200.opacity(0.6))
-          .frame(width: 60, height: 5)
+        topBar
         mainView
       }
-      .padding(.top, 60)
-      .background(asset.primaryColor)
-
+   
       MetalBackgroundView()
     }
     .ignoresSafeArea()
+    .offset(y: dragOffsetY)
+    .animation(.spring(duration: 0.25), value: dragOffsetY)
     .onAppear { viewModel.onAppear() }
     .onDisappear { viewModel.onDisappear() }
   }
 }
 
 extension PlaybackView {
+  private var topBar: some View {
+    Capsule()
+      .fill(.gray200.opacity(0.6))
+      .frame(width: 60, height: 5)
+      .padding(.top, 8)
+      .gesture(
+        DragGesture()
+          .onChanged { value in
+            guard value.translation.height > 0 else { return }
+            dragOffsetY = value.translation.height
+          }
+          .onEnded { value in
+            let shouldClose = value.translation.height > 100
+
+            if shouldClose {
+              onClose()
+            } else {
+              dragOffsetY = 0
+            }
+          }
+      )
+  }
   private var mainView: some View {
     VStack(spacing: 40) {
       header
@@ -66,7 +93,7 @@ extension PlaybackView {
   private var content: some View {
     ScrollView(showsIndicators: true) {
       LazyVStack(alignment: .leading) {
-        Text(viewModel.lyrics)
+        Text(viewModel.lyrics.replacingOccurrences(of: "\\n", with: "\n"))
       }
       .multilineTextAlignment(.leading)
       .font(.B1_1)
@@ -108,14 +135,22 @@ extension PlaybackView {
   /// 컨트롤
   private var controlView: some View {
     HStack(spacing: 44) {
-      playbackButton("backward.fill")
+      playbackButton("backward.fill") {
+        viewModel.playPrevious()
+      }
+      .disabled(!viewModel.canSkipManually)
+      .opacity(viewModel.canSkipManually ? 1 : 0.3)
       playbackButton(
         viewModel.isPlaying ? "pause.fill" : "play.fill",
         center: true
       ) {
         viewModel.togglePlayback()
       }
-      playbackButton("forward.fill")
+      playbackButton("forward.fill") {
+        viewModel.playNext()
+      }
+      .disabled(!viewModel.canSkipManually)
+      .opacity(viewModel.canSkipManually ? 1 : 0.3)
     }
   }
 

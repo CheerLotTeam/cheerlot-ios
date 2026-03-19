@@ -195,3 +195,17 @@ extension View {
     )
   }
 }
+
+struct MiniPlayerHiddenPreferenceKey: PreferenceKey {
+  static var defaultValue: Bool = false
+
+  static func reduce(value: inout Bool, nextValue: () -> Bool) {
+    value = value || nextValue()
+  }
+}
+
+extension View {
+  func hideMiniPlayerBar(_ hidden: Bool = true) -> some View {
+    preference(key: MiniPlayerHiddenPreferenceKey.self, value: hidden)
+  }
+}

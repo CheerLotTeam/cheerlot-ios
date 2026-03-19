@@ -13,7 +13,6 @@ enum PresentationStyle {
 }
 
 enum ModalRoute: Identifiable {
-  // TODO: - 각 case 마다 넘겨주는 값(파라미터) 재설정
   // Sheet 스타일
   case cheerSongList(
     asset: TeamAssetVO,
@@ -29,7 +28,13 @@ enum ModalRoute: Identifiable {
   case servicePage
 
   // FullScreen 스타일
-  case lineupPlayback
+  case lineupPlayback(
+    teamId: TeamID,
+    players: [LineupPlayerVO],
+    startIndex: Int,
+    gameDate: String,
+    teamsText: String
+  )
   case basePlayback(
     teamId: TeamID,
     song: CheerSongInfo,
@@ -38,8 +43,8 @@ enum ModalRoute: Identifiable {
 
   var id: String {
     switch self {
-    case let .teamChange(selectedTeam):
-      return "teamChange_\(selectedTeam)"
+    case let .teamChange(selectedTeamId):
+      return "teamChange_\(selectedTeamId)"
     default:
       return String(describing: self)
     }
@@ -102,18 +107,31 @@ extension AppCoordinator {
       Color.clear
     case let .servicePage:
       Color.clear
-    case let .lineupPlayback:
-      Color.clear
+    case let .lineupPlayback(teamId, players, startIndex, gameDate, teamsText):
+      let vm = factory.createLineupPlaybackViewModel(
+        players: players,
+        startIndex: startIndex
+      )
+      NavigationStack {
+        LineupPlaybackView(
+          asset: LineupPlaybackAssetVO(base: TeamAssetVO(teamId)),
+          gameDate: gameDate,
+          teamsText: teamsText,
+          viewModel: vm
+        )
+      }
     case let .basePlayback(teamId, song, playerName):
       let vm = factory.createPlaybackViewModel(
         song: song,
-        playerName: playerName,
-        audioPlayer: audioPlayer
+        playerName: playerName
       )
 
       PlaybackView(
         asset: TeamAssetVO(teamId),
-        viewModel: vm
+        viewModel: vm,
+        onClose: {
+          self.dismissModal()
+        }
       )
     }
   }
