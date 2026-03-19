@@ -50,7 +50,8 @@ final class SettingViewModel {
   }
 
   // MARK: - Setting Actions
-  func didUpdateSelectedTeam(_ team: TeamInfo) {
+  func didUpdateSelectedTeam() {
+    guard let team = teamSelectionUseCase.getCurrentTeam() else { return }
     currentTeam = team
 
     if appIconMode == .team {

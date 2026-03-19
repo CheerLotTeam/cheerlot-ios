@@ -13,35 +13,43 @@ final class LineupManagementUseCaseImpl: LineupManagementUseCase {
   private let playerLocalRepository: PlayerLocalRepository
   private let playerRemoteRepository: PlayerRemoteRepository
   private let userSettingsRepository: UserSettingsRepository
+  private let watchSyncRepository: WatchSyncRepository
 
   init(
     teamLocalRepository: TeamLocalRepository,
     teamRemoteRepository: TeamRemoteRepository,
     playerLocalRepository: PlayerLocalRepository,
     playerRemoteRepository: PlayerRemoteRepository,
-    userSettingsRepository: UserSettingsRepository
+    userSettingsRepository: UserSettingsRepository,
+    watchSyncRepository: WatchSyncRepository
   ) {
     self.teamLocalRepository = teamLocalRepository
     self.teamRemoteRepository = teamRemoteRepository
     self.playerLocalRepository = playerLocalRepository
     self.playerRemoteRepository = playerRemoteRepository
     self.userSettingsRepository = userSettingsRepository
+    self.watchSyncRepository = watchSyncRepository
   }
 
   // MARK: - Public Methods
 
   func loadLineup(for teamId: TeamID) async throws -> LineupData {
-    // 동기화 필요 여부 확인 및 실행
     try await syncIfNeeded(teamId)
 
-    return try await fetchLocalData(teamId)
+    let data = try await fetchLocalData(teamId)
+    watchSyncRepository.sendTeamSelection(teamId)
+    watchSyncRepository.sendLineup(data.lineupPlayers)
+    return data
   }
 
   func refreshLineup(for teamId: TeamID) async throws -> LineupData {
     // 강제 동기화
     try await forceSync(teamId)
 
-    return try await fetchLocalData(teamId)
+    let data = try await fetchLocalData(teamId)
+    watchSyncRepository.sendTeamSelection(teamId)
+    watchSyncRepository.sendLineup(data.lineupPlayers)
+    return data
   }
 
   // MARK: - Private Methods - Sync

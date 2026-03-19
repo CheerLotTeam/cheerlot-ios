@@ -61,9 +61,8 @@ struct SettingView: View {
         SafariView(url: url)
       }
     }
-    .onReceive(NotificationCenter.default.publisher(for: .teamSelected)) { notification in
-      guard let team = notification.object as? TeamInfo else { return }
-      viewModel.didUpdateSelectedTeam(team)
+    .onReceive(NotificationCenter.default.publisher(for: .teamSelected)) { _ in
+      viewModel.didUpdateSelectedTeam()
     }
   }
 }

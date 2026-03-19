@@ -11,7 +11,7 @@ final class TeamSelectionRepositoryImpl: TeamSelectionRepository {
 
   private let sharedDefaults: UserDefaults
 
-  init(appGroupIdentifier: String = "group.shared.CheerLot") {  // TODO: - config 처리
+  init(appGroupIdentifier: String = AppGroup.id) {
     guard let defaults = UserDefaults(suiteName: appGroupIdentifier) else {
       fatalError("Failed to create UserDefaults with App Group")
     }

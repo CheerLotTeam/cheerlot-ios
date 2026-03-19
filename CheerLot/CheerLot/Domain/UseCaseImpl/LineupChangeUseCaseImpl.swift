@@ -9,9 +9,14 @@ import Foundation
 
 final class LineupChangeUseCaseImpl: LineupChangeUseCase {
   private let playerLocalRepository: PlayerLocalRepository
+  private let watchSyncRepository: WatchSyncRepository
 
-  init(playerLocalRepository: PlayerLocalRepository) {
+  init(
+    playerLocalRepository: PlayerLocalRepository,
+    watchSyncRepository: WatchSyncRepository
+  ) {
     self.playerLocalRepository = playerLocalRepository
+    self.watchSyncRepository = watchSyncRepository
   }
 
   func getBenchPlayers(_ teamId: TeamID) async throws -> [PlayerInfo] {
@@ -73,5 +78,12 @@ final class LineupChangeUseCaseImpl: LineupChangeUseCase {
       )
       try await playerLocalRepository.updatePlayer(promotedPlayer)
     }
+
+    let updatedLineup = try await playerLocalRepository.fetchAllPlayers(teamId)
+      .filter { $0.battingOrder != nil }
+      .sorted { ($0.battingOrder ?? 0) < ($1.battingOrder ?? 0) }
+
+    watchSyncRepository.sendTeamSelection(teamId)
+    watchSyncRepository.sendLineup(updatedLineup)
   }
 }

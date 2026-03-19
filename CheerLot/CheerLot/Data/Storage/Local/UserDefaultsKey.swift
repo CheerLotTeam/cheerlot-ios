@@ -13,3 +13,7 @@ enum UserDefaultsKey {
   static let showRecentLineup = "showRecentLineup"
   static let appIconMode = "appIconMode"
 }
+
+enum AppGroup {
+  static let id = "group.shared.CheerLot"
+}

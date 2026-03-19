@@ -29,12 +29,14 @@ struct PlaybackView: View {
 
   // MARK: - Body
   var body: some View {
-    VStack(spacing: 14) {
-      topBar
-      mainView
+    ZStack {
+      VStack(spacing: 14) {
+        topBar
+        mainView
+      }
+   
+      MetalBackgroundView()
     }
-    .padding(.top, 60)
-    .background(asset.primaryColor)
     .ignoresSafeArea()
     .offset(y: dragOffsetY)
     .animation(.spring(duration: 0.25), value: dragOffsetY)
