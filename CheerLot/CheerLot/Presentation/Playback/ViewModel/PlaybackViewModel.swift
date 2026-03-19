@@ -28,20 +28,22 @@ final class PlaybackViewModel {
   var lyrics: String
 
   // MARK: - Dependencies
-
-  /// 앱 전역 오디오 재생 서비스
-  private let audioPlayer: AudioPlaybackService
+  @ObservationIgnored
+  @Injected(AudioPlaybackUseCase.self) private var audioPlaybackUseCase
 
   /// 진행바 동기화용 observer 토큰
   private var timeObserver: Any?
+  
+  var canSkipManually: Bool {
+    audioPlaybackUseCase.canSkipManually
+  }
 
   // MARK: - Init
 
-  init(song: CheerSongInfo, playerName: String, audioPlayer: AudioPlaybackService) {
+  init(song: CheerSongInfo, playerName: String) {
     self.title = song.title
     self.playerName = playerName
     self.lyrics = song.lyrics
-    self.audioPlayer = audioPlayer
 
     // 최초 진입
     syncFromService()
@@ -68,26 +70,26 @@ final class PlaybackViewModel {
 
   /// 재생/일시정지 토글
   func togglePlayback() {
-    audioPlayer.toggle()
+    audioPlaybackUseCase.toggle()
     syncFromService()
   }
 
   /// 특정 초로 이동
   func seek(to seconds: Double) {
-    audioPlayer.seek(seconds)
+    audioPlaybackUseCase.seek(seconds)
 
     // 실제 currentTime은 다음 tick에서 다시 서비스 값으로 싱크됨
     progress = max(seconds, 0)
-    duration = max(audioPlayer.duration, 1)
+    duration = max(audioPlaybackUseCase.duration, 1)
   }
   
   func playNext() {
-    audioPlayer.playNext()
+    audioPlaybackUseCase.playNext()
     syncFromService()
   }
   
   func playPrevious() {
-    audioPlayer.playPrevious()
+    audioPlaybackUseCase.playPrevious()
     syncFromService()
   }
 }
@@ -98,14 +100,14 @@ extension PlaybackViewModel {
 
   /// 서비스 -> UI 상태 동기화
   fileprivate func syncFromService() {
-    isPlaying = audioPlayer.isPlaying
-    progress = audioPlayer.currentTime
-    duration = max(audioPlayer.duration, 1)
+    isPlaying = audioPlaybackUseCase.isPlaying
+    progress = audioPlaybackUseCase.currentTime
+    duration = max(audioPlaybackUseCase.duration, 1)
     
-    if let song = audioPlayer.nowPlaying {
+    if let song = audioPlaybackUseCase.nowPlaying {
       title = song.title
       lyrics = song.lyrics
-      playerName = audioPlayer.currentPlayerName ?? song.playerId.value
+      playerName = audioPlaybackUseCase.currentPlayerName ?? song.playerId.value
     }
   }
 
@@ -113,7 +115,7 @@ extension PlaybackViewModel {
   fileprivate func startObservingTime() {
     guard timeObserver == nil else { return }
 
-    timeObserver = audioPlayer.observeTime(every: 0.5, queue: .main) { [weak self] _ in
+    timeObserver = audioPlaybackUseCase.observeTime(every: 0.5, queue: .main) { [weak self] _ in
       guard let self else { return }
       self.syncFromService()
     }
@@ -122,7 +124,7 @@ extension PlaybackViewModel {
   /// observer 해제
   fileprivate func stopObservingTime() {
     if let token = timeObserver {
-      audioPlayer.removeObserver(token)
+      audioPlaybackUseCase.removeObserver(token)
       timeObserver = nil
     }
   }
