@@ -13,7 +13,7 @@ import Observation
 
 /// 앱 전역 오디오 재생을 담당하는 서비스
 @Observable
-final class AudioPlaybackService {
+final class AudioPlaybackService: AudioPlayer {
 
   // MARK: - Core
   private let player = AVPlayer()
@@ -37,6 +37,15 @@ final class AudioPlaybackService {
   var currentPlayerName: String?
   var currentCoverImageName: String?
   var isPlaying: Bool = false
+  var playbackMode: PlaybackMode = .normal
+  
+  var currentQueueIndex: Int {
+    currentIndex
+  }
+  
+  var canSkipManually: Bool {
+     playbackMode == .normal && queue.count > 1
+   }
 
   // MARK: - Init
   init() {
@@ -59,6 +68,7 @@ final class AudioPlaybackService {
     queue = [song]
     queuePlayerNames = [playerName ?? song.playerId.value]
     currentIndex = 0
+    playbackMode = .normal
     
     nowPlaying = song
     
@@ -73,7 +83,8 @@ final class AudioPlaybackService {
     _ songs: [CheerSongInfo],
     playerNames: [String],
     startAt index: Int = 0,
-    coverImageName: String?
+    coverImageName: String?,
+    mode: PlaybackMode = .normal
   ) {
     guard !songs.isEmpty else { return }
     guard songs.count == playerNames.count else { return }
@@ -82,6 +93,7 @@ final class AudioPlaybackService {
     queue = songs
     queuePlayerNames = playerNames
     currentIndex = index
+    playbackMode = mode
     
     nowPlaying = queue[currentIndex]
     currentPlayerName = queuePlayerNames[currentIndex]
@@ -93,17 +105,24 @@ final class AudioPlaybackService {
   /// 다음곡
   func playNext() {
     guard !queue.isEmpty else { return }
-    guard currentIndex + 1 < queue.count else { return }
     
-    currentIndex += 1
+    if currentIndex + 1 < queue.count {
+      currentIndex += 1
+    } else if playbackMode == .search {
+      currentIndex = 0
+    } else {
+      return
+    }
+    
     nowPlaying = queue[currentIndex]
     currentPlayerName = queuePlayerNames[currentIndex]
     
     playCurrentSong()
   }
-
+  
   /// 이전곡
   func playPrevious() {
+    guard canSkipManually else { return }
     guard !queue.isEmpty else { return }
     guard currentIndex - 1 >= 0 else { return }
     
@@ -149,6 +168,11 @@ final class AudioPlaybackService {
         
         if self.currentIndex + 1 < self.queue.count {
           self.playNext()
+        } else if self.playbackMode == .search && !self.queue.isEmpty {
+          self.currentIndex = 0
+          self.nowPlaying = self.queue[0]
+          self.currentPlayerName = self.queuePlayerNames[0]
+          self.playCurrentSong()
         } else {
           self.isPlaying = false
           self.syncNowPlaying()
