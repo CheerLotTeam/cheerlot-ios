@@ -12,7 +12,7 @@ struct WatchCheerLot_Watch_AppApp: App {
 
   var body: some Scene {
     WindowGroup {
-      StartingMemberListView()
+        LineupView()
     }
   }
 }
