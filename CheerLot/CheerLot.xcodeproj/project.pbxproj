@@ -83,6 +83,14 @@
 				Core/Util/Config.swift,
 				Core/Util/Constants.swift,
 				Data/DTOs/Response/Legacy/PlayerWatchDto.swift,
+				Data/RepositoryImpl/Player/PlayerLocalRepositoryImpl.swift,
+				Data/RepositoryImpl/Team/TeamLocalRepositoryImpl.swift,
+				Data/RepositoryImpl/Team/TeamSelectionRepositoryImpl.swift,
+				Data/Source/TeamDataSource.swift,
+				Data/Storage/Local/LocalStorageError.swift,
+				Data/Storage/Local/Schema/CheerLotSchemaV3.swift,
+				Data/Storage/Local/Schema/SchemaAliases.swift,
+				Data/Storage/Local/UserDefaultsKey.swift,
 				Legacy/Enum/Theme.swift,
 			);
 			target = CF3BA72A2DED7FB800E600B6 /* WatchCheerLot Watch App */;
