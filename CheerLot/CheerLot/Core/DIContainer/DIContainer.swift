@@ -109,6 +109,10 @@ extension DIContainer {
     registerSingleton(PlayerRemoteRepository.self) {
       PlayerRemoteRepositoryImpl()
     }
+
+    registerSingleton(WatchSyncRepository.self) {
+      WatchSyncRepositoryImpl()
+    }
   }
 
   private func assembleUseCases() {
@@ -162,12 +166,16 @@ extension DIContainer {
         teamRemoteRepository: container.resolve(TeamRemoteRepository.self),
         playerLocalRepository: container.resolve(PlayerLocalRepository.self),
         playerRemoteRepository: container.resolve(PlayerRemoteRepository.self),
-        userSettingsRepository: container.resolve(UserSettingsRepository.self)
+        userSettingsRepository: container.resolve(UserSettingsRepository.self),
+        watchSyncRepository: container.resolve(WatchSyncRepository.self)
       )
     }
 
     register(LineupChangeUseCase.self) { container in
-      LineupChangeUseCaseImpl(playerLocalRepository: container.resolve(PlayerLocalRepository.self))
+      LineupChangeUseCaseImpl(
+        playerLocalRepository: container.resolve(PlayerLocalRepository.self),
+        watchSyncRepository: container.resolve(WatchSyncRepository.self)
+      )
     }
   }
 }

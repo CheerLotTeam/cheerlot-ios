@@ -19,7 +19,7 @@ final class TeamSelectViewModel {
 
   let columns = [
     GridItem(.flexible(), spacing: 17),
-    GridItem(.flexible(), spacing: 17),
+    GridItem(.flexible(), spacing: 17)
   ]
 
   @ObservationIgnored
