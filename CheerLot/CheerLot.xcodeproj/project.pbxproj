@@ -85,6 +85,7 @@
 				Core/Util/Constants.swift,
 				Data/DTOs/Response/Legacy/PlayerWatchDto.swift,
 				Legacy/Enum/Theme.swift,
+				Resource/AppIcon/cheerlot_icon_default.icon,
 			);
 			target = CF3BA72A2DED7FB800E600B6 /* WatchCheerLot Watch App */;
 		};
@@ -520,7 +521,7 @@
 		CF3BA73A2DED7FB900E600B6 /* Debug configuration for PBXNativeTarget "WatchCheerLot Watch App" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = cheerlot_icon_default;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = "WatchCheerLot Watch App/WatchCheerLot Watch App.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
@@ -557,7 +558,7 @@
 		CF3BA73B2DED7FB900E600B6 /* Release configuration for PBXNativeTarget "WatchCheerLot Watch App" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = cheerlot_icon_default;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = "WatchCheerLot Watch App/WatchCheerLot Watch App.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";

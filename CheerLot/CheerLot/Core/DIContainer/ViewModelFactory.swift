@@ -34,24 +34,39 @@ final class ViewModelFactory {
     LineupChangeViewModel(lineupPlayer)
   }
 
+  func createLineupPlaybackViewModel(
+    players: [LineupPlayerVO],
+    startIndex: Int
+  ) -> LineupPlaybackViewModel {
+    LineupPlaybackViewModel(
+      players: players,
+      startIndex: startIndex
+    )
+  }
+
   // MARK: - TeamMembers
-  func createTeamMembersViewModel(team: TeamInfo, audioPlayer: AudioPlaybackService)
-    -> TeamMembersViewModel
-  {
-    TeamMembersViewModel(audioPlayer: audioPlayer)
+  func createTeamMembersViewModel() -> TeamMembersViewModel {
+    TeamMembersViewModel()
   }
 
   // MARK: - Playback
   func createPlaybackViewModel(
     song: CheerSongInfo,
-    playerName: String,
-    audioPlayer: AudioPlaybackService
+    playerName: String
   ) -> PlaybackViewModel {
-    PlaybackViewModel(song: song, playerName: playerName, audioPlayer: audioPlayer)
+    PlaybackViewModel(
+      song: song,
+      playerName: playerName
+    )
+  }
+
+  // MARK: - Search
+  func createSearchViewModel() -> SearchViewModel {
+    SearchViewModel()
   }
 
   // MARK: - Setting
-  func createSettingViewModel(coordinator: AppCoordinator) -> SettingViewModel {
-    SettingViewModel(coordinator: coordinator)
+  func createSettingViewModel() -> SettingViewModel {
+    SettingViewModel()
   }
 }

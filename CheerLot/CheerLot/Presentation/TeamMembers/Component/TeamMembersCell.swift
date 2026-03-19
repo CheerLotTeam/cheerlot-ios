@@ -14,6 +14,7 @@ struct TeamMembersCell: View {
   let asset: TeamMembersAssetVO
   let memberName: String
   let hasSong: Bool
+  let title: String?
   let backNumber: Int
 
   // MARK: - Body
@@ -29,13 +30,20 @@ struct TeamMembersCell: View {
         .offset(y: -2)
 
       Spacer()
+      HStack(spacing: 8) {
+        if let title {
+          Text(title)
+            .font(.M4)
+            .foregroundStyle(.gray300)
+        }
 
-      Image(systemName: "play.fill")
-        .resizable()
-        .scaledToFit()
-        .frame(width: 14)
-        .frame(height: 16)
-        .foregroundStyle(hasSong ? asset.primaryColor : .gray200)
+        Image(systemName: "play.fill")
+          .resizable()
+          .scaledToFit()
+          .frame(width: 14)
+          .frame(height: 16)
+          .foregroundStyle(hasSong ? asset.primaryColor : .gray200)
+      }
     }
     .padding(.bottom, 12)
     .padding(.horizontal, 10)
@@ -51,6 +59,7 @@ struct TeamMembersCell: View {
     ),
     memberName: "김선수",
     hasSong: true,
+    title: "응원가",
     backNumber: 23
   )
 }

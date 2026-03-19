@@ -6,76 +6,137 @@
 //
 
 import Foundation
+import Observation
 
+@Observable
 final class TeamMembersViewModel {
 
-  private let audioPlayer: AudioPlaybackService
+  // MARK: - State
+  var currentTeam: TeamInfo
+  var rows: [TeamMembersSongVO] = []
+  var isLoading = false
+  var errorMessage: String?
 
-  // 지금은 mockMembers를 VM이 소유 (나중에 UseCase로 교체)
-  let members: [Member]
+  private var players: [PlayerInfo] = []
 
-  init(
-    audioPlayer: AudioPlaybackService,
-    members: [Member] = TeamMembersViewModel.mockMembers
-  ) {
-    self.audioPlayer = audioPlayer
-    self.members = members
+  var totalSongCount: Int {
+    rows.filter { $0.song != nil }.count
   }
 
-  func didTapMember(_ member: Member) {
-    guard member.hasSong else { return }
+  // MARK: - Dependencies
+  @ObservationIgnored
+  @Injected(TeamSelectionUseCase.self) private var teamSelectionUseCase
 
-    /// 테스트
-    let song = CheerSongInfo(
-      id: "1",
-      playerId: PlayerID("박찬호"),
-      title: "기본 응원가",
-      lyrics: "치고 달려라\n멀리 높이 더 빨리\n뜨거운 열정을 담아",
-      audioURL: "ht1.mp3"
+  @ObservationIgnored
+  @Injected(TeamPlayersSyncUseCase.self) private var teamPlayersSyncUseCase
+
+  @ObservationIgnored
+  @Injected(PlayTeamMembersUseCase.self) private var playTeamMembersUseCase
+
+  // MARK: - Init
+  init() {
+    let teamSelectionUseCase = DIContainer.shared.resolve(TeamSelectionUseCase.self)
+    self.currentTeam =
+      teamSelectionUseCase.getCurrentTeam()
+      ?? TeamDataSource.toEntity(.samsung)
+  }
+
+  // MARK: - Action
+  func onAppear() async {
+    if let selectedTeam = teamSelectionUseCase.getCurrentTeam(),
+      selectedTeam.id != currentTeam.id
+    {
+      currentTeam = selectedTeam
+    }
+
+    await syncData()
+    await loadData()
+  }
+
+  func refresh() async {
+    await syncData()
+    await loadData()
+  }
+
+  func didUpdateSelectedTeam(_ team: TeamInfo) async {
+    guard currentTeam.id != team.id else { return }
+    currentTeam = team
+    await syncData()
+    await loadData()
+  }
+
+  func didTapSong(_ item: TeamMembersSongVO) {
+    playTeamMembersUseCase.playSelected(
+      row: item,
+      allRows: rows,
+      currentTeam: currentTeam
     )
-
-    audioPlayer.play(song)
   }
 
   func didTapPlayAll() {
-    // TODO: 전체 재생 로직
+    playTeamMembersUseCase.playAll(
+      rows: rows,
+      currentTeam: currentTeam
+    )
   }
-}
 
-extension TeamMembersViewModel {
-  static let mockMembers: [Member] = [
-    Member(name: "김선수", backNumber: 23, hasSong: true),
-    Member(name: "이선수", backNumber: 7, hasSong: false),
-    Member(name: "박선수", backNumber: 10, hasSong: true),
-    Member(name: "김선수", backNumber: 23, hasSong: true),
-    Member(name: "이선수", backNumber: 7, hasSong: false),
-    Member(name: "박선수", backNumber: 10, hasSong: true),
-    Member(name: "김선수", backNumber: 23, hasSong: true),
-    Member(name: "이선수", backNumber: 7, hasSong: false),
-    Member(name: "박선수", backNumber: 10, hasSong: true),
-    Member(name: "김선수", backNumber: 23, hasSong: true),
-    Member(name: "이선수", backNumber: 7, hasSong: false),
-    Member(name: "박선수", backNumber: 10, hasSong: true),
-    Member(name: "김선수", backNumber: 23, hasSong: true),
-    Member(name: "이선수", backNumber: 7, hasSong: false),
-    Member(name: "박선수", backNumber: 10, hasSong: true),
-    Member(name: "김선수", backNumber: 23, hasSong: true),
-    Member(name: "이선수", backNumber: 7, hasSong: false),
-    Member(name: "박선수", backNumber: 10, hasSong: true),
-    Member(name: "김선수", backNumber: 23, hasSong: true),
-    Member(name: "이선수", backNumber: 7, hasSong: false),
-    Member(name: "박선수", backNumber: 10, hasSong: true),
-  ]
-}
+  // MARK: - Private
+  private func syncData() async {
+    do {
+      try await teamPlayersSyncUseCase.syncIfNeeded(currentTeam.id)
+    } catch {
+      print("Team players sync failed: \(error)")
+    }
+  }
 
-struct Member: Identifiable {
-  let id = UUID()
-  let name: String
-  let backNumber: Int
-  let hasSong: Bool
+  private func loadData() async {
+    isLoading = true
+    errorMessage = nil
 
-  /// 임시 mock용 PlayerID
-  var playerIdMock: PlayerID {
-    PlayerID("\(backNumber)")
+    do {
+      let playerEntities = try await teamPlayersSyncUseCase.getAllPlayers(currentTeam.id)
+
+      let sortedPlayers = playerEntities.sorted { lhs, rhs in
+        let lhsHasSong = !lhs.cheerSongs.isEmpty
+        let rhsHasSong = !rhs.cheerSongs.isEmpty
+
+        if lhsHasSong != rhsHasSong {
+          return lhsHasSong && !rhsHasSong
+        }
+
+        return lhs.name.localizedCompare(rhs.name) == .orderedAscending
+      }
+
+      players = sortedPlayers
+
+      rows = sortedPlayers.flatMap { player in
+        if player.cheerSongs.isEmpty {
+          return [
+            TeamMembersSongVO(
+              id: "\(player.id.value)-empty",
+              playerId: player.id,
+              playerName: player.name,
+              backNumber: player.backNumber,
+              song: nil
+            )
+          ]
+        } else {
+          return player.cheerSongs.map { song in
+            TeamMembersSongVO(
+              id: "\(player.id.value)-\(song.id)",
+              playerId: player.id,
+              playerName: player.name,
+              backNumber: player.backNumber,
+              song: song
+            )
+          }
+        }
+      }
+
+      isLoading = false
+    } catch {
+      isLoading = false
+      errorMessage = "전체 선수 데이터를 불러올 수 없습니다: \(error.localizedDescription)"
+    }
   }
 }

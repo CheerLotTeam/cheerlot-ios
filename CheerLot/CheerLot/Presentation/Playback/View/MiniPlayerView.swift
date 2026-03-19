@@ -11,6 +11,7 @@ import SwiftUI
 struct MiniPlayerView: View {
 
   // MARK: - Properties
+  let coverImage: Image
   let playerName: String
   let title: String
   let isPlaying: Bool
@@ -65,9 +66,13 @@ extension MiniPlayerView {
   /// 응원가 정보
   private var cheerSongInfo: some View {
     HStack(spacing: 8) {
-      RoundedRectangle(cornerRadius: layout.imageCornerRadius)
-        .fill(.gray)
+      coverImage
+        .resizable()
+        .scaledToFill()
         .frame(width: layout.imageSize, height: layout.imageSize)
+        .clipShape(
+          RoundedRectangle(cornerRadius: layout.imageCornerRadius)
+        )
 
       VStack(alignment: .leading, spacing: .zero) {
         Text(playerName)

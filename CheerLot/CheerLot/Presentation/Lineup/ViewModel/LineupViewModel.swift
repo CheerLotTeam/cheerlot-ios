@@ -95,6 +95,21 @@ final class LineupViewModel {
     showToast = true
   }
 
+  func lineupPlaybackStartIndex(
+    playerId: String,
+    songId: String
+  ) -> Int {
+    let flattenedItems = lineupPlayers.flatMap { player in
+      player.cheerSongs.map { song in
+        (playerId: player.id, songId: song.id)
+      }
+    }
+
+    return flattenedItems.firstIndex {
+      $0.playerId == playerId && $0.songId == songId
+    } ?? 0
+  }
+
   // MARK: - Private
   private func convertToVO(data: LineupData, teamId: String) {
     guard let teamInfo = teamInfoUseCase.getTeamInfo(TeamID(teamId)) else { return }

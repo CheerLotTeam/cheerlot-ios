@@ -29,7 +29,7 @@ extension AppCoordinator {
     // TODO: - View 넣기
     switch route {
     case .settings:
-      let viewModel = factory.createSettingViewModel(coordinator: self)
+      let viewModel = factory.createSettingViewModel()
       SettingView(viewModel: viewModel)
 
     case .serviceInfo:

@@ -19,7 +19,10 @@ struct MainTabView: View {
 
   @State private var selectedTab: TabKey = .lineup
   @State private var isPlayerExpanded: Bool = false
+  @State private var isMiniPlayerHidden: Bool = false
   @State private var lineupViewModel = ViewModelFactory.shared.createLineupViewModel()
+  @State private var teamMembersViewModel = ViewModelFactory.shared.createTeamMembersViewModel()
+  @State private var searchViewModel = ViewModelFactory.shared.createSearchViewModel()
 
   @Namespace private var animation
 
@@ -28,7 +31,7 @@ struct MainTabView: View {
   }
 
   private var showMiniPlayer: Bool {
-    selectedTab != .lineup && audioPlayer.nowPlaying != nil
+    selectedTab != .lineup && audioPlayer.nowPlaying != nil && !isMiniPlayerHidden
   }
 
   // MARK: - Init
@@ -61,6 +64,9 @@ struct MainTabView: View {
           .padding(.bottom, 50)
       }
     }
+    .onPreferenceChange(MiniPlayerHiddenPreferenceKey.self) { hidden in
+      isMiniPlayerHidden = hidden
+    }
     .onChange(of: selectedTab) { _, newValue in
       if newValue == .lineup {
         audioPlayer.pause()
@@ -72,9 +78,11 @@ struct MainTabView: View {
           asset: asset,
           viewModel: ViewModelFactory.shared.createPlaybackViewModel(
             song: song,
-            playerName: song.playerId.value,
-            audioPlayer: audioPlayer
-          )
+            playerName: audioPlayer.currentPlayerName ?? song.playerId.value
+          ),
+          onClose: {
+            isPlayerExpanded = false
+          }
         )
         .navigationTransition(.zoom(sourceID: "AUDIOPLAYER", in: animation))
         .ignoresSafeArea()
@@ -96,21 +104,16 @@ extension MainTabView {
       }
 
     case .teamMembers:
-      let asset = TeamMembersAssetVO(base: TeamAssetVO(team.id))
       AppCoordinatorContainer {
-        TeamMembersView(
-          team: team,
-          asset: asset,
-          viewModel: ViewModelFactory.shared.createTeamMembersViewModel(
-            team: team,
-            audioPlayer: audioPlayer
-          )
-        )
+        TeamMembersView(viewModel: teamMembersViewModel)
       }
 
     case .search:
       AppCoordinatorContainer {
-        SearchView(asset: SearchAssetVO(base: TeamAssetVO(TeamDataSource.toEntity(.samsung).id)))
+        SearchView(
+          asset: SearchAssetVO(base: TeamAssetVO(team.id)),
+          viewModel: searchViewModel
+        )
       }
     }
   }
@@ -154,14 +157,19 @@ extension MainTabView {
   private var miniPlayerBar: some View {
     if let song = audioPlayer.nowPlaying {
       MiniPlayerView(
-        playerName: song.playerId.value,  // MARK: - PlayerInfo.name으로 교체 예정
+        coverImage: asset.coverImage,
+        playerName: audioPlayer.currentPlayerName ?? song.playerId.value,
         title: song.title,
         isPlaying: audioPlayer.isPlaying,
         onTap: {
           isPlayerExpanded.toggle()
         },
         onPlayPause: { audioPlayer.toggle() },
-        onNext: { /* TODO: 다음 곡 */  }
+        onNext: {
+          if audioPlayer.canSkipManually {
+            audioPlayer.playNext()
+          }
+        }
       )
       .matchedTransitionSource(id: "AUDIOPLAYER", in: animation)
       .padding(.horizontal, 20)
