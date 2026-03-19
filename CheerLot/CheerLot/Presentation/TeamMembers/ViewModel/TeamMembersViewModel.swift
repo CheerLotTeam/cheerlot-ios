@@ -10,7 +10,7 @@ import Observation
 
 @Observable
 final class TeamMembersViewModel {
-
+  
   // MARK: - State
   var currentTeam: TeamInfo
   var rows: [TeamMembersSongVO] = []
@@ -31,18 +31,16 @@ final class TeamMembersViewModel {
   @Injected(TeamPlayersSyncUseCase.self) private var teamPlayersSyncUseCase
   
   @ObservationIgnored
-  private let audioPlayer: AudioPlaybackService
-
+  @Injected(PlayTeamMembersUseCase.self) private var playTeamMembersUseCase
+  
   // MARK: - Init
-  init(audioPlayer: AudioPlaybackService) {
-    self.audioPlayer = audioPlayer
-    
+  init() {
     let teamSelectionUseCase = DIContainer.shared.resolve(TeamSelectionUseCase.self)
     self.currentTeam =
     teamSelectionUseCase.getCurrentTeam()
     ?? TeamDataSource.toEntity(.samsung)
   }
-
+  
   // MARK: - Action
   func onAppear() async {
     if let selectedTeam = teamSelectionUseCase.getCurrentTeam(),
@@ -60,44 +58,26 @@ final class TeamMembersViewModel {
   }
   
   func didUpdateSelectedTeam(_ team: TeamInfo) async {
-     guard currentTeam.id != team.id else { return }
-     currentTeam = team
-     await syncData()
-     await loadData()
-   }
+    guard currentTeam.id != team.id else { return }
+    currentTeam = team
+    await syncData()
+    await loadData()
+  }
   
   func didTapSong(_ item: TeamMembersSongVO) {
-    let playableRows = rows.filter { $0.song != nil }
-    guard let startIndex = playableRows.firstIndex(where: { $0.id == item.id }) else { return }
-
-    let coverImageName = TeamAssetVO(currentTeam.id).coverImageName
-    let cheerSongs = playableRows.compactMap(\.song)
-    let playerNames = playableRows.map(\.playerName)
-
-    audioPlayer.playQueue(
-      cheerSongs,
-      playerNames: playerNames,
-      startAt: startIndex,
-      coverImageName: coverImageName
-    )
-  }
-    
-  func didTapPlayAll() {
-    let playableRows = rows.filter { $0.song != nil }
-    guard !playableRows.isEmpty else { return }
-    
-    let coverImageName = TeamAssetVO(currentTeam.id).coverImageName
-    let cheerSongs = playableRows.compactMap(\.song)
-    let playerNames = playableRows.map(\.playerName)
-    
-    audioPlayer.playQueue(
-      cheerSongs,
-      playerNames: playerNames,
-      startAt: 0,
-      coverImageName: coverImageName
+    playTeamMembersUseCase.playSelected(
+      row: item,
+      allRows: rows,
+      currentTeam: currentTeam
     )
   }
   
+  func didTapPlayAll() {
+    playTeamMembersUseCase.playAll(
+      rows: rows,
+      currentTeam: currentTeam
+    )
+  }
   
   // MARK: - Private
   private func syncData() async {
@@ -107,16 +87,28 @@ final class TeamMembersViewModel {
       print("Team players sync failed: \(error)")
     }
   }
-
+  
   private func loadData() async {
     isLoading = true
     errorMessage = nil
-
+    
     do {
       let playerEntities = try await teamPlayersSyncUseCase.getAllPlayers(currentTeam.id)
-      players = playerEntities
-
-      rows = playerEntities.flatMap { player in
+      
+      let sortedPlayers = playerEntities.sorted { lhs, rhs in
+        let lhsHasSong = !lhs.cheerSongs.isEmpty
+        let rhsHasSong = !rhs.cheerSongs.isEmpty
+        
+        if lhsHasSong != rhsHasSong {
+          return lhsHasSong && !rhsHasSong
+        }
+        
+        return lhs.name.localizedCompare(rhs.name) == .orderedAscending
+      }
+      
+      players = sortedPlayers
+      
+      rows = sortedPlayers.flatMap { player in
         if player.cheerSongs.isEmpty {
           return [
             TeamMembersSongVO(
@@ -139,7 +131,7 @@ final class TeamMembersViewModel {
           }
         }
       }
-
+      
       isLoading = false
     } catch {
       isLoading = false
