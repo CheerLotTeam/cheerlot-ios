@@ -27,8 +27,6 @@ final class DIContainer {
     defer { lock.unlock() }
 
     let key = String(describing: type)
-//    let instance = factory()
-//    singletons[key] = instance
     singletonFactories[key] = factory
   }
 
