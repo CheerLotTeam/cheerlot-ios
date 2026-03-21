@@ -19,6 +19,8 @@ struct Constants {
   static let instagramURL: String = "https://www.instagram.com/cheer.lot/"
 
   static let appStoreURL: String = "https://apps.apple.com/app/id6748527115?action=write-review"
+  
+  static let mainPageURL: String = "https://nettle-check-e5b.notion.site/CheerLot-2a851bda753c81128f11e57d5da88a0e"
 
   struct AppInfo {
     static let termsOfService =

@@ -10,7 +10,11 @@ import SwiftUI
 struct SettingsMenuCard: View {
   let titles: [String]
   let onTap: (Int) -> Void
-
+  
+  private var cardCornerRadius: CGFloat {
+    titles.count == 1 ? 25 : 20
+  }
+  
   var body: some View {
     VStack(spacing: .zero) {
       ForEach(titles.indices, id: \.self) { idx in
@@ -21,9 +25,9 @@ struct SettingsMenuCard: View {
             Text(titles[idx])
               .font(.M3)
               .foregroundStyle(.gray800)
-
+            
             Spacer()
-
+            
             Image(systemName: "chevron.right")
               .resizable()
               .scaledToFit()
@@ -31,20 +35,22 @@ struct SettingsMenuCard: View {
               .foregroundStyle(.gray200)
           }
           .padding(.vertical, 14)
+          .padding(.horizontal, 5)
           .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
-
+        
         if idx != titles.count - 1 {
           Rectangle()
-            .fill(.gray200)
-            .frame(height: 0.5)
+            .fill(.gray100)
+            .frame(height: 0.25)
         }
       }
     }
-    .padding(.horizontal, 14)
+    .padding(.horizontal, 19)
     .padding(.vertical, 6)
-    .background(RoundedRectangle(cornerRadius: 20).fill(.gray100))
-    .clipShape(RoundedRectangle(cornerRadius: 20))
+    .background(RoundedRectangle(cornerRadius: cardCornerRadius)
+      .fill(.gray000))
+    .clipShape(RoundedRectangle(cornerRadius: cardCornerRadius))
   }
 }
