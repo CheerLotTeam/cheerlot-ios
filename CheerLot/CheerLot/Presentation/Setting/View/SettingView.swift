@@ -96,7 +96,7 @@ extension SettingView {
       appIconButtonGroup
         .background(
           RoundedRectangle(cornerRadius: 20)
-            .fill(.gray100)
+            .fill(.gray000)
         )
     }
   }
