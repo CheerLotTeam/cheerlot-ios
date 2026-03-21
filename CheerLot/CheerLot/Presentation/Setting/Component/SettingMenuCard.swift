@@ -29,10 +29,8 @@ struct SettingsMenuCard: View {
             Spacer()
             
             Image(systemName: "chevron.right")
-              .resizable()
-              .scaledToFit()
-              .frame(width: 8, height: 14)
-              .foregroundStyle(.gray200)
+              .font(.system(size: 16, weight: .medium))
+              .foregroundStyle(.gray100)
           }
           .padding(.vertical, 14)
           .padding(.horizontal, 5)

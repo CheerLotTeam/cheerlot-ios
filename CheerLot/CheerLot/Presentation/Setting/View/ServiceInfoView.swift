@@ -19,14 +19,19 @@ struct ServiceInfoView: View {
 
   // MARK: - Body
   var body: some View {
-    VStack(spacing: 20) {
-      mainPageContent
-      serviceContents
+    ZStack {
+      Color.grayWhite
+        .ignoresSafeArea()
 
-      Spacer()
+      VStack(spacing: 20) {
+        mainPageContent
+        serviceContents
+
+        Spacer()
+      }
+      .padding(.horizontal, 20)
+      .padding(.top, 20)
     }
-    .padding(.horizontal, 20)
-    .padding(.top, 20)
     .toolbar(.hidden, for: .tabBar)
     .navigationBar_backWithTitle(title: "서비스 소개") {
       coordinator.pop()
