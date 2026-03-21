@@ -59,6 +59,7 @@ extension LyricsView {
             Text(song.lyrics)
               .font(.LyricsTypo)
               .foregroundStyle(.grayWhite)
+              .frame(maxWidth: .infinity, alignment: .leading)
           }
         }
       }
