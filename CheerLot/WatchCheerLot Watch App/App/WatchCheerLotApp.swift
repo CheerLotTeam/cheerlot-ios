@@ -14,7 +14,7 @@ struct WatchCheerLot_Watch_AppApp: App {
 
   init() {
     DIContainer.shared.assemble()
-    DIContainer.shared.resolve(WatchConnectivityRepository.self).activate()
+    DIContainer.shared.resolve(WatchDataSyncUseCase.self).start()
     _lineupViewModel = State(initialValue: ViewModelFactory.shared.createLineupViewModel())
   }
 

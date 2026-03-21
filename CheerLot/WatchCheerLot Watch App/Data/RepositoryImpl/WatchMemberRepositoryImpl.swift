@@ -11,7 +11,7 @@ final class WatchMemberRepositoryImpl: WatchMemberRepository {
 
   private let defaults = UserDefaults.standard
 
-  func fetchLineupMembers(teamId: TeamID) -> [PlayerInfo] {
+  func fetchLineupMembers() -> [PlayerInfo] {
     guard let data = defaults.data(forKey: WatchUserDefaultsKey.lineupMembers),
       let dtos = try? JSONDecoder().decode([PlayerSyncDTO].self, from: data)
     else { return [] }
@@ -19,10 +19,9 @@ final class WatchMemberRepositoryImpl: WatchMemberRepository {
     return
       dtos
       .map { $0.toPlayerInfo() }
-      .filter { $0.teamId == teamId }
   }
 
-  func saveLineupMembers(_ members: [PlayerInfo], teamId: TeamID) {
+  func saveLineupMembers(_ members: [PlayerInfo]) {
     let dtos = members.map { PlayerSyncDTO(from: $0) }
     guard let data = try? JSONEncoder().encode(dtos) else {
       print("[WatchMember] 멤버 저장 인코딩 실패")
