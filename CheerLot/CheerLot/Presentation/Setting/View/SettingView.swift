@@ -38,15 +38,22 @@ struct SettingView: View {
 
   // MARK: - Body
   var body: some View {
-    ScrollView {
-      VStack(spacing: 20) {
-        myTeamCard
-        appIconContent
-        supportContent
+    ZStack(alignment: .bottom) {
+      Color.grayWhite
+        .ignoresSafeArea()
+      ScrollView {
+        VStack(spacing: 20) {
+          myTeamCard
+          appIconContent
+          supportContent
+        }
+        .padding(.horizontal, 20)
+        .padding(.top, 20)
       }
-      .padding(.horizontal, 20)
-      .padding(.top, 12)
-      .padding(.bottom, 24)
+      Text("쳐랏 | App Version \(Constants.appVersion)")
+        .font(.M6)
+        .foregroundStyle(.gray200)
+        .padding(.bottom, 60)
     }
     .hideMiniPlayerBar()
     .onAppear {
