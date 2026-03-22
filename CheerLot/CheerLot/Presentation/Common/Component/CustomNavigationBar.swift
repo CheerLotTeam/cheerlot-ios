@@ -66,7 +66,7 @@ struct ToolBarItemBuilder {
 
     case .largeTitle(let text):
       Text(text)
-        .font(.B2)
+        .font(.B1)
         .foregroundStyle(.grayBlack)
         .fixedSize()
 

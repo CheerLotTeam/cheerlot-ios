@@ -27,8 +27,7 @@ struct LineupMemberCell: View {
       Image(systemName: "play.fill")
         .resizable()
         .scaledToFit()
-        .frame(width: 14)
-        .frame(height: 16)
+        .frame(width: 12)
         .foregroundStyle(player.hasSong ? .grayWhite : asset.playDisableColor)
     }
   }
