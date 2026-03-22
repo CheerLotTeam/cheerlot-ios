@@ -27,12 +27,12 @@ struct AppInfoTextPageView: View {
       }
     }
     .navigationBarBackButtonHidden(true)
-    .customNavigation(
-      title: "\(title)",
-      leadingAction: {
-
-      }
-    )
+//    .customNavigation(
+//      title: "\(title)",
+//      leadingAction: {
+//
+//      }
+//    )
     .onAppear {
       AnalyticsLogger.logScreen(LoggerEvent.View.termsV)
     }

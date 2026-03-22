@@ -38,10 +38,10 @@ struct CheerSongView: View {
     }
     //    .ignoresSafeArea(.all)
     .navigationBarBackButtonHidden(true)
-    .customNavigation(
-      leadingAction: {},
-      whiteStyle: true
-    )
+//    .customNavigation(
+//      leadingAction: {},
+//      whiteStyle: true
+//    )
     .onAppear {
       AnalyticsLogger.logScreen(screenName)
       viewModel.configurePlaylist(with: players, startAt: startIndex)

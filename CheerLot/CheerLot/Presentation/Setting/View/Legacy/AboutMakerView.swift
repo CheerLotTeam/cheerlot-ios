@@ -24,12 +24,12 @@ struct AboutMakerView: View {
         .padding(.horizontal, DynamicLayout.dynamicValuebyWidth(21))
     }
     .navigationBarBackButtonHidden(true)
-    .customNavigation(
-      title: "만든 사람들",
-      leadingAction: {
-        //        container.navigationRouter.pop()
-      }
-    )
+//    .customNavigation(
+//      title: "만든 사람들",
+//      leadingAction: {
+//        //        container.navigationRouter.pop()
+//      }
+//    )
     .onAppear {
       AnalyticsLogger.logScreen(screenName)
     }

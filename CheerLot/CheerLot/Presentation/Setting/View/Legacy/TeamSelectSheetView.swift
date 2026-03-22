@@ -28,44 +28,44 @@ struct TeamSelectSheetView: View {
   ]
 
   var body: some View {
-    VStack(spacing: 26) {
-      ZStack {
-        Text("응원팀 변경")
-          .font(.dynamicPretend(type: .semibold, size: 20))
-          .foregroundStyle(.black)
-
-        HStack {
-          Spacer()
-          Button {
-            AnalyticsLogger.logButtonClick(
-              screen: screenName, button: LoggerEvent.ButtonEvent.completeBtnTapped)
-            themeManager.updateTheme(tempSelectedTheme)
-            onComplete?()
-          } label: {
-            Text("완료")
-              .font(.dynamicPretend(type: .regular, size: 18))
-              .foregroundStyle(.blue)
-          }
-        }
-      }
-
-      LazyVGrid(columns: columns, spacing: 9) {
-        ForEach(Theme.allCases) { theme in
-          TeamBtn(theme: theme, isSelected: tempSelectedTheme == theme)
-            .onTapGesture {
-              tempSelectedTheme = theme
-              AnalyticsLogger.logCellClick(
-                screen: screenName,
-                cell: LoggerEvent.CellEvent.teamTapped,
-                index: theme.id
-              )
-            }
-        }
-      }
-    }
-    .padding(.horizontal, DynamicLayout.dynamicValuebyWidth(31))
-    .onAppear {
-      AnalyticsLogger.logScreen(screenName)
-    }
+//    VStack(spacing: 26) {
+//      ZStack {
+//        Text("응원팀 변경")
+//          .font(.dynamicPretend(type: .semibold, size: 20))
+//          .foregroundStyle(.black)
+//
+//        HStack {
+//          Spacer()
+//          Button {
+//            AnalyticsLogger.logButtonClick(
+//              screen: screenName, button: LoggerEvent.ButtonEvent.completeBtnTapped)
+//            themeManager.updateTheme(tempSelectedTheme)
+//            onComplete?()
+//          } label: {
+//            Text("완료")
+//              .font(.dynamicPretend(type: .regular, size: 18))
+//              .foregroundStyle(.blue)
+//          }
+//        }
+//      }
+//
+//      LazyVGrid(columns: columns, spacing: 9) {
+//        ForEach(Theme.allCases) { theme in
+//          TeamBtn(theme: theme, isSelected: tempSelectedTheme == theme)
+//            .onTapGesture {
+//              tempSelectedTheme = theme
+//              AnalyticsLogger.logCellClick(
+//                screen: screenName,
+//                cell: LoggerEvent.CellEvent.teamTapped,
+//                index: theme.id
+//              )
+//            }
+//        }
+//      }
+//    }
+//    .padding(.horizontal, DynamicLayout.dynamicValuebyWidth(31))
+//    .onAppear {
+//      AnalyticsLogger.logScreen(screenName)
+//    }
   }
 }

@@ -39,12 +39,12 @@ struct MainAppInfoView: View {
         .padding(.bottom, DynamicLayout.dynamicValuebyHeight(30))
     }
     .navigationBarBackButtonHidden(true)
-    .customNavigation(
-      title: "앱 정보",
-      leadingAction: {
-        //        container.navigationRouter.pop()
-      }
-    )
+//    .customNavigation(
+//      title: "앱 정보",
+//      leadingAction: {
+//        //        container.navigationRouter.pop()
+//      }
+//    )
     .sheet(
       isPresented: $showTeamSelectSheet,
       onDismiss: {
