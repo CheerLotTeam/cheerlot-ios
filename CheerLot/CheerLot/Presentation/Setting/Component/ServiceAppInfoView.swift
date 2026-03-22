@@ -15,13 +15,19 @@ struct ServiceAppInfoView: View {
   let text: String
 
   var body: some View {
-    VStack(spacing: 20) {
-      ScrollView {
-        Text(text)
-          .font(.R2)
-          .foregroundStyle(.gray500)
+    ZStack {
+      Color.grayWhite
+        .ignoresSafeArea()
+      
+      VStack(spacing: 20) {
+        ScrollView(showsIndicators: false) {
+          Text(.init(text))
+            .font(.R2)
+            .foregroundStyle(.gray400)
+        }
+        .padding(.horizontal, 20)
+        .padding(.top, 20)
       }
-      .padding(.horizontal, 20)
     }
     .toolbar(.hidden, for: .tabBar)
     .navigationBar_backWithTitle(title: title) {
