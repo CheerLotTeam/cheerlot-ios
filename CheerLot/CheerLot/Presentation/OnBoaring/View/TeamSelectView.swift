@@ -25,57 +25,42 @@ struct TeamSelectView: View {
   }
 
   var body: some View {
-    VStack(spacing: 15) {
-      header
-        .padding(.bottom, 10)
-
-      teamListGrid
-
-      if viewModel.mode.showsBottomButton {
-        completeButton
-      }
-    }
-    .frame(maxWidth: .infinity, maxHeight: .infinity)
-    .padding(.horizontal, 30)
-    .padding(.top, viewModel.mode == .change ? 20 : 32)
-    .padding(.bottom, 12)
-    .navigationTitle(viewModel.mode.navigationTitle)
-    .navigationBarTitleDisplayMode(.inline)
-    .toolbar {
       if viewModel.mode.showsTopBar {
-        ToolbarItem(placement: .topBarLeading) {
-          Button {
-            onClose?()
-          } label: {
-            Image(systemName: "xmark")
-              .font(.system(size: 14, weight: .semibold))
-          }
-          .tint(.grayBlack)
-        }
-
-        ToolbarItem(placement: .principal) {
-          Text(viewModel.mode.navigationTitle)
-            .font(.SB6)
-            .foregroundStyle(.grayBlack)
-        }
-
-        ToolbarItem(placement: .topBarTrailing) {
-          Button {
-            viewModel.complete()
-            onCompleteForChange?()
-          } label: {
-            Image(systemName: "checkmark")
-              .font(.system(size: 14, weight: .semibold))
-          }
-          .tint(.grayBlack)
-          .disabled(!viewModel.isButtonEnabled)
-        }
+          content
+              .toolBar_editMode(
+                title: viewModel.mode.navigationTitle,
+                onClose: { onClose?() },
+                onCheck: {
+                    viewModel.complete()
+                    onCompleteForChange?()
+                }
+              )
+          
+      } else {
+          content
       }
-    }
   }
 }
 
 extension TeamSelectView {
+    
+    private var content: some View {
+        VStack(spacing: 15) {
+          header
+            .padding(.bottom, 10)
+
+          teamListGrid
+
+          if viewModel.mode.showsBottomButton {
+            completeButton
+          }
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .padding(.horizontal, 30)
+        .padding(.top, viewModel.mode == .change ? 20 : 32)
+        .padding(.bottom, 12)
+    }
+    
   private var header: some View {
     Text(viewModel.mode.guideText)
       .font(viewModel.mode == .onboarding ? .SB4 : .M3)
