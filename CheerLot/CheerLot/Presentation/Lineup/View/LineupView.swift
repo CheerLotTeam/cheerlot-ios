@@ -76,7 +76,7 @@ struct LineupView: View {
   }
 
   private func cellHeight(cardHeight: CGFloat) -> CGFloat {
-    let totalSeparatorHeight = separatorHeight * 8
+    let totalSeparatorHeight = separatorHeight * 9
     let availableHeight = listHeight(cardHeight: cardHeight) - totalSeparatorHeight
     return max(0, availableHeight / 9)
   }
@@ -202,6 +202,9 @@ extension LineupView {
               .stroke(style: StrokeStyle(lineWidth: 1, dash: [3]))
               .foregroundColor(asset.listLineColor)
               .frame(height: separatorHeight)
+          } else {
+              Color.clear
+                  .frame(height: separatorHeight)
           }
         }
         .listRowSeparator(.hidden)
