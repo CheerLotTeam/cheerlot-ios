@@ -34,7 +34,7 @@ struct PlaybackView: View {
         topBar
         mainView
       }
-   
+
       MetalBackgroundView()
     }
     .ignoresSafeArea()

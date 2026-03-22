@@ -18,7 +18,7 @@ struct ServiceAppInfoView: View {
     ZStack {
       Color.grayWhite
         .ignoresSafeArea()
-      
+
       VStack(spacing: 20) {
         ScrollView(showsIndicators: false) {
           Text(.init(text))

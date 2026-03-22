@@ -80,8 +80,8 @@ extension ServiceInfoView {
   private func didTapServiceInfoMenu(_ menu: ServiceInfoMenu) {
     switch menu {
     case .mainPage:
-       guard let url = URL(string: Constants.mainPageURL) else { return }
-       openURL(url)
+      guard let url = URL(string: Constants.mainPageURL) else { return }
+      openURL(url)
     case .termsOfService:
       coordinator.push(.termsOfService)
     case .privacyPolicy:
