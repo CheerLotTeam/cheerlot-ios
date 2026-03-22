@@ -129,7 +129,7 @@ extension Font {
 
     /// SwiftUI 폰트 반환
     func swiftUIFont(size: CGFloat) -> Font {
-      .custom(rawValue, size: size)
+      .custom(rawValue, fixedSize: size)
     }
   }
 
@@ -147,7 +147,7 @@ extension Font {
 
     /// SwiftUI 폰트 반환
     func swiftUIFont(size: CGFloat) -> Font {
-      .custom(rawValue, size: size)
+      .custom(rawValue, fixedSize: size)
     }
   }
 }
