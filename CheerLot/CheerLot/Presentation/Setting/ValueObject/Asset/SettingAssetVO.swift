@@ -42,8 +42,7 @@ struct SettingAssetVO {
     LinearGradient(
       colors: [
         base.primaryPalette.color200,
-        base.primaryPalette.color200,
-        base.primaryPalette.color600,
+        base.primaryPalette.color600
       ],
       startPoint: .top,
       endPoint: .bottom
