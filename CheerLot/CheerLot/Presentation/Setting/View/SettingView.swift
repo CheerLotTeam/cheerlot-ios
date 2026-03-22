@@ -49,6 +49,7 @@ struct SettingView: View {
         }
         .padding(.horizontal, 20)
         .padding(.top, 20)
+        .padding(.bottom, 80)
       }
       Text("쳐랏 | App Version \(Constants.appVersion)")
         .font(.M6)
