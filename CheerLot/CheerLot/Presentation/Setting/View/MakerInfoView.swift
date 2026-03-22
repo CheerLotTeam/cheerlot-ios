@@ -14,19 +14,24 @@ struct MakerInfoView: View {
 
   // MARK: - Body
   var body: some View {
-    VStack {
-      SettingsMenuCard(
-        titles: MakerInfoMenu.allCases.map(\.rawValue),
-        onTap: { index in
-          let menus = MakerInfoMenu.allCases
-          guard menus.indices.contains(index) else { return }
-          makerInfoTap(menus[index])
-        }
-      )
-
-      Spacer()
+    ZStack {
+      Color.grayWhite
+        .ignoresSafeArea()
+      VStack {
+        SettingsMenuCard(
+          titles: MakerInfoMenu.allCases.map(\.rawValue),
+          onTap: { index in
+            let menus = MakerInfoMenu.allCases
+            guard menus.indices.contains(index) else { return }
+            makerInfoTap(menus[index])
+          }
+        )
+        
+        Spacer()
+      }
+      .padding(.horizontal, 20)
+      .padding(.top, 20)
     }
-    .padding(.horizontal, 20)
     .toolbar(.hidden, for: .tabBar)
     .navigationBar_backWithTitle(title: "쳐랏 팀") {
       coordinator.pop()
