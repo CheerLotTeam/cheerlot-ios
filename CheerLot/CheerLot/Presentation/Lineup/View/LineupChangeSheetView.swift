@@ -30,7 +30,8 @@ struct LineupChangeSheetView: View {
         }
       }
       .toolBar_editMode(
-        title: "선발 라인업"
+        title: "선수 교체",
+        checkColor: viewModel.selectedPlayer != nil ? (viewModel.asset?.primaryColor ?? .gray800) : .gray800
       ) {
         coordinator.dismissModal()
       } onCheck: {

@@ -10,7 +10,7 @@ import SwiftUI
 enum NavigationBarItem {
   case back(action: () -> Void)
   case close(action: () -> Void)
-  case check(action: () -> Void)
+  case check(action: () -> Void, color: Color)
   case profile(action: () -> Void)
   case largeTitle(String)
   case inlineTitle(String)
@@ -34,56 +34,55 @@ struct ToolBarItemBuilder {
       Button(action: action) {
         Image(systemName: "chevron.left")
           .font(.system(size: 18, weight: .medium))
-          .foregroundStyle(.gray800)
       }
+      .tint(.gray800)
 
     case .close(let action):
       Button(action: action) {
         Image(systemName: "xmark")
           .font(.system(size: 18, weight: .medium))
-          .foregroundStyle(.gray800)
       }
+      .tint(.gray800)
 
-    case .check(let action):
+    case .check(let action, let color):
       Button(action: action) {
         Image(systemName: "checkmark")
           .font(.system(size: 18, weight: .medium))
-          .foregroundStyle(.gray800)
       }
+      .tint(color)
 
     case .profile(let action):
       Button(action: action) {
         if #available(iOS 26.0, *) {
           Image(systemName: "person.fill")
             .font(.system(size: 18, weight: .medium))
-            .foregroundStyle(.gray800)
         } else {
           Image(systemName: "person.crop.circle")
             .font(.system(size: 18, weight: .medium))
-            .foregroundStyle(.gray800)
         }
       }
+      .tint(.gray800)
 
     case .largeTitle(let text):
       Text(text)
         .font(.B1)
-        .foregroundStyle(.grayBlack)
+        .tint(.grayBlack)
         .fixedSize()
 
     case .inlineTitle(let text):
       Text(text)
         .font(.SB6)
-        .foregroundStyle(.grayBlack)
+        .tint(.grayBlack)
 
     case .gameInfo(let date, let teams):
       VStack(alignment: .center, spacing: 0) {
         Text(date)
           .font(.M5)
-          .foregroundStyle(.gray800)
+          .tint(.gray800)
 
         Text(teams)
           .font(.SB8)
-          .foregroundStyle(.grayBlack)
+          .tint(.grayBlack)
       }
 
     case .custom(let view):

@@ -132,13 +132,14 @@ extension View {
   /// leading에 cancel 버튼과 center에 inlineTitle, trailing에 check 버튼을 가지는 toolbar 확장 메서드
   func toolBar_editMode(
     title: String,
+    checkColor: Color = .gray800,
     onClose: @escaping () -> Void,
     onCheck: @escaping () -> Void
   ) -> some View {
     customToolBar(
       leftItem: .close(action: onClose),
       centerItem: .inlineTitle(title),
-      rightItem: .check(action: onCheck)
+      rightItem: .check(action: onCheck, color: checkColor)
     )
     .navigationBarTitleDisplayMode(.inline)
   }
