@@ -32,7 +32,7 @@ struct CheerSongMenuSheetView: View {
       ForEach(Array(player.cheerSongs.enumerated()), id: \.element.id) { _, cheerSong in
         VStack(spacing: 28) {
           Divider()
-            .foregroundStyle(.gray100)
+            .foregroundStyle(.gray000)
 
           Text(cheerSong.title)
             .font(.SB5)

@@ -102,7 +102,7 @@ extension AppCoordinator {
           }
         )
       }
-      .presentationDragIndicator(.visible)
+      .presentationDragIndicator(.hidden)
     case let .inquiry:
       Color.clear
     case let .servicePage:

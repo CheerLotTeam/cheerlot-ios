@@ -10,6 +10,7 @@ import SwiftUI
 /// 서비스 소개 화면입니다.
 struct ServiceInfoView: View {
   @Environment(AppCoordinator.self) private var coordinator
+  @Environment(\.openURL) private var openURL
 
   // MARK: - Properties
   private var policyMenus: [ServiceInfoMenu] {
@@ -18,13 +19,19 @@ struct ServiceInfoView: View {
 
   // MARK: - Body
   var body: some View {
-    VStack(spacing: 20) {
-      mainPageContent
-      serviceContents
+    ZStack {
+      Color.grayWhite
+        .ignoresSafeArea()
 
-      Spacer()
+      VStack(spacing: 20) {
+        mainPageContent
+        serviceContents
+
+        Spacer()
+      }
+      .padding(.horizontal, 20)
+      .padding(.top, 20)
     }
-    .padding(.horizontal, 20)
     .toolbar(.hidden, for: .tabBar)
     .navigationBar_backWithTitle(title: "서비스 소개") {
       coordinator.pop()
@@ -73,7 +80,8 @@ extension ServiceInfoView {
   private func didTapServiceInfoMenu(_ menu: ServiceInfoMenu) {
     switch menu {
     case .mainPage:
-      coordinator.presentModal(.servicePage)
+      guard let url = URL(string: Constants.mainPageURL) else { return }
+      openURL(url)
     case .termsOfService:
       coordinator.push(.termsOfService)
     case .privacyPolicy:
