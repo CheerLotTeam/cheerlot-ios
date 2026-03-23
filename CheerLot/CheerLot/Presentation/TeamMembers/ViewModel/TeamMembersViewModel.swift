@@ -32,6 +32,9 @@ final class TeamMembersViewModel {
 
   @ObservationIgnored
   @Injected(PlayTeamMembersUseCase.self) private var playTeamMembersUseCase
+  
+  @ObservationIgnored
+  @Injected(AudioPlaybackUseCase.self) private var audioPlaybackUseCase
 
   // MARK: - Init
   init() {
@@ -77,6 +80,33 @@ final class TeamMembersViewModel {
     playTeamMembersUseCase.playAll(
       rows: rows,
       currentTeam: currentTeam
+    )
+  }
+  
+  /// 검색 재생 중이면 현재 곡 기준으로 전체선수용 일반 재생 큐로 전환하는 함수
+  func syncPlaybackModeIfNeeded() {
+    guard audioPlaybackUseCase.playbackMode == .search else { return }
+    guard let nowPlaying = audioPlaybackUseCase.nowPlaying else { return }
+
+    let playableRows = rows.filter { $0.song != nil }
+    guard !playableRows.isEmpty else { return }
+
+    guard let startIndex = playableRows.firstIndex(where: {
+      $0.song?.id == nowPlaying.id && $0.playerId == nowPlaying.playerId
+    }) else {
+      return
+    }
+
+    let songs = playableRows.compactMap(\.song)
+    let playerNames = playableRows.map(\.playerName)
+    let coverImageName = TeamAssetVO(currentTeam.id).coverImageName
+
+    audioPlaybackUseCase.playQueue(
+      songs,
+      playerNames: playerNames,
+      startAt: startIndex,
+      coverImageName: coverImageName,
+      mode: .normal
     )
   }
 
