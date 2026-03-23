@@ -10,11 +10,10 @@ import SwiftUI
 /// 팀 내 선수를 검색할 수 있는 화면입니다.
 struct SearchView: View {
   @Environment(AppCoordinator.self) private var coordinator
-  @Environment(\.dismissSearch) private var dismissSearch
 
   let asset: SearchAssetVO
   @State private var viewModel: SearchViewModel
-  @State private var isSearchPresented: Bool = true
+  @State private var isSearchPresented = false
 
   init(asset: SearchAssetVO, viewModel: SearchViewModel) {
     self.asset = asset
@@ -23,7 +22,6 @@ struct SearchView: View {
 
   var body: some View {
     content
-      .hideMiniPlayerBar()
       .toolBar_titleWithProfile(title: "검색") {
         coordinator.push(.settings)
       }
@@ -36,14 +34,6 @@ struct SearchView: View {
         placement: .navigationBarDrawer(displayMode: .always),
         prompt: "검색어를 입력해주세요"
       )
-      .onChange(of: viewModel.query) { _, newValue in
-        if newValue.count > 12 {
-          viewModel.updateQuery(String(newValue.prefix(12)))
-        }
-      }
-      .onSubmit(of: .search) {
-        isSearchPresented = false
-      }
       .task {
         await viewModel.onAppear()
         isSearchPresented = true
@@ -52,9 +42,12 @@ struct SearchView: View {
         guard let team = notification.object as? TeamInfo else { return }
         Task {
           await viewModel.didUpdateSelectedTeam(team)
-          isSearchPresented = true
         }
       }
+      .toastMessage(
+        isPresented: $viewModel.showToast,
+        message: viewModel.toastMessage
+      )
   }
 
   @ViewBuilder
@@ -72,12 +65,12 @@ struct SearchView: View {
   }
 
   private var memberSearchView: some View {
-    VStack(alignment: .center, spacing: 32) {
+    VStack(alignment: .center, spacing: 28) {
       Image(.noGame)
         .resizable()
         .aspectRatio(contentMode: .fit)
-        .frame(width: 84)
-
+        .frame(width: 130)
+      
       Text("우리 팀 선수를 검색해보세요")
         .font(.M1)
         .foregroundStyle(.gray200)
@@ -86,11 +79,11 @@ struct SearchView: View {
   }
 
   private var emptySearchView: some View {
-    VStack(alignment: .center, spacing: 32) {
+    VStack(alignment: .center, spacing: 28) {
       Image(.noSeason)
         .resizable()
         .aspectRatio(contentMode: .fit)
-        .frame(width: 84)
+        .frame(width: 130)
 
       Text("검색 결과가 없습니다")
         .font(.M1)
@@ -101,27 +94,33 @@ struct SearchView: View {
 
   private func searchResultView(results: [SearchResultVO]) -> some View {
     VStack(alignment: .leading, spacing: 16) {
-      Text("총 \(results.count)명")
+      Text("총 \(results.count)곡")
         .font(.M4)
         .foregroundStyle(.gray400)
         .padding(.leading, 20)
+        .padding(.top, 16)
 
       List(results) { result in
         SearchResultCell(
           asset: asset,
           memberName: result.playerName,
           hasSong: result.hasSong,
+          title: result.titleText,
           backNumber: result.backNumber
         )
         .contentShape(Rectangle())
         .onTapGesture {
-          guard result.hasSong else { return }
+          guard let song = result.song else {
+            viewModel.showNoSongToast()
+            return
+          }
 
           viewModel.didTapResult(result)
+
           coordinator.presentModal(
             .basePlayback(
               teamId: viewModel.currentTeam.id,
-              song: result.cheerSongs.first!,
+              song: song,
               playerName: result.playerName
             )
           )
@@ -130,6 +129,7 @@ struct SearchView: View {
         .listRowInsets(.init(top: 0, leading: 20, bottom: 0, trailing: 20))
       }
       .listStyle(.plain)
+      .scrollDismissesKeyboard(.immediately)
     }
   }
 }
