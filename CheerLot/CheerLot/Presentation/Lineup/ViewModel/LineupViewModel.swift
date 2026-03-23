@@ -79,7 +79,7 @@ final class LineupViewModel {
     errorMessage = nil
 
     do {
-      let data = try await lineupManagementUseCase.loadLineup(for: TeamID(teamId))
+      let data = try await lineupManagementUseCase.loadLineupWithSync(for: TeamID(teamId))
 
       convertToVO(data: data, teamId: teamId)
 
@@ -95,19 +95,25 @@ final class LineupViewModel {
     showToast = true
   }
 
-  func lineupPlaybackStartIndex(
-    playerId: String,
-    songId: String
-  ) -> Int {
-    let flattenedItems = lineupPlayers.flatMap { player in
-      player.cheerSongs.map { song in
-        (playerId: player.id, songId: song.id)
-      }
-    }
+  func lineupPlaybackStartIndex(songId: String) -> Int {
+    lineupPlayers
+      .flatMap { $0.cheerSongs }
+      .firstIndex { $0.id == songId } ?? 0
+  }
 
-    return flattenedItems.firstIndex {
-      $0.playerId == playerId && $0.songId == songId
-    } ?? 0
+  func handlePlayerTap(player: LineupPlayerVO) -> LineupTapAction {
+    if player.cheerSongs.count >= 2 {
+      return .showSongList(player: player)
+    } else if let firstSong = player.cheerSongs.first {
+      return .goToPlayback(startIndex: lineupPlaybackStartIndex(songId: firstSong.id))
+    } else {
+      showNoSongToast()
+      return .none
+    }
+  }
+
+  func handleSongSelect(song: CheerSongVO) -> LineupTapAction {
+    .goToPlayback(startIndex: lineupPlaybackStartIndex(songId: song.id))
   }
 
   // MARK: - Private
@@ -129,4 +135,10 @@ final class LineupViewModel {
     // Lineup Players VO 변환
     lineupPlayers = data.lineupPlayers.map { LineupPlayerVO(from: $0) }
   }
+}
+
+enum LineupTapAction {
+    case showSongList(player: LineupPlayerVO)
+    case goToPlayback(startIndex: Int)
+    case none
 }

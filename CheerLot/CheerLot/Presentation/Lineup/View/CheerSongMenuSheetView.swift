@@ -55,19 +55,12 @@ struct CheerSongMenuSheetView: View {
 
 extension CheerSongMenuSheetView {
   private func handleSongSelection(_ selectedSong: CheerSongVO) {
-    // 1. 모든 응원가 수집
-    let allCheerSongs = lineupPlayers.flatMap { $0.cheerSongs }
+      let selectedIndex = lineupPlayers
+          .flatMap { $0.cheerSongs }
+          .firstIndex { $0.id == selectedSong.id } ?? 0
 
-    // 2. 선택된 응원가의 인덱스 찾기
-    guard let selectedIndex = allCheerSongs.firstIndex(where: { $0.id == selectedSong.id }) else {
-      return
-    }
-
-    // 3. Sheet 닫기
     coordinator.dismissModal()
-
-    // TODO: Playback 화면으로 이동
-    // coordinator.presentModal(.playback(player: playerVO, songIndex: selectedIndex))
+    coordinator.presentModal(.lineupPlayback(startIndex: selectedIndex))
 
   }
 }
