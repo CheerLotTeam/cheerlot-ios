@@ -53,7 +53,7 @@ extension TeamSelectCell {
       .overlay(
         RoundedRectangle(cornerRadius: 10)
           .strokeBorder(
-            isSelected ? asset.primaryColor : .gray100,
+            isSelected ? asset.primaryColor : .gray000,
             lineWidth: 1
           )
       )

@@ -96,7 +96,7 @@ extension TeamSelectView {
         .foregroundStyle(viewModel.isButtonEnabled ? .grayWhite : .gray400)
         .frame(maxWidth: .infinity)
         .frame(height: 56)
-        .background(viewModel.isButtonEnabled ? .gray900 : .gray100)
+        .background(viewModel.isButtonEnabled ? .gray900 : .gray000)
         .clipShape(RoundedRectangle(cornerRadius: 35))
     }
     .disabled(!viewModel.isButtonEnabled)
