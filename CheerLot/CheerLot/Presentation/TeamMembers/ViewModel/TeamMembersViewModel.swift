@@ -54,6 +54,7 @@ final class TeamMembersViewModel {
 
     await syncData()
     await loadData()
+    syncPlaybackModeIfNeeded()
   }
 
   func refresh() async {
