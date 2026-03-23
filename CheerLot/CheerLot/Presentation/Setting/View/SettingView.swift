@@ -10,6 +10,7 @@ import SwiftUI
 /// 설정 화면 입니다.
 struct SettingView: View {
   @Environment(AppCoordinator.self) private var coordinator
+  @Environment(MiniPlayerDisplayState.self) private var miniPlayerDisplayState
 
   // MARK: - Properties
   @State private var viewModel: SettingViewModel
@@ -56,9 +57,12 @@ struct SettingView: View {
         .foregroundStyle(.gray200)
         .padding(.bottom, 60)
     }
-    .hideMiniPlayerBar()
     .onAppear {
       viewModel.onAppear()
+      miniPlayerDisplayState.hide()
+    }
+    .onDisappear {
+      miniPlayerDisplayState.show()
     }
     .navigationBar_backWithTitle(title: "설정") {
       coordinator.pop()
