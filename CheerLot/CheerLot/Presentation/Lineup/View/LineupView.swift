@@ -35,6 +35,7 @@ struct LineupView: View {
         if let asset = viewModel.asset {
           ScrollView {
             lineupCard(asset: asset, cardHeight: cardHeight, cardWidth: cardWidth)
+              .padding(.top, UIDevice.isIOS26OrLater ? 3 : 10)
           }
           .frame(width: geo.size.width)
           .scrollIndicators(.hidden)
