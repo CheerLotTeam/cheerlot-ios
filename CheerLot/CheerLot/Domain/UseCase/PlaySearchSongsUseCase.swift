@@ -8,5 +8,9 @@
 import Foundation
 
 protocol PlaySearchSongsUseCase {
-  func play(result: SearchResultVO, coverImageName: String?)
+  func play(
+    selectedResult: SearchResultVO,
+    allResults: [SearchResultVO],
+    coverImageName: String?
+  )
 }

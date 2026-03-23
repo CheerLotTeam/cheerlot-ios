@@ -14,16 +14,24 @@ final class PlaySearchSongsUseCaseImpl: PlaySearchSongsUseCase {
     self.audioPlaybackUseCase = audioPlaybackUseCase
   }
 
-  func play(result: SearchResultVO, coverImageName: String?) {
-    guard !result.cheerSongs.isEmpty else { return }
+  func play(
+    selectedResult: SearchResultVO,
+    allResults: [SearchResultVO],
+    coverImageName: String?
+  ) {
+    let samePlayerRows = allResults.filter { $0.playerId == selectedResult.playerId }
+    let songs = samePlayerRows.compactMap(\.song)
 
-    let songs = result.cheerSongs
-    let playerNames = Array(repeating: result.playerName, count: songs.count)
+    guard !songs.isEmpty else { return }
+
+    let playerNames = Array(repeating: selectedResult.playerName, count: songs.count)
+
+    let startIndex = samePlayerRows.firstIndex { $0.id == selectedResult.id } ?? 0
 
     audioPlaybackUseCase.playQueue(
       songs,
       playerNames: playerNames,
-      startAt: 0,
+      startAt: startIndex,
       coverImageName: coverImageName,
       mode: .search
     )
