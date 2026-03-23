@@ -45,11 +45,21 @@ struct ToolBarItemBuilder {
       .tint(.gray800)
 
     case .check(let action, let color):
-      Button(action: action) {
-        Image(systemName: "checkmark")
-          .font(.system(size: 18, weight: .medium))
-      }
-      .tint(color)
+        if color == .gray800 {
+            Button(action: action) {
+                Image(systemName: "checkmark")
+                    .font(.system(size: 18, weight: .medium))
+            }
+            .tint(color)
+            .buttonStyle(.automatic)
+        } else {
+            Button(action: action) {
+                Image(systemName: "checkmark")
+                    .font(.system(size: 18, weight: .medium))
+            }
+            .tint(color)
+            .buttonStyle(.borderedProminent)
+        }
 
     case .profile(let action):
       Button(action: action) {
