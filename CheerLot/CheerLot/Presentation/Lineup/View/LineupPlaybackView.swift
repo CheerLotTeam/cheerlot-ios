@@ -204,7 +204,7 @@ extension LineupPlaybackView {
     HStack(spacing: 8) {
       ForEach(0..<viewModel.carouselItems.count, id: \.self) { index in
         Capsule()
-          .fill(index == currentRealIndex ? asset.pageIndicatorColor : .grayWhite)
+          .fill(index == currentRealIndex ? asset.selectedPageIndicatorColor : asset.unselectedPageIndicatorColor)
           .frame(
             width: index == currentRealIndex ? 10 : 8, height: index == currentRealIndex ? 10 : 8
           )

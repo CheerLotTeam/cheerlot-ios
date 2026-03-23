@@ -30,6 +30,15 @@ final class TeamAssetVO {
   lazy var secondaryPalette: Color.TeamSecondaryPalette = {
     Color.teamSecondaryPalette(for: assetPrefix)
   }()
+    
+    lazy var pageIndicatorUnselectedColor: Color = {
+        switch assetPrefix {
+        case "hh", "kt":
+            return primaryPalette.color200
+        default:
+            return .grayWhite
+        }
+    }()
 
   lazy var coverImageName: String = {
     "\(assetPrefix)_cover"

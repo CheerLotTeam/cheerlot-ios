@@ -38,7 +38,7 @@ struct LineupPlaybackAssetVO {
       gradient: Gradient(stops: [
         .init(color: base.primaryPalette.color600, location: 0.0),
         .init(color: base.primaryPalette.color100, location: 0.66),
-        .init(color: base.primaryPalette.color300, location: 1.0),
+        .init(color: base.primaryPalette.color300, location: 1.0)
       ]),
       startPoint: .topLeading,
       endPoint: .bottomTrailing
@@ -48,12 +48,12 @@ struct LineupPlaybackAssetVO {
   /// 뷰 배경 그라데이션
   var playbackBackgroundGradient: LinearGradient {
     LinearGradient(
-      colors: [
-        base.primaryPalette.color200.opacity(0),
-        base.primaryPalette.color200,
-      ],
-      startPoint: UnitPoint(x: 0.5, y: 0.45),
-      endPoint: .bottom
+      gradient: Gradient(stops: [
+        .init(color: base.primaryPalette.color200, location: 0),
+        .init(color: base.primaryPalette.color200.opacity(0), location: 0.35)
+      ]),
+      startPoint: .bottom,
+      endPoint: UnitPoint(x: 0.5, y: 0.45)
     )
   }
 
@@ -63,7 +63,7 @@ struct LineupPlaybackAssetVO {
       stops: [
         .init(color: .black, location: 0),
         .init(color: .black, location: 0.85),
-        .init(color: .clear, location: 1),
+        .init(color: .clear, location: 1)
       ],
       startPoint: .top,
       endPoint: .bottom
@@ -95,9 +95,13 @@ struct LineupPlaybackAssetVO {
   }
 
   /// 페이지 인디케이터 컬러
-  var pageIndicatorColor: Color {
+  var selectedPageIndicatorColor: Color {
     base.primaryPalette.color300
   }
+
+    var unselectedPageIndicatorColor: Color {
+        base.pageIndicatorUnselectedColor
+    }
 
   /// 1~9 battingOrder에 따라 사용하는 카드 BG
   private let playCardBGImages: [Image] = [
@@ -109,7 +113,7 @@ struct LineupPlaybackAssetVO {
     Image(.playCardBG6),
     Image(.playCardBG7),
     Image(.playCardBG8),
-    Image(.playCardBG9),
+    Image(.playCardBG9)
   ]
 
   /// battingOrder에 따른 카드 BG 추출 함수
