@@ -8,18 +8,20 @@
 import SwiftUI
 
 struct LineupPlaybackView: View {
+  // MARK: - Environment
+
   @Environment(\.scenePhase) private var scenePhase
   @Environment(AppCoordinator.self) private var coordinator
 
-  let asset: LineupPlaybackAssetVO
-  let gameDate: String
-  let teamsText: String
+  // MARK: - State
 
   @State private var viewModel: LineupPlaybackViewModel
-  @State private var scrollPosition: Int?
-  @State private var itemsArray: [[CarouselItem]] = []
-  @State private var isRebalancing: Bool = false
-  @State private var lastRealIndex: Int?
+  @State private var scrollPosition: Int? // itemsArray 전체 기준 현재 중앙 아이템의 인덱스
+  @State private var itemsArray: [[CarouselItemVO]] = [] // 무한 스크롤을 위해  carouselItems를 3벌 복제
+  @State private var isRebalancing: Bool = false // 재배치 애니메이션 중 onChange 방지 플래그
+  @State private var lastRealIndex: Int? // 실제 인덱스 변경 여부 확인을 위한 이전 인덱스
+
+  // MARK: - Layout Constants
 
   private let animationDuration: TimeInterval = 0.3
 
@@ -31,62 +33,59 @@ struct LineupPlaybackView: View {
     pageWidth * 1.596
   }
 
-  private var carouselItems: [CarouselItem] {
-    viewModel.players.flatMap { player in
-      player.cheerSongs.map { song in
-        CarouselItem(id: "\(player.id)-\(song.id)", player: player, cheerSong: song)
-      }
-    }
-  }
+  // MARK: - Computed
 
   // itemsArray를 평탄화한 전체 아이템
-  private var itemsTemp: [CarouselItem] {
+  private var itemsTemp: [CarouselItemVO] {
     itemsArray.flatMap { $0 }
   }
 
   // 현재 실제 players 인덱스 (페이지 인디케이터용)
   private var currentRealIndex: Int {
     guard let scrollPosition else { return 0 }
-    guard !carouselItems.isEmpty else { return 0 }
-    return scrollPosition % carouselItems.count
+    guard !viewModel.carouselItems.isEmpty else { return 0 }
+    return scrollPosition % viewModel.carouselItems.count
   }
 
-  init(
-    asset: LineupPlaybackAssetVO,
-    gameDate: String,
-    teamsText: String,
-    viewModel: LineupPlaybackViewModel
-  ) {
-    self.asset = asset
-    self.gameDate = gameDate
-    self.teamsText = teamsText
+  // MARK: - Init
+
+  init(viewModel: LineupPlaybackViewModel) {
     _viewModel = State(initialValue: viewModel)
   }
 
   var body: some View {
     ZStack {
-      asset.playbackBackgroundGradient
-        .ignoresSafeArea()
+      if let asset = viewModel.asset {
+        asset.playbackBackgroundGradient
+          .ignoresSafeArea()
+      }
 
-      VStack(spacing: 23) {
-        cardCarouselView
-          .frame(height: pageHeight)
+      if viewModel.lineupPlayers.isEmpty {
+        ProgressView()
+          .frame(maxWidth: .infinity, maxHeight: .infinity)
+          .appBackground()
+      } else if let asset = viewModel.asset {
+        VStack(spacing: 23) {
+          cardCarouselView(asset: asset)
+            .frame(height: pageHeight)
 
-        pageIndicator
+          pageIndicator(asset: asset)
+        }
       }
     }
     .toolBar_gameInfo(
-      date: gameDate, teams: teamsText,
+      date: viewModel.gameDate, teams: viewModel.teamsText,
       onClose: {
         viewModel.stopPlayback()
         coordinator.dismissModal()
       }
     )
-    .onAppear {
-      viewModel.onAppear()
-      // 3벌로 초기화, 두번째 벌의 첫번째 아이템에서 시작
-      itemsArray = [carouselItems, carouselItems, carouselItems]
-      scrollPosition = carouselItems.count + viewModel.startIndex
+    .task {
+      await viewModel.onAppear()
+      let items = viewModel.carouselItems
+      guard !items.isEmpty else { return }
+      itemsArray = [items, items, items]
+      scrollPosition = items.count + viewModel.startIndex
       lastRealIndex = viewModel.startIndex
     }
     .onDisappear {
@@ -98,16 +97,23 @@ struct LineupPlaybackView: View {
       }
     }
     .onChange(of: viewModel.currentPlaybackIndex) { _, newValue in
-      guard !carouselItems.isEmpty else { return }
-      scrollPosition = carouselItems.count + newValue
-      lastRealIndex = newValue
+        let items = viewModel.carouselItems
+        guard !items.isEmpty else { return }
+        guard let currentPosition = scrollPosition else { return }
+        
+        guard viewModel.isSyncingFromPlayback else { return }
+        withAnimation(.easeInOut(duration: animationDuration)) {
+            scrollPosition = currentPosition + 1
+        }
+        lastRealIndex = newValue
     }
   }
 }
 
 extension LineupPlaybackView {
-  private var cardCarouselView: some View {
+  private func cardCarouselView(asset: LineupPlaybackAssetVO) -> some View {
     let widthDifference = UIScreen.width - pageWidth
+    let itemCount = viewModel.carouselItems.count
 
     return ScrollView(.horizontal) {
       LazyHStack(spacing: 0) {
@@ -115,8 +121,9 @@ extension LineupPlaybackView {
           let item = itemsTemp[index]
 
           cardView(
+            asset: asset,
             item: item,
-            itemIndex: index % max(carouselItems.count, 1),
+            itemIndex: index % max(itemCount, 1),
             pageHeight: pageHeight
           )
           .id(index)
@@ -136,16 +143,15 @@ extension LineupPlaybackView {
     .scrollIndicators(.hidden)
     .onChange(of: scrollPosition) {
       guard let scrollPosition, !isRebalancing else { return }
-
-      let itemCount = carouselItems.count
       guard itemCount > 0 else { return }
 
       // 앞쪽 1/3 영역 진입 시 재배치
       if scrollPosition < itemCount {
         isRebalancing = true
+        let items = viewModel.carouselItems
         DispatchQueue.main.asyncAfter(deadline: .now() + animationDuration) {
           itemsArray.removeLast()
-          itemsArray.insert(carouselItems, at: 0)
+          itemsArray.insert(items, at: 0)
           self.scrollPosition = scrollPosition + itemCount
           self.isRebalancing = false
         }
@@ -155,9 +161,10 @@ extension LineupPlaybackView {
       // 뒤쪽 1/3 영역 진입 시 재배치
       if scrollPosition >= itemCount * 2 {
         isRebalancing = true
+        let items = viewModel.carouselItems
         DispatchQueue.main.asyncAfter(deadline: .now() + animationDuration) {
           itemsArray.removeFirst()
-          itemsArray.append(carouselItems)
+          itemsArray.append(items)
           self.scrollPosition = scrollPosition - itemCount
           self.isRebalancing = false
         }
@@ -174,7 +181,8 @@ extension LineupPlaybackView {
 
   @ViewBuilder
   private func cardView(
-    item: CarouselItem,
+    asset: LineupPlaybackAssetVO,
+    item: CarouselItemVO,
     itemIndex: Int,
     pageHeight: CGFloat
   ) -> some View {
@@ -192,9 +200,9 @@ extension LineupPlaybackView {
     .frame(height: pageHeight)
   }
 
-  private var pageIndicator: some View {
+  private func pageIndicator(asset: LineupPlaybackAssetVO) -> some View {
     HStack(spacing: 8) {
-      ForEach(0..<carouselItems.count, id: \.self) { index in
+      ForEach(0..<viewModel.carouselItems.count, id: \.self) { index in
         Capsule()
           .fill(index == currentRealIndex ? asset.pageIndicatorColor : .grayWhite)
           .frame(
@@ -205,46 +213,4 @@ extension LineupPlaybackView {
     }
     .padding(.all, 1)
   }
-}
-
-extension LineupPlaybackView {
-  private struct CarouselItem: Identifiable {
-    let id: String
-    let player: LineupPlayerVO
-    let cheerSong: CheerSongVO
-  }
-}
-
-#Preview {
-  //  let players: [LineupPlayerVO] = (1...9).map { i in
-  //    LineupPlayerVO(
-  //      from: PlayerInfo(
-  //        id: PlayerID("\(i)"),
-  //        teamId: TeamID("samsung"),
-  //        name: "심재훈",
-  //        backNumber: i,
-  //        position: "포지션",
-  //        batThrow: "좌타",
-  //        battingOrder: i,
-  //        cheerSongs: [
-  //          CheerSongInfo(
-  //            id: "\(i)", playerId: PlayerID("\(i)"), title: "응원가 \(i)",
-  //            lyrics:
-  //              "삼성의 심재훈 삼성의 심재훈\n안타를 날!려!버!려! 삼성 심재훈\n삼성의 심재훈 삼성의 심재훈\n홈런을 날!려!버!려! 삼성 심재훈\n삼성의 심재훈 삼성의 심재훈\n안타를 날!려!버!려! 삼성 심재훈\n삼성의 심재훈 삼성의 심재훈\n홈런을 날!려!버!려! 삼성 심재훈",
-  //            audioURL: ""),
-  //          CheerSongInfo(
-  //            id: "\(i)", playerId: PlayerID("\(i)"), title: "응원가 \(i)",
-  //            lyrics:
-  //              "삼성의 심재훈 삼성의 심재훈\n안타를 날!려!버!려! 삼성 심재훈\n삼성의 심재훈 삼성의 심재훈\n홈런을 날!려!버!려! 삼성 심재훈\n삼성의 심재훈 삼성의 심재훈\n안타를 날!려!버!려! 삼성 심재훈\n삼성의 심재훈 삼성의 심재훈\n홈런을 날!려!버!려! 삼성 심재훈",
-  //            audioURL: ""),
-  //        ]
-  //      )
-  //    )
-  //  }
-  //
-  //  LineupPlaybackView(
-  //    asset: LineupPlaybackAssetVO(base: TeamAssetVO(TeamDataSource.toEntity(.samsung).id)),
-  //    players: players,
-  //    startIndex: 2
-  //  )
 }
