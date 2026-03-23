@@ -19,6 +19,14 @@ enum NavigationBarItem {
 }
 
 struct ToolBarItemBuilder {
+    private static var systemImageFont: Font {
+        if #available(iOS 26, *) {
+            return .system(size: 14, weight: .semibold)
+        } else {
+            return .system(size: 18, weight: .medium)
+        }
+    }
+    
   static func buildItem(for item: NavigationBarItem, placement: ToolbarItemPlacement)
     -> some ToolbarContent
   {
@@ -33,14 +41,14 @@ struct ToolBarItemBuilder {
     case .back(let action):
       Button(action: action) {
         Image(systemName: "chevron.left")
-          .font(.system(size: 18, weight: .medium))
+          .font(systemImageFont)
       }
       .tint(.gray800)
 
     case .close(let action):
       Button(action: action) {
         Image(systemName: "xmark")
-          .font(.system(size: 18, weight: .medium))
+          .font(systemImageFont)
       }
       .tint(.gray800)
 
@@ -48,14 +56,14 @@ struct ToolBarItemBuilder {
         if color == .gray800 {
             Button(action: action) {
                 Image(systemName: "checkmark")
-                    .font(.system(size: 18, weight: .medium))
+                    .font(systemImageFont)
             }
             .tint(color)
             .buttonStyle(.automatic)
         } else {
             Button(action: action) {
                 Image(systemName: "checkmark")
-                    .font(.system(size: 18, weight: .medium))
+                    .font(systemImageFont)
             }
             .tint(color)
             .buttonStyle(.borderedProminent)
@@ -65,36 +73,52 @@ struct ToolBarItemBuilder {
       Button(action: action) {
         if #available(iOS 26.0, *) {
           Image(systemName: "person.fill")
-            .font(.system(size: 18, weight: .medium))
+            .font(systemImageFont)
         } else {
           Image(systemName: "person.crop.circle")
-            .font(.system(size: 18, weight: .medium))
+            .font(systemImageFont)
         }
       }
       .tint(.gray800)
 
     case .largeTitle(let text):
-      Text(text)
-        .font(.B1)
-        .tint(.grayBlack)
-        .fixedSize()
+        if #available(iOS 26.0, *) {
+            Text(text)
+                .font(.B1)
+                .foregroundStyle(.grayBlack)
+                .fixedSize()
+        } else {
+            Text(text)
+                .font(.B2)
+                .foregroundStyle(.grayBlack)
+                .fixedSize()
+        }
 
     case .inlineTitle(let text):
       Text(text)
         .font(.SB6)
-        .tint(.grayBlack)
+        .foregroundStyle(.grayBlack)
 
     case .gameInfo(let date, let teams):
-      VStack(alignment: .center, spacing: 0) {
-        Text(date)
-          .font(.M5)
-          .tint(.gray800)
-
-        Text(teams)
-          .font(.SB8)
-          .tint(.grayBlack)
-      }
-
+        VStack(alignment: .center, spacing: 0) {
+            if #available(iOS 26, *) {
+                Text(date)
+                    .font(.M5)
+                    .foregroundStyle(.gray800)
+                Text(teams)
+                    .font(.SB8)
+                    .foregroundStyle(.grayBlack)
+            } else {
+                Text(date)
+                    .font(.M5)
+                    .foregroundColor(.gray600)
+                Text(teams)
+                    .font(.SB8)
+                    .foregroundColor(.gray800)
+            }
+        }
+        .fixedSize()
+        
     case .custom(let view):
       view
     }

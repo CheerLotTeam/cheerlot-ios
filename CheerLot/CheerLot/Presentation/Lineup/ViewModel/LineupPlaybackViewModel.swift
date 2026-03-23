@@ -14,8 +14,8 @@ final class LineupPlaybackViewModel {
 
   var lineupPlayers: [LineupPlayerVO] = []
   var asset: LineupPlaybackAssetVO?
-  var gameDate: String = ""
-  var teamsText: String = ""
+  var gameDate: String = " "
+  var teamsText: String = " "
 
   var carouselItems: [CarouselItemVO] {
     lineupPlayers.flatMap { player in
