@@ -18,7 +18,6 @@ struct LineupChangeSheetView: View {
   }
 
   var body: some View {
-    NavigationStack {
       VStack(spacing: 18) {
         header
           .padding(.top, 10)
@@ -48,10 +47,9 @@ struct LineupChangeSheetView: View {
         if viewModel.isLoading || viewModel.isSwapping {
           ProgressView()
             .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .background(.ultraThinMaterial)
+            .appBackground()
         }
       }
-    }
     .task {
       await viewModel.onAppear()
     }
