@@ -34,14 +34,8 @@ final class ViewModelFactory {
     LineupChangeViewModel(lineupPlayer)
   }
 
-  func createLineupPlaybackViewModel(
-    players: [LineupPlayerVO],
-    startIndex: Int
-  ) -> LineupPlaybackViewModel {
-    LineupPlaybackViewModel(
-      players: players,
-      startIndex: startIndex
-    )
+  func createLineupPlaybackViewModel(startIndex: Int) -> LineupPlaybackViewModel {
+    LineupPlaybackViewModel(startIndex: startIndex)
   }
 
   // MARK: - TeamMembers

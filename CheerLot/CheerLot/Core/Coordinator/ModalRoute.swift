@@ -28,13 +28,7 @@ enum ModalRoute: Identifiable {
   case servicePage
 
   // FullScreen 스타일
-  case lineupPlayback(
-    teamId: TeamID,
-    players: [LineupPlayerVO],
-    startIndex: Int,
-    gameDate: String,
-    teamsText: String
-  )
+  case lineupPlayback(startIndex: Int)
   case basePlayback(
     teamId: TeamID,
     song: CheerSongInfo,
@@ -64,9 +58,7 @@ extension AppCoordinator {
   @ViewBuilder
   func buildModalView(for route: ModalRoute) -> some View {
     let factory = ViewModelFactory.shared
-    let audioPlayer = DIContainer.shared.resolve(AudioPlaybackService.self)
 
-    // TODO: - View 넣기
     switch route {
     case let .cheerSongList(asset, player, lineupPlayers):
       CheerSongMenuSheetView(
@@ -77,23 +69,24 @@ extension AppCoordinator {
       .presentationDetents([.height(CGFloat((player.cheerSongs.count)) * 77 + 83)])
       .presentationDragIndicator(.visible)
     case let .lineupChange(lineupPlayer, onComplete):
-      let vm = factory.createLineupChangeViewModel(
-        lineupPlayer
-      )
+      let viewModel = factory.createLineupChangeViewModel(lineupPlayer)
 
-      LineupChangeSheetView(
-        viewModel: vm,
-        onComplete: onComplete
-      )
+        NavigationStack {
+            LineupChangeSheetView(
+                viewModel: viewModel,
+                onComplete: onComplete
+            )
+        }
       .presentationDetents([.large])
       .presentationDragIndicator(.hidden)
     case let .teamChange(selectedTeamId):
-      NavigationStack {
-        TeamSelectView(
-          viewModel: factory.createTeamSelectViewModel(
+        let viewModel = factory.createTeamSelectViewModel(
             mode: .change,
             initialSelectedTeamId: selectedTeamId
-          ),
+          )
+      NavigationStack {
+        TeamSelectView(
+          viewModel: viewModel,
           onClose: {
             self.dismissModal()
           },
@@ -107,28 +100,21 @@ extension AppCoordinator {
       Color.clear
     case let .servicePage:
       Color.clear
-    case let .lineupPlayback(teamId, players, startIndex, gameDate, teamsText):
-      let vm = factory.createLineupPlaybackViewModel(
-        players: players,
-        startIndex: startIndex
-      )
+    case let .lineupPlayback(startIndex):
+      let viewModel = factory.createLineupPlaybackViewModel(startIndex: startIndex)
+
       NavigationStack {
-        LineupPlaybackView(
-          asset: LineupPlaybackAssetVO(base: TeamAssetVO(teamId)),
-          gameDate: gameDate,
-          teamsText: teamsText,
-          viewModel: vm
-        )
+        LineupPlaybackView(viewModel: viewModel)
       }
     case let .basePlayback(teamId, song, playerName):
-      let vm = factory.createPlaybackViewModel(
+      let viewModel = factory.createPlaybackViewModel(
         song: song,
         playerName: playerName
       )
 
       PlaybackView(
         asset: TeamAssetVO(teamId),
-        viewModel: vm,
+        viewModel: viewModel,
         onClose: {
           self.dismissModal()
         }
