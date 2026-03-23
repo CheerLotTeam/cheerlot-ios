@@ -31,10 +31,8 @@ struct MainTabView: View {
   }
 
   private var showMiniPlayer: Bool {
-    selectedTab != .lineup &&
-    selectedTab != .search &&
-    audioPlayer.nowPlaying != nil &&
-    !miniPlayerDisplayState.isHidden
+    selectedTab != .lineup && selectedTab != .search && audioPlayer.nowPlaying != nil
+      && !miniPlayerDisplayState.isHidden
   }
 
   // MARK: - Init

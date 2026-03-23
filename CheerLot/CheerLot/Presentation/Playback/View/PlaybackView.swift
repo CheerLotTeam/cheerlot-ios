@@ -78,7 +78,7 @@ extension PlaybackView {
         }
     )
   }
-  
+
   private var mainView: some View {
     VStack(spacing: 40) {
       header

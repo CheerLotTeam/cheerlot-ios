@@ -30,14 +30,14 @@ struct SearchResultCell: View {
         .offset(y: -4)
 
       Spacer()
-      
+
       HStack(spacing: 16) {
         if let title {
           Text(title)
             .font(.M4)
             .foregroundStyle(.gray300)
         }
-        
+
         Image(systemName: "play.fill")
           .font(.system(size: 16, weight: .regular))
           .foregroundStyle(hasSong ? asset.primaryColor : .gray200)

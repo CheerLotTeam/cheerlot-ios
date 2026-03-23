@@ -17,7 +17,7 @@ struct RootViewSwitcher: View {
   @State private var teamSelectViewModel = ViewModelFactory.shared.createTeamSelectViewModel(
     mode: .onboarding)
   @State private var miniPlayerDisplayState = MiniPlayerDisplayState()
-  
+
   @ObservationIgnored
   @Injected(TeamSelectionUseCase.self) private var teamSelectionUseCase
 

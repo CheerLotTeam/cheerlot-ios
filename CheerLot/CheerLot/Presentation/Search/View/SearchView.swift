@@ -70,7 +70,7 @@ struct SearchView: View {
         .resizable()
         .aspectRatio(contentMode: .fit)
         .frame(width: 130)
-      
+
       Text("우리 팀 선수를 검색해보세요")
         .font(.M1)
         .foregroundStyle(.gray200)
