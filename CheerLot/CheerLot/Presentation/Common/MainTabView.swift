@@ -12,6 +12,7 @@ enum TabKey {
 }
 
 struct MainTabView: View {
+  @Environment(MiniPlayerDisplayState.self) private var miniPlayerDisplayState
 
   // MARK: - Properties
   let team: TeamInfo
@@ -19,7 +20,6 @@ struct MainTabView: View {
 
   @State private var selectedTab: TabKey = .lineup
   @State private var isPlayerExpanded: Bool = false
-  @State private var isMiniPlayerHidden: Bool = false
   @State private var lineupViewModel = ViewModelFactory.shared.createLineupViewModel()
   @State private var teamMembersViewModel = ViewModelFactory.shared.createTeamMembersViewModel()
   @State private var searchViewModel = ViewModelFactory.shared.createSearchViewModel()
@@ -31,7 +31,10 @@ struct MainTabView: View {
   }
 
   private var showMiniPlayer: Bool {
-    selectedTab != .lineup && audioPlayer.nowPlaying != nil && !isMiniPlayerHidden
+    selectedTab != .lineup &&
+    selectedTab != .search &&
+    audioPlayer.nowPlaying != nil &&
+    !miniPlayerDisplayState.isHidden
   }
 
   // MARK: - Init
@@ -64,12 +67,13 @@ struct MainTabView: View {
           .padding(.bottom, 50)
       }
     }
-    .onPreferenceChange(MiniPlayerHiddenPreferenceKey.self) { hidden in
-      isMiniPlayerHidden = hidden
-    }
     .onChange(of: selectedTab) { _, newValue in
       if newValue == .lineup {
         audioPlayer.pause()
+      }
+
+      if newValue == .teamMembers {
+        teamMembersViewModel.syncPlaybackModeIfNeeded()
       }
     }
     .fullScreenCover(isPresented: $isPlayerExpanded) {
