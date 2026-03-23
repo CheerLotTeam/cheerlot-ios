@@ -12,10 +12,15 @@ struct SearchResultVO: Identifiable, Equatable {
   let playerId: PlayerID
   let playerName: String
   let backNumber: Int
-  let cheerSongs: [CheerSongInfo]
+  let song: CheerSongInfo?
   let matchIndex: Int
 
   var hasSong: Bool {
-    !cheerSongs.isEmpty
+    song != nil
+  }
+
+  var titleText: String? {
+    guard let song else { return nil }
+    return song.title == "기본 응원가" ? nil : song.title
   }
 }
