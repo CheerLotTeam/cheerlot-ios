@@ -79,6 +79,7 @@ extension AppCoordinator {
         }
       .presentationDetents([.large])
       .presentationDragIndicator(.hidden)
+      .padding(.top, UIDevice.isIOS26OrLater ? 0 : 8)
     case let .teamChange(selectedTeamId):
         let viewModel = factory.createTeamSelectViewModel(
             mode: .change,
@@ -96,6 +97,7 @@ extension AppCoordinator {
         )
       }
       .presentationDragIndicator(.hidden)
+      .padding(.top, UIDevice.isIOS26OrLater ? 0 : 8)
     case let .inquiry:
       Color.clear
     case let .servicePage:
