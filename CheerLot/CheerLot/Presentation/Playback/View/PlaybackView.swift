@@ -30,12 +30,15 @@ struct PlaybackView: View {
   // MARK: - Body
   var body: some View {
     ZStack {
+      MetalBackgroundView()
+        .ignoresSafeArea()
+
       VStack(spacing: 14) {
         topBar
         mainView
       }
-
-      MetalBackgroundView()
+      .padding(.top, 40)
+      .background(asset.primaryColor)
     }
     .ignoresSafeArea()
     .offset(y: dragOffsetY)
@@ -47,27 +50,35 @@ struct PlaybackView: View {
 
 extension PlaybackView {
   private var topBar: some View {
-    Capsule()
-      .fill(.gray200.opacity(0.6))
-      .frame(width: 60, height: 5)
-      .padding(.top, 8)
-      .gesture(
-        DragGesture()
-          .onChanged { value in
-            guard value.translation.height > 0 else { return }
-            dragOffsetY = value.translation.height
-          }
-          .onEnded { value in
-            let shouldClose = value.translation.height > 100
+    ZStack {
+      Color.clear
 
-            if shouldClose {
-              onClose()
-            } else {
-              dragOffsetY = 0
-            }
+      Capsule()
+        .fill(.gray200.opacity(0.6))
+        .frame(width: 60, height: 5)
+    }
+    .padding(.bottom, -20)
+    .frame(maxWidth: .infinity)
+    .frame(height: 44)
+    .contentShape(Rectangle())
+    .gesture(
+      DragGesture()
+        .onChanged { value in
+          guard value.translation.height > 0 else { return }
+          dragOffsetY = value.translation.height
+        }
+        .onEnded { value in
+          let shouldClose = value.translation.height > 80
+
+          if shouldClose {
+            onClose()
+          } else {
+            dragOffsetY = 0
           }
-      )
+        }
+    )
   }
+
   private var mainView: some View {
     VStack(spacing: 40) {
       header

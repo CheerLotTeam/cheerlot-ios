@@ -16,6 +16,7 @@ struct RootViewSwitcher: View {
     AudioPlaybackService.self)
   @State private var teamSelectViewModel = ViewModelFactory.shared.createTeamSelectViewModel(
     mode: .onboarding)
+  @State private var miniPlayerDisplayState = MiniPlayerDisplayState()
 
   @ObservationIgnored
   @Injected(TeamSelectionUseCase.self) private var teamSelectionUseCase
@@ -50,6 +51,7 @@ extension RootViewSwitcher {
 
     case .main(let team):
       MainTabView(team: team, audioPlayer: audioPlayer)
+        .environment(miniPlayerDisplayState)
         .transition(.opacity)
         .id(team.id)
     }
