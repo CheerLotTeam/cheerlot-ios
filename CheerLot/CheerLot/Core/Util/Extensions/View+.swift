@@ -196,6 +196,16 @@ extension View {
     )
   }
     
+    /// 조건에 따라 선택적으로 View Modifier를 적용하는 확장 메서드
+    @ViewBuilder
+    func ifApply<Content: View>(_ condition: Bool, transform: (Self) -> Content) -> some View {
+        if condition {
+            transform(self)
+        } else {
+            self
+        }
+    }
+    
     /// View의 background를 grayWhite로 적용하는 확장메서드
     func appBackground() -> some View {
         self.background(Color.grayWhite.ignoresSafeArea())
