@@ -53,46 +53,27 @@ struct ToolBarItemBuilder {
       .tint(.gray800)
 
     case .check(let action, let color):
-        if color == .gray800 {
-            Button(action: action) {
-                Image(systemName: "checkmark")
-                    .font(systemImageFont)
-            }
-            .tint(color)
-            .buttonStyle(.automatic)
-        } else {
-            Button(action: action) {
-                Image(systemName: "checkmark")
-                    .font(systemImageFont)
-            }
-            .tint(color)
-            .buttonStyle(.borderedProminent)
+        Button(action: action) {
+            Image(systemName: "checkmark")
+                .font(systemImageFont)
+        }
+        .tint(color)
+        .ifApply(color != .gray800 && UIDevice.isIOS26OrLater) {
+            $0.buttonStyle(.borderedProminent)
         }
 
     case .profile(let action):
-      Button(action: action) {
-        if #available(iOS 26.0, *) {
-          Image(systemName: "person.fill")
-            .font(systemImageFont)
-        } else {
-          Image(systemName: "person.crop.circle")
-            .font(systemImageFont)
+        Button(action: action) {
+            Image(systemName: UIDevice.isIOS26OrLater ? "person.fill" : "person.crop.circle")
+                .font(systemImageFont)
         }
-      }
-      .tint(.gray800)
+        .tint(.gray800)
 
     case .largeTitle(let text):
-        if #available(iOS 26.0, *) {
-            Text(text)
-                .font(.B1)
-                .foregroundStyle(.grayBlack)
-                .fixedSize()
-        } else {
-            Text(text)
-                .font(.B2)
-                .foregroundStyle(.grayBlack)
-                .fixedSize()
-        }
+        Text(text)
+            .font(UIDevice.isIOS26OrLater ? .B1 : .B2)
+            .foregroundStyle(.grayBlack)
+            .fixedSize()
 
     case .inlineTitle(let text):
       Text(text)
@@ -101,21 +82,12 @@ struct ToolBarItemBuilder {
 
     case .gameInfo(let date, let teams):
         VStack(alignment: .center, spacing: 0) {
-            if #available(iOS 26, *) {
-                Text(date)
-                    .font(.M5)
-                    .foregroundStyle(.gray800)
-                Text(teams)
-                    .font(.SB8)
-                    .foregroundStyle(.grayBlack)
-            } else {
-                Text(date)
-                    .font(.M5)
-                    .foregroundColor(.gray600)
-                Text(teams)
-                    .font(.SB8)
-                    .foregroundColor(.gray800)
-            }
+            Text(date)
+                .font(.M5)
+                .foregroundStyle(UIDevice.isIOS26OrLater ? Color.gray800 : Color.gray600)
+            Text(teams)
+                .font(.SB8)
+                .foregroundStyle(UIDevice.isIOS26OrLater ? Color.grayBlack : Color.gray800)
         }
         .fixedSize()
         
