@@ -219,7 +219,8 @@ extension PlaybackView {
   }
   
   private func handleClose() {
-    viewModel.closePlayback()
-    onClose()
+    viewModel.closePlayback {
+      onClose()
+    }
   }
 }

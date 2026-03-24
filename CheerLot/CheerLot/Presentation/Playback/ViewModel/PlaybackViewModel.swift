@@ -96,8 +96,14 @@ final class PlaybackViewModel {
     syncFromService()
   }
   
-  func closePlayback() {
-    seek(to: 0)
+  func closePlayback(completion: @escaping () -> Void) {
+    audioPlaybackUseCase.resetToBeginning { [weak self] in
+      guard let self else { return }
+      self.progress = 0
+      self.duration = max(self.audioPlaybackUseCase.duration, 1)
+      self.syncFromService()
+      completion()
+    }
   }
 }
 

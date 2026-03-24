@@ -32,6 +32,7 @@ protocol AudioPlayer {
   func toggle()
   func stop()
   func seek(_ seconds: Double)
+  func resetToBeginning(completion: @escaping () -> Void)
 
   func observeTime(
     every interval: Double,

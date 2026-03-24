@@ -248,6 +248,17 @@ final class AudioPlaybackService: AudioPlayer {
   func removeObserver(_ token: Any) {
     player.removeTimeObserver(token)
   }
+  
+  func resetToBeginning(completion: @escaping () -> Void) {
+    player.seek(to: .zero) { [weak self] _ in
+      guard let self else { return }
+
+      DispatchQueue.main.async {
+        self.syncNowPlaying()
+        completion()
+      }
+    }
+  }
 }
 
 // MARK: - Setup
