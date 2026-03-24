@@ -15,24 +15,22 @@ struct MakerInfoView: View {
 
   // MARK: - Body
   var body: some View {
-    ZStack {
-      Color.grayWhite
-        .ignoresSafeArea()
-      VStack {
-        SettingsMenuCard(
-          titles: MakerInfoMenu.allCases.map(\.rawValue),
-          onTap: { index in
-            let menus = MakerInfoMenu.allCases
-            guard menus.indices.contains(index) else { return }
-            makerInfoTap(menus[index])
-          }
-        )
-
-        Spacer()
-      }
-      .padding(.horizontal, 20)
-      .padding(.top, 20)
+    VStack {
+      SettingsMenuCard(
+        titles: MakerInfoMenu.allCases.map(\.rawValue),
+        onTap: { index in
+          let menus = MakerInfoMenu.allCases
+          guard menus.indices.contains(index) else { return }
+          makerInfoTap(menus[index])
+        }
+      )
+      
+      Spacer()
     }
+    .padding(.horizontal, 20)
+    .padding(.top, 20)
+    
+    .appBackground()
     .onAppear {
       miniPlayerDisplayState.hide()
     }

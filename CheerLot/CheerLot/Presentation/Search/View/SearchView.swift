@@ -25,6 +25,7 @@ struct SearchView: View {
       .toolBar_titleWithProfile(title: "검색") {
         coordinator.push(.settings)
       }
+      .appBackground()
       .searchable(
         text: Binding(
           get: { viewModel.query },

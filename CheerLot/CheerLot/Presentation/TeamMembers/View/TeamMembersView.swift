@@ -41,6 +41,7 @@ struct TeamMembersView: View {
     .toolBar_titleWithProfile(title: "전체 선수") {
       coordinator.push(.settings)
     }
+    .appBackground()
     .task {
       await viewModel.onAppear()
     }

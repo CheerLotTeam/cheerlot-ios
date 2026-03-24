@@ -20,19 +20,16 @@ struct ServiceInfoView: View {
 
   // MARK: - Body
   var body: some View {
-    ZStack {
-      Color.grayWhite
-        .ignoresSafeArea()
-
-      VStack(spacing: 20) {
-        mainPageContent
-        serviceContents
-
-        Spacer()
-      }
-      .padding(.horizontal, 20)
-      .padding(.top, 20)
+    VStack(spacing: 20) {
+      mainPageContent
+      serviceContents
+      
+      Spacer()
     }
+    .padding(.horizontal, 20)
+    .padding(.top, 20)
+    
+    .appBackground()
     .onAppear {
       miniPlayerDisplayState.hide()
     }

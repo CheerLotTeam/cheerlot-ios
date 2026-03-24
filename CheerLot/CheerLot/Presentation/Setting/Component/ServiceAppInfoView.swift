@@ -16,20 +16,16 @@ struct ServiceAppInfoView: View {
   let text: String
 
   var body: some View {
-    ZStack {
-      Color.grayWhite
-        .ignoresSafeArea()
-
-      VStack(spacing: 20) {
-        ScrollView(showsIndicators: false) {
-          Text(.init(text))
-            .font(.R2)
-            .foregroundStyle(.gray400)
-        }
-        .padding(.horizontal, 20)
-        .padding(.top, 20)
+    VStack(spacing: 20) {
+      ScrollView(showsIndicators: false) {
+        Text(.init(text))
+          .font(.R2)
+          .foregroundStyle(.gray400)
       }
+      .padding(.horizontal, 20)
+      .padding(.top, 20)
     }
+    .appBackground()
     .onAppear {
       miniPlayerDisplayState.hide()
     }
