@@ -317,9 +317,13 @@ extension AudioPlaybackService {
 
     cc.previousTrackCommand.addTarget { [weak self] _ in
       guard let self else { return .commandFailed }
-      let before = self.nowPlaying?.id
+
+      let beforeID = self.nowPlaying?.id
+      let shouldRewind = self.currentTime > 3
+
       self.playPrevious()
-      return self.nowPlaying?.id != before ? .success : .commandFailed
+
+      return (shouldRewind || self.nowPlaying?.id != beforeID) ? .success : .commandFailed
     }
 
     cc.changePlaybackPositionCommand.addTarget { [weak self] event in
