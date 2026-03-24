@@ -130,8 +130,8 @@ extension LineupPlaybackView {
           .frame(width: pageWidth)
           .scrollTransition(.interactive, axis: .horizontal) { content, phase in
             content
-              .scaleEffect(phase.isIdentity ? 1.0 : 0.92)
-              .opacity(phase.isIdentity ? 1.0 : 0.3)
+              .scaleEffect(phase.isIdentity ? 1.0 : 0.91)
+              .opacity(phase.isIdentity ? 1.0 : 0.2)
           }
         }
       }
