@@ -14,10 +14,11 @@ struct PlaybackButtonStyle: ButtonStyle {
   func makeBody(configuration: Configuration) -> some View {
     configuration.label
       .frame(width: size, height: size)
+      .contentShape(Circle())
       .background {
         Circle()
           .fill(Color.white.opacity(configuration.isPressed ? 0.6 : 0))
       }
-      .animation(.easeOut(duration: 0.5), value: configuration.isPressed)
+      .animation(.easeInOut(duration: 0.12), value: configuration.isPressed)
   }
 }
