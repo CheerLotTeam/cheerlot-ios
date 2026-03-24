@@ -104,16 +104,10 @@ final class AudioPlaybackService: AudioPlayer {
 
   /// 다음곡
   func playNext() {
+    guard canSkipManually else { return }
     guard !queue.isEmpty else { return }
 
-    if currentIndex + 1 < queue.count {
-      currentIndex += 1
-    } else if playbackMode == .search {
-      currentIndex = 0
-    } else {
-      return
-    }
-
+    currentIndex = (currentIndex + 1) % queue.count
     nowPlaying = queue[currentIndex]
     currentPlayerName = queuePlayerNames[currentIndex]
 
@@ -124,9 +118,13 @@ final class AudioPlaybackService: AudioPlayer {
   func playPrevious() {
     guard canSkipManually else { return }
     guard !queue.isEmpty else { return }
-    guard currentIndex - 1 >= 0 else { return }
 
-    currentIndex -= 1
+    if currentTime > 3 {
+      seek(0)
+      return
+    }
+
+    currentIndex = (currentIndex - 1 + queue.count) % queue.count
     nowPlaying = queue[currentIndex]
     currentPlayerName = queuePlayerNames[currentIndex]
 
@@ -156,6 +154,7 @@ final class AudioPlaybackService: AudioPlayer {
 
     let item = AVPlayerItem(url: url)
     player.replaceCurrentItem(with: item)
+    player.seek(to: .zero)
     player.play()
 
     isPlaying = true
