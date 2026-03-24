@@ -10,13 +10,17 @@ import Observation
 /// 미니플레이어 표시 여부를 관리하는 공용 UI 상태입니다.
 @Observable
 final class MiniPlayerDisplayState {
-  var isHidden: Bool = false
+  private var hiddenCount: Int = 0
+
+  var isHidden: Bool {
+    hiddenCount > 0
+  }
 
   func hide() {
-    isHidden = true
+    hiddenCount += 1
   }
 
   func show() {
-    isHidden = false
+    hiddenCount = max(0, hiddenCount - 1)
   }
 }
