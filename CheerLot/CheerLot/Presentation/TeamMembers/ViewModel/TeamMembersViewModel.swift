@@ -16,6 +16,8 @@ final class TeamMembersViewModel {
   var rows: [TeamMembersSongVO] = []
   var isLoading = false
   var errorMessage: String?
+  var showToast = false
+  var toastMessage = ""
 
   private var players: [PlayerInfo] = []
 
@@ -70,6 +72,11 @@ final class TeamMembersViewModel {
   }
 
   func didTapSong(_ item: TeamMembersSongVO) {
+    guard item.song != nil else {
+      showNoSongToast()
+      return
+    }
+    
     playTeamMembersUseCase.playSelected(
       row: item,
       allRows: rows,
@@ -82,6 +89,11 @@ final class TeamMembersViewModel {
       rows: rows,
       currentTeam: currentTeam
     )
+  }
+  
+  func showNoSongToast() {
+     toastMessage = "아직 개인 응원가가 없어요"
+     showToast = true
   }
 
   /// 검색 재생 중이면 현재 곡 기준으로 전체선수용 일반 재생 큐로 전환하는 함수
