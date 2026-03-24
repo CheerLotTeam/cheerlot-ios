@@ -161,7 +161,7 @@ extension PlaybackView {
     VStack(spacing: 4) {
       PlaybackSeekBar(
         value: $viewModel.progress,
-        maxValue: viewModel.duration,
+        maxValue: viewModel.seekBarMaxValue,
         onEditingChanged: { viewModel.isSeeking = $0 },
         onSeek: { viewModel.seek(to: $0) }
       )

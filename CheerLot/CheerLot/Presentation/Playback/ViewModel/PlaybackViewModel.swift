@@ -20,7 +20,9 @@ final class PlaybackViewModel {
   var progress: Double = 0
 
   /// 총 길이(초)
-  var duration: Double = 1
+  var duration: Double = 0
+  
+  var seekBarMaxValue: Double { max(duration, 1) }
 
   /// UI 표시용 메타 정보
   var title: String
@@ -117,7 +119,7 @@ extension PlaybackViewModel {
         progress = min(max(rawCurrentTime, 0), rawDuration)
       }
     } else {
-      duration = 1
+      duration = 0
 
       if !isSeeking {
         progress = 0
