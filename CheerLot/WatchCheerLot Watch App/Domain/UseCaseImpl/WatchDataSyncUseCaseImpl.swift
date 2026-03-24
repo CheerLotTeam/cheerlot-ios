@@ -45,8 +45,7 @@ final class WatchDataSyncUseCaseImpl: WatchDataSyncUseCase {
 
     private func applyReceivedLineup(from context: [String: Any]) {
         guard let data = context[WatchContextKey.lineup] as? Data,
-              let dtos = try? JSONDecoder().decode([PlayerSyncDTO].self, from: data),
-              let teamId = dtos.first.map({ TeamID($0.teamId) })
+              let dtos = try? JSONDecoder().decode([PlayerSyncDTO].self, from: data)
         else { return }
 
         let members = dtos.map { $0.toPlayerInfo() }
