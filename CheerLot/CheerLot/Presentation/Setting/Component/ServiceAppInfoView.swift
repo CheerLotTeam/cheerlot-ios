@@ -10,24 +10,27 @@ import SwiftUI
 /// 서비스 약관 (이용약관, 개인정보처리방침, 저작권 법적고지)에서 쓰이는 공통 화면입니다.
 struct ServiceAppInfoView: View {
   @Environment(AppCoordinator.self) private var coordinator
+  @Environment(MiniPlayerDisplayState.self) private var miniPlayerDisplayState
 
   let title: String
   let text: String
 
   var body: some View {
-    ZStack {
-      Color.grayWhite
-        .ignoresSafeArea()
-
-      VStack(spacing: 20) {
-        ScrollView(showsIndicators: false) {
-          Text(.init(text))
-            .font(.R2)
-            .foregroundStyle(.gray400)
-        }
-        .padding(.horizontal, 20)
-        .padding(.top, 20)
+    VStack(spacing: 20) {
+      ScrollView(showsIndicators: false) {
+        Text(.init(text))
+          .font(.R2)
+          .foregroundStyle(.gray400)
       }
+      .padding(.horizontal, 20)
+      .padding(.top, 20)
+    }
+    .appBackground()
+    .onAppear {
+      miniPlayerDisplayState.hide()
+    }
+    .onDisappear {
+      miniPlayerDisplayState.show()
     }
     .toolbar(.hidden, for: .tabBar)
     .navigationBar_backWithTitle(title: title) {

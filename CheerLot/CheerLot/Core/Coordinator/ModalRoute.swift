@@ -115,7 +115,7 @@ extension AppCoordinator {
       )
 
       PlaybackView(
-        asset: TeamAssetVO(teamId),
+        asset: PlaybackAssetVO(base: TeamAssetVO(teamId)),
         viewModel: viewModel,
         onClose: {
           self.dismissModal()

@@ -11,6 +11,7 @@ struct CustomToastModifier: ViewModifier {
   @Binding var isPresented: Bool
   let message: String
   var showCaution: Bool = true
+  let bottomPadding: CGFloat
 
   func body(content: Content) -> some View {
     ZStack {
@@ -20,6 +21,7 @@ struct CustomToastModifier: ViewModifier {
         CustomToastMessageView(
           message: message,
           showCaution: showCaution,
+          bottomPadding: bottomPadding,
           isPresented: $isPresented
         )
       }

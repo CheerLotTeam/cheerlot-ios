@@ -11,26 +11,31 @@ import SwiftUI
 struct MakerInfoView: View {
   @Environment(AppCoordinator.self) private var coordinator
   @Environment(\.openURL) private var openURL
+  @Environment(MiniPlayerDisplayState.self) private var miniPlayerDisplayState
 
   // MARK: - Body
   var body: some View {
-    ZStack {
-      Color.grayWhite
-        .ignoresSafeArea()
-      VStack {
-        SettingsMenuCard(
-          titles: MakerInfoMenu.allCases.map(\.rawValue),
-          onTap: { index in
-            let menus = MakerInfoMenu.allCases
-            guard menus.indices.contains(index) else { return }
-            makerInfoTap(menus[index])
-          }
-        )
+    VStack {
+      SettingsMenuCard(
+        titles: MakerInfoMenu.allCases.map(\.rawValue),
+        onTap: { index in
+          let menus = MakerInfoMenu.allCases
+          guard menus.indices.contains(index) else { return }
+          makerInfoTap(menus[index])
+        }
+      )
 
-        Spacer()
-      }
-      .padding(.horizontal, 20)
-      .padding(.top, 20)
+      Spacer()
+    }
+    .padding(.horizontal, 20)
+    .padding(.top, 20)
+
+    .appBackground()
+    .onAppear {
+      miniPlayerDisplayState.hide()
+    }
+    .onDisappear {
+      miniPlayerDisplayState.show()
     }
     .toolbar(.hidden, for: .tabBar)
     .navigationBar_backWithTitle(title: "쳐랏 팀") {
@@ -57,4 +62,5 @@ extension MakerInfoView {
 #Preview {
   MakerInfoView()
     .environment(AppCoordinator())
+    .environment(MiniPlayerDisplayState())
 }

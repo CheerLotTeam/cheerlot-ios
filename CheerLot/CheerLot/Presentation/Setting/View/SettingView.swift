@@ -40,8 +40,6 @@ struct SettingView: View {
   // MARK: - Body
   var body: some View {
     ZStack(alignment: .bottom) {
-      Color.grayWhite
-        .ignoresSafeArea()
       ScrollView {
         VStack(spacing: 20) {
           myTeamCard
@@ -57,6 +55,7 @@ struct SettingView: View {
         .foregroundStyle(.gray200)
         .padding(.bottom, 60)
     }
+    .appBackground()
     .onAppear {
       viewModel.onAppear()
       miniPlayerDisplayState.hide()

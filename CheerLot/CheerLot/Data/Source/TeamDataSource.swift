@@ -90,7 +90,7 @@ struct TeamDataSource {
         shortName: "SSG",
         longName: "SSG 랜더스",
         englishFullName: "SSG LANDERS",
-        slogan: "No Limits, Amazing Landers"
+        slogan: "NO LIMITS, AMAZING LANDERS"
       )
 
     case .doosan:

@@ -104,16 +104,10 @@ final class AudioPlaybackService: AudioPlayer {
 
   /// 다음곡
   func playNext() {
+    guard canSkipManually else { return }
     guard !queue.isEmpty else { return }
 
-    if currentIndex + 1 < queue.count {
-      currentIndex += 1
-    } else if playbackMode == .search {
-      currentIndex = 0
-    } else {
-      return
-    }
-
+    currentIndex = (currentIndex + 1) % queue.count
     nowPlaying = queue[currentIndex]
     currentPlayerName = queuePlayerNames[currentIndex]
 
@@ -124,9 +118,13 @@ final class AudioPlaybackService: AudioPlayer {
   func playPrevious() {
     guard canSkipManually else { return }
     guard !queue.isEmpty else { return }
-    guard currentIndex - 1 >= 0 else { return }
 
-    currentIndex -= 1
+    if currentTime > 3 {
+      seek(0)
+      return
+    }
+
+    currentIndex = (currentIndex - 1 + queue.count) % queue.count
     nowPlaying = queue[currentIndex]
     currentPlayerName = queuePlayerNames[currentIndex]
 
@@ -156,6 +154,7 @@ final class AudioPlaybackService: AudioPlayer {
 
     let item = AVPlayerItem(url: url)
     player.replaceCurrentItem(with: item)
+    player.seek(to: .zero)
     player.play()
 
     isPlaying = true
@@ -249,6 +248,17 @@ final class AudioPlaybackService: AudioPlayer {
   func removeObserver(_ token: Any) {
     player.removeTimeObserver(token)
   }
+  
+  func resetToBeginning(completion: @escaping () -> Void) {
+    player.seek(to: .zero) { [weak self] _ in
+      guard let self else { return }
+
+      DispatchQueue.main.async {
+        self.syncNowPlaying()
+        completion()
+      }
+    }
+  }
 }
 
 // MARK: - Setup
@@ -318,9 +328,13 @@ extension AudioPlaybackService {
 
     cc.previousTrackCommand.addTarget { [weak self] _ in
       guard let self else { return .commandFailed }
-      let before = self.nowPlaying?.id
+
+      let beforeID = self.nowPlaying?.id
+      let shouldRewind = self.currentTime > 3
+
       self.playPrevious()
-      return self.nowPlaying?.id != before ? .success : .commandFailed
+
+      return (shouldRewind || self.nowPlaying?.id != beforeID) ? .success : .commandFailed
     }
 
     cc.changePlaybackPositionCommand.addTarget { [weak self] event in

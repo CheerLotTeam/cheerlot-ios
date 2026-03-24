@@ -20,12 +20,15 @@ final class PlaybackViewModel {
   var progress: Double = 0
 
   /// 총 길이(초)
-  var duration: Double = 1
+  var duration: Double = 0
+  
+  var seekBarMaxValue: Double { max(duration, 1) }
 
   /// UI 표시용 메타 정보
   var title: String
   var playerName: String
   var lyrics: String
+  var isSeeking: Bool = false
 
   // MARK: - Dependencies
   @ObservationIgnored
@@ -92,6 +95,16 @@ final class PlaybackViewModel {
     audioPlaybackUseCase.playPrevious()
     syncFromService()
   }
+  
+  func closePlayback(completion: @escaping () -> Void) {
+    audioPlaybackUseCase.resetToBeginning { [weak self] in
+      guard let self else { return }
+      self.progress = 0
+      self.duration = max(self.audioPlaybackUseCase.duration, 1)
+      self.syncFromService()
+      completion()
+    }
+  }
 }
 
 // MARK: - Private Helpers
@@ -101,8 +114,23 @@ extension PlaybackViewModel {
   /// 서비스 -> UI 상태 동기화
   fileprivate func syncFromService() {
     isPlaying = audioPlaybackUseCase.isPlaying
-    progress = audioPlaybackUseCase.currentTime
-    duration = max(audioPlaybackUseCase.duration, 1)
+
+    let rawDuration = audioPlaybackUseCase.duration
+    let rawCurrentTime = audioPlaybackUseCase.currentTime
+
+    if rawDuration > 0 {
+      duration = rawDuration
+
+      if !isSeeking {
+        progress = min(max(rawCurrentTime, 0), rawDuration)
+      }
+    } else {
+      duration = 0
+
+      if !isSeeking {
+        progress = 0
+      }
+    }
 
     if let song = audioPlaybackUseCase.nowPlaying {
       title = song.title

@@ -17,11 +17,14 @@ struct PlaybackSeekBar: View {
   /// 전체 재생 길이
   let maxValue: Double
 
+  /// 드래그 시작/종료 상태 전달
+  let onEditingChanged: (Bool) -> Void
+
   /// 드래그 종료 시 실제 seek 처리
   let onSeek: (Double) -> Void
 
-  private let barHeight: CGFloat = 4
-  private let thumbSize: CGFloat = 14
+  private let barHeight: CGFloat = 6
+  private let thumbSize: CGFloat = 12
 
   /// 사용자가 SeekBar를 드래그 중인지 여부
   @State private var isDragging = false
@@ -39,7 +42,7 @@ struct PlaybackSeekBar: View {
       ZStack(alignment: .leading) {
         // Background bar
         Capsule()
-          .fill(.gray200.opacity(0.3))
+          .fill(.grayWhite.opacity(0.25))
           .frame(height: barHeight)
 
         // Progress bar

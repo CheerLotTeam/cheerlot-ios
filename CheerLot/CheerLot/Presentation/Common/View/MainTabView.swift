@@ -77,7 +77,7 @@ struct MainTabView: View {
     .fullScreenCover(isPresented: $isPlayerExpanded) {
       if let song = audioPlayer.nowPlaying {
         PlaybackView(
-          asset: asset,
+          asset: PlaybackAssetVO(base: TeamAssetVO(team.id)),
           viewModel: ViewModelFactory.shared.createPlaybackViewModel(
             song: song,
             playerName: audioPlayer.currentPlayerName ?? song.playerId.value

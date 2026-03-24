@@ -35,10 +35,13 @@ struct TeamMembersView: View {
         contents
       }
       .padding(.horizontal, 20)
+      .padding(.top, 10)
+      .padding(.bottom, 80)
     }
     .toolBar_titleWithProfile(title: "전체 선수") {
       coordinator.push(.settings)
     }
+    .appBackground()
     .task {
       await viewModel.onAppear()
     }
@@ -51,6 +54,11 @@ struct TeamMembersView: View {
         await viewModel.didUpdateSelectedTeam(team)
       }
     }
+    .toastMessage(
+      isPresented: $viewModel.showToast,
+      message: viewModel.toastMessage,
+      bottomPadding: 160
+    )
   }
 }
 
