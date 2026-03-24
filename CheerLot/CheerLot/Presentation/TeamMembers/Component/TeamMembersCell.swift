@@ -27,10 +27,10 @@ struct TeamMembersCell: View {
       Text("\(backNumber)")
         .font(.M3)
         .foregroundStyle(.gray400)
-        .offset(y: -2)
+        .offset(y: -4)
 
       Spacer()
-      HStack(spacing: 8) {
+      HStack(spacing: 16) {
         if let title {
           Text(title)
             .font(.M4)
@@ -38,10 +38,7 @@ struct TeamMembersCell: View {
         }
 
         Image(systemName: "play.fill")
-          .resizable()
-          .scaledToFit()
-          .frame(width: 14)
-          .frame(height: 16)
+          .font(.system(size: 16, weight: .regular))
           .foregroundStyle(hasSong ? asset.primaryColor : .gray200)
       }
     }
