@@ -180,23 +180,6 @@ extension DIContainer {
       )
     }
 
-    register(LineupSyncUseCase.self) { container in
-      LineupSyncUseCaseImpl(
-        teamLocalRepository: container.resolve(TeamLocalRepository.self),
-        teamRemoteRepository: container.resolve(TeamRemoteRepository.self),
-        playerLocalRepository: container.resolve(PlayerLocalRepository.self),
-        playerRemoteRepository: container.resolve(PlayerRemoteRepository.self),
-        userSettingsRepository: container.resolve(UserSettingsRepository.self)
-      )
-    }
-
-    register(TeamGameInfoSyncUseCase.self) { container in
-      TeamGameInfoSyncUseCaseImpl(
-        teamLocalRepository: container.resolve(TeamLocalRepository.self),
-        teamRemoteRepository: container.resolve(TeamRemoteRepository.self)
-      )
-    }
-
     register(LineupManagementUseCase.self) { container in
       LineupManagementUseCaseImpl(
         teamLocalRepository: container.resolve(TeamLocalRepository.self),

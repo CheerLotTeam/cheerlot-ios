@@ -8,28 +8,30 @@
 import SwiftUI
 
 struct TeamMemberListView: View {
+    var body: some View {
+        
   //  @EnvironmentObject var router: NavigationRouter
   //  @EnvironmentObject var container: DIContainer
-  @EnvironmentObject private var themeManager: ThemeManager
-  @Binding var teamMembers: [Player]
-
-  @State private var showToastMessage = false
-  @State private var showCheerSongSheet = false
-  @State private var selectedPlayerForSheet: Player?
-
-  //  let viewModel = TeamRoasterViewModel.shared
-  var screenName: String = LoggerEvent.View.mainRoasterV
-
-  var body: some View {
-    List {
-      ForEach($teamMembers, id: \.id) { $player in
-//        teamMemberCell(for: $player)
-      }
-      .listRowSeparator(.hidden)
-      .listRowInsets(EdgeInsets())
-    }
-    .listStyle(.plain)
-    .refreshable {
+//  @EnvironmentObject private var themeManager: ThemeManager
+//  @Binding var teamMembers: [Player]
+//
+//  @State private var showToastMessage = false
+//  @State private var showCheerSongSheet = false
+//  @State private var selectedPlayerForSheet: Player?
+//
+//  //  let viewModel = TeamRoasterViewModel.shared
+//  var screenName: String = LoggerEvent.View.mainRoasterV
+//
+//  var body: some View {
+//    List {
+//      ForEach($teamMembers, id: \.id) { $player in
+////        teamMemberCell(for: $player)
+//      }
+//      .listRowSeparator(.hidden)
+//      .listRowInsets(EdgeInsets())
+//    }
+//    .listStyle(.plain)
+//    .refreshable {
       //      await viewModel.fetchTeamPlayers(for: themeManager.currentTheme.rawValue.uppercased())
     }
     //    .sheet(item: $selectedPlayerForSheet) { selectedPlayer in
@@ -53,7 +55,7 @@ struct TeamMemberListView: View {
     //        .animation(.easeInOut, value: showToastMessage)
     //        .padding(.bottom, DynamicLayout.dynamicValuebyHeight(15))
     //    }
-  }
+//  }
 
 //  @ViewBuilder
 //  private func teamMemberCell(for player: Binding<Player>) -> some View {
