@@ -40,6 +40,7 @@ struct PlaybackView: View {
         
         MetalBackgroundView()
             .ignoresSafeArea()
+            .allowsHitTesting(false)
     }
     .ignoresSafeArea()
     .offset(y: dragOffsetY)
