@@ -11,14 +11,15 @@ import SwiftUI
 struct PlaybackView: View {
 
   // MARK: - Properties
-  let asset: TeamAssetVO
+  let asset: PlaybackAssetVO
   let onClose: () -> Void
 
   @State private var viewModel: PlaybackViewModel
   @State private var dragOffsetY: CGFloat = 0
+  @State private var isScrolledToBottom: Bool = false
 
   init(
-    asset: TeamAssetVO,
+    asset: PlaybackAssetVO,
     viewModel: PlaybackViewModel,
     onClose: @escaping () -> Void
   ) {
@@ -30,17 +31,23 @@ struct PlaybackView: View {
   // MARK: - Body
   var body: some View {
     ZStack {
-
+      asset.primaryColor
+        .ignoresSafeArea()
+      
+      MetalBackgroundView()
+        .ignoresSafeArea()
+        .allowsHitTesting(false)
+      
+      Color.grayBlack.opacity(0.1)
+        .ignoresSafeArea()
+        .allowsHitTesting(false)
+      
       VStack(spacing: 14) {
         topBar
         mainView
       }
+      .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
       .padding(.top, 40)
-      .background(asset.primaryColor)
-
-      MetalBackgroundView()
-        .ignoresSafeArea()
-        .allowsHitTesting(false)
     }
     .ignoresSafeArea()
     .offset(y: dragOffsetY)
@@ -56,13 +63,14 @@ extension PlaybackView {
       Color.clear
 
       Capsule()
-        .fill(.gray200.opacity(0.6))
+        .fill(.grayWhite.opacity(0.5))
         .frame(width: 60, height: 5)
     }
     .padding(.bottom, -20)
     .frame(maxWidth: .infinity)
     .frame(height: 44)
     .contentShape(Rectangle())
+    .onTapGesture { onClose() }
     .gesture(
       DragGesture()
         .onChanged { value in
@@ -70,7 +78,7 @@ extension PlaybackView {
           dragOffsetY = value.translation.height
         }
         .onEnded { value in
-          let shouldClose = value.translation.height > 80
+          let shouldClose = value.translation.height > 40
 
           if shouldClose {
             onClose()
@@ -85,8 +93,10 @@ extension PlaybackView {
     VStack(spacing: 40) {
       header
       content
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
       footer
     }
+    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
   }
 
   /// 선수 이름 + 응원가 종류
@@ -104,15 +114,36 @@ extension PlaybackView {
 
   /// 가사뷰
   private var content: some View {
-    ScrollView(showsIndicators: true) {
-      LazyVStack(alignment: .leading) {
-        Text(viewModel.lyrics.replacingOccurrences(of: "\\n", with: "\n"))
+    ViewThatFits(in: .vertical) {
+      lyricsText
+
+      ScrollView(.vertical, showsIndicators: false) {
+        lyricsText
       }
+      .onScrollGeometryChange(for: Bool.self) { geo in
+        geo.contentOffset.y >= geo.contentSize.height - geo.containerSize.height - 1
+      } action: { _, isBottom in
+        isScrolledToBottom = isBottom
+      }
+      .mask(
+        Group {
+          if isScrolledToBottom {
+            Color.black
+          } else {
+            asset.lyricsScrollMaskGradient
+          }
+        }
+      )
+    }
+    .padding(.horizontal, 24)
+  }
+  
+  private var lyricsText: some View {
+    Text(viewModel.lyrics.replacingOccurrences(of: "\\n", with: "\n"))
       .multilineTextAlignment(.leading)
       .font(.B1_1)
       .foregroundStyle(.grayWhite)
-    }
-    .padding(.horizontal, 24)
+      .frame(maxWidth: .infinity, alignment: .leading)
   }
 
   /// 재생바 + 컨트롤뷰
@@ -122,12 +153,12 @@ extension PlaybackView {
       controlView
     }
     .padding(.horizontal, 20)
-    .padding(.bottom, 36)
+    .padding(.bottom, 50)
   }
 
   /// 재생바
   private var progressView: some View {
-    VStack(spacing: 8) {
+    VStack(spacing: 4) {
       PlaybackSeekBar(
         value: $viewModel.progress,
         maxValue: viewModel.duration,
@@ -136,12 +167,15 @@ extension PlaybackView {
 
       HStack {
         Text(viewModel.progress.asTimeString)
+          .font(.M5)
+          .foregroundStyle(.grayWhite)
+
         Spacer()
         Text(viewModel.duration.asTimeString)
+          .font(.M5)
+          .foregroundStyle(.grayWhite).opacity(0.5)
+          
       }
-      .font(.M5)
-      .foregroundStyle(.gray300)
-      .padding(.bottom, 4)
     }
   }
 
@@ -177,12 +211,7 @@ extension PlaybackView {
       action()
     } label: {
       Image(systemName: systemName)
-        .resizable()
-        .aspectRatio(contentMode: .fit)
-        .frame(
-          width: center ? 28 : 36,
-          height: center ? 38 : 29
-        )
+        .font(.system(size: center ? 32 : 24, weight: .regular))
         .foregroundStyle(.grayWhite)
     }
     .buttonStyle(PlaybackButtonStyle(size: 56))

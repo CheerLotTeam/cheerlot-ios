@@ -101,8 +101,17 @@ extension PlaybackViewModel {
   /// 서비스 -> UI 상태 동기화
   fileprivate func syncFromService() {
     isPlaying = audioPlaybackUseCase.isPlaying
-    progress = audioPlaybackUseCase.currentTime
-    duration = max(audioPlaybackUseCase.duration, 1)
+
+    let rawDuration = audioPlaybackUseCase.duration
+    let rawCurrentTime = audioPlaybackUseCase.currentTime
+
+    if rawDuration > 0 {
+      duration = rawDuration
+      progress = min(max(rawCurrentTime, 0), rawDuration)
+    } else {
+      duration = 1
+      progress = 0
+    }
 
     if let song = audioPlaybackUseCase.nowPlaying {
       title = song.title
