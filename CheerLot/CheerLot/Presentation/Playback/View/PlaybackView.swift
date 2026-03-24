@@ -33,15 +33,15 @@ struct PlaybackView: View {
     ZStack {
       asset.primaryColor
         .ignoresSafeArea()
-      
+
       MetalBackgroundView()
         .ignoresSafeArea()
         .allowsHitTesting(false)
-      
+
       Color.grayBlack.opacity(0.1)
         .ignoresSafeArea()
         .allowsHitTesting(false)
-      
+
       VStack(spacing: 14) {
         topBar
         mainView
@@ -137,7 +137,7 @@ extension PlaybackView {
     }
     .padding(.horizontal, 24)
   }
-  
+
   private var lyricsText: some View {
     Text(viewModel.lyrics.replacingOccurrences(of: "\\n", with: "\n"))
       .multilineTextAlignment(.leading)
@@ -174,7 +174,7 @@ extension PlaybackView {
         Text(viewModel.duration.asTimeString)
           .font(.M5)
           .foregroundStyle(.grayWhite).opacity(0.5)
-          
+
       }
     }
   }

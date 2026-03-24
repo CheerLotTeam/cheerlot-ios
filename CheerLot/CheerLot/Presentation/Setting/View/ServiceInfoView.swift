@@ -23,12 +23,12 @@ struct ServiceInfoView: View {
     VStack(spacing: 20) {
       mainPageContent
       serviceContents
-      
+
       Spacer()
     }
     .padding(.horizontal, 20)
     .padding(.top, 20)
-    
+
     .appBackground()
     .onAppear {
       miniPlayerDisplayState.hide()

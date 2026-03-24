@@ -167,7 +167,7 @@ extension View {
       )
     )
   }
-  
+
   /// 하단 여백을 지정할 수 있는 커스텀 토스트 메시지 확장메서드
   func toastMessage(
     isPresented: Binding<Bool>,

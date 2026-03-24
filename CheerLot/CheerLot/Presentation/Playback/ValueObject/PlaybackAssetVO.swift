@@ -19,7 +19,7 @@ struct PlaybackAssetVO {
   var dragHandleColor: Color {
     .grayWhite.opacity(0.5)
   }
-  
+
   /// 가사 스크롤 하단 마스크 그라데이션
   var lyricsScrollMaskGradient: LinearGradient {
     LinearGradient(

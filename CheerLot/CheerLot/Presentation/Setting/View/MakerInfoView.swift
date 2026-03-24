@@ -24,12 +24,12 @@ struct MakerInfoView: View {
           makerInfoTap(menus[index])
         }
       )
-      
+
       Spacer()
     }
     .padding(.horizontal, 20)
     .padding(.top, 20)
-    
+
     .appBackground()
     .onAppear {
       miniPlayerDisplayState.hide()
