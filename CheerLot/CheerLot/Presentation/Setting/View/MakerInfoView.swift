@@ -62,4 +62,5 @@ extension MakerInfoView {
 #Preview {
   MakerInfoView()
     .environment(AppCoordinator())
+    .environment(MiniPlayerDisplayState())
 }
