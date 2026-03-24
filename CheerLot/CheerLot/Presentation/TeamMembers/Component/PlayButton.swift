@@ -30,9 +30,9 @@ struct PlayButton: View {
           .resizable()
           .frame(width: 15, height: 14)
           .foregroundStyle(.grayWhite)
+          .padding(.vertical, 1)
       }
-      .frame(height: 30)
-      .padding(1)
+      .frame(height: 28)
       .padding(.horizontal, 10)
       .background(
         RoundedRectangle(cornerRadius: 12)
