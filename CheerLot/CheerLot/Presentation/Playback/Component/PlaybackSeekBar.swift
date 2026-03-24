@@ -17,6 +17,9 @@ struct PlaybackSeekBar: View {
   /// 전체 재생 길이
   let maxValue: Double
 
+  /// 드래그 시작/종료 상태 전달
+  let onEditingChanged: (Bool) -> Void
+
   /// 드래그 종료 시 실제 seek 처리
   let onSeek: (Double) -> Void
 

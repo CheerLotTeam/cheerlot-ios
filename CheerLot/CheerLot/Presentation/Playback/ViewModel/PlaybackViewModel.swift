@@ -26,6 +26,7 @@ final class PlaybackViewModel {
   var title: String
   var playerName: String
   var lyrics: String
+  var isSeeking: Bool = false
 
   // MARK: - Dependencies
   @ObservationIgnored
@@ -92,6 +93,10 @@ final class PlaybackViewModel {
     audioPlaybackUseCase.playPrevious()
     syncFromService()
   }
+  
+  func closePlayback() {
+    seek(to: 0)
+  }
 }
 
 // MARK: - Private Helpers
@@ -107,10 +112,16 @@ extension PlaybackViewModel {
 
     if rawDuration > 0 {
       duration = rawDuration
-      progress = min(max(rawCurrentTime, 0), rawDuration)
+
+      if !isSeeking {
+        progress = min(max(rawCurrentTime, 0), rawDuration)
+      }
     } else {
       duration = 1
-      progress = 0
+
+      if !isSeeking {
+        progress = 0
+      }
     }
 
     if let song = audioPlaybackUseCase.nowPlaying {
