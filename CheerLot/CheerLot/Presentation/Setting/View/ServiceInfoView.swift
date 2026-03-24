@@ -11,6 +11,7 @@ import SwiftUI
 struct ServiceInfoView: View {
   @Environment(AppCoordinator.self) private var coordinator
   @Environment(\.openURL) private var openURL
+  @Environment(MiniPlayerDisplayState.self) private var miniPlayerDisplayState
 
   // MARK: - Properties
   private var policyMenus: [ServiceInfoMenu] {
@@ -31,6 +32,12 @@ struct ServiceInfoView: View {
       }
       .padding(.horizontal, 20)
       .padding(.top, 20)
+    }
+    .onAppear {
+      miniPlayerDisplayState.hide()
+    }
+    .onDisappear {
+      miniPlayerDisplayState.show()
     }
     .toolbar(.hidden, for: .tabBar)
     .navigationBar_backWithTitle(title: "서비스 소개") {
