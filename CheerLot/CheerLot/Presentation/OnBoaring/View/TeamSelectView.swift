@@ -59,6 +59,7 @@ extension TeamSelectView {
         .padding(.horizontal, 30)
         .padding(.top, viewModel.mode == .change ? 20 : 32)
         .padding(.bottom, 12)
+        .appBackground()
     }
     
   private var header: some View {

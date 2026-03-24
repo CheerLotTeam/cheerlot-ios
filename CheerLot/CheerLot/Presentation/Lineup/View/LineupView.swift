@@ -56,6 +56,7 @@ struct LineupView: View {
         coordinator.push(.settings)
       }
     }
+    .appBackground()
     .task {
       await viewModel.onAppear()
     }

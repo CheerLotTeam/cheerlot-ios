@@ -73,6 +73,7 @@ struct LineupPlaybackView: View {
         }
       }
     }
+    .appBackground()
     .toolBar_gameInfo(
       date: viewModel.gameDate, teams: viewModel.teamsText,
       onClose: {

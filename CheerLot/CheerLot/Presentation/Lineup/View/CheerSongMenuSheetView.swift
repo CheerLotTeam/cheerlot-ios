@@ -23,7 +23,7 @@ struct CheerSongMenuSheetView: View {
 
       CheerSongListView
     }
-    .background(Color.grayWhite)
+    .appBackground()
   }
 
   private var CheerSongListView: some View {
