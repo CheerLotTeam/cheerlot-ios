@@ -162,7 +162,25 @@ extension View {
       CustomToastModifier(
         isPresented: isPresented,
         message: message,
-        showCaution: showCaution
+        showCaution: showCaution,
+        bottomPadding: UIScreen.height * 0.12
+      )
+    )
+  }
+  
+  /// 하단 여백을 지정할 수 있는 커스텀 토스트 메시지 확장메서드
+  func toastMessage(
+    isPresented: Binding<Bool>,
+    message: String,
+    showCaution: Bool = true,
+    bottomPadding: CGFloat
+  ) -> some View {
+    modifier(
+      CustomToastModifier(
+        isPresented: isPresented,
+        message: message,
+        showCaution: showCaution,
+        bottomPadding: bottomPadding
       )
     )
   }

@@ -10,6 +10,7 @@ import SwiftUI
 struct CustomToastMessageView: View {
   let message: String
   var showCaution: Bool = true
+  var bottomPadding: CGFloat = UIScreen.height * 0.12
   @Binding var isPresented: Bool
 
   var body: some View {
@@ -17,7 +18,7 @@ struct CustomToastMessageView: View {
       Spacer()
 
       toastContent
-        .padding(.bottom, UIScreen.height * 0.12)
+        .padding(.bottom, bottomPadding)
     }
     .frame(maxWidth: .infinity)
     .ignoresSafeArea(edges: .bottom)
@@ -60,6 +61,7 @@ extension CustomToastMessageView {
   CustomToastMessageView(
     message: "아직 개인 응원가가 없어요",
     showCaution: true,
+    bottomPadding: 120,
     isPresented: .constant(true)
   )
 }
