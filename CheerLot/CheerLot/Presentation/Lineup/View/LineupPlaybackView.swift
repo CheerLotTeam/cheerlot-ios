@@ -16,10 +16,10 @@ struct LineupPlaybackView: View {
   // MARK: - State
 
   @State private var viewModel: LineupPlaybackViewModel
-  @State private var scrollPosition: Int? // itemsArray 전체 기준 현재 중앙 아이템의 인덱스
-  @State private var itemsArray: [[CarouselItemVO]] = [] // 무한 스크롤을 위해  carouselItems를 3벌 복제
-  @State private var isRebalancing: Bool = false // 재배치 애니메이션 중 onChange 방지 플래그
-  @State private var lastRealIndex: Int? // 실제 인덱스 변경 여부 확인을 위한 이전 인덱스
+  @State private var scrollPosition: Int?  // itemsArray 전체 기준 현재 중앙 아이템의 인덱스
+  @State private var itemsArray: [[CarouselItemVO]] = []  // 무한 스크롤을 위해  carouselItems를 3벌 복제
+  @State private var isRebalancing: Bool = false  // 재배치 애니메이션 중 onChange 방지 플래그
+  @State private var lastRealIndex: Int?  // 실제 인덱스 변경 여부 확인을 위한 이전 인덱스
 
   // MARK: - Layout Constants
 
@@ -98,15 +98,15 @@ struct LineupPlaybackView: View {
       }
     }
     .onChange(of: viewModel.currentPlaybackIndex) { _, newValue in
-        let items = viewModel.carouselItems
-        guard !items.isEmpty else { return }
-        guard let currentPosition = scrollPosition else { return }
-        
-        guard viewModel.isSyncingFromPlayback else { return }
-        withAnimation(.easeInOut(duration: animationDuration)) {
-            scrollPosition = currentPosition + 1
-        }
-        lastRealIndex = newValue
+      let items = viewModel.carouselItems
+      guard !items.isEmpty else { return }
+      guard let currentPosition = scrollPosition else { return }
+
+      guard viewModel.isSyncingFromPlayback else { return }
+      withAnimation(.easeInOut(duration: animationDuration)) {
+        scrollPosition = currentPosition + 1
+      }
+      lastRealIndex = newValue
     }
   }
 }
@@ -205,7 +205,10 @@ extension LineupPlaybackView {
     HStack(spacing: 8) {
       ForEach(0..<viewModel.carouselItems.count, id: \.self) { index in
         Capsule()
-          .fill(index == currentRealIndex ? asset.selectedPageIndicatorColor : asset.unselectedPageIndicatorColor)
+          .fill(
+            index == currentRealIndex
+              ? asset.selectedPageIndicatorColor : asset.unselectedPageIndicatorColor
+          )
           .frame(
             width: index == currentRealIndex ? 10 : 8, height: index == currentRealIndex ? 10 : 8
           )

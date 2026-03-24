@@ -50,17 +50,17 @@ final class LineupViewModel {
     let entities = lineupFetchUseCase.getLineupMembers(TeamID(teamId))
     lineupMembers = entities.map { LineupMemberVO(from: $0) }
   }
-    
-    /// WCSession 데이터 수신 시 전체 갱신
-    private func refreshData() async {
-        guard let teamInfo = teamFetchUseCase.getCurrentTeam() else { return }
-        
-        asset = WatchTeamAssetVO(teamInfo.id)
-        teamName = teamInfo.shortName
-        currentTeamId = teamInfo.id.value
-        
-        await loadLineupMembers()
-    }
+
+  /// WCSession 데이터 수신 시 전체 갱신
+  private func refreshData() async {
+    guard let teamInfo = teamFetchUseCase.getCurrentTeam() else { return }
+
+    asset = WatchTeamAssetVO(teamInfo.id)
+    teamName = teamInfo.shortName
+    currentTeamId = teamInfo.id.value
+
+    await loadLineupMembers()
+  }
 
   /// WCSession으로 데이터가 수신되면 최신 상태로 리로드
   private func startObservingConnectivity() {

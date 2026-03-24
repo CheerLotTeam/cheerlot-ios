@@ -9,8 +9,8 @@ import Foundation
 import UIKit
 
 extension UIDevice {
-    static var isIOS26OrLater: Bool {
-        if #available(iOS 26, *) { return true }
-        return false
-    }
+  static var isIOS26OrLater: Bool {
+    if #available(iOS 26, *) { return true }
+    return false
+  }
 }

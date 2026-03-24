@@ -8,6 +8,6 @@
 import Foundation
 
 protocol WatchDataSyncUseCase {
-    /// WCSession 활성화 및 데이터 수신 시작
-    func start()
+  /// WCSession 활성화 및 데이터 수신 시작
+  func start()
 }

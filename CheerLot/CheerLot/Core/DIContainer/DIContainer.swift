@@ -11,8 +11,8 @@ import Foundation
 final class DIContainer {
   static let shared = DIContainer()
 
-  private var singletons: [String: Any] = [:] // 캐시용
-  private var singletonFactories: [String: () -> Any] = [:] // Lazy 생성용
+  private var singletons: [String: Any] = [:]  // 캐시용
+  private var singletonFactories: [String: () -> Any] = [:]  // Lazy 생성용
   private var factories: [String: (DIContainer) -> Any] = [:]
   private let lock = NSRecursiveLock()
 
@@ -59,10 +59,10 @@ final class DIContainer {
       guard let instance = factory() as? T else {
         fatalError("\(key)의 타입이 일치하지 않습니다.")
       }
-      singletons[key] = instance // 캐싱
+      singletons[key] = instance  // 캐싱
       return instance
     }
-      
+
     // 3. Transient Factory
     if let factory = factories[key] {
       guard let instance = factory(self) as? T else {

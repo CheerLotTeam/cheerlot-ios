@@ -138,7 +138,7 @@ final class LineupViewModel {
 }
 
 enum LineupTapAction {
-    case showSongList(player: LineupPlayerVO)
-    case goToPlayback(startIndex: Int)
-    case none
+  case showSongList(player: LineupPlayerVO)
+  case goToPlayback(startIndex: Int)
+  case none
 }

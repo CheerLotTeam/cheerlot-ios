@@ -18,39 +18,40 @@ struct LineupChangeSheetView: View {
   }
 
   var body: some View {
-      VStack(spacing: 18) {
-        header
-          .padding(.top, 10)
+    VStack(spacing: 18) {
+      header
+        .padding(.top, 10)
 
-        if let asset = viewModel.asset {
-          playerListGrid(asset: asset)
-        } else {
-          Color.clear
+      if let asset = viewModel.asset {
+        playerListGrid(asset: asset)
+      } else {
+        Color.clear
+      }
+    }
+    .appBackground()
+    .toolBar_editMode(
+      title: "선수 교체",
+      checkColor: viewModel.selectedPlayer != nil
+        ? (viewModel.asset?.primaryColor ?? .gray800) : .gray800
+    ) {
+      coordinator.dismissModal()
+    } onCheck: {
+      Task {
+        let success = await viewModel.swapPlayers()
+        if success {
+          onComplete()
+          coordinator.dismissModal()
         }
       }
-      .appBackground()
-      .toolBar_editMode(
-        title: "선수 교체",
-        checkColor: viewModel.selectedPlayer != nil ? (viewModel.asset?.primaryColor ?? .gray800) : .gray800
-      ) {
-        coordinator.dismissModal()
-      } onCheck: {
-        Task {
-          let success = await viewModel.swapPlayers()
-          if success {
-            onComplete()
-            coordinator.dismissModal()
-          }
-        }
+    }
+    .disabled(viewModel.isSwapping)
+    .overlay {
+      if viewModel.isLoading || viewModel.isSwapping {
+        ProgressView()
+          .frame(maxWidth: .infinity, maxHeight: .infinity)
+          .appBackground()
       }
-      .disabled(viewModel.isSwapping)
-      .overlay {
-        if viewModel.isLoading || viewModel.isSwapping {
-          ProgressView()
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .appBackground()
-        }
-      }
+    }
     .task {
       await viewModel.onAppear()
     }

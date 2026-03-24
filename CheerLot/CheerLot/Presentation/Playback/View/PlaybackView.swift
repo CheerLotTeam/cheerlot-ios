@@ -37,10 +37,10 @@ struct PlaybackView: View {
       }
       .padding(.top, 40)
       .background(asset.primaryColor)
-        
-        MetalBackgroundView()
-            .ignoresSafeArea()
-            .allowsHitTesting(false)
+
+      MetalBackgroundView()
+        .ignoresSafeArea()
+        .allowsHitTesting(false)
     }
     .ignoresSafeArea()
     .offset(y: dragOffsetY)

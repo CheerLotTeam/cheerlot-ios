@@ -11,8 +11,8 @@ import Foundation
 final class DIContainer {
   static let shared = DIContainer()
 
-  private var singletons: [String: Any] = [:] // 캐시용
-  private var singletonFactories: [String: () -> Any] = [:] // Lazy 생성용
+  private var singletons: [String: Any] = [:]  // 캐시용
+  private var singletonFactories: [String: () -> Any] = [:]  // Lazy 생성용
   private var factories: [String: (DIContainer) -> Any] = [:]
   private let lock = NSRecursiveLock()
 
@@ -59,10 +59,10 @@ final class DIContainer {
       guard let instance = factory() as? T else {
         fatalError("\(key)의 타입이 일치하지 않습니다.")
       }
-      singletons[key] = instance // 캐싱
+      singletons[key] = instance  // 캐싱
       return instance
     }
-      
+
     // 3. Transient Factory
     if let factory = factories[key] {
       guard let instance = factory(self) as? T else {
@@ -87,7 +87,7 @@ extension DIContainer {
     registerSingleton(WatchConnectivityRepository.self) {
       WatchConnectivityRepositoryImpl()
     }
-      
+
     registerSingleton(WatchTeamRepository.self) {
       WatchTeamRepositoryImpl()
     }
@@ -98,15 +98,15 @@ extension DIContainer {
   }
 
   private func assembleUseCases() {
-      /// WatchDataSyncUseCase는 앱 생명주기 동안 살아있어야 하므로 lazy singleton으로 등록
-      registerSingleton(WatchDataSyncUseCase.self) {
-          WatchDataSyncUseCaseImpl(
-            watchConnectivityRepository: DIContainer.shared.resolve(WatchConnectivityRepository.self),
-            watchTeamRepository: DIContainer.shared.resolve(WatchTeamRepository.self),
-            watchMemberRepository: DIContainer.shared.resolve(WatchMemberRepository.self)
-          )
-      }
-      
+    /// WatchDataSyncUseCase는 앱 생명주기 동안 살아있어야 하므로 lazy singleton으로 등록
+    registerSingleton(WatchDataSyncUseCase.self) {
+      WatchDataSyncUseCaseImpl(
+        watchConnectivityRepository: DIContainer.shared.resolve(WatchConnectivityRepository.self),
+        watchTeamRepository: DIContainer.shared.resolve(WatchTeamRepository.self),
+        watchMemberRepository: DIContainer.shared.resolve(WatchMemberRepository.self)
+      )
+    }
+
     register(TeamFetchUseCase.self) { container in
       TeamFetchUseCaseImpl(
         watchTeamRepository: container.resolve(WatchTeamRepository.self)

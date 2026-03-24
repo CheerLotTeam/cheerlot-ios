@@ -30,12 +30,12 @@ struct TeamSelectCell: View {
 extension TeamSelectCell {
   private var textContents: some View {
     VStack(alignment: .center, spacing: 7.5) {
-        TightLineHeightText(
-            text: team.englishFullName,
-            style: .T3,
-            color: isSelected ? UIColor(.grayWhite) : UIColor(.gray300)
-        )
-        .fixedSize()
+      TightLineHeightText(
+        text: team.englishFullName,
+        style: .T3,
+        color: isSelected ? UIColor(.grayWhite) : UIColor(.gray300)
+      )
+      .fixedSize()
 
       Text(team.longName)
         .font(.SB9)

@@ -19,7 +19,9 @@ final class PlaySearchSongsUseCaseImpl: PlaySearchSongsUseCase {
     allResults: [SearchResultVO],
     coverImageName: String?
   ) {
-    let samePlayerRows = allResults.filter { $0.playerId == selectedResult.playerId && $0.song != nil }
+    let samePlayerRows = allResults.filter {
+      $0.playerId == selectedResult.playerId && $0.song != nil
+    }
     let songs = samePlayerRows.compactMap(\.song)
 
     guard !songs.isEmpty else { return }

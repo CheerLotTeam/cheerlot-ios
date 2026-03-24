@@ -46,33 +46,33 @@ struct LineupView: View {
 }
 
 extension LineupView {
-    private var MemberListView: some View {
-        List {
-            ForEach(viewModel.lineupMembers, id: \.id) { member in
-                if let asset = viewModel.asset {
-                    NavigationLink {
-                        LyricsView(
-                            members: viewModel.lineupMembers, initialMember: member, asset: asset)
-                    } label: {
-                        MemberCell(member)
-                    }
-                }
-            }
+  private var MemberListView: some View {
+    List {
+      ForEach(viewModel.lineupMembers, id: \.id) { member in
+        if let asset = viewModel.asset {
+          NavigationLink {
+            LyricsView(
+              members: viewModel.lineupMembers, initialMember: member, asset: asset)
+          } label: {
+            MemberCell(member)
+          }
         }
+      }
     }
-    
-    private func MemberCell(_ member: LineupMemberVO) -> some View {
-        HStack(spacing: 6) {
-            if let battingOrder = member.battingOrder {
-                Text("\(battingOrder)")
-                    .font(.SB6)
-            }
-            
-            Text(member.name)
-                .font(.SB7)
-        }
-        .padding(.leading, 7.5)
+  }
+
+  private func MemberCell(_ member: LineupMemberVO) -> some View {
+    HStack(spacing: 6) {
+      if let battingOrder = member.battingOrder {
+        Text("\(battingOrder)")
+          .font(.SB6)
+      }
+
+      Text(member.name)
+        .font(.SB7)
     }
+    .padding(.leading, 7.5)
+  }
 
   private var EmptyListView: some View {
     ZStack {

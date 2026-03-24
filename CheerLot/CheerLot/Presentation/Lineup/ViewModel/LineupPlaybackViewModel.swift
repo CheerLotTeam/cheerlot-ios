@@ -119,7 +119,9 @@ final class LineupPlaybackViewModel {
 
     asset = LineupPlaybackAssetVO(base: TeamAssetVO(teamId))
 
-    guard let data = try? await lineupManagementUseCase.loadCurrentLineup(for: teamId) else { return }
+    guard let data = try? await lineupManagementUseCase.loadCurrentLineup(for: teamId) else {
+      return
+    }
 
     lineupPlayers = data.lineupPlayers.map { LineupPlayerVO(from: $0) }
 

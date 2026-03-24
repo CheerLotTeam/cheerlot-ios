@@ -71,20 +71,20 @@ extension AppCoordinator {
     case let .lineupChange(lineupPlayer, onComplete):
       let viewModel = factory.createLineupChangeViewModel(lineupPlayer)
 
-        NavigationStack {
-            LineupChangeSheetView(
-                viewModel: viewModel,
-                onComplete: onComplete
-            )
-        }
+      NavigationStack {
+        LineupChangeSheetView(
+          viewModel: viewModel,
+          onComplete: onComplete
+        )
+      }
       .presentationDetents([.large])
       .presentationDragIndicator(.hidden)
       .padding(.top, UIDevice.isIOS26OrLater ? 0 : 8)
     case let .teamChange(selectedTeamId):
-        let viewModel = factory.createTeamSelectViewModel(
-            mode: .change,
-            initialSelectedTeamId: selectedTeamId
-          )
+      let viewModel = factory.createTeamSelectViewModel(
+        mode: .change,
+        initialSelectedTeamId: selectedTeamId
+      )
       NavigationStack {
         TeamSelectView(
           viewModel: viewModel,

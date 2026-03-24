@@ -32,11 +32,11 @@ final class LineupManagementUseCaseImpl: LineupManagementUseCase {
   }
 
   // MARK: - Public Methods
-    
-    func loadCurrentLineup(for teamId: TeamID) async throws -> LineupData {
-        let data = try await fetchLocalData(teamId)
-        return data
-    }
+
+  func loadCurrentLineup(for teamId: TeamID) async throws -> LineupData {
+    let data = try await fetchLocalData(teamId)
+    return data
+  }
 
   func loadLineupWithSync(for teamId: TeamID) async throws -> LineupData {
     try await syncIfNeeded(teamId)

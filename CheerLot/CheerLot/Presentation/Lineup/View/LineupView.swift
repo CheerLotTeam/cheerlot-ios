@@ -192,21 +192,21 @@ extension LineupView {
           .padding(.horizontal, 5.5)
           .contentShape(Rectangle())
           .onTapGesture {
-              let action = viewModel.handlePlayerTap(player: player)
-              switch action {
-              case .showSongList(let player):
-                  coordinator.presentModal(
-                    .cheerSongList(
-                        asset: asset.base,
-                        player: player,
-                        lineupPlayers: viewModel.lineupPlayers
-                    )
-                  )
-              case .goToPlayback(let startIndex):
-                  coordinator.presentModal(.lineupPlayback(startIndex: startIndex))
-              case .none:
-                  break
-              }
+            let action = viewModel.handlePlayerTap(player: player)
+            switch action {
+            case .showSongList(let player):
+              coordinator.presentModal(
+                .cheerSongList(
+                  asset: asset.base,
+                  player: player,
+                  lineupPlayers: viewModel.lineupPlayers
+                )
+              )
+            case .goToPlayback(let startIndex):
+              coordinator.presentModal(.lineupPlayback(startIndex: startIndex))
+            case .none:
+              break
+            }
           }
 
           if index < viewModel.lineupPlayers.count - 1 {
@@ -215,8 +215,8 @@ extension LineupView {
               .foregroundColor(asset.listLineColor)
               .frame(height: separatorHeight)
           } else {
-              Color.clear
-                  .frame(height: separatorHeight)
+            Color.clear
+              .frame(height: separatorHeight)
           }
         }
         .listRowSeparator(.hidden)
@@ -237,13 +237,13 @@ extension LineupView {
             )
           },
           onSelectSong: { cheerSong in
-              let action = viewModel.handleSongSelect(song: cheerSong)
-              switch action {
-              case .goToPlayback(let startIndex):
-                  coordinator.presentModal(.lineupPlayback(startIndex: startIndex))
-              default:
-                  break
-              }
+            let action = viewModel.handleSongSelect(song: cheerSong)
+            switch action {
+            case .goToPlayback(let startIndex):
+              coordinator.presentModal(.lineupPlayback(startIndex: startIndex))
+            default:
+              break
+            }
           }
         )
       }

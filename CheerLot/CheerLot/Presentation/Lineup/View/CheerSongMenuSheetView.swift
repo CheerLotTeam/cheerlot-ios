@@ -55,9 +55,10 @@ struct CheerSongMenuSheetView: View {
 
 extension CheerSongMenuSheetView {
   private func handleSongSelection(_ selectedSong: CheerSongVO) {
-      let selectedIndex = lineupPlayers
-          .flatMap { $0.cheerSongs }
-          .firstIndex { $0.id == selectedSong.id } ?? 0
+    let selectedIndex =
+      lineupPlayers
+      .flatMap { $0.cheerSongs }
+      .firstIndex { $0.id == selectedSong.id } ?? 0
 
     coordinator.dismissModal()
     coordinator.presentModal(.lineupPlayback(startIndex: selectedIndex))

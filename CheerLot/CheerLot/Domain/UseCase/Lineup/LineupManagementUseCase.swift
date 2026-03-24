@@ -11,7 +11,7 @@ import Foundation
 protocol LineupManagementUseCase {
   /// 현재 라인업 데이터 로드
   func loadCurrentLineup(for teamId: TeamID) async throws -> LineupData
-    
+
   /// 라인업 데이터 로드 (필요시 동기화 후)
   func loadLineupWithSync(for teamId: TeamID) async throws -> LineupData
 

@@ -25,43 +25,43 @@ struct TeamSelectView: View {
   }
 
   var body: some View {
-      if viewModel.mode.showsTopBar {
-          content
-              .toolBar_editMode(
-                title: viewModel.mode.navigationTitle,
-                onClose: { onClose?() },
-                onCheck: {
-                    viewModel.complete()
-                    onCompleteForChange?()
-                }
-              )
-          
-      } else {
-          content
-      }
+    if viewModel.mode.showsTopBar {
+      content
+        .toolBar_editMode(
+          title: viewModel.mode.navigationTitle,
+          onClose: { onClose?() },
+          onCheck: {
+            viewModel.complete()
+            onCompleteForChange?()
+          }
+        )
+
+    } else {
+      content
+    }
   }
 }
 
 extension TeamSelectView {
-    
-    private var content: some View {
-        VStack(spacing: 15) {
-          header
-            .padding(.bottom, 10)
 
-          teamListGrid
+  private var content: some View {
+    VStack(spacing: 15) {
+      header
+        .padding(.bottom, 10)
 
-          if viewModel.mode.showsBottomButton {
-            completeButton
-          }
-        }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .padding(.horizontal, 30)
-        .padding(.top, viewModel.mode == .change ? 20 : 32)
-        .padding(.bottom, 12)
-        .appBackground()
+      teamListGrid
+
+      if viewModel.mode.showsBottomButton {
+        completeButton
+      }
     }
-    
+    .frame(maxWidth: .infinity, maxHeight: .infinity)
+    .padding(.horizontal, 30)
+    .padding(.top, viewModel.mode == .change ? 20 : 32)
+    .padding(.bottom, 12)
+    .appBackground()
+  }
+
   private var header: some View {
     Text(viewModel.mode.guideText)
       .font(viewModel.mode == .onboarding ? .SB4 : .M3)
