@@ -30,8 +30,6 @@ struct PlaybackView: View {
   // MARK: - Body
   var body: some View {
     ZStack {
-      MetalBackgroundView()
-        .ignoresSafeArea()
 
       VStack(spacing: 14) {
         topBar
@@ -39,6 +37,10 @@ struct PlaybackView: View {
       }
       .padding(.top, 40)
       .background(asset.primaryColor)
+
+      MetalBackgroundView()
+        .ignoresSafeArea()
+        .allowsHitTesting(false)
     }
     .ignoresSafeArea()
     .offset(y: dragOffsetY)

@@ -127,32 +127,17 @@ private struct MiniPlayerLayout {
   let iconWidth: CGFloat
 
   static var current: MiniPlayerLayout {
-    if #available(iOS 26, *) {
-      return .init(
-        height: 48,
-        leadingSpacing: 18,
-        trailingSpacing: 23,
-        cornerRadius: 0,
-        backgroundColor: .grayWhite,
-        shadowColor: .clear,
-        imageSize: 30,
-        imageCornerRadius: 5,
-        controlSpacing: 22,
-        iconWidth: 18,
-      )
-    } else {
-      return .init(
-        height: 56,
-        leadingSpacing: 7,
-        trailingSpacing: 14,
-        cornerRadius: 16,
-        backgroundColor: .grayWhite,
-        shadowColor: .gray200.opacity(0.3),
-        imageSize: 40,
-        imageCornerRadius: 10,
-        controlSpacing: 25,
-        iconWidth: 22,
-      )
-    }
+    .init(
+      height: UIDevice.isIOS26OrLater ? 48 : 56,
+      leadingSpacing: UIDevice.isIOS26OrLater ? 18 : 7,
+      trailingSpacing: UIDevice.isIOS26OrLater ? 23 : 14,
+      cornerRadius: UIDevice.isIOS26OrLater ? 0 : 16,
+      backgroundColor: .grayWhite,
+      shadowColor: UIDevice.isIOS26OrLater ? .clear : .gray200.opacity(0.3),
+      imageSize: UIDevice.isIOS26OrLater ? 30 : 40,
+      imageCornerRadius: UIDevice.isIOS26OrLater ? 5 : 10,
+      controlSpacing: UIDevice.isIOS26OrLater ? 22 : 25,
+      iconWidth: UIDevice.isIOS26OrLater ? 18 : 22
+    )
   }
 }

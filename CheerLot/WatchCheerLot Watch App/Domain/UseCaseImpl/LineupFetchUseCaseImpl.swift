@@ -15,9 +15,8 @@ final class LineupFetchUseCaseImpl: LineupFetchUseCase {
     self.memberRepository = memberRepository
   }
 
-  func getLineupMembers(_ teamId: TeamID) async throws -> [PlayerInfo] {
-    memberRepository
-      .fetchLineupMembers(teamId: teamId)
+  func getLineupMembers(_ teamId: TeamID) -> [PlayerInfo] {
+    memberRepository.fetchLineupMembers()
       .filter { $0.battingOrder != nil }
       .sorted { ($0.battingOrder ?? 0) < ($1.battingOrder ?? 0) }
   }

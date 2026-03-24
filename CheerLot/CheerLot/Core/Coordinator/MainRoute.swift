@@ -26,7 +26,6 @@ extension AppCoordinator {
   func buildView(for route: MainRoute) -> some View {
     let factory = ViewModelFactory.shared
 
-    // TODO: - View 넣기
     switch route {
     case .settings:
       let viewModel = factory.createSettingViewModel()

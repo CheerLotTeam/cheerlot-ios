@@ -11,13 +11,14 @@ import Foundation
 final class DIContainer {
   static let shared = DIContainer()
 
-  private var singletons: [String: Any] = [:]
+  private var singletons: [String: Any] = [:]  // 캐시용
+  private var singletonFactories: [String: () -> Any] = [:]  // Lazy 생성용
   private var factories: [String: (DIContainer) -> Any] = [:]
   private let lock = NSRecursiveLock()
 
   private init() {}
 
-  /// Singleton 등록 (한 번만 생성)
+  /// Lazy Singleton 등록 (처음 resolve 시 생성)
   func registerSingleton<T>(
     _ type: T.Type,
     _ factory: @escaping () -> T
@@ -26,8 +27,7 @@ final class DIContainer {
     defer { lock.unlock() }
 
     let key = String(describing: type)
-    let instance = factory()
-    singletons[key] = instance
+    singletonFactories[key] = factory
   }
 
   /// Transient 등록 (매번 생성)
@@ -49,12 +49,21 @@ final class DIContainer {
 
     let key = String(describing: type)
 
-    // 1. Singleton 확인
+    // 1. 이미 생성된 Singleton 캐시 확인
     if let singleton = singletons[key] as? T {
       return singleton
     }
 
-    // 2. Factory 확인
+    // 2. Lazy Singleton - 첫 resolve 시 생성 후 캐싱
+    if let factory = singletonFactories[key] {
+      guard let instance = factory() as? T else {
+        fatalError("\(key)의 타입이 일치하지 않습니다.")
+      }
+      singletons[key] = instance  // 캐싱
+      return instance
+    }
+
+    // 3. Transient Factory
     if let factory = factories[key] {
       guard let instance = factory(self) as? T else {
         fatalError("\(key)의 타입이 일치하지 않습니다.")
@@ -168,23 +177,6 @@ extension DIContainer {
         teamRemoteRepository: container.resolve(TeamRemoteRepository.self),
         playerLocalRepository: container.resolve(PlayerLocalRepository.self),
         playerRemoteRepository: container.resolve(PlayerRemoteRepository.self)
-      )
-    }
-
-    register(LineupSyncUseCase.self) { container in
-      LineupSyncUseCaseImpl(
-        teamLocalRepository: container.resolve(TeamLocalRepository.self),
-        teamRemoteRepository: container.resolve(TeamRemoteRepository.self),
-        playerLocalRepository: container.resolve(PlayerLocalRepository.self),
-        playerRemoteRepository: container.resolve(PlayerRemoteRepository.self),
-        userSettingsRepository: container.resolve(UserSettingsRepository.self)
-      )
-    }
-
-    register(TeamGameInfoSyncUseCase.self) { container in
-      TeamGameInfoSyncUseCaseImpl(
-        teamLocalRepository: container.resolve(TeamLocalRepository.self),
-        teamRemoteRepository: container.resolve(TeamRemoteRepository.self)
       )
     }
 

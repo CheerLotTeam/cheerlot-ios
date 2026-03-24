@@ -79,10 +79,8 @@
 		CF3BA7982DED855A00E600B6 /* Exceptions for "CheerLot" folder in "WatchCheerLot Watch App" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				Core/DesignSystem/RoundedCornerShape.swift,
 				Core/Util/Config.swift,
 				Core/Util/Constants.swift,
-				Data/DTOs/APIResponse/Legacy/PlayerWatchDto.swift,
 				Data/DTOs/Watch/PlayerSyncDTO.swift,
 				Data/Source/TeamDataSource.swift,
 				Data/Storage/Local/LocalStorageError.swift,
@@ -90,8 +88,6 @@
 				Domain/Entity/CheerSong/CheerSongInfo.swift,
 				Domain/Entity/Player/PlayerInfo.swift,
 				Domain/Entity/Team/TeamInfo.swift,
-				Legacy/Enum/Theme.swift,
-				Resource/AppIcon/cheerlot_icon_default.icon,
 			);
 			target = CF3BA72A2DED7FB800E600B6 /* WatchCheerLot Watch App */;
 		};

@@ -8,8 +8,10 @@
 import Foundation
 
 /// iPhone → Watch 데이터 수신 Repository
-protocol WatchConnectivityRepository {
-  /// WCSession 활성화 (앱 시작 시 1회 호출)
+protocol WatchConnectivityRepository: AnyObject {
+  /// iOS로부터 수신한 context 데이터 콜백
+  var onContextReceived: (([String: Any]) -> Void)? { get set }
+  /// WCSession 활성화 (1회 호출)
   func activate()
 }
 

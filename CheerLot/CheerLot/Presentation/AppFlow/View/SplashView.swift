@@ -26,6 +26,7 @@ struct SplashView: View {
         }
       }
     }
+    .appBackground()
     .ignoresSafeArea()
     // foreground로 복귀할 때마다 checkVersion 함수를 실행
     .onReceive(

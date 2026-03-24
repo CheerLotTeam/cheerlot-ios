@@ -39,7 +39,20 @@ final class LineupViewModel {
 
   func onAppear() async {
     startObservingConnectivity()
+    await refreshData()
+  }
 
+  // MARK: - Private
+
+  private func loadLineupMembers() async {
+    guard let teamId = currentTeamId else { return }
+
+    let entities = lineupFetchUseCase.getLineupMembers(TeamID(teamId))
+    lineupMembers = entities.map { LineupMemberVO(from: $0) }
+  }
+
+  /// WCSession 데이터 수신 시 전체 갱신
+  private func refreshData() async {
     guard let teamInfo = teamFetchUseCase.getCurrentTeam() else { return }
 
     asset = WatchTeamAssetVO(teamInfo.id)
@@ -49,26 +62,13 @@ final class LineupViewModel {
     await loadLineupMembers()
   }
 
-  // MARK: - Private
-
-  private func loadLineupMembers() async {
-    guard let teamId = currentTeamId else { return }
-
-    do {
-      let entities = try await lineupFetchUseCase.getLineupMembers(TeamID(teamId))
-      lineupMembers = entities.map { LineupMemberVO(from: $0) }
-    } catch {
-      lineupMembers = []
-    }
-  }
-
   /// WCSession으로 데이터가 수신되면 최신 상태로 리로드
   private func startObservingConnectivity() {
     guard observationTask == nil else { return }
 
     observationTask = Task { @MainActor [weak self] in
       for await _ in NotificationCenter.default.notifications(named: .watchDataReceived) {
-        await self?.onAppear()
+        await self?.refreshData()
       }
     }
   }

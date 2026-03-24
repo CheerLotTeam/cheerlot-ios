@@ -48,12 +48,12 @@ struct LineupPlaybackAssetVO {
   /// 뷰 배경 그라데이션
   var playbackBackgroundGradient: LinearGradient {
     LinearGradient(
-      colors: [
-        base.primaryPalette.color200.opacity(0),
-        base.primaryPalette.color200,
-      ],
-      startPoint: UnitPoint(x: 0.5, y: 0.45),
-      endPoint: .bottom
+      gradient: Gradient(stops: [
+        .init(color: base.primaryPalette.color200, location: 0),
+        .init(color: base.primaryPalette.color200.opacity(0), location: 0.35),
+      ]),
+      startPoint: .bottom,
+      endPoint: UnitPoint(x: 0.5, y: 0.45)
     )
   }
 
@@ -95,8 +95,12 @@ struct LineupPlaybackAssetVO {
   }
 
   /// 페이지 인디케이터 컬러
-  var pageIndicatorColor: Color {
+  var selectedPageIndicatorColor: Color {
     base.primaryPalette.color300
+  }
+
+  var unselectedPageIndicatorColor: Color {
+    base.pageIndicatorUnselectedColor
   }
 
   /// 1~9 battingOrder에 따라 사용하는 카드 BG

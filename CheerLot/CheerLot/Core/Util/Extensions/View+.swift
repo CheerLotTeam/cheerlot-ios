@@ -8,35 +8,6 @@
 import SwiftUI
 
 extension View {
-  //특정 corner radius 적용 함수
-  func cornerRadius(_ radius: CGFloat, corners: UIRectCorner) -> some View {
-    clipShape(RoundedCornerShape(radius: radius, corners: corners))
-  }
-
-  // 기본 style Text 커스텀 수정자 적용 함수
-  func basicTextStyle(fontType: Font.Pretend, fontSize: CGFloat) -> some View {
-    self.modifier(BasicTextStyle(fontType: fontType, fontSize: fontSize))
-  }
-
-  // pretend에 line height multiple와 letter spacing 수정자 적용 함수
-  func lineHeightMultipleAdaptPretend(
-    fontType: Font.Pretend, fontSize: CGFloat, lineHeight: CGFloat, letterSpacing: CGFloat = 0
-  ) -> some View {
-    self.modifier(
-      LineHeightMultipleAdaptPretend(
-        fontType: fontType, fontSize: fontSize, lineHeight: lineHeight, letterSpacing: letterSpacing
-      ))
-  }
-
-  // freshman에 line height multiple와 letter spacing 수정자 적용 함수
-  func lineHeightMultipleAdaptFreshman(
-    fontSize: CGFloat, lineHeight: CGFloat, letterSpacing: CGFloat = 0
-  ) -> some View {
-    self.modifier(
-      LineHeightMultipleAdaptFreshman(
-        fontSize: fontSize, lineHeight: lineHeight, letterSpacing: letterSpacing))
-  }
-
   /// 커스텀 폰트 스타일(`TypeStyle`)을 한 줄로 적용하는 확장 메서드
   func font(_ style: TypeStyle) -> some View {
     self
@@ -132,13 +103,14 @@ extension View {
   /// leading에 cancel 버튼과 center에 inlineTitle, trailing에 check 버튼을 가지는 toolbar 확장 메서드
   func toolBar_editMode(
     title: String,
+    checkColor: Color = .gray800,
     onClose: @escaping () -> Void,
     onCheck: @escaping () -> Void
   ) -> some View {
     customToolBar(
       leftItem: .close(action: onClose),
       centerItem: .inlineTitle(title),
-      rightItem: .check(action: onCheck)
+      rightItem: .check(action: onCheck, color: checkColor)
     )
     .navigationBarTitleDisplayMode(.inline)
   }
@@ -193,5 +165,20 @@ extension View {
         showCaution: showCaution
       )
     )
+  }
+
+  /// 조건에 따라 선택적으로 View Modifier를 적용하는 확장 메서드
+  @ViewBuilder
+  func ifApply<Content: View>(_ condition: Bool, transform: (Self) -> Content) -> some View {
+    if condition {
+      transform(self)
+    } else {
+      self
+    }
+  }
+
+  /// View의 background를 grayWhite로 적용하는 확장메서드
+  func appBackground() -> some View {
+    self.background(Color.grayWhite.ignoresSafeArea())
   }
 }

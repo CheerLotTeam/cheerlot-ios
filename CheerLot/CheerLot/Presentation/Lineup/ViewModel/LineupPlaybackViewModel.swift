@@ -10,8 +10,20 @@ import Observation
 
 @Observable
 final class LineupPlaybackViewModel {
-  let players: [LineupPlayerVO]
   let startIndex: Int
+
+  var lineupPlayers: [LineupPlayerVO] = []
+  var asset: LineupPlaybackAssetVO?
+  var gameDate: String = " "
+  var teamsText: String = " "
+
+  var carouselItems: [CarouselItemVO] {
+    lineupPlayers.flatMap { player in
+      player.cheerSongs.map { song in
+        CarouselItemVO(id: "\(player.id)-\(song.id)", player: player, cheerSong: song)
+      }
+    }
+  }
 
   var currentPlaybackIndex: Int
   var isSyncingFromPlayback = false
@@ -20,13 +32,18 @@ final class LineupPlaybackViewModel {
   @ObservationIgnored
   @Injected(PlayLineupSongsUseCase.self) private var playLineupSongsUseCase
 
+  @ObservationIgnored
+  @Injected(TeamSelectionUseCase.self) private var teamSelectionUseCase
+
+  @ObservationIgnored
+  @Injected(LineupManagementUseCase.self) private var lineupManagementUseCase
+
+  @ObservationIgnored
+  @Injected(TeamInfoUseCase.self) private var teamInfoUseCase
+
   private var timeObserver: Any?
 
-  init(
-    players: [LineupPlayerVO],
-    startIndex: Int
-  ) {
-    self.players = players
+  init(startIndex: Int) {
     self.startIndex = startIndex
     self.currentPlaybackIndex = startIndex
   }
@@ -35,8 +52,10 @@ final class LineupPlaybackViewModel {
     stopObservingPlayback()
   }
 
-  func onAppear() {
-    let flattenedItems = players.flatMap { player in
+  func onAppear() async {
+    await loadData()
+
+    let flattenedItems = lineupPlayers.flatMap { player in
       player.cheerSongs.map { song in
         (playerName: player.name, song: song.toEntity())
       }
@@ -78,10 +97,6 @@ final class LineupPlaybackViewModel {
     isPlaying = false
   }
 
-  func onDisappear() {
-    stopPlayback()
-  }
-
   func togglePlayback() {
     playLineupSongsUseCase.toggle()
     isPlaying = playLineupSongsUseCase.isPlaying
@@ -94,6 +109,31 @@ final class LineupPlaybackViewModel {
     playLineupSongsUseCase.play(at: index)
     currentPlaybackIndex = index
     isPlaying = playLineupSongsUseCase.isPlaying
+  }
+
+  // MARK: - Private
+
+  private func loadData() async {
+    guard let teamInfo = teamSelectionUseCase.getCurrentTeam() else { return }
+    let teamId = teamInfo.id
+
+    asset = LineupPlaybackAssetVO(base: TeamAssetVO(teamId))
+
+    guard let data = try? await lineupManagementUseCase.loadCurrentLineup(for: teamId) else {
+      return
+    }
+
+    lineupPlayers = data.lineupPlayers.map { LineupPlayerVO(from: $0) }
+
+    let opponentTeamInfo = data.opponentTeamId.flatMap { teamInfoUseCase.getTeamInfo($0) }
+    let gameInfoVO = LineupGameInfoVO(
+      teamInfo: teamInfo,
+      opponentTeamInfo: opponentTeamInfo,
+      gameInfo: data.gameInfo
+    )
+
+    gameDate = gameInfoVO.gameDateText
+    teamsText = gameInfoVO.gameTeamsText
   }
 
   private func startObservingPlayback() {

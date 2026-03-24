@@ -35,6 +35,7 @@ struct LineupView: View {
         if let asset = viewModel.asset {
           ScrollView {
             lineupCard(asset: asset, cardHeight: cardHeight, cardWidth: cardWidth)
+              .padding(.top, UIDevice.isIOS26OrLater ? 3 : 10)
           }
           .frame(width: geo.size.width)
           .scrollIndicators(.hidden)
@@ -48,13 +49,14 @@ struct LineupView: View {
         if viewModel.isLoading {
           ProgressView()
             .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .background(.white)
+            .appBackground()
         }
       }
       .toolBar_titleWithProfile(title: "선발 라인업") {
         coordinator.push(.settings)
       }
     }
+    .appBackground()
     .task {
       await viewModel.onAppear()
     }
@@ -76,7 +78,7 @@ struct LineupView: View {
   }
 
   private func cellHeight(cardHeight: CGFloat) -> CGFloat {
-    let totalSeparatorHeight = separatorHeight * 8
+    let totalSeparatorHeight = separatorHeight * 9
     let availableHeight = listHeight(cardHeight: cardHeight) - totalSeparatorHeight
     return max(0, availableHeight / 9)
   }
@@ -190,17 +192,30 @@ extension LineupView {
           .padding(.horizontal, 5.5)
           .contentShape(Rectangle())
           .onTapGesture {
-            handlePlayerTap(
-              coordinator: coordinator,
-              player: player,
-              asset: asset
-            )
+            let action = viewModel.handlePlayerTap(player: player)
+            switch action {
+            case .showSongList(let player):
+              coordinator.presentModal(
+                .cheerSongList(
+                  asset: asset.base,
+                  player: player,
+                  lineupPlayers: viewModel.lineupPlayers
+                )
+              )
+            case .goToPlayback(let startIndex):
+              coordinator.presentModal(.lineupPlayback(startIndex: startIndex))
+            case .none:
+              break
+            }
           }
 
           if index < viewModel.lineupPlayers.count - 1 {
             DashedLine()
               .stroke(style: StrokeStyle(lineWidth: 1, dash: [3]))
               .foregroundColor(asset.listLineColor)
+              .frame(height: separatorHeight)
+          } else {
+            Color.clear
               .frame(height: separatorHeight)
           }
         }
@@ -217,13 +232,18 @@ extension LineupView {
                   Task {
                     await viewModel.loadData()
                   }
-                }))
+                }
+              )
+            )
           },
           onSelectSong: { cheerSong in
-            goToLineupPlayback(
-              player: player,
-              song: cheerSong
-            )
+            let action = viewModel.handleSongSelect(song: cheerSong)
+            switch action {
+            case .goToPlayback(let startIndex):
+              coordinator.presentModal(.lineupPlayback(startIndex: startIndex))
+            default:
+              break
+            }
           }
         )
       }
@@ -266,48 +286,5 @@ extension LineupView {
       }
       Spacer()
     }
-  }
-
-  private func handlePlayerTap(
-    coordinator: AppCoordinator,
-    player: LineupPlayerVO,
-    asset: LineupAssetVO
-  ) {
-    if player.cheerSongs.count >= 2 {
-      coordinator.presentModal(
-        .cheerSongList(
-          asset: asset.base,
-          player: player,
-          lineupPlayers: viewModel.lineupPlayers
-        )
-      )
-    } else if let firstSong = player.cheerSongs.first {
-      goToLineupPlayback(
-        player: player,
-        song: firstSong
-      )
-    } else {
-      viewModel.showNoSongToast()
-    }
-  }
-
-  private func goToLineupPlayback(
-    player: LineupPlayerVO,
-    song: CheerSongVO
-  ) {
-    let startIndex = viewModel.lineupPlaybackStartIndex(
-      playerId: player.id,
-      songId: song.id
-    )
-
-    coordinator.presentModal(
-      .lineupPlayback(
-        teamId: TeamID(player.teamId),
-        players: viewModel.lineupPlayers,
-        startIndex: startIndex,
-        gameDate: viewModel.gameInfo?.gameDateText ?? "",
-        teamsText: viewModel.gameInfo?.gameTeamsText ?? ""
-      )
-    )
   }
 }

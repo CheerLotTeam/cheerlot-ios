@@ -70,16 +70,14 @@ extension LineupPlayCard {
 
       Spacer()
 
-      Group {
-        isPlaying
-          ? Image(systemName: "pause.fill")
-            .resizable()
-          : Image(systemName: "play.fill")
-            .resizable()
+      if !isPlaying {
+        Image(systemName: "pause.fill")
+          .resizable()
+          .scaledToFit()
+          .frame(height: 15)
+          .foregroundStyle(asset.cardContentsColor)
+          .padding(.top, 3.6)
       }
-      .scaledToFit()
-      .frame(height: isPlaying ? 17 : 15)
-      .foregroundStyle(asset.cardContentsColor)
     }
   }
 
