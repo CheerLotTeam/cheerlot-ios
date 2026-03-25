@@ -21,7 +21,7 @@ final class PlaybackViewModel {
 
   /// 총 길이(초)
   var duration: Double = 0
-  
+
   var seekBarMaxValue: Double { max(duration, 1) }
 
   /// UI 표시용 메타 정보
@@ -95,7 +95,7 @@ final class PlaybackViewModel {
     audioPlaybackUseCase.playPrevious()
     syncFromService()
   }
-  
+
   func closePlayback(completion: @escaping () -> Void) {
     audioPlaybackUseCase.resetToBeginning { [weak self] in
       guard let self else { return }

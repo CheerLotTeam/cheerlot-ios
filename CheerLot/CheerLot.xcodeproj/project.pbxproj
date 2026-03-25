@@ -234,8 +234,8 @@
 				CF703E922DE8297900330888 /* Resources */,
 				3C465E742DE849A5001F15F3 /* Run Script: SwiftLint */,
 				CF3BA7392DED7FB900E600B6 /* Embed Watch Content */,
-				CF09BDF52E22D35300E11198 /* Run Script: Firebase Crashlytics */,
 				3C96AB952F3B4954007ED0A5 /* Embed Foundation Extensions */,
+				CF09BDF52E22D35300E11198 /* Run Script: Firebase Crashlytics */,
 			);
 			buildRules = (
 			);

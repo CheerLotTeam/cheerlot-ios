@@ -70,7 +70,7 @@ extension PlaybackView {
     .frame(maxWidth: .infinity)
     .frame(height: 44)
     .contentShape(Rectangle())
-    .onTapGesture { handleClose() }
+    .onTapGesture { onClose() }
     .gesture(
       DragGesture()
         .onChanged { value in
@@ -81,7 +81,7 @@ extension PlaybackView {
           let shouldClose = value.translation.height > 40
 
           if shouldClose {
-            handleClose()
+            onClose()
           } else {
             dragOffsetY = 0
           }
@@ -216,11 +216,5 @@ extension PlaybackView {
         .foregroundStyle(.grayWhite)
     }
     .buttonStyle(PlaybackButtonStyle(size: 56))
-  }
-  
-  private func handleClose() {
-    viewModel.closePlayback {
-      onClose()
-    }
   }
 }

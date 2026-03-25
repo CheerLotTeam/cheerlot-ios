@@ -13,6 +13,7 @@ enum TabKey {
 
 struct MainTabView: View {
   @Environment(MiniPlayerDisplayState.self) private var miniPlayerDisplayState
+  @Environment(\.scenePhase) private var scenePhase
 
   // MARK: - Properties
   let team: TeamInfo
@@ -74,6 +75,10 @@ struct MainTabView: View {
         teamMembersViewModel.syncPlaybackModeIfNeeded()
       }
     }
+    .onChange(of: scenePhase) { _, newPhase in
+       guard newPhase == .active else { return }
+       restorePlayback()
+     }
     .fullScreenCover(isPresented: $isPlayerExpanded) {
       if let song = audioPlayer.nowPlaying {
         PlaybackView(
@@ -177,6 +182,14 @@ extension MainTabView {
       .padding(.horizontal, 20)
       .padding(.vertical, 8)
     }
+  }
+  
+  private func restorePlayback() {
+    guard audioPlayer.nowPlaying != nil else { return }
+    guard !isPlayerExpanded else { return }
+    guard showMiniPlayer else { return }
+
+    isPlayerExpanded = true
   }
 }
 
