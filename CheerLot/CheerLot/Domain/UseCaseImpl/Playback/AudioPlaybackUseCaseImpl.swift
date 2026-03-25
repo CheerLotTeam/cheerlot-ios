@@ -109,7 +109,7 @@ final class AudioPlaybackUseCaseImpl: AudioPlaybackUseCase {
   func seek(_ seconds: Double) {
     audioPlayer.seek(seconds)
   }
-  
+
   func resetToBeginning(completion: @escaping () -> Void) {
     audioPlayer.resetToBeginning(completion: completion)
   }

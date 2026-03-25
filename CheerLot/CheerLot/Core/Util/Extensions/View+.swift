@@ -75,6 +75,15 @@ extension View {
     )
   }
 
+  /// leading에만 LargeTitle을 가지는 toolbar 확장 메서드
+  func toolBar_largeTitle(
+    title: String
+  ) -> some View {
+    customToolBar(
+      leftItem: .largeTitle(title)
+    )
+  }
+
   /// leading에 cancel 버튼과 center에 경기 정보를 가지는 toolbar 확장 메서드
   func toolBar_gameInfo(
     date: String,

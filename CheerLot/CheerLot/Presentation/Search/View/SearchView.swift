@@ -22,9 +22,7 @@ struct SearchView: View {
 
   var body: some View {
     content
-      .toolBar_titleWithProfile(title: "검색") {
-        coordinator.push(.settings)
-      }
+      .toolBar_largeTitle(title: "검색")
       .appBackground()
       .searchable(
         text: Binding(

@@ -154,7 +154,6 @@ final class AudioPlaybackService: AudioPlayer {
 
     let item = AVPlayerItem(url: url)
     player.replaceCurrentItem(with: item)
-    player.seek(to: .zero)
     player.play()
 
     isPlaying = true
@@ -248,7 +247,7 @@ final class AudioPlaybackService: AudioPlayer {
   func removeObserver(_ token: Any) {
     player.removeTimeObserver(token)
   }
-  
+
   func resetToBeginning(completion: @escaping () -> Void) {
     player.seek(to: .zero) { [weak self] _ in
       guard let self else { return }
