@@ -154,7 +154,6 @@ final class AudioPlaybackService: AudioPlayer {
 
     let item = AVPlayerItem(url: url)
     player.replaceCurrentItem(with: item)
-    player.seek(to: .zero)
     player.play()
 
     isPlaying = true
