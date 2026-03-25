@@ -23,9 +23,16 @@ enum Config {
   }()
 
   static let streamAudioURL: String = {
-    guard let apiURL = infoDictionary["STREAM_AUDIO_URL"] as? String else {
+    guard let streamAudioURL = infoDictionary["STREAM_AUDIO_URL"] as? String else {
       fatalError()
     }
-    return apiURL
+    return streamAudioURL
   }()
+    
+    static let amplitudeKey: String = {
+        guard let amplitudeKey = infoDictionary["AMPLITUDE_KEY"] as? String else {
+            fatalError()
+        }
+        return amplitudeKey
+    }()
 }
