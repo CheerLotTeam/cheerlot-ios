@@ -82,6 +82,6 @@ protocol AudioPlaybackUseCase {
 
   /// 관찰자 제거
   func removeObserver(_ token: Any)
-  
+
   func resetToBeginning(completion: @escaping () -> Void)
 }
