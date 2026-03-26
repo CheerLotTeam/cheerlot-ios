@@ -133,7 +133,7 @@ private struct MiniPlayerLayout {
       trailingSpacing: UIDevice.isIOS26OrLater ? 23 : 14,
       cornerRadius: UIDevice.isIOS26OrLater ? 0 : 16,
       backgroundColor: .grayWhite,
-      shadowColor: UIDevice.isIOS26OrLater ? .clear : .gray200.opacity(0.3),
+      shadowColor: UIDevice.isIOS26OrLater ? .clear : .gray100.opacity(0.4),
       imageSize: UIDevice.isIOS26OrLater ? 30 : 40,
       imageCornerRadius: UIDevice.isIOS26OrLater ? 5 : 10,
       controlSpacing: UIDevice.isIOS26OrLater ? 22 : 25,

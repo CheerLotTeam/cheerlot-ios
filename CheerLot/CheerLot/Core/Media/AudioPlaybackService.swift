@@ -165,16 +165,19 @@ final class AudioPlaybackService: AudioPlayer {
       .sink { [weak self] _ in
         guard let self else { return }
 
-        if self.currentIndex + 1 < self.queue.count {
-          self.playNext()
-        } else if self.playbackMode == .search && !self.queue.isEmpty {
-          self.currentIndex = 0
-          self.nowPlaying = self.queue[0]
-          self.currentPlayerName = self.queuePlayerNames[0]
-          self.playCurrentSong()
-        } else {
+        guard !self.queue.isEmpty else {
           self.isPlaying = false
           self.syncNowPlaying()
+          return
+        }
+
+        switch self.playbackMode {
+        case .normal:
+          self.playNext()
+
+        case .search:
+          self.seek(0)
+          self.resume()
         }
       }
   }
