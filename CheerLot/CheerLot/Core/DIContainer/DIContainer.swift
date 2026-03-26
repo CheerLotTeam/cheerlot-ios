@@ -85,6 +85,10 @@ final class DIContainer {
 extension DIContainer {
 
   private func assembleService() {
+    registerSingleton(AnalyticsService.self) {
+      AmplitudeAnalyticsService()
+    }
+
     registerSingleton(AudioPlaybackService.self) {
       AudioPlaybackService()
     }
@@ -177,6 +181,12 @@ extension DIContainer {
         teamRemoteRepository: container.resolve(TeamRemoteRepository.self),
         playerLocalRepository: container.resolve(PlayerLocalRepository.self),
         playerRemoteRepository: container.resolve(PlayerRemoteRepository.self)
+      )
+    }
+
+    register(TeamGameInfoUseCase.self) { container in
+      TeamGameInfoUseCaseImpl(
+        teamLocalRepository: container.resolve(TeamLocalRepository.self)
       )
     }
 
