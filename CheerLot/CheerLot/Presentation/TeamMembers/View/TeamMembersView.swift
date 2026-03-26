@@ -35,7 +35,7 @@ struct TeamMembersView: View {
         contents
       }
       .padding(.horizontal, 20)
-      .padding(.top, 10)
+      .padding(.top, UIDevice.isIOS26OrLater ? 3 : 10)
       .padding(.bottom, 80)
     }
     .toolBar_titleWithProfile(title: "전체 선수") {
