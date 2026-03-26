@@ -71,14 +71,18 @@ final class AudioPlaybackUseCaseImpl: AudioPlaybackUseCase {
     playerNames: [String],
     startAt index: Int,
     coverImageName: String?,
-    mode: PlaybackMode = .normal
+    mode: PlaybackMode,
+    source: PlaySource,
+    isGameDay: Bool
   ) {
     audioPlayer.playQueue(
       songs,
       playerNames: playerNames,
       startAt: index,
       coverImageName: coverImageName,
-      mode: mode
+      mode: mode,
+      source: source,
+      isGameDay: isGameDay
     )
   }
 

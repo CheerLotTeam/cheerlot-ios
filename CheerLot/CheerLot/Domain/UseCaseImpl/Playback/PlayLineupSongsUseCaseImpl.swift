@@ -33,12 +33,14 @@ final class PlayLineupSongsUseCaseImpl: PlayLineupSongsUseCase {
   func playQueue(
     _ songs: [CheerSongInfo],
     playerNames: [String],
-    startAt index: Int
+    startAt index: Int,
+    isGameDay: Bool
   ) {
     lineupAudioPlayer.playQueue(
       songs,
       playerNames: playerNames,
-      startAt: index
+      startAt: index,
+      isGameDay: isGameDay
     )
   }
 
