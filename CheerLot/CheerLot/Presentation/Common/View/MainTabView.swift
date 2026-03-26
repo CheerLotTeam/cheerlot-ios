@@ -77,25 +77,11 @@ struct MainTabView: View {
       }
     }
     .onChange(of: scenePhase) { _, newPhase in
-       guard newPhase == .active else { return }
-       restorePlayback()
-     }
+      guard newPhase == .active else { return }
+      restorePlayback()
+    }
     .fullScreenCover(isPresented: $isPlayerExpanded) {
-      if let song = audioPlayer.nowPlaying {
-        PlaybackView(
-          asset: PlaybackAssetVO(base: TeamAssetVO(team.id)),
-          viewModel: ViewModelFactory.shared.createPlaybackViewModel(
-            song: song,
-            playerName: audioPlayer.currentPlayerName ?? song.playerId.value,
-            source: audioPlayer.currentSource
-          ),
-          onClose: {
-            isPlayerExpanded = false
-          }
-        )
-        .navigationTransition(.zoom(sourceID: "AUDIOPLAYER", in: animation))
-        .ignoresSafeArea()
-      }
+      playbackCover
     }
   }
 }
@@ -163,6 +149,25 @@ extension MainTabView {
   }
 
   @ViewBuilder
+  private var playbackCover: some View {
+    if let song = audioPlayer.nowPlaying {
+      PlaybackView(
+        asset: PlaybackAssetVO(base: TeamAssetVO(team.id)),
+        viewModel: ViewModelFactory.shared.createPlaybackViewModel(
+          song: song,
+          playerName: audioPlayer.currentPlayerName ?? song.playerId.value,
+          source: audioPlayer.currentSource
+        ),
+        onClose: {
+          isPlayerExpanded = false
+        }
+      )
+      .navigationTransition(.zoom(sourceID: "AUDIOPLAYER", in: animation))
+      .ignoresSafeArea()
+    }
+  }
+
+  @ViewBuilder
   private var miniPlayerBar: some View {
     if let song = audioPlayer.nowPlaying {
       MiniPlayerView(
@@ -181,11 +186,13 @@ extension MainTabView {
         }
       )
       .matchedTransitionSource(id: "AUDIOPLAYER", in: animation)
+      .padding(.horizontal, 6)
+      .padding(.vertical, 6)
       .padding(.horizontal, 20)
       .padding(.vertical, 8)
     }
   }
-  
+
   private func restorePlayback() {
     guard audioPlayer.nowPlaying != nil else { return }
     guard !isPlayerExpanded else { return }

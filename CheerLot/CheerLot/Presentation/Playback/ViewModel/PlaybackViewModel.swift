@@ -93,11 +93,16 @@ final class PlaybackViewModel {
 
   /// 특정 초로 이동
   func seek(to seconds: Double) {
-    audioPlaybackUseCase.seek(seconds)
-
-    // 실제 currentTime은 다음 tick에서 다시 서비스 값으로 싱크됨
     progress = max(seconds, 0)
     duration = max(audioPlaybackUseCase.duration, 1)
+
+    audioPlaybackUseCase.seek(seconds)
+
+    DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) { [weak self] in
+      guard let self else { return }
+      self.isSeeking = false
+      self.syncFromService()
+    }
   }
 
   func playNext() {
@@ -160,7 +165,7 @@ extension PlaybackViewModel {
   fileprivate func startObservingTime() {
     guard timeObserver == nil else { return }
 
-    timeObserver = audioPlaybackUseCase.observeTime(every: 0.5, queue: .main) { [weak self] _ in
+    timeObserver = audioPlaybackUseCase.observeTime(every: 0.1, queue: .main) { [weak self] _ in
       guard let self else { return }
       self.syncFromService()
     }

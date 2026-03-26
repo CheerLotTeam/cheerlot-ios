@@ -35,8 +35,6 @@ struct TeamCardButton: View {
           .opacity(0.5)
           .blendMode(.softLight)
 
-        // 텍스트 모음
-        textContents
       }
       .frame(height: 100)
       .clipShape(RoundedRectangle(cornerRadius: 12))
@@ -54,6 +52,7 @@ struct TeamCardButton: View {
           .padding(.trailing, 14),
         alignment: .topTrailing
       )
+      .overlay(textContents)
 
     }
     .buttonStyle(.plain)

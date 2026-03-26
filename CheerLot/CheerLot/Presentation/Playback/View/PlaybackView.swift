@@ -112,7 +112,7 @@ extension PlaybackView {
 
       Text(viewModel.title)
         .font(.SB8)
-        .foregroundStyle(.gray200)
+        .foregroundStyle(.grayWhite).opacity(0.75)
     }
   }
 

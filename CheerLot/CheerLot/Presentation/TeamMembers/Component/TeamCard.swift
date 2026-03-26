@@ -33,8 +33,6 @@ struct TeamCard: View {
         .opacity(0.5)
         .blendMode(.softLight)
 
-      /// 텍스트 모음
-      textContents
     }
     .frame(height: 100)
     .clipShape(RoundedRectangle(cornerRadius: 12))
@@ -42,6 +40,7 @@ struct TeamCard: View {
       RoundedRectangle(cornerRadius: 12)
         .stroke(asset.cardSubtitleColor, lineWidth: 2)
     )
+    .overlay(textContents)
   }
 }
 
