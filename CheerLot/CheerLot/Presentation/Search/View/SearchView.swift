@@ -120,7 +120,8 @@ struct SearchView: View {
             .basePlayback(
               teamId: viewModel.currentTeam.id,
               song: song,
-              playerName: result.playerName
+              playerName: result.playerName,
+              source: .search
             )
           )
         }

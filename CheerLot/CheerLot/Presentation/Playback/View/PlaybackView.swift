@@ -52,8 +52,12 @@ struct PlaybackView: View {
     .ignoresSafeArea()
     .offset(y: dragOffsetY)
     .animation(.spring(duration: 0.25), value: dragOffsetY)
-    .onAppear { viewModel.onAppear() }
-    .onDisappear { viewModel.onDisappear() }
+    .task {
+      await viewModel.onAppear()
+    }
+    .onDisappear {
+      viewModel.onDisappear()
+    }
   }
 }
 

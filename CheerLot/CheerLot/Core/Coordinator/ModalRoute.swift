@@ -32,7 +32,8 @@ enum ModalRoute: Identifiable {
   case basePlayback(
     teamId: TeamID,
     song: CheerSongInfo,
-    playerName: String
+    playerName: String,
+    source: PlaySource
   )
 
   var id: String {
@@ -108,10 +109,11 @@ extension AppCoordinator {
       NavigationStack {
         LineupPlaybackView(viewModel: viewModel)
       }
-    case let .basePlayback(teamId, song, playerName):
+    case let .basePlayback(teamId, song, playerName, source):
       let viewModel = factory.createPlaybackViewModel(
         song: song,
-        playerName: playerName
+        playerName: playerName,
+        source: source
       )
 
       PlaybackView(
