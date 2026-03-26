@@ -40,20 +40,23 @@ struct SettingView: View {
   // MARK: - Body
   var body: some View {
     ZStack(alignment: .bottom) {
-      ScrollView {
+      VStack {
         VStack(spacing: 20) {
           myTeamCard
           appIconContent
           supportContent
+          Spacer()
         }
         .padding(.horizontal, 20)
         .padding(.top, 20)
-        .padding(.bottom, 80)
       }
+      
+      Spacer()
+      
       Text("쳐랏 | App Version \(Constants.appVersion)")
         .font(.M6)
         .foregroundStyle(.gray200)
-        .padding(.bottom, 60)
+        .padding(.bottom, 40)
     }
     .appBackground()
     .onAppear {
