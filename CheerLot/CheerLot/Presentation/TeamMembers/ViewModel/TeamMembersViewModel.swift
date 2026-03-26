@@ -38,6 +38,11 @@ final class TeamMembersViewModel {
   @ObservationIgnored
   @Injected(AudioPlaybackUseCase.self) private var audioPlaybackUseCase
 
+  @ObservationIgnored
+  @Injected(TeamGameInfoUseCase.self) private var teamGameInfoUseCase
+
+  private var isGameDay = false
+
   // MARK: - Init
   init() {
     let teamSelectionUseCase = DIContainer.shared.resolve(TeamSelectionUseCase.self)
@@ -56,6 +61,7 @@ final class TeamMembersViewModel {
 
     await syncData()
     await loadData()
+    await loadIsGameDay()
     syncPlaybackModeIfNeeded()
   }
 
@@ -80,14 +86,16 @@ final class TeamMembersViewModel {
     playTeamMembersUseCase.playSelected(
       row: item,
       allRows: rows,
-      currentTeam: currentTeam
+      currentTeam: currentTeam,
+      isGameDay: isGameDay
     )
   }
 
   func didTapPlayAll() {
     playTeamMembersUseCase.playAll(
       rows: rows,
-      currentTeam: currentTeam
+      currentTeam: currentTeam,
+      isGameDay: isGameDay
     )
   }
 
@@ -121,11 +129,17 @@ final class TeamMembersViewModel {
       playerNames: playerNames,
       startAt: startIndex,
       coverImageName: coverImageName,
-      mode: .normal
+      mode: .normal,
+      source: .teamMembers,
+      isGameDay: isGameDay
     )
   }
 
   // MARK: - Private
+  private func loadIsGameDay() async {
+    isGameDay = await teamGameInfoUseCase.isGameDay(currentTeam.id)
+  }
+
   private func syncData() async {
     do {
       try await teamPlayersSyncUseCase.syncIfNeeded(currentTeam.id)

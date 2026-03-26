@@ -17,7 +17,8 @@ final class PlaySearchSongsUseCaseImpl: PlaySearchSongsUseCase {
   func play(
     selectedResult: SearchResultVO,
     allResults: [SearchResultVO],
-    coverImageName: String?
+    coverImageName: String?,
+    isGameDay: Bool
   ) {
     let samePlayerRows = allResults.filter {
       $0.playerId == selectedResult.playerId && $0.song != nil
@@ -35,7 +36,9 @@ final class PlaySearchSongsUseCaseImpl: PlaySearchSongsUseCase {
       playerNames: playerNames,
       startAt: startIndex,
       coverImageName: coverImageName,
-      mode: .search
+      mode: .search,
+      source: .search,
+      isGameDay: isGameDay
     )
   }
 }

@@ -46,11 +46,13 @@ final class ViewModelFactory {
   // MARK: - Playback
   func createPlaybackViewModel(
     song: CheerSongInfo,
-    playerName: String
+    playerName: String,
+    source: PlaySource
   ) -> PlaybackViewModel {
     PlaybackViewModel(
       song: song,
-      playerName: playerName
+      playerName: playerName,
+      source: source
     )
   }
 

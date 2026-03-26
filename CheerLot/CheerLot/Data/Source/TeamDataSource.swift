@@ -54,7 +54,7 @@ struct TeamDataSource {
         shortName: "한화",
         longName: "한화 이글스",
         englishFullName: "HANWHA EAGLES",
-        slogan: "BURNING UP"
+        slogan: "IT IS OUR TURN"
       )
 
     case .lg:
@@ -63,7 +63,7 @@ struct TeamDataSource {
         shortName: "LG",
         longName: "LG 트윈스",
         englishFullName: "LG TWINS",
-        slogan: "승리를 향해, 하나의 트윈스"
+        slogan: "무적 LG! 끝까지 TWINS!"
       )
 
     case .lotte:

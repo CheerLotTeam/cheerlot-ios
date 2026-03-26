@@ -37,8 +37,12 @@ final class LineupViewModel {
   }
 
   private var currentTeamId: String?
+  private var hasTrackedAppOpen = false
 
   // MARK: - Dependencies
+
+  @ObservationIgnored
+  @Injected(AnalyticsService.self) private var analyticsService
 
   @ObservationIgnored
   @Injected(UserSettingsUseCase.self) private var userSettingsUseCase
@@ -65,6 +69,17 @@ final class LineupViewModel {
 
     await loadData()
     showRecentLineup = userSettingsUseCase.getShowRecentLineup()
+
+    if !hasTrackedAppOpen {
+      hasTrackedAppOpen = true
+      analyticsService.track(
+        AppOpenEvent(
+          entryPoint: .app,
+          widgetId: nil,
+          isGameDay: gameInfo?.status == .playingToday
+        )
+      )
+    }
   }
 
   func toggleShowRecentLineup() {

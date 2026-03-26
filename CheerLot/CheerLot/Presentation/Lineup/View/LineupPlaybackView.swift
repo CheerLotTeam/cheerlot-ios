@@ -90,6 +90,7 @@ struct LineupPlaybackView: View {
       lastRealIndex = viewModel.startIndex
     }
     .onDisappear {
+      viewModel.trackDismissed()
       viewModel.stopPlayback()
     }
     .onChange(of: scenePhase) { _, newPhase in

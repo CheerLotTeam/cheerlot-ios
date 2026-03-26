@@ -31,8 +31,21 @@ final class PlaybackViewModel {
   var isSeeking: Bool = false
 
   // MARK: - Dependencies
+
   @ObservationIgnored
   @Injected(AudioPlaybackUseCase.self) private var audioPlaybackUseCase
+
+  @ObservationIgnored
+  @Injected(AnalyticsService.self) private var analyticsService
+
+  @ObservationIgnored
+  @Injected(TeamGameInfoUseCase.self) private var teamGameInfoUseCase
+
+  @ObservationIgnored
+  @Injected(TeamSelectionUseCase.self) private var teamSelectionUseCase
+
+  private let source: PlaySource
+  private var isGameDay = false
 
   /// 진행바 동기화용 observer 토큰
   private var timeObserver: Any?
@@ -43,12 +56,12 @@ final class PlaybackViewModel {
 
   // MARK: - Init
 
-  init(song: CheerSongInfo, playerName: String) {
+  init(song: CheerSongInfo, playerName: String, source: PlaySource) {
     self.title = song.title
     self.playerName = playerName
     self.lyrics = song.lyrics
+    self.source = source
 
-    // 최초 진입
     syncFromService()
   }
 
@@ -58,14 +71,15 @@ final class PlaybackViewModel {
 
   // MARK: - Lifecycle
 
-  /// 화면이 나타날 때: 현재 상태 동기화 + tick 시작
-  func onAppear() {
+  func onAppear() async {
+    await loadIsGameDay()
     syncFromService()
     startObservingTime()
+    trackPresented()
   }
 
-  /// 화면이 사라질 때: tick 해제
   func onDisappear() {
+    trackDismissed()
     stopObservingTime()
   }
 
@@ -116,6 +130,11 @@ final class PlaybackViewModel {
 
 extension PlaybackViewModel {
 
+  private func loadIsGameDay() async {
+    guard let teamId = teamSelectionUseCase.getCurrentTeam()?.id else { return }
+    isGameDay = await teamGameInfoUseCase.isGameDay(teamId)
+  }
+
   /// 서비스 -> UI 상태 동기화
   fileprivate func syncFromService() {
     isPlaying = audioPlaybackUseCase.isPlaying
@@ -125,13 +144,11 @@ extension PlaybackViewModel {
 
     if rawDuration > 0 {
       duration = rawDuration
-
       if !isSeeking {
         progress = min(max(rawCurrentTime, 0), rawDuration)
       }
     } else {
       duration = 0
-
       if !isSeeking {
         progress = 0
       }
@@ -160,5 +177,33 @@ extension PlaybackViewModel {
       audioPlaybackUseCase.removeObserver(token)
       timeObserver = nil
     }
+  }
+
+  // MARK: - Analytics
+
+  private func trackPresented() {
+    let playerId = audioPlaybackUseCase.nowPlaying?.playerId.value ?? ""
+    analyticsService.track(
+      PlayViewPresentedEvent(
+        source: source,
+        viewType: .playback,
+        isPlaying: isPlaying,
+        isGameDay: isGameDay,
+        playerId: playerId
+      )
+    )
+  }
+
+  private func trackDismissed() {
+    let playerId = audioPlaybackUseCase.nowPlaying?.playerId.value ?? ""
+    analyticsService.track(
+      PlayViewDismissedEvent(
+        source: source,
+        viewType: .playback,
+        isPlaying: isPlaying,
+        isGameDay: isGameDay,
+        playerId: playerId
+      )
+    )
   }
 }

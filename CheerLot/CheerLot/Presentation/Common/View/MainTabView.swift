@@ -15,6 +15,8 @@ struct MainTabView: View {
   @Environment(MiniPlayerDisplayState.self) private var miniPlayerDisplayState
   @Environment(\.scenePhase) private var scenePhase
 
+  @Injected(AnalyticsService.self) private var analyticsService
+
   // MARK: - Properties
   let team: TeamInfo
   let audioPlayer: AudioPlaybackService
@@ -59,7 +61,6 @@ struct MainTabView: View {
         legacyTabView
       }
     }
-    .tint(asset.primaryColor)
     .safeAreaInset(edge: .bottom, spacing: 0) {
       if showMiniPlayer {
         miniPlayerBar
@@ -154,7 +155,8 @@ extension MainTabView {
         asset: PlaybackAssetVO(base: TeamAssetVO(team.id)),
         viewModel: ViewModelFactory.shared.createPlaybackViewModel(
           song: song,
-          playerName: audioPlayer.currentPlayerName ?? song.playerId.value
+          playerName: audioPlayer.currentPlayerName ?? song.playerId.value,
+          source: audioPlayer.currentSource
         ),
         onClose: {
           isPlayerExpanded = false

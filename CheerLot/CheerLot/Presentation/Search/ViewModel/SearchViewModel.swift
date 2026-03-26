@@ -30,6 +30,10 @@ final class SearchViewModel {
   @ObservationIgnored
   @Injected(PlaySearchSongsUseCase.self) private var playSearchSongsUseCase
 
+  @ObservationIgnored
+  @Injected(TeamGameInfoUseCase.self) private var teamGameInfoUseCase
+
+  private var isGameDay = false
   private var allRows: [SearchResultVO] = []
 
   // MARK: - Init
@@ -60,6 +64,7 @@ final class SearchViewModel {
     }
 
     await loadPlayers()
+    await loadIsGameDay()
     applySearch()
   }
 
@@ -94,11 +99,16 @@ final class SearchViewModel {
     playSearchSongsUseCase.play(
       selectedResult: result,
       allResults: results,
-      coverImageName: coverImageName
+      coverImageName: coverImageName,
+      isGameDay: isGameDay
     )
   }
 
   // MARK: - Private
+  private func loadIsGameDay() async {
+    isGameDay = await teamGameInfoUseCase.isGameDay(currentTeam.id)
+  }
+
   private func loadPlayers() async {
     isLoading = true
     errorMessage = nil

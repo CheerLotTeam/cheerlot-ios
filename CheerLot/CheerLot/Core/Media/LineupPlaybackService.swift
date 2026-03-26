@@ -23,6 +23,11 @@ final class LineupPlaybackService: LineupAudioPlayer {
   // MARK: - State
   private(set) var isPlaying: Bool = false
 
+  // MARK: - Analytics
+  @Injected(AnalyticsService.self) private var analyticsService
+  private var currentIsGameDay = false
+  private var pendingTrigger: PlayTrigger?
+
   var currentTime: Double {
     let s = player.currentTime().seconds
     return s.isFinite ? max(s, 0) : 0
@@ -41,7 +46,8 @@ final class LineupPlaybackService: LineupAudioPlayer {
   func playQueue(
     _ songs: [CheerSongInfo],
     playerNames: [String],
-    startAt index: Int
+    startAt index: Int,
+    isGameDay: Bool
   ) {
     guard !songs.isEmpty else { return }
     guard songs.count == playerNames.count else { return }
@@ -50,6 +56,8 @@ final class LineupPlaybackService: LineupAudioPlayer {
     self.songs = songs
     self.playerNames = playerNames
     self.currentSongIndex = index
+    self.currentIsGameDay = isGameDay
+    self.pendingTrigger = .userTap
 
     playCurrentSong()
   }
@@ -136,6 +144,18 @@ extension LineupPlaybackService {
 
     let song = songs[currentSongIndex]
 
+    let trigger = pendingTrigger ?? .userTap
+    pendingTrigger = nil
+    analyticsService.track(
+      CheerPlayStartedEvent(
+        source: .lineup,
+        trigger: trigger,
+        isGameDay: currentIsGameDay,
+        playerId: song.playerId.value
+      )
+    )
+    analyticsService.incrementUserProperty(.totalPlayCount)
+
     if song.audioURL.hasPrefix("http"),
       let url = URL(string: song.audioURL)
     {
@@ -159,6 +179,7 @@ extension LineupPlaybackService {
       .publisher(for: .AVPlayerItemDidPlayToEndTime, object: item)
       .receive(on: RunLoop.main)
       .sink { [weak self] _ in
+        self?.pendingTrigger = .autoNext
         self?.playNext()
       }
   }

@@ -29,6 +29,11 @@ final class LineupPlaybackViewModel {
   var isSyncingFromPlayback = false
   var isPlaying = false
 
+  private var isGameDay = false
+
+  @ObservationIgnored
+  @Injected(AnalyticsService.self) private var analyticsService
+
   @ObservationIgnored
   @Injected(PlayLineupSongsUseCase.self) private var playLineupSongsUseCase
 
@@ -54,36 +59,23 @@ final class LineupPlaybackViewModel {
 
   func onAppear() async {
     await loadData()
+    trackPresented()
+    beginPlayback()
+  }
 
-    let flattenedItems = lineupPlayers.flatMap { player in
-      player.cheerSongs.map { song in
-        (playerName: player.name, song: song.toEntity())
-      }
-    }
-
-    guard !flattenedItems.isEmpty else { return }
-
-    if playLineupSongsUseCase.duration > 0 {
-      playLineupSongsUseCase.resume()
-      isPlaying = playLineupSongsUseCase.isPlaying
-      startObservingPlayback()
-      return
-    }
-
-    guard flattenedItems.indices.contains(startIndex) else { return }
-
-    let songs = flattenedItems.map(\.song)
-    let playerNames = flattenedItems.map(\.playerName)
-
-    playLineupSongsUseCase.playQueue(
-      songs,
-      playerNames: playerNames,
-      startAt: startIndex
+  func trackDismissed() {
+    let playerId =
+      carouselItems.indices.contains(currentPlaybackIndex)
+      ? carouselItems[currentPlaybackIndex].player.id : ""
+    analyticsService.track(
+      PlayViewDismissedEvent(
+        source: .lineup,
+        viewType: .lineupPlayback,
+        isPlaying: isPlaying,
+        isGameDay: isGameDay,
+        playerId: playerId
+      )
     )
-
-    currentPlaybackIndex = startIndex
-    isPlaying = playLineupSongsUseCase.isPlaying
-    startObservingPlayback()
   }
 
   func pausePlayback() {
@@ -134,6 +126,40 @@ final class LineupPlaybackViewModel {
 
     gameDate = gameInfoVO.gameDateText
     teamsText = gameInfoVO.gameTeamsText
+    isGameDay = gameInfoVO.status == .playingToday
+  }
+
+  private func beginPlayback() {
+    let flattenedItems = lineupPlayers.flatMap { player in
+      player.cheerSongs.map { song in
+        (playerName: player.name, song: song.toEntity())
+      }
+    }
+
+    guard !flattenedItems.isEmpty else { return }
+
+    if playLineupSongsUseCase.duration > 0 {
+      playLineupSongsUseCase.resume()
+      isPlaying = playLineupSongsUseCase.isPlaying
+      startObservingPlayback()
+      return
+    }
+
+    guard flattenedItems.indices.contains(startIndex) else { return }
+
+    let songs = flattenedItems.map(\.song)
+    let playerNames = flattenedItems.map(\.playerName)
+
+    playLineupSongsUseCase.playQueue(
+      songs,
+      playerNames: playerNames,
+      startAt: startIndex,
+      isGameDay: isGameDay
+    )
+
+    currentPlaybackIndex = startIndex
+    isPlaying = playLineupSongsUseCase.isPlaying
+    startObservingPlayback()
   }
 
   private func startObservingPlayback() {
@@ -159,5 +185,19 @@ final class LineupPlaybackViewModel {
       playLineupSongsUseCase.removeObserver(token)
       timeObserver = nil
     }
+  }
+
+  private func trackPresented() {
+    let playerId =
+      carouselItems.indices.contains(startIndex) ? carouselItems[startIndex].player.id : ""
+    analyticsService.track(
+      PlayViewPresentedEvent(
+        source: .lineup,
+        viewType: .lineupPlayback,
+        isPlaying: isPlaying,
+        isGameDay: isGameDay,
+        playerId: playerId
+      )
+    )
   }
 }

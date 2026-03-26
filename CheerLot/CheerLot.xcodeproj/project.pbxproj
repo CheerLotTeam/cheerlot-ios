@@ -17,6 +17,7 @@
 		CF09BDE92E22901C00E11198 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = CF09BDE82E22901C00E11198 /* FirebaseAnalytics */; };
 		CF09BDEB2E22901C00E11198 /* FirebaseCrashlytics in Frameworks */ = {isa = PBXBuildFile; productRef = CF09BDEA2E22901C00E11198 /* FirebaseCrashlytics */; };
 		CF3BA7382DED7FB900E600B6 /* WatchCheerLot Watch App.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = CF3BA72B2DED7FB800E600B6 /* WatchCheerLot Watch App.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		CF66AB892F75030800D131B8 /* AmplitudeUnified in Frameworks */ = {isa = PBXBuildFile; productRef = CF66AB882F75030800D131B8 /* AmplitudeUnified */; };
 		CF703F922DE82C5F00330888 /* Moya in Frameworks */ = {isa = PBXBuildFile; productRef = CF703F912DE82C5F00330888 /* Moya */; };
 /* End PBXBuildFile section */
 
@@ -141,6 +142,7 @@
 		CF703E912DE8297900330888 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			files = (
+				CF66AB892F75030800D131B8 /* AmplitudeUnified in Frameworks */,
 				CF703F922DE82C5F00330888 /* Moya in Frameworks */,
 				CF09BDEB2E22901C00E11198 /* FirebaseCrashlytics in Frameworks */,
 				3C465E732DE83430001F15F3 /* SwiftFormat in Frameworks */,
@@ -252,6 +254,7 @@
 				CF09BDEA2E22901C00E11198 /* FirebaseCrashlytics */,
 				CF05480D2E895CFB003CCB61 /* FirebaseRemoteConfig */,
 				1F118A352F650E1200EC6DB3 /* Lottie */,
+				CF66AB882F75030800D131B8 /* AmplitudeUnified */,
 			);
 			productName = CheerLot;
 			productReference = CF703E942DE8297900330888 /* CheerLot.app */;
@@ -293,6 +296,7 @@
 				3C465E712DE83430001F15F3 /* XCRemoteSwiftPackageReference "swift-format" */,
 				CF09BDE72E22901C00E11198 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 				1F118A342F650E1200EC6DB3 /* XCRemoteSwiftPackageReference "lottie-ios" */,
+				CF66AB872F75030700D131B8 /* XCRemoteSwiftPackageReference "AmplitudeUnified-Swift" */,
 			);
 			preferredProjectObjectVersion = 90;
 			productRefGroup = CF703E952DE8297900330888 /* Products */;
@@ -742,7 +746,6 @@
 				INFOPLIST_FILE = CheerLot/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "쳐랏!";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.sports";
-				INFOPLIST_KEY_NSUserTrackingUsageDescription = "사용자의 데이터는 서비스 안정성 개선을 위한 목적으로만 활용됩니다.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -790,7 +793,6 @@
 				INFOPLIST_FILE = CheerLot/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "쳐랏!";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.sports";
-				INFOPLIST_KEY_NSUserTrackingUsageDescription = "사용자의 데이터는 서비스 안정성 개선을 위한 목적으로만 활용됩니다.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -879,6 +881,14 @@
 				minimumVersion = 11.15.0;
 			};
 		};
+		CF66AB872F75030700D131B8 /* XCRemoteSwiftPackageReference "AmplitudeUnified-Swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/amplitude/AmplitudeUnified-Swift";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
 		CF703F902DE82C5F00330888 /* XCRemoteSwiftPackageReference "Moya" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Moya/Moya";
@@ -914,6 +924,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = CF09BDE72E22901C00E11198 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseCrashlytics;
+		};
+		CF66AB882F75030800D131B8 /* AmplitudeUnified */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = CF66AB872F75030700D131B8 /* XCRemoteSwiftPackageReference "AmplitudeUnified-Swift" */;
+			productName = AmplitudeUnified;
 		};
 		CF703F912DE82C5F00330888 /* Moya */ = {
 			isa = XCSwiftPackageProductDependency;

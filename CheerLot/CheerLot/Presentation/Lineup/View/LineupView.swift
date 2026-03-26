@@ -21,7 +21,7 @@ struct LineupView: View {
   private let gameInfoHeight: CGFloat = 26.5
   private let cardTopPadding: CGFloat = 20
   private let cardBottomPadding: CGFloat = 10
-  private let cardSpacing: CGFloat = 8
+  private let cardSpacing: CGFloat = 4
   private let separatorHeight: CGFloat = 1
   private let safeAreaVerticalPadding: CGFloat = 10
   private let safeAreaHorizontalPadding: CGFloat = 20
@@ -74,7 +74,7 @@ struct LineupView: View {
     max(
       0,
       cardHeight - teamNameHeight - gameInfoHeight - cardTopPadding - cardBottomPadding
-        - cardSpacing * 2)
+        - cardSpacing * 3)
   }
 
   private func cellHeight(cardHeight: CGFloat) -> CGFloat {
@@ -126,6 +126,7 @@ extension LineupView {
 
         if let gameInfo = viewModel.gameInfo {
           teamName(asset: asset, gameInfo: gameInfo)
+            .padding(.bottom, cardSpacing)
           gameInfoView(asset: asset, gameInfo: gameInfo)
         }
 
@@ -157,10 +158,10 @@ extension LineupView {
 
   private func gameInfoView(asset: LineupAssetVO, gameInfo: LineupGameInfoVO) -> some View {
     HStack(spacing: 8) {
-      Text(gameInfo.gameInfoText)
+      Text(viewModel.shouldShowLineup ? gameInfo.lastGameInfoText : gameInfo.todayNoGameText)
         .font(.M5_gameState)
 
-      if let starterPitcher = gameInfo.starterPitcher {
+      if viewModel.shouldShowLineup, let starterPitcher = gameInfo.starterPitcher {
         HStack(spacing: 2) {
           Image(.pitcher)
             .resizable()

@@ -16,7 +16,8 @@ final class PlayTeamMembersUseCaseImpl: PlayTeamMembersUseCase {
 
   func playAll(
     rows: [TeamMembersSongVO],
-    currentTeam: TeamInfo
+    currentTeam: TeamInfo,
+    isGameDay: Bool
   ) {
     let playableRows = rows.filter { $0.song != nil }
     guard !playableRows.isEmpty else { return }
@@ -30,14 +31,17 @@ final class PlayTeamMembersUseCaseImpl: PlayTeamMembersUseCase {
       playerNames: playerNames,
       startAt: 0,
       coverImageName: coverImageName,
-      mode: .normal
+      mode: .normal,
+      source: .teamMembers,
+      isGameDay: isGameDay
     )
   }
 
   func playSelected(
     row: TeamMembersSongVO,
     allRows: [TeamMembersSongVO],
-    currentTeam: TeamInfo
+    currentTeam: TeamInfo,
+    isGameDay: Bool
   ) {
     let playableRows = allRows.filter { $0.song != nil }
     guard let startIndex = playableRows.firstIndex(where: { $0.id == row.id }) else { return }
@@ -51,7 +55,9 @@ final class PlayTeamMembersUseCaseImpl: PlayTeamMembersUseCase {
       playerNames: playerNames,
       startAt: startIndex,
       coverImageName: coverImageName,
-      mode: .normal
+      mode: .normal,
+      source: .teamMembers,
+      isGameDay: isGameDay
     )
   }
 }

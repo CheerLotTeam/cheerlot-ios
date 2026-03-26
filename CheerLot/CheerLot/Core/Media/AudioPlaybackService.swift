@@ -47,6 +47,14 @@ final class AudioPlaybackService: AudioPlayer {
     playbackMode == .normal && queue.count > 1
   }
 
+  // MARK: - Analytics
+  @ObservationIgnored
+  @Injected(AnalyticsService.self) private var analyticsService
+
+  private(set) var currentSource: PlaySource = .teamMembers
+  private var currentIsGameDay = false
+  private var pendingTrigger: PlayTrigger?
+
   // MARK: - Init
   init() {
     self.nowPlayingSession = MPNowPlayingSession(players: [player])
@@ -69,6 +77,7 @@ final class AudioPlaybackService: AudioPlayer {
     queuePlayerNames = [playerName ?? song.playerId.value]
     currentIndex = 0
     playbackMode = .normal
+    pendingTrigger = .userTap
 
     nowPlaying = song
 
@@ -84,7 +93,9 @@ final class AudioPlaybackService: AudioPlayer {
     playerNames: [String],
     startAt index: Int = 0,
     coverImageName: String?,
-    mode: PlaybackMode = .normal
+    mode: PlaybackMode = .normal,
+    source: PlaySource,
+    isGameDay: Bool
   ) {
     guard !songs.isEmpty else { return }
     guard songs.count == playerNames.count else { return }
@@ -94,6 +105,9 @@ final class AudioPlaybackService: AudioPlayer {
     queuePlayerNames = playerNames
     currentIndex = index
     playbackMode = mode
+    currentSource = source
+    currentIsGameDay = isGameDay
+    pendingTrigger = .userTap
 
     nowPlaying = queue[currentIndex]
     currentPlayerName = queuePlayerNames[currentIndex]
@@ -134,6 +148,18 @@ final class AudioPlaybackService: AudioPlayer {
   private func playCurrentSong() {
     guard let song = nowPlaying else { return }
 
+    let trigger = pendingTrigger ?? .userTap
+    pendingTrigger = nil
+    analyticsService.track(
+      CheerPlayStartedEvent(
+        source: currentSource,
+        trigger: trigger,
+        isGameDay: currentIsGameDay,
+        playerId: song.playerId.value
+      )
+    )
+    analyticsService.incrementUserProperty(.totalPlayCount)
+
     if song.audioURL.hasPrefix("http"),
       let url = URL(string: song.audioURL)
     {
@@ -164,7 +190,6 @@ final class AudioPlaybackService: AudioPlayer {
       .receive(on: RunLoop.main)
       .sink { [weak self] _ in
         guard let self else { return }
-
         guard !self.queue.isEmpty else {
           self.isPlaying = false
           self.syncNowPlaying()
@@ -173,6 +198,7 @@ final class AudioPlaybackService: AudioPlayer {
 
         switch self.playbackMode {
         case .normal:
+          self.pendingTrigger = .autoNext
           self.playNext()
 
         case .search:
