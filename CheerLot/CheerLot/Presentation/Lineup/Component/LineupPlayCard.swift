@@ -27,6 +27,7 @@ struct LineupPlayCard: View {
     } label: {
       cardView
     }
+    .buttonStyle(.plain)
   }
 }
 

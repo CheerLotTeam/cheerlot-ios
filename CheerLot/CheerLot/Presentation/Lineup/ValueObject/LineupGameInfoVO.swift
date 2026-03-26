@@ -39,14 +39,15 @@ struct LineupGameInfoVO: Equatable {
     self.starterPitcher = gameInfo.starterPitcherName
     self.status = gameInfo.status
   }
-
-  var gameInfoText: String {
-    if let opponent = opponent {
-      "\(date) | \(teamName) vs \(opponent)"
-    } else {
-      "\(date) | 경기없음"
+    
+    var todayNoGameText: String {
+        let today = Self.todayString()
+        return "\(today) | 경기 없음"
     }
-  }
+
+    var lastGameInfoText: String {
+        "\(gameDateText) | \(gameTeamsText)"
+    }
 
   var gameDateText: String {
     date
@@ -76,4 +77,12 @@ struct LineupGameInfoVO: Equatable {
 
     return outputFormatter.string(from: date)
   }
+    
+    private static func todayString() -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "M월 d일"
+        formatter.locale = Locale(identifier: "ko_KR")
+        
+        return formatter.string(from: Date())
+    }
 }
