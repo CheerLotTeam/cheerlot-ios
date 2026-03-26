@@ -49,30 +49,37 @@ struct PlaybackSeekBar: View {
         Capsule()
           .fill(.grayWhite)
           .frame(width: xPosition, height: barHeight)
+          .animation(isDragging ? nil : .linear(duration: 0.1), value: value)
 
         // Thumb
         Circle()
           .fill(.grayWhite)
           .frame(width: thumbSize, height: thumbSize)
           .offset(x: xPosition - thumbSize / 2)
+          .animation(isDragging ? nil : .linear(duration: 0.1), value: value)
       }
       .frame(height: max(barHeight, thumbSize))
       .contentShape(Rectangle())
       .gesture(
         DragGesture(minimumDistance: 0)
           .onChanged { gesture in
-            isDragging = true
+            if !isDragging {
+              isDragging = true
+              onEditingChanged(true)
+            }
+            
             updateValue(
               locationX: gesture.location.x,
               width: width
             )
           }
           .onEnded { gesture in
-            isDragging = false
             let newValue = updateValue(
               locationX: gesture.location.x,
               width: width
             )
+
+            isDragging = false
             onSeek(newValue)
           }
       )
