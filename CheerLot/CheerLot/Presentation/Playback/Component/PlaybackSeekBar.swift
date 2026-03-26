@@ -67,7 +67,7 @@ struct PlaybackSeekBar: View {
               isDragging = true
               onEditingChanged(true)
             }
-            
+
             updateValue(
               locationX: gesture.location.x,
               width: width

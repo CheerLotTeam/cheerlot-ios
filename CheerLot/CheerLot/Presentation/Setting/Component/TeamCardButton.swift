@@ -34,7 +34,7 @@ struct TeamCardButton: View {
           .scaledToFill()
           .opacity(0.5)
           .blendMode(.softLight)
-        
+
       }
       .frame(height: 100)
       .clipShape(RoundedRectangle(cornerRadius: 12))

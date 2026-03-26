@@ -50,9 +50,9 @@ struct SettingView: View {
         .padding(.horizontal, 20)
         .padding(.top, 20)
       }
-      
+
       Spacer()
-      
+
       Text("쳐랏 | App Version \(Constants.appVersion)")
         .font(.M6)
         .foregroundStyle(.gray200)

@@ -158,23 +158,23 @@ final class AudioPlaybackService: AudioPlayer {
 
     isPlaying = true
     syncNowPlaying()
-    
+
     endOfTrackCancellable = NotificationCenter.default
       .publisher(for: .AVPlayerItemDidPlayToEndTime, object: item)
       .receive(on: RunLoop.main)
       .sink { [weak self] _ in
         guard let self else { return }
-        
+
         guard !self.queue.isEmpty else {
           self.isPlaying = false
           self.syncNowPlaying()
           return
         }
-        
+
         switch self.playbackMode {
         case .normal:
           self.playNext()
-          
+
         case .search:
           self.seek(0)
           self.resume()

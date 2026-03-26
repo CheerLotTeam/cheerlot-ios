@@ -76,8 +76,8 @@ struct MainTabView: View {
       }
     }
     .onChange(of: scenePhase) { _, newPhase in
-       guard newPhase == .active else { return }
-       restorePlayback()
+      guard newPhase == .active else { return }
+      restorePlayback()
     }
     .fullScreenCover(isPresented: $isPlayerExpanded) {
       playbackCover
@@ -146,7 +146,7 @@ extension MainTabView {
     }
     .tint(asset.secondaryColor)
   }
-  
+
   @ViewBuilder
   private var playbackCover: some View {
     if let song = audioPlayer.nowPlaying {
@@ -190,7 +190,7 @@ extension MainTabView {
       .padding(.vertical, 8)
     }
   }
-  
+
   private func restorePlayback() {
     guard audioPlayer.nowPlaying != nil else { return }
     guard !isPlayerExpanded else { return }

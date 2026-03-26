@@ -21,18 +21,18 @@ struct TeamCard: View {
     ZStack {
       /// 기본 컬러
       asset.primaryColor
-      
+
       /// 그라데이션
       asset.cardBackgroundGradient
         .opacity(0.2)
-      
+
       /// 점박스 이미지
       Image(.teamCardBG)
         .resizable()
         .scaledToFill()
         .opacity(0.5)
         .blendMode(.softLight)
-      
+
     }
     .frame(height: 100)
     .clipShape(RoundedRectangle(cornerRadius: 12))
