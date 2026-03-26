@@ -5,9 +5,6 @@
 //  Created by 이현주 on 2/9/26.
 //
 
-import AdSupport
-import AppTrackingTransparency
-import FirebaseAnalytics
 import FirebaseCore
 import UIKit
 
@@ -20,26 +17,9 @@ class AppDelegate: NSObject, UIApplicationDelegate {
     FirebaseApp.configure()
 
     if let uuid = UIDevice.current.identifierForVendor?.uuidString {
-      Analytics.setUserID(uuid)
-    }
-
-    DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-      self.requestTrackingAuthorization()
+      DIContainer.shared.resolve(AnalyticsService.self).setUserId(uuid)
     }
 
     return true
-  }
-
-  private func requestTrackingAuthorization() {
-    if #available(iOS 14, *) {
-      ATTrackingManager.requestTrackingAuthorization { status in
-        switch status {
-        case .authorized:
-          Analytics.setAnalyticsCollectionEnabled(true)
-        default:
-          Analytics.setAnalyticsCollectionEnabled(false)
-        }
-      }
-    }
   }
 }
