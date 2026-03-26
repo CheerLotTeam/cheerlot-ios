@@ -11,6 +11,7 @@ protocol PlaySearchSongsUseCase {
   func play(
     selectedResult: SearchResultVO,
     allResults: [SearchResultVO],
-    coverImageName: String?
+    coverImageName: String?,
+    isGameDay: Bool
   )
 }

@@ -49,7 +49,9 @@ protocol AudioPlaybackUseCase {
     playerNames: [String],
     startAt index: Int,
     coverImageName: String?,
-    mode: PlaybackMode
+    mode: PlaybackMode,
+    source: PlaySource,
+    isGameDay: Bool
   )
 
   /// 다음곡

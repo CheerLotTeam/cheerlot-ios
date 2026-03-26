@@ -24,7 +24,7 @@ protocol AudioPlayer {
   func play(_ song: CheerSongInfo, playerName: String?, coverImageName: String?)
   func playQueue(
     _ songs: [CheerSongInfo], playerNames: [String], startAt index: Int, coverImageName: String?,
-    mode: PlaybackMode)
+    mode: PlaybackMode, source: PlaySource, isGameDay: Bool)
   func playNext()
   func playPrevious()
   func pause()

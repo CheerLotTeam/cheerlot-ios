@@ -16,7 +16,8 @@ protocol LineupAudioPlayer {
   func playQueue(
     _ songs: [CheerSongInfo],
     playerNames: [String],
-    startAt index: Int
+    startAt index: Int,
+    isGameDay: Bool
   )
 
   func play(at index: Int)
