@@ -178,32 +178,32 @@ extension PlaybackViewModel {
       timeObserver = nil
     }
   }
-    
-    // MARK: - Analytics
 
-    private func trackPresented() {
-      let playerId = audioPlaybackUseCase.nowPlaying?.playerId.value ?? ""
-      analyticsService.track(
-        PlayViewPresentedEvent(
-          source: source,
-          viewType: .playback,
-          isPlaying: isPlaying,
-          isGameDay: isGameDay,
-          playerId: playerId
-        )
-      )
-    }
+  // MARK: - Analytics
 
-    private func trackDismissed() {
-      let playerId = audioPlaybackUseCase.nowPlaying?.playerId.value ?? ""
-      analyticsService.track(
-        PlayViewDismissedEvent(
-          source: source,
-          viewType: .playback,
-          isPlaying: isPlaying,
-          isGameDay: isGameDay,
-          playerId: playerId
-        )
+  private func trackPresented() {
+    let playerId = audioPlaybackUseCase.nowPlaying?.playerId.value ?? ""
+    analyticsService.track(
+      PlayViewPresentedEvent(
+        source: source,
+        viewType: .playback,
+        isPlaying: isPlaying,
+        isGameDay: isGameDay,
+        playerId: playerId
       )
-    }
+    )
+  }
+
+  private func trackDismissed() {
+    let playerId = audioPlaybackUseCase.nowPlaying?.playerId.value ?? ""
+    analyticsService.track(
+      PlayViewDismissedEvent(
+        source: source,
+        viewType: .playback,
+        isPlaying: isPlaying,
+        isGameDay: isGameDay,
+        playerId: playerId
+      )
+    )
+  }
 }

@@ -35,4 +35,3 @@ final class AmplitudeAnalyticsService: AnalyticsService {
     amplitude.identify(identify: identify)
   }
 }
-

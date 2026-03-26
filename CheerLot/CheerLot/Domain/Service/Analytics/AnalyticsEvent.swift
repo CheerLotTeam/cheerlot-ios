@@ -19,7 +19,7 @@ protocol AnalyticsEvent {
 enum AppEntryPoint: String {
   case app
   case widget  // 추후
-  case push    // 추후
+  case push  // 추후
 }
 
 enum PlaySource: String {

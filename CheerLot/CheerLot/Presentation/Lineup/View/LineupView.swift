@@ -126,7 +126,7 @@ extension LineupView {
 
         if let gameInfo = viewModel.gameInfo {
           teamName(asset: asset, gameInfo: gameInfo)
-                .padding(.bottom, cardSpacing)
+            .padding(.bottom, cardSpacing)
           gameInfoView(asset: asset, gameInfo: gameInfo)
         }
 
