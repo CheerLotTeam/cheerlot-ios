@@ -32,6 +32,9 @@ final class TeamSelectViewModel {
   @ObservationIgnored
   @Injected(AudioPlaybackUseCase.self) private var audioPlaybackUseCase
 
+  @ObservationIgnored
+  @Injected(AnalyticsService.self) private var analyticsService
+
   init(
     mode: TeamSelectMode,
     initialSelectedTeamId: String? = nil
@@ -55,6 +58,7 @@ final class TeamSelectViewModel {
 
     audioPlaybackUseCase.stop()
     teamSelectionUseCase.selectTeam(TeamID(selectedTeamId))
+    analyticsService.setUserProperty(.teamId, value: selectedTeamId)
     NotificationCenter.default.post(name: .teamSelected, object: selectedTeamId)
   }
 }
