@@ -48,12 +48,10 @@ struct WidgetCheerLotEntryView: View {
   var entry: Provider.Entry
 
   var body: some View {
-    VStack {
-      Text("Time:")
-      Text(entry.date, style: .time)
-
-      Text("Favorite Emoji:")
-      Text(entry.configuration.favoriteEmoji)
+    VStack(alignment: .center) {
+      Text("Coming Soon!")
+        .font(.system(size: 16, weight: .semibold))
+        .multilineTextAlignment(.center)
     }
   }
 }
