@@ -46,7 +46,7 @@ extension Font {
       .custom(rawValue, fixedSize: size)
     }
   }
-  
+
   public enum Pretendard: String {
     case bold = "Pretendard-Bold"
     case semibold = "Pretendard-SemiBold"
@@ -63,7 +63,7 @@ extension Font {
 // MARK: - Style Presets
 /// 위젯 프로젝트 전역에서 사용 가능한 텍스트 스타일 프리셋 모음
 extension TypeStyle {
-  
+
   /// Black 15pt
   public static let T4 = TypeStyle(
     font: Font.RobotoCondensed.black.swiftUIFont(size: 15),
@@ -71,7 +71,7 @@ extension TypeStyle {
     lineHeight: 0.9,
     letterSpacing: 0
   )
-  
+
   /// Bold 24pt
   public static let B3 = TypeStyle(
     font: Font.Pretendard.bold.swiftUIFont(size: 24),
@@ -79,7 +79,7 @@ extension TypeStyle {
     lineHeight: 1.3,
     letterSpacing: -0.04
   )
-  
+
   /// SemiBold 24pt
   public static let SB3 = TypeStyle(
     font: Font.Pretendard.semibold.swiftUIFont(size: 24),
@@ -87,7 +87,7 @@ extension TypeStyle {
     lineHeight: 1.3,
     letterSpacing: -0.04
   )
-  
+
   /// SemiBold 20pt
   public static let SB5 = TypeStyle(
     font: Font.Pretendard.semibold.swiftUIFont(size: 20),
@@ -95,7 +95,7 @@ extension TypeStyle {
     lineHeight: 1.3,
     letterSpacing: -0.04
   )
-  
+
   /// SemiBold 14pt
   public static let SB8 = TypeStyle(
     font: Font.Pretendard.semibold.swiftUIFont(size: 14),
@@ -103,7 +103,7 @@ extension TypeStyle {
     lineHeight: 1.3,
     letterSpacing: -0.04
   )
-  
+
   /// SemiBold 12pt
   public static let SB9 = TypeStyle(
     font: Font.Pretendard.semibold.swiftUIFont(size: 12),
@@ -111,7 +111,7 @@ extension TypeStyle {
     lineHeight: 1.3,
     letterSpacing: -0.04
   )
-  
+
   /// Medium 12pt
   public static let M5 = TypeStyle(
     font: Font.Pretendard.medium.swiftUIFont(size: 12),
@@ -119,7 +119,7 @@ extension TypeStyle {
     lineHeight: 1.3,
     letterSpacing: -0.04
   )
-  
+
   /// Medium 10pt
   public static let M6 = TypeStyle(
     font: Font.Pretendard.medium.swiftUIFont(size: 10),
@@ -127,7 +127,7 @@ extension TypeStyle {
     lineHeight: 1.2,
     letterSpacing: 0
   )
-  
+
   /// Medium 8pt
   public static let M7 = TypeStyle(
     font: Font.Pretendard.medium.swiftUIFont(size: 8),
