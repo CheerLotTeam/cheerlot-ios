@@ -47,7 +47,7 @@ struct SimpleEntry: TimelineEntry {
 struct WidgetCheerLotEntryView: View {
   var entry: Provider.Entry
   let asset = WidgetTeamAssetVO("HANWHA")
-  
+
   var body: some View {
     asset.coverImage
       .resizable()
