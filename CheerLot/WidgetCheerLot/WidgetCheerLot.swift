@@ -51,7 +51,7 @@ struct WidgetCheerLotEntryView: View {
   var body: some View {
     VStack {
       Text("HANWHA")
-        .font(TypeStyle.SB1.font)
+        .font(.SB8)
 
       asset.coverImage
         .resizable()
