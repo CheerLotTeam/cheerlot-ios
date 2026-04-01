@@ -46,13 +46,13 @@ struct SimpleEntry: TimelineEntry {
 
 struct WidgetCheerLotEntryView: View {
   var entry: Provider.Entry
-
+  let asset = WidgetTeamAssetVO("HANWHA")
+  
   var body: some View {
-    VStack(alignment: .center) {
-      Text("Coming Soon!")
-        .font(.system(size: 16, weight: .semibold))
-        .multilineTextAlignment(.center)
-    }
+    asset.coverImage
+      .resizable()
+      .scaledToFill()
+      .background(asset.primaryColor)
   }
 }
 
