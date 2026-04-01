@@ -77,6 +77,17 @@
 			);
 			target = 3C96AB792F3B4953007ED0A5 /* WidgetCheerLotExtension */;
 		};
+		3CE85B502F7D7BA9003FE470 /* Exceptions for "CheerLot" folder in "WidgetCheerLotExtension" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				"Resource/Fonts/Pretendard-Bold.otf",
+				"Resource/Fonts/Pretendard-Medium.otf",
+				"Resource/Fonts/Pretendard-Regular.otf",
+				"Resource/Fonts/Pretendard-SemiBold.otf",
+				"Resource/Fonts/RobotoCondensed-Black.ttf",
+			);
+			target = 3C96AB792F3B4953007ED0A5 /* WidgetCheerLotExtension */;
+		};
 		CF3BA7982DED855A00E600B6 /* Exceptions for "CheerLot" folder in "WatchCheerLot Watch App" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
@@ -120,6 +131,7 @@
 			exceptions = (
 				CF502C212E1BDDEE00AF772B /* Exceptions for "CheerLot" folder in "CheerLot" target */,
 				CF3BA7982DED855A00E600B6 /* Exceptions for "CheerLot" folder in "WatchCheerLot Watch App" target */,
+				3CE85B502F7D7BA9003FE470 /* Exceptions for "CheerLot" folder in "WidgetCheerLotExtension" target */,
 			);
 			path = CheerLot;
 			sourceTree = "<group>";
@@ -885,8 +897,8 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/amplitude/AmplitudeUnified-Swift";
 			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 1.0.0;
+				branch = main;
+				kind = branch;
 			};
 		};
 		CF703F902DE82C5F00330888 /* XCRemoteSwiftPackageReference "Moya" */ = {
