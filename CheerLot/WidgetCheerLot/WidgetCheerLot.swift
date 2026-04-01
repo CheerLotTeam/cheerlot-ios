@@ -49,10 +49,15 @@ struct WidgetCheerLotEntryView: View {
   let asset = WidgetTeamAssetVO("HANWHA")
 
   var body: some View {
-    asset.coverImage
-      .resizable()
-      .scaledToFill()
-      .background(asset.primaryColor)
+    VStack {
+      Text("HANWHA")
+        .font(TypeStyle.SB1.font)
+
+      asset.coverImage
+        .resizable()
+        .scaledToFill()
+        .background(asset.primaryColor)
+    }
   }
 }
 
