@@ -8,11 +8,17 @@
 import SwiftUI
 
 final class WidgetTeamAssetVO {
+  private let teamId: String
   private let assetPrefix: String
 
   init(_ teamId: String) {
+    self.teamId = teamId.uppercased()
     self.assetPrefix = Self.getAssetPrefix(for: teamId)
   }
+
+  lazy var shortName: String = {
+    Self.getShortName(for: teamId)
+  }()
 
   lazy var colors: Color.TeamColorSet = {
     Color.teamColors(for: assetPrefix)
@@ -32,6 +38,22 @@ final class WidgetTeamAssetVO {
 }
 
 extension WidgetTeamAssetVO {
+  private static func getShortName(for teamId: String) -> String {
+    switch teamId.uppercased() {
+    case "HANWHA": return "한화"
+    case "LG": return "LG"
+    case "LOTTE": return "롯데"
+    case "SAMSUNG": return "삼성"
+    case "NC": return "NC"
+    case "KT": return "KT"
+    case "SSG": return "SSG"
+    case "DOOSAN": return "두산"
+    case "KIWOOM": return "키움"
+    case "KIA": return "KIA"
+    default: return teamId
+    }
+  }
+
   private static func getAssetPrefix(for teamId: String) -> String {
     let normalizedId = teamId.uppercased()
 
