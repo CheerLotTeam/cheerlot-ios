@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftData
+import WidgetKit
 
 @ModelActor
 actor TeamLocalRepositoryImpl: TeamLocalRepository {
@@ -24,6 +25,8 @@ actor TeamLocalRepositoryImpl: TeamLocalRepository {
 
     updateModelFromEntity(model: data, entity: team)
     try modelContext.save()
+    syncToWidgetDefaults(team.gameInfo)
+    WidgetCenter.shared.reloadAllTimelines()
   }
 
   func teamExists(_ teamId: TeamID) async throws -> Bool {
@@ -40,6 +43,25 @@ extension TeamLocalRepositoryImpl {
       return try modelContext.fetch(descriptor).first
     } catch {
       throw LocalStorageError.fetchError
+    }
+  }
+
+  // 게임 상태 동기화
+  private func syncToWidgetDefaults(_ gameInfo: TeamGameInfo) {
+    guard let defaults = UserDefaults(suiteName: AppGroup.id) else { return }
+    switch gameInfo.status {
+    case .playingToday:
+      defaults.set(true, forKey: UserDefaultsKey.Widget.hasTodayGame)
+      defaults.set(false, forKey: UserDefaultsKey.Widget.isSeasonEnded)
+      defaults.set(gameInfo.opponent?.value, forKey: UserDefaultsKey.Widget.opponentTeamId)
+    case .offDay:
+      defaults.set(false, forKey: UserDefaultsKey.Widget.hasTodayGame)
+      defaults.set(false, forKey: UserDefaultsKey.Widget.isSeasonEnded)
+      defaults.removeObject(forKey: UserDefaultsKey.Widget.opponentTeamId)
+    case .seasonEnded:
+      defaults.set(false, forKey: UserDefaultsKey.Widget.hasTodayGame)
+      defaults.set(true, forKey: UserDefaultsKey.Widget.isSeasonEnded)
+      defaults.removeObject(forKey: UserDefaultsKey.Widget.opponentTeamId)
     }
   }
 
