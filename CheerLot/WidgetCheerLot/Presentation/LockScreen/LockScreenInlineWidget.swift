@@ -102,6 +102,7 @@ struct LockScreenInlineWidget: Widget {
   var body: some WidgetConfiguration {
     StaticConfiguration(kind: kind, provider: LockScreenInlineProvider()) { entry in
       LockScreenInlineWidgetView(entry: entry)
+        .containerBackground(.clear, for: .widget)
     }
     .configurationDisplayName("경기 일정")
     .description("오늘의 경기 일정을 잠금화면에서 확인하세요.")
