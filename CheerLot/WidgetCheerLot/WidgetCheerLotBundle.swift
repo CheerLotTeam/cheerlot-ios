@@ -15,5 +15,6 @@ struct WidgetCheerLotBundle: WidgetBundle {
     WidgetCheerLotControl()
     WidgetCheerLotLiveActivity()
     LockScreenInlineWidget()
+    LockScreenRectangularWidget()
   }
 }
