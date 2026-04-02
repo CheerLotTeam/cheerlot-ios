@@ -12,6 +12,12 @@ enum UserDefaultsKey {
   static let hasSelectedTeam = "hasSelectedTeam"
   static let showRecentLineup = "showRecentLineup"
   static let appIconMode = "appIconMode"
+  
+  enum Widget {
+    static let hasTodayGame = "widget.hasTodayGame"
+    static let isSeasonEnded = "widget.isSeasonEnded"
+    static let opponentTeamId = "widget.opponentTeamId"
+  }
 }
 
 enum AppGroup {
