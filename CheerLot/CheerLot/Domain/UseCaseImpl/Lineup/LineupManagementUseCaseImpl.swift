@@ -94,7 +94,7 @@ final class LineupManagementUseCaseImpl: LineupManagementUseCase {
   // MARK: - Private Methods - Individual Sync
 
   private func syncGameInfo(_ teamId: TeamID) async throws {
-    let gameInfo = try await teamRemoteRepository.fetchGameInfo(teamId)
+    let gameInfo = try await teamRemoteRepository.fetchTodayGameInfo(teamId)
 
     guard let localTeam = try await teamLocalRepository.fetchTeam(teamId) else {
       throw LocalStorageError.notFound
