@@ -55,7 +55,8 @@ struct HomePlayerProvider: TimelineProvider {
       let defaults = UserDefaults(suiteName: AppGroup.id),
       let teamId = defaults.string(forKey: UserDefaultsKey.selectedTeamId)
     else {
-      return HomePlayerEntry(date: .now, displayState: .team(teamId: "SAMSUNG", teamName: "삼성", totalSongCount: 0))
+      return HomePlayerEntry(
+        date: .now, displayState: .team(teamId: "SAMSUNG", teamName: "삼성", totalSongCount: 0))
     }
 
     let asset = HomeTeamAssetVO(base: WidgetTeamAssetVO(teamId))
@@ -248,6 +249,7 @@ struct HomePlayerWidget: Widget {
 #Preview(as: .systemSmall) {
   HomePlayerWidget()
 } timeline: {
-  HomePlayerEntry(date: .now, displayState: .team(teamId: "SAMSUNG", teamName: "삼성 라이온즈", totalSongCount: 30))
+  HomePlayerEntry(
+    date: .now, displayState: .team(teamId: "SAMSUNG", teamName: "삼성 라이온즈", totalSongCount: 30))
   HomePlayerEntry(date: .now, displayState: .player(teamId: "SAMSUNG", playerName: "김선수"))
 }

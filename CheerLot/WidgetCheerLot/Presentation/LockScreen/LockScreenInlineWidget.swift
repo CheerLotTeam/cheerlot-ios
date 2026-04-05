@@ -29,10 +29,13 @@ struct LockScreenInlineProvider: TimelineProvider {
   }
 
   func getSnapshot(in context: Context, completion: @escaping (LockScreenInlineEntry) -> Void) {
-    completion(LockScreenInlineEntry(date: .now, displayState: .playingToday(myTeam: "삼성", opponent: "한화")))
+    completion(
+      LockScreenInlineEntry(date: .now, displayState: .playingToday(myTeam: "삼성", opponent: "한화")))
   }
 
-  func getTimeline(in context: Context, completion: @escaping (Timeline<LockScreenInlineEntry>) -> Void) {
+  func getTimeline(
+    in context: Context, completion: @escaping (Timeline<LockScreenInlineEntry>) -> Void
+  ) {
     let entry = fetchEntry()
     let nextUpdate = Calendar.current.date(byAdding: .hour, value: 1, to: .now) ?? .now
     completion(Timeline(entries: [entry], policy: .after(nextUpdate)))
@@ -55,7 +58,8 @@ struct LockScreenInlineProvider: TimelineProvider {
     if isSeasonEnded {
       displayState = .seasonEnded
     } else if hasTodayGame {
-      let opponentShortName = opponentTeamId.map { LockScreenTeamAssetVO(base: WidgetTeamAssetVO($0)).shortName } ?? "상대팀"
+      let opponentShortName =
+        opponentTeamId.map { LockScreenTeamAssetVO(base: WidgetTeamAssetVO($0)).shortName } ?? "상대팀"
       displayState = .playingToday(myTeam: myTeam.shortName, opponent: opponentShortName)
     } else {
       displayState = .offDay

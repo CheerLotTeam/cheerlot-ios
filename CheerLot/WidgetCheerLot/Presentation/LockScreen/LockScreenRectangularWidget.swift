@@ -31,7 +31,8 @@ struct LockScreenRectangularProvider: TimelineProvider {
     )
   }
 
-  func getSnapshot(in context: Context, completion: @escaping (LockScreenRectangularEntry) -> Void) {
+  func getSnapshot(in context: Context, completion: @escaping (LockScreenRectangularEntry) -> Void)
+  {
     completion(
       LockScreenRectangularEntry(
         date: .now,
@@ -66,7 +67,8 @@ struct LockScreenRectangularProvider: TimelineProvider {
     if isSeasonEnded {
       displayState = .seasonEnded
     } else if hasTodayGame {
-      let opponentShortName = opponentTeamId.map { LockScreenTeamAssetVO(base: WidgetTeamAssetVO($0)).shortName } ?? "상대팀"
+      let opponentShortName =
+        opponentTeamId.map { LockScreenTeamAssetVO(base: WidgetTeamAssetVO($0)).shortName } ?? "상대팀"
       displayState = .playingToday(myTeam: myTeam.shortName, opponent: opponentShortName)
     } else {
       displayState = .offDay

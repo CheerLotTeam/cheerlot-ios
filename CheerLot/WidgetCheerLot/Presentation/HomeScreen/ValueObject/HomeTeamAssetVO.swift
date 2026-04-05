@@ -21,12 +21,12 @@ struct HomeTeamAssetVO {
   var secondaryPalette: Color.TeamSecondaryPalette { base.secondaryPalette }
   var coverImage: Image { base.coverImage }
   var noCoverImage: Image { base.noCoverImage }
-  
+
   var widgetBackgroundGradient: LinearGradient {
     LinearGradient(
       colors: [
         base.primaryPalette.color600,
-        base.primaryPalette.color200
+        base.primaryPalette.color200,
       ],
       startPoint: .top,
       endPoint: .bottom
