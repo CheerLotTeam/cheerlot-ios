@@ -18,7 +18,6 @@ struct LockScreenRectangularEntry: TimelineEntry {
     case playingToday(myTeam: String, opponent: String)
     case offDay
     case seasonEnded
-    case noTeam
   }
 }
 
@@ -55,10 +54,10 @@ struct LockScreenRectangularProvider: TimelineProvider {
       let defaults = UserDefaults(suiteName: AppGroup.id),
       let teamIdValue = defaults.string(forKey: UserDefaultsKey.selectedTeamId)
     else {
-      return LockScreenRectangularEntry(date: .now, displayState: .noTeam)
+      return LockScreenRectangularEntry(date: .now, displayState: .offDay)
     }
 
-    let myTeam = WidgetTeamAssetVO(teamIdValue)
+    let myTeam = LockScreenTeamAssetVO(base: WidgetTeamAssetVO(teamIdValue))
     let isSeasonEnded = defaults.bool(forKey: UserDefaultsKey.Widget.isSeasonEnded)
     let hasTodayGame = defaults.bool(forKey: UserDefaultsKey.Widget.hasTodayGame)
     let opponentTeamId = defaults.string(forKey: UserDefaultsKey.Widget.opponentTeamId)
@@ -67,7 +66,7 @@ struct LockScreenRectangularProvider: TimelineProvider {
     if isSeasonEnded {
       displayState = .seasonEnded
     } else if hasTodayGame {
-      let opponentShortName = opponentTeamId.map { WidgetTeamAssetVO($0).shortName } ?? "상대팀"
+      let opponentShortName = opponentTeamId.map { LockScreenTeamAssetVO(base: WidgetTeamAssetVO($0)).shortName } ?? "상대팀"
       displayState = .playingToday(myTeam: myTeam.shortName, opponent: opponentShortName)
     } else {
       displayState = .offDay
@@ -87,7 +86,6 @@ struct LockScreenRectangularWidgetView: View {
     case .playingToday(let myTeam, let opponent): return "\(myTeam) vs \(opponent)"
     case .offDay: return "경기 없음"
     case .seasonEnded: return "시즌 종료"
-    case .noTeam: return "팀 정보 없음"
     }
   }
 
@@ -135,5 +133,4 @@ struct LockScreenRectangularWidget: Widget {
   LockScreenRectangularEntry(date: .now, displayState: .playingToday(myTeam: "삼성", opponent: "LG"))
   LockScreenRectangularEntry(date: .now, displayState: .offDay)
   LockScreenRectangularEntry(date: .now, displayState: .seasonEnded)
-  LockScreenRectangularEntry(date: .now, displayState: .noTeam)
 }
