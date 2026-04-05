@@ -18,7 +18,6 @@ struct LockScreenInlineEntry: TimelineEntry {
     case playingToday(myTeam: String, opponent: String)
     case offDay
     case seasonEnded
-    case noTeam
   }
 }
 
@@ -44,10 +43,10 @@ struct LockScreenInlineProvider: TimelineProvider {
       let defaults = UserDefaults(suiteName: AppGroup.id),
       let teamIdValue = defaults.string(forKey: UserDefaultsKey.selectedTeamId)
     else {
-      return LockScreenInlineEntry(date: .now, displayState: .noTeam)
+      return LockScreenInlineEntry(date: .now, displayState: .offDay)
     }
 
-    let myTeam = WidgetTeamAssetVO(teamIdValue)
+    let myTeam = LockScreenTeamAssetVO(base: WidgetTeamAssetVO(teamIdValue))
     let isSeasonEnded = defaults.bool(forKey: UserDefaultsKey.Widget.isSeasonEnded)
     let hasTodayGame = defaults.bool(forKey: UserDefaultsKey.Widget.hasTodayGame)
     let opponentTeamId = defaults.string(forKey: UserDefaultsKey.Widget.opponentTeamId)
@@ -56,7 +55,7 @@ struct LockScreenInlineProvider: TimelineProvider {
     if isSeasonEnded {
       displayState = .seasonEnded
     } else if hasTodayGame {
-      let opponentShortName = opponentTeamId.map { WidgetTeamAssetVO($0).shortName } ?? "상대팀"
+      let opponentShortName = opponentTeamId.map { LockScreenTeamAssetVO(base: WidgetTeamAssetVO($0)).shortName } ?? "상대팀"
       displayState = .playingToday(myTeam: myTeam.shortName, opponent: opponentShortName)
     } else {
       displayState = .offDay
@@ -76,7 +75,6 @@ struct LockScreenInlineWidgetView: View {
     case .playingToday(let myTeam, let opponent): return "\(myTeam) VS \(opponent)"
     case .offDay: return "경기 없음"
     case .seasonEnded: return "시즌 종료"
-    case .noTeam: return "팀 정보 없음"
     }
   }
 
@@ -118,5 +116,4 @@ struct LockScreenInlineWidget: Widget {
   LockScreenInlineEntry(date: .now, displayState: .playingToday(myTeam: "삼성", opponent: "한화"))
   LockScreenInlineEntry(date: .now, displayState: .offDay)
   LockScreenInlineEntry(date: .now, displayState: .seasonEnded)
-  LockScreenInlineEntry(date: .now, displayState: .noTeam)
 }
