@@ -208,42 +208,6 @@ private struct PlayerStateView: View {
       .padding(14)
       .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
     }
-//    ZStack {
-//      asset.primaryColor
-//
-//      VStack(alignment: .leading, spacing: 0) {
-//        RoundedRectangle(cornerRadius: 16)
-//          .fill(.white.opacity(0.9))
-//          .frame(width: 72, height: 72)
-//          .overlay {
-//            asset.noCoverImage
-//              .resizable()
-//              .scaledToFit()
-//              .padding(6)
-//          }
-//
-//        Spacer()
-//
-//        HStack(alignment: .bottom) {
-//          VStack(alignment: .leading, spacing: 2) {
-//            Text(playerName)
-//              .font(.system(size: 15, weight: .bold))
-//              .foregroundStyle(.white)
-//              .lineLimit(1)
-//              .minimumScaleFactor(0.8)
-//
-//            Text("기본 응원가")
-//              .font(.system(size: 12, weight: .regular))
-//              .foregroundStyle(.white.opacity(0.7))
-//          }
-//
-//          Spacer()
-//
-//          PlayButton()
-//        }
-//      }
-//      .padding(14)
-//    }
   }
 }
 
