@@ -80,6 +80,7 @@
 		3CE85B502F7D7BA9003FE470 /* Exceptions for "CheerLot" folder in "WidgetCheerLotExtension" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
+				Data/Storage/Local/UserDefaultsKey.swift,
 				"Resource/Fonts/Pretendard-Bold.otf",
 				"Resource/Fonts/Pretendard-Medium.otf",
 				"Resource/Fonts/Pretendard-Regular.otf",

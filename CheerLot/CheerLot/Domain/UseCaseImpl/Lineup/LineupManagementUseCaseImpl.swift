@@ -71,12 +71,14 @@ final class LineupManagementUseCaseImpl: LineupManagementUseCase {
     let needsPlayersSync = localVersions.playersVersion != serverVersions.playersVersion
     let needsLineupSync = localVersions.lineupVersion != serverVersions.lineupVersion
 
+    // 경기 정보는 매일 바뀌므로 항상 갱신
+    try await syncGameInfo(teamId)
+
     if needsPlayersSync {
       try await syncPlayers(teamId, newVersion: serverVersions.playersVersion)
     }
 
     if needsLineupSync {
-      try await syncGameInfo(teamId)
       try await syncLineup(teamId, newVersion: serverVersions.lineupVersion)
     }
   }
