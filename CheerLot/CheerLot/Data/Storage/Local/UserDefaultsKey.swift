@@ -17,6 +17,8 @@ enum UserDefaultsKey {
     static let hasTodayGame = "widget.hasTodayGame"
     static let isSeasonEnded = "widget.isSeasonEnded"
     static let opponentTeamId = "widget.opponentTeamId"
+    static let playerName = "widget.playerName"
+    static let totalSongCount = "widget.totalSongCount"
   }
 }
 
