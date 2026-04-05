@@ -9,8 +9,9 @@ import Foundation
 import Moya
 
 enum TeamAPI {
-  case getTeamGameInfo(teamCode: String)
+  case getTeamTodayGameInfo(teamCode: String)
   case getTeamVersions(teamCode: String)
+  case getTeamGamesInfo(teamCode: String)
 }
 
 extension TeamAPI: APITargetType {
@@ -20,23 +21,25 @@ extension TeamAPI: APITargetType {
 
   var path: String {
     switch self {
-    case .getTeamGameInfo(let teamCode):
+    case .getTeamTodayGameInfo(let teamCode):
       return "/\(teamCode)"
     case .getTeamVersions(let teamCode):
       return "/\(teamCode)/version"
+    case .getTeamGamesInfo(let teamCode):
+      return "/\(teamCode)/games"
     }
   }
 
   var method: Moya.Method {
     switch self {
-    case .getTeamGameInfo, .getTeamVersions:
+    case .getTeamTodayGameInfo, .getTeamVersions, .getTeamGamesInfo:
       return .get
     }
   }
 
   var task: Task {
     switch self {
-    case .getTeamGameInfo, .getTeamVersions:
+    case .getTeamTodayGameInfo, .getTeamVersions, .getTeamGamesInfo:
       return .requestPlain
     }
   }
