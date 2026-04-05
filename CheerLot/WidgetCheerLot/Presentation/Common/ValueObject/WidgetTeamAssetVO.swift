@@ -27,14 +27,21 @@ final class WidgetTeamAssetVO {
   var primaryColor: Color { colors.primary }
   var secondaryColor: Color { colors.secondary }
 
-  // 위젯 전용 커버 이미지
-  lazy var coverImageName: String = {
-    "\(assetPrefix)_cover"
+  lazy var primaryPalette: Color.TeamPrimaryPalette = {
+    Color.teamPrimaryPalette(for: assetPrefix)
   }()
 
-  lazy var coverImage: Image = {
-    Image(coverImageName)
+  lazy var secondaryPalette: Color.TeamSecondaryPalette = {
+    Color.teamSecondaryPalette(for: assetPrefix)
   }()
+
+  // 위젯 전용 커버 이미지
+  var coverImageName: String { "\(assetPrefix)_cover" }
+  var coverImage: Image { Image(coverImageName) }
+
+  // 선수 없음 커버 이미지
+  var noCoverImageName: String { "\(assetPrefix)_noCover" }
+  var noCoverImage: Image { Image(noCoverImageName) }
 }
 
 extension WidgetTeamAssetVO {
