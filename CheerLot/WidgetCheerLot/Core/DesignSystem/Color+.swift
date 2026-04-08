@@ -29,6 +29,9 @@ extension Color {
     let color600: Color
   }
 
+  static let appPrimary = Color.sky600
+  static let appSecondary = Color.seam400
+
   static let hanwhaPrimary = Color.hhOrange400
   static let hanwhaSecondary = Color.hhOrange400
 
@@ -178,7 +181,7 @@ extension Color {
     case "kia":
       return TeamColorSet(primary: .kiaPrimary, secondary: .kiaSecondary)
     default:
-      return TeamColorSet(primary: .gray, secondary: .gray)
+      return TeamColorSet(primary: .appPrimary, secondary: .appSecondary)
     }
   }
 }

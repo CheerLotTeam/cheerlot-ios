@@ -9,10 +9,10 @@ import Foundation
 
 /// 라인업 데이터 관리 (동기화 + 조회)
 protocol LineupManagementUseCase {
-  /// 현재 라인업 데이터 로드
+  /// 현재 라인업 데이터 로드 (동기화 X)
   func loadCurrentLineup(for teamId: TeamID) async throws -> LineupData
 
-  /// 라인업 데이터 로드 (필요시 동기화 후)
+  /// 라인업 데이터 로드 (필요시 경기정보/전체 선수/라인업 동기화 후)
   func loadLineupWithSync(for teamId: TeamID) async throws -> LineupData
 
   /// 강제 새로고침

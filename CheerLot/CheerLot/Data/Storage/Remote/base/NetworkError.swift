@@ -19,8 +19,9 @@ enum APIType {
   }
 
   enum TeamAPIType {
-    case gameInfo
+    case todayGameInfo
     case versions
+    case gamesInfo
   }
 }
 

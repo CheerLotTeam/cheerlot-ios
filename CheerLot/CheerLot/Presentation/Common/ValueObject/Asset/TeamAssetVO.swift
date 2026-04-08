@@ -40,6 +40,7 @@ final class TeamAssetVO {
     }
   }()
 
+  // MARK: - Images
   lazy var coverImageName: String = {
     "\(assetPrefix)_cover"
   }()

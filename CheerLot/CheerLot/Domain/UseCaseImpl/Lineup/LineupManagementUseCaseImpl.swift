@@ -71,14 +71,12 @@ final class LineupManagementUseCaseImpl: LineupManagementUseCase {
     let needsPlayersSync = localVersions.playersVersion != serverVersions.playersVersion
     let needsLineupSync = localVersions.lineupVersion != serverVersions.lineupVersion
 
-    // 경기 정보는 매일 바뀌므로 항상 갱신
-    try await syncGameInfo(teamId)
-
     if needsPlayersSync {
       try await syncPlayers(teamId, newVersion: serverVersions.playersVersion)
     }
 
     if needsLineupSync {
+      try await syncGameInfo(teamId)
       try await syncLineup(teamId, newVersion: serverVersions.lineupVersion)
     }
   }
@@ -94,7 +92,7 @@ final class LineupManagementUseCaseImpl: LineupManagementUseCase {
   // MARK: - Private Methods - Individual Sync
 
   private func syncGameInfo(_ teamId: TeamID) async throws {
-    let gameInfo = try await teamRemoteRepository.fetchGameInfo(teamId)
+    let gameInfo = try await teamRemoteRepository.fetchTodayGameInfo(teamId)
 
     guard let localTeam = try await teamLocalRepository.fetchTeam(teamId) else {
       throw LocalStorageError.notFound
