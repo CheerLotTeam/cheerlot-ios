@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import WidgetKit
 
 final class TeamSelectionRepositoryImpl: TeamSelectionRepository {
 
@@ -34,8 +33,6 @@ final class TeamSelectionRepositoryImpl: TeamSelectionRepository {
   func updateSelectedTeam(_ teamId: TeamID) {
     sharedDefaults.set(teamId.value, forKey: UserDefaultsKey.selectedTeamId)
     sharedDefaults.set(true, forKey: UserDefaultsKey.hasSelectedTeam)
-    resetWidgetGameState()
-    WidgetCenter.shared.reloadAllTimelines()
 
     NotificationCenter.default.post(
       name: .teamSelected,
@@ -53,14 +50,6 @@ final class TeamSelectionRepositoryImpl: TeamSelectionRepository {
   }
 }
 
-extension TeamSelectionRepositoryImpl {
-  // 팀 변경시 이전 팀 데이터 초기화
-  private func resetWidgetGameState() {
-    sharedDefaults.set(false, forKey: UserDefaultsKey.Widget.hasTodayGame)
-    sharedDefaults.set(false, forKey: UserDefaultsKey.Widget.isSeasonEnded)
-    sharedDefaults.removeObject(forKey: UserDefaultsKey.Widget.opponentTeamId)
-  }
-}
 
 extension Notification.Name {
   static let teamSelected = Notification.Name("teamSelected")
