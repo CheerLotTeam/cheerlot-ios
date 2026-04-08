@@ -88,7 +88,7 @@ extension TeamGameScheduleDTO {
                 GameScheduleInfo(
                     date: game.date,
                     hasGame: game.hasGame,
-                    opponentTeamId: game.opponentTeamCode.map { TeamID($0) },
+                    opponentTeamId: game.opponentTeamCode.flatMap { TeamDataSource.fromAPICode($0) }.map { TeamID($0.rawValue) },
                     isHome: game.isHome,
                     starterPitcherName: game.starterPitcherName,
                     opponentStarterPitcherName: game.opponentStarterPitcherName
