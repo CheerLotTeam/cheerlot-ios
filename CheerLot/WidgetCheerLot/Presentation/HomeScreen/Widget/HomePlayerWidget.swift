@@ -25,6 +25,9 @@ struct HomePlayerEntry: TimelineEntry {
 // MARK: - Provider
 
 struct HomePlayerProvider: TimelineProvider {
+  @Injected(TeamSelectionUseCase.self) private var teamSelectionUseCase
+  @Injected(TeamInfoUseCase.self) private var teamInfoUseCase
+
   func placeholder(in context: Context) -> HomePlayerEntry {
     HomePlayerEntry(
       date: .now,
@@ -51,28 +54,26 @@ struct HomePlayerProvider: TimelineProvider {
   }
 
   private func fetchEntry() -> HomePlayerEntry {
-    guard
-      let defaults = UserDefaults(suiteName: AppGroup.id),
-      let teamId = defaults.string(forKey: UserDefaultsKey.selectedTeamId)
-    else {
+    guard let teamInfo = teamSelectionUseCase.getCurrentTeam() else {
       return HomePlayerEntry(
-        date: .now, displayState: .team(teamId: "SAMSUNG", teamName: "삼성", totalSongCount: 0))
+        date: .now,
+        displayState: .team(teamId: "SAMSUNG", teamName: "삼성", totalSongCount: 0)
+      )
     }
 
-    let asset = HomeTeamAssetVO(base: WidgetTeamAssetVO(teamId))
-    let playerName = defaults.string(forKey: UserDefaultsKey.Widget.playerName)
+    let defaults = UserDefaults(suiteName: AppGroup.id)
+    let playerName = defaults?.string(forKey: UserDefaultsKey.Widget.playerName)
 
     if let playerName {
       return HomePlayerEntry(
         date: .now,
-        displayState: .player(teamId: teamId, playerName: playerName)
+        displayState: .player(teamId: teamInfo.id.value, playerName: playerName)
       )
     } else {
-      let songCount = defaults.integer(forKey: UserDefaultsKey.Widget.totalSongCount)
-      let teamName = asset.shortName
+      let songCount = defaults?.integer(forKey: UserDefaultsKey.Widget.totalSongCount) ?? 0
       return HomePlayerEntry(
         date: .now,
-        displayState: .team(teamId: teamId, teamName: teamName, totalSongCount: songCount)
+        displayState: .team(teamId: teamInfo.id.value, teamName: teamInfo.shortName, totalSongCount: songCount)
       )
     }
   }
@@ -87,7 +88,7 @@ struct HomePlayerWidgetView: View {
     switch entry.displayState {
     case .team(let teamId, let teamName, let totalSongCount):
       TeamStateView(
-        asset: HomeTeamAssetVO(base: WidgetTeamAssetVO(teamId)),
+        asset: WidgetTeamAssetVO(TeamID(teamId)),
         teamName: teamName,
         totalSongCount: totalSongCount
       )
@@ -95,7 +96,7 @@ struct HomePlayerWidgetView: View {
 
     case .player(let teamId, let playerName):
       PlayerStateView(
-        asset: HomeTeamAssetVO(base: WidgetTeamAssetVO(teamId)),
+        asset: WidgetTeamAssetVO(TeamID(teamId)),
         playerName: playerName
       )
       .widgetURL(URL(string: "cheerlot://playerSong"))
@@ -106,7 +107,7 @@ struct HomePlayerWidgetView: View {
 // MARK: - TeamStateView
 
 private struct TeamStateView: View {
-  let asset: HomeTeamAssetVO
+  let asset: WidgetTeamAssetVO
   let teamName: String
   let totalSongCount: Int
 
@@ -161,7 +162,7 @@ private struct TeamStateView: View {
 // MARK: - PlayerStateView
 
 private struct PlayerStateView: View {
-  let asset: HomeTeamAssetVO
+  let asset: WidgetTeamAssetVO
   let playerName: String
 
   var body: some View {
@@ -241,6 +242,7 @@ struct HomePlayerWidget: Widget {
     .configurationDisplayName("응원가 플레이어")
     .description("응원가를 홈화면에서 바로 재생하세요.")
     .supportedFamilies([.systemSmall])
+    .contentMarginsDisabledIfAvailable()
   }
 }
 
