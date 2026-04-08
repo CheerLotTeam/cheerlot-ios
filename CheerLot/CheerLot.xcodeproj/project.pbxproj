@@ -88,6 +88,7 @@
 				Data/DTOs/APIResponse/TeamResponseDTO.swift,
 				Data/RepositoryImpl/Player/PlayerLocalRepositoryImpl.swift,
 				Data/RepositoryImpl/Player/PlayerRemoteRepositoryImpl.swift,
+				Data/RepositoryImpl/Setting/UserSettingsRepositoryImpl.swift,
 				Data/RepositoryImpl/Team/TeamInfoRepositoryImpl.swift,
 				Data/RepositoryImpl/Team/TeamLocalRepositoryImpl.swift,
 				Data/RepositoryImpl/Team/TeamRemoteRepositoryImpl.swift,
@@ -114,15 +115,14 @@
 				Domain/Entity/Team/TeamVersionInfo.swift,
 				Domain/Repository/Interface/Player/PlayerLocalRepository.swift,
 				Domain/Repository/Interface/Player/PlayerRemoteRepository.swift,
+				Domain/Repository/Interface/Setting/UserSettingsRepository.swift,
 				Domain/Repository/Interface/Team/TeamInfoRepository.swift,
 				Domain/Repository/Interface/Team/TeamLocalRepository.swift,
 				Domain/Repository/Interface/Team/TeamRemoteRepository.swift,
 				Domain/Repository/Interface/Team/TeamSelectionRepository.swift,
-				Domain/UseCase/Lineup/LineupManagementUseCase.swift,
 				Domain/UseCase/Team/TeamGameInfoUseCase.swift,
 				Domain/UseCase/Team/TeamInfoUseCase.swift,
 				Domain/UseCase/Team/TeamSelectionUseCase.swift,
-				Domain/UseCaseImpl/Lineup/LineupManagementUseCaseImpl.swift,
 				Domain/UseCaseImpl/Team/TeamGameInfoUseCaseImpl.swift,
 				Domain/UseCaseImpl/Team/TeamInfoUseCaseImpl.swift,
 				Domain/UseCaseImpl/Team/TeamSelectionUseCaseImpl.swift,
@@ -531,7 +531,7 @@
 				INFOPLIST_FILE = WidgetCheerLot/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = WidgetCheerLot;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 26.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -544,11 +544,15 @@
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "match Development group.com.CheerLot.WidgetCheerLot";
 				SKIP_INSTALL = YES;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -568,7 +572,7 @@
 				INFOPLIST_FILE = WidgetCheerLot/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = WidgetCheerLot;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 26.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -581,11 +585,15 @@
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "match AppStore group.com.CheerLot.WidgetCheerLot";
 				SKIP_INSTALL = YES;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
