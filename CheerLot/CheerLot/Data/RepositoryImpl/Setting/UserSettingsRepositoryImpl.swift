@@ -9,27 +9,30 @@ import Foundation
 
 final class UserSettingsRepositoryImpl: UserSettingsRepository {
 
-  private let userDefaults: UserDefaults
+  private let sharedDefaults: UserDefaults
 
-  init(userDefaults: UserDefaults = .standard) {
-    self.userDefaults = userDefaults
-  }
+    init(appGroupIdentifier: String = AppGroup.id) {
+        guard let defaults = UserDefaults(suiteName: appGroupIdentifier) else {
+            fatalError("Failed to create UserDefaults with App Group")
+        }
+        self.sharedDefaults = defaults
+    }
 
   func getShowRecentLineup() -> Bool {
-    userDefaults.bool(forKey: UserDefaultsKey.showRecentLineup)
+    sharedDefaults.bool(forKey: UserDefaultsKey.showRecentLineup)
   }
 
   func setShowRecentLineup(_ value: Bool) {
-    userDefaults.set(value, forKey: UserDefaultsKey.showRecentLineup)
+    sharedDefaults.set(value, forKey: UserDefaultsKey.showRecentLineup)
   }
 
   func resetShowRecentLineup() {
-    userDefaults.set(false, forKey: UserDefaultsKey.showRecentLineup)
+    sharedDefaults.set(false, forKey: UserDefaultsKey.showRecentLineup)
   }
 
   func getAppIconMode() -> AppIconMode {
     guard
-      let rawValue = userDefaults.string(forKey: UserDefaultsKey.appIconMode),
+      let rawValue = sharedDefaults.string(forKey: UserDefaultsKey.appIconMode),
       let mode = AppIconMode(rawValue: rawValue)
     else {
       return .base
@@ -38,6 +41,6 @@ final class UserSettingsRepositoryImpl: UserSettingsRepository {
   }
 
   func setAppIconMode(_ mode: AppIconMode) {
-    userDefaults.set(mode.rawValue, forKey: UserDefaultsKey.appIconMode)
+    sharedDefaults.set(mode.rawValue, forKey: UserDefaultsKey.appIconMode)
   }
 }
