@@ -126,6 +126,7 @@
 				Domain/UseCaseImpl/Team/TeamGameInfoUseCaseImpl.swift,
 				Domain/UseCaseImpl/Team/TeamInfoUseCaseImpl.swift,
 				Domain/UseCaseImpl/Team/TeamSelectionUseCaseImpl.swift,
+				Presentation/Setting/ValueObject/AppIconMode.swift,
 				"Resource/Fonts/Pretendard-Bold.otf",
 				"Resource/Fonts/Pretendard-Medium.otf",
 				"Resource/Fonts/Pretendard-Regular.otf",
