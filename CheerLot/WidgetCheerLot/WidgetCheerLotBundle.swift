@@ -10,6 +10,10 @@ import WidgetKit
 
 @main
 struct WidgetCheerLotBundle: WidgetBundle {
+  init() {
+    WidgetDIContainer.shared.assemble()
+  }
+
   var body: some Widget {
     WidgetCheerLot()
     WidgetCheerLotControl()
@@ -17,5 +21,6 @@ struct WidgetCheerLotBundle: WidgetBundle {
     LockScreenInlineWidget()
     LockScreenRectangularWidget()
     HomePlayerWidget()
+    HomeGameInfoSmallWidget()
   }
 }
