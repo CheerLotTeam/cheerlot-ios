@@ -7,6 +7,7 @@
 
 import Foundation
 import Moya
+internal import Alamofire
 
 enum PlayerAPI {
   case getLineup(teamCode: String)

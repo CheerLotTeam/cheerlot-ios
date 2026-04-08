@@ -7,6 +7,7 @@
 
 import Foundation
 import Moya
+internal import Alamofire
 
 enum AudioAPI {
   case streamAudio(fileName: String)
