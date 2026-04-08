@@ -50,7 +50,6 @@ final class TeamSelectionRepositoryImpl: TeamSelectionRepository {
   }
 }
 
-
 extension Notification.Name {
   static let teamSelected = Notification.Name("teamSelected")
 }

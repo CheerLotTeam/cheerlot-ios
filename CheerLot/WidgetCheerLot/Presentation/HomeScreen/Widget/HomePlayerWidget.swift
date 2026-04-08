@@ -73,7 +73,8 @@ struct HomePlayerProvider: TimelineProvider {
       let songCount = defaults?.integer(forKey: UserDefaultsKey.Widget.totalSongCount) ?? 0
       return HomePlayerEntry(
         date: .now,
-        displayState: .team(teamId: teamInfo.id.value, teamName: teamInfo.shortName, totalSongCount: songCount)
+        displayState: .team(
+          teamId: teamInfo.id.value, teamName: teamInfo.shortName, totalSongCount: songCount)
       )
     }
   }

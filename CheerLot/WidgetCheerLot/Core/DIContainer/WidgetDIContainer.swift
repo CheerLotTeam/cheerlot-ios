@@ -80,7 +80,7 @@ extension WidgetDIContainer {
     registerSingleton(TeamRemoteRepository.self) {
       TeamRemoteRepositoryImpl()
     }
-      
+
     registerSingleton(PlayerLocalRepository.self) {
       PlayerLocalRepositoryImpl(modelContainer: WidgetLocalStorage.shared.modelContainer)
     }

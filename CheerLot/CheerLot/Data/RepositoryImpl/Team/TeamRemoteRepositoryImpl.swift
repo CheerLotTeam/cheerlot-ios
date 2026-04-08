@@ -60,38 +60,38 @@ final class TeamRemoteRepositoryImpl: TeamRemoteRepository {
       }
     }
   }
-    
-    func fetchGamesSchedule(_ teamId: TeamID) async throws -> TeamGameScheduleInfo {
-        let apiTeamCode = try convertTeamIdToAPICode(teamId)
-        
-        return try await withCheckedThrowingContinuation { continuation in
-            provider.request(.getTeamGamesInfo(teamCode: apiTeamCode)) { result in
-                switch result {
-                case .success(let response):
-                    do {
-                        let dto = try response.map(TeamGameScheduleDTO.self)
-                        continuation.resume(returning: dto.toEntity())
-                    } catch {
-                        continuation.resume(throwing: NetworkError.decodingError(error))
-                    }
-                case .failure(let error):
-                  continuation.resume(
-                    throwing: NetworkError.moyaError(error, api: .team(.gamesInfo))
-                  )
-                }
-            }
+
+  func fetchGamesSchedule(_ teamId: TeamID) async throws -> TeamGameScheduleInfo {
+    let apiTeamCode = try convertTeamIdToAPICode(teamId)
+
+    return try await withCheckedThrowingContinuation { continuation in
+      provider.request(.getTeamGamesInfo(teamCode: apiTeamCode)) { result in
+        switch result {
+        case .success(let response):
+          do {
+            let dto = try response.map(TeamGameScheduleDTO.self)
+            continuation.resume(returning: dto.toEntity())
+          } catch {
+            continuation.resume(throwing: NetworkError.decodingError(error))
+          }
+        case .failure(let error):
+          continuation.resume(
+            throwing: NetworkError.moyaError(error, api: .team(.gamesInfo))
+          )
         }
+      }
     }
+  }
 }
 
 extension TeamRemoteRepositoryImpl {
-    func convertTeamIdToAPICode(_ teamId: TeamID) throws -> String {
-        let normalizedId = teamId.value.uppercased()
-        
-        guard let teamCode = TeamDataSource.TeamCode(rawValue: normalizedId) else {
-            throw LocalStorageError.invalidData
-        }
-        
-        return TeamDataSource.toAPICode(teamCode)
+  func convertTeamIdToAPICode(_ teamId: TeamID) throws -> String {
+    let normalizedId = teamId.value.uppercased()
+
+    guard let teamCode = TeamDataSource.TeamCode(rawValue: normalizedId) else {
+      throw LocalStorageError.invalidData
     }
+
+    return TeamDataSource.toAPICode(teamCode)
+  }
 }

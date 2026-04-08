@@ -5,9 +5,9 @@
 //  Created by 이현주 on 3/2/26.
 //
 
+internal import Alamofire
 import Foundation
 import Moya
-internal import Alamofire
 
 enum TeamAPI {
   case getTeamTodayGameInfo(teamCode: String)

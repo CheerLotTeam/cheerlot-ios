@@ -27,22 +27,27 @@ struct HomeGameInfoSmallWidgetView: View {
     if entry.gameStatus == .teamEmpty {
       TeamEmptyView(isSmallSize: true)
     } else {
-      let title: String = switch entry.gameStatus {
-      case .playingToday: "\(entry.teamShortName) vs \(entry.gameSchedule.first?.opponentShortName ?? "")"
-      case .offDay:       "경기 없음"
-      case .seasonEnded:  "시즌 종료"
-      case .teamEmpty:    ""
-      }
-      let capsuleTitle: String = switch entry.gameStatus {
-      case .playingToday: "선발 라인업"
-      case .offDay:       "이전 라인업"
-      case .seasonEnded:  "최근 라인업"
-      case .teamEmpty:    ""
-      }
+      let title: String =
+        switch entry.gameStatus {
+        case .playingToday:
+          "\(entry.teamShortName) vs \(entry.gameSchedule.first?.opponentShortName ?? "")"
+        case .offDay: "경기 없음"
+        case .seasonEnded: "시즌 종료"
+        case .teamEmpty: ""
+        }
+      let capsuleTitle: String =
+        switch entry.gameStatus {
+        case .playingToday: "선발 라인업"
+        case .offDay: "이전 라인업"
+        case .seasonEnded: "최근 라인업"
+        case .teamEmpty: ""
+        }
       let opponents = entry.gameSchedule.map { game in
         game.hasGame ? (game.opponentShortName ?? "?") : "휴"
       }.joined(separator: " · ")
-      GameInfoView(isSmallSize: true, title: title, dateString: dateString, capsuleTitle: capsuleTitle, opponents: opponents, asset: asset)
+      GameInfoView(
+        isSmallSize: true, title: title, dateString: dateString, capsuleTitle: capsuleTitle,
+        opponents: opponents, asset: asset)
     }
   }
 }

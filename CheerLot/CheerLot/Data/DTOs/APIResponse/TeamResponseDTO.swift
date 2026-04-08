@@ -23,17 +23,17 @@ struct TeamVersionsDTO: Decodable {
 }
 
 struct TeamGameScheduleDTO: Decodable {
-    let teamCode: String
-    let recentGames: [TeamRecentGameDTO]
+  let teamCode: String
+  let recentGames: [TeamRecentGameDTO]
 }
 
 struct TeamRecentGameDTO: Decodable {
-    let date: String
-    let hasGame: Bool
-    let opponentTeamCode: String?
-    let isHome: Bool?
-    let starterPitcherName: String?
-    let opponentStarterPitcherName: String?
+  let date: String
+  let hasGame: Bool
+  let opponentTeamCode: String?
+  let isHome: Bool?
+  let starterPitcherName: String?
+  let opponentStarterPitcherName: String?
 }
 
 extension TeamGameDTO {
@@ -81,19 +81,21 @@ extension TeamVersionsDTO {
 }
 
 extension TeamGameScheduleDTO {
-    func toEntity() -> TeamGameScheduleInfo {
-        return TeamGameScheduleInfo(
-            id: TeamID(self.teamCode),
-            recentGames: self.recentGames.map { game in
-                GameScheduleInfo(
-                    date: game.date,
-                    hasGame: game.hasGame,
-                    opponentTeamId: game.opponentTeamCode.flatMap { TeamDataSource.fromAPICode($0) }.map { TeamID($0.rawValue) },
-                    isHome: game.isHome,
-                    starterPitcherName: game.starterPitcherName,
-                    opponentStarterPitcherName: game.opponentStarterPitcherName
-                )
-            }
+  func toEntity() -> TeamGameScheduleInfo {
+    return TeamGameScheduleInfo(
+      id: TeamID(self.teamCode),
+      recentGames: self.recentGames.map { game in
+        GameScheduleInfo(
+          date: game.date,
+          hasGame: game.hasGame,
+          opponentTeamId: game.opponentTeamCode.flatMap { TeamDataSource.fromAPICode($0) }.map {
+            TeamID($0.rawValue)
+          },
+          isHome: game.isHome,
+          starterPitcherName: game.starterPitcherName,
+          opponentStarterPitcherName: game.opponentStarterPitcherName
         )
-    }
+      }
+    )
+  }
 }

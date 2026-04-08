@@ -17,10 +17,10 @@ struct TeamGamesEntry: TimelineEntry {
 }
 
 enum WidgetGameStatus: Equatable {
-    case teamEmpty
-    case playingToday
-    case offDay
-    case seasonEnded
+  case teamEmpty
+  case playingToday
+  case offDay
+  case seasonEnded
 }
 
 struct Game {

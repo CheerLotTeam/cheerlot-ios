@@ -15,12 +15,12 @@ struct LockScreenInlineWidgetView: View {
 
   private var statusText: String {
     switch entry.gameStatus {
-    case .teamEmpty:    return "팀 정보 없음"
+    case .teamEmpty: return "팀 정보 없음"
     case .playingToday:
       let opponent = entry.gameSchedule.first?.opponentShortName ?? ""
       return "\(entry.teamShortName) VS \(opponent)"
-    case .offDay:       return "경기 없음"
-    case .seasonEnded:  return "시즌 종료"
+    case .offDay: return "경기 없음"
+    case .seasonEnded: return "시즌 종료"
     }
   }
 

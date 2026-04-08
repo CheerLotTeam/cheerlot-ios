@@ -8,21 +8,21 @@
 import Foundation
 
 final class GameScheduleRepositoryImpl: GameScheduleRepository {
-  private let defaults: UserDefaults?
+  private let sharedDefaults: UserDefaults?
 
   init() {
-    self.defaults = UserDefaults(suiteName: AppGroup.id)
+    self.sharedDefaults = UserDefaults(suiteName: AppGroup.id)
   }
 
   func saveGameSchedule(_ schedule: TeamGameScheduleInfo, for teamId: TeamID) {
     let dto = GameScheduleStorageDTO.from(schedule)
     guard let data = try? JSONEncoder().encode(dto) else { return }
-    defaults?.set(data, forKey: storageKey(for: teamId))
+    sharedDefaults?.set(data, forKey: storageKey(for: teamId))
   }
 
   func fetchGameSchedule(for teamId: TeamID) -> TeamGameScheduleInfo? {
     guard
-      let data = defaults?.data(forKey: storageKey(for: teamId)),
+      let data = sharedDefaults?.data(forKey: storageKey(for: teamId)),
       let dto = try? JSONDecoder().decode(GameScheduleStorageDTO.self, from: data)
     else { return nil }
     return dto.toDomain()

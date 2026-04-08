@@ -92,14 +92,14 @@ struct TeamGamesProvider: TimelineProvider {
       gameStatus: mapStatus(gameStatus)
     )
   }
-    
-    private func mapStatus(_ gameStatus: GameStatus) -> WidgetGameStatus {
-        switch gameStatus {
-        case .playingToday: return .playingToday
-        case .offDay:       return .offDay
-        case .seasonEnded:  return .seasonEnded
-        }
+
+  private func mapStatus(_ gameStatus: GameStatus) -> WidgetGameStatus {
+    switch gameStatus {
+    case .playingToday: return .playingToday
+    case .offDay: return .offDay
+    case .seasonEnded: return .seasonEnded
     }
+  }
 
   // 00시 8분, 경기 시간 1시간 전 등...
   // 현재는 00시 8분만 호출 -> 수정 필요

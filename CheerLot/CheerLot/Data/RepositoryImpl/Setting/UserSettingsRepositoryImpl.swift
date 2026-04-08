@@ -11,12 +11,12 @@ final class UserSettingsRepositoryImpl: UserSettingsRepository {
 
   private let sharedDefaults: UserDefaults
 
-    init(appGroupIdentifier: String = AppGroup.id) {
-        guard let defaults = UserDefaults(suiteName: appGroupIdentifier) else {
-            fatalError("Failed to create UserDefaults with App Group")
-        }
-        self.sharedDefaults = defaults
+  init(appGroupIdentifier: String = AppGroup.id) {
+    guard let defaults = UserDefaults(suiteName: appGroupIdentifier) else {
+      fatalError("Failed to create UserDefaults with App Group")
     }
+    self.sharedDefaults = defaults
+  }
 
   func getShowRecentLineup() -> Bool {
     sharedDefaults.bool(forKey: UserDefaultsKey.showRecentLineup)

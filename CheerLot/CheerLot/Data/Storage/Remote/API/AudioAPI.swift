@@ -5,9 +5,9 @@
 //  Created by 이현주 on 3/3/26.
 //
 
+internal import Alamofire
 import Foundation
 import Moya
-internal import Alamofire
 
 enum AudioAPI {
   case streamAudio(fileName: String)

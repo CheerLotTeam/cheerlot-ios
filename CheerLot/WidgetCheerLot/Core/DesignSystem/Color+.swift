@@ -28,7 +28,7 @@ extension Color {
     let color500: Color
     let color600: Color
   }
-    
+
   static let appPrimary = Color.sky600
   static let appSecondary = Color.seam400
 
