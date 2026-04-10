@@ -73,12 +73,14 @@ struct TeamGamesProvider: TimelineProvider {
     let games = schedule.recentGames.map { info in
       let opponentInfo = info.opponentTeamId.flatMap { teamInfoUseCase.getTeamInfo($0) }
       return Game(
+        id:dateFormatter.date(from: info.date) ?? .now,
         date: dateFormatter.date(from: info.date) ?? .now,
         hasGame: info.hasGame,
         starterPitcherName: info.starterPitcherName,
         opponentId: info.opponentTeamId?.value,
         opponentShortName: opponentInfo?.shortName,
         opponentLongName: opponentInfo?.longName,
+        opponentStarterPitcherName: info.opponentStarterPitcherName,
         isHome: info.isHome
       )
     }
