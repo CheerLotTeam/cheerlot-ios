@@ -23,13 +23,15 @@ enum WidgetGameStatus: Equatable {
   case seasonEnded
 }
 
-struct Game {
+struct Game: Identifiable {
+  let id: Date
   let date: Date
   let hasGame: Bool
   let starterPitcherName: String?
   let opponentId: String?
   let opponentShortName: String?
   let opponentLongName: String?
+  let opponentStarterPitcherName: String?
   let isHome: Bool?
 }
 
@@ -43,30 +45,36 @@ extension TeamGamesEntry {
     teamLongName: "삼성 라이온즈",
     gameSchedule: [
       Game(
+        id: .now,
         date: .now,
         hasGame: true,
         starterPitcherName: "원태인",
         opponentId: "HANWHA",
         opponentShortName: "한화",
         opponentLongName: "한화 이글스",
+        opponentStarterPitcherName: "문동주",
         isHome: true
       ),
       Game(
+        id: Calendar.current.date(byAdding: .day, value: 1, to: .now)!,
         date: Calendar.current.date(byAdding: .day, value: 1, to: .now)!,
         hasGame: false,
         starterPitcherName: nil,
         opponentId: nil,
         opponentShortName: nil,
         opponentLongName: nil,
+        opponentStarterPitcherName: nil,
         isHome: nil
       ),
       Game(
+        id: Calendar.current.date(byAdding: .day, value: 2, to: .now)!,
         date: Calendar.current.date(byAdding: .day, value: 2, to: .now)!,
         hasGame: true,
         starterPitcherName: "후라도",
         opponentId: "LG",
         opponentShortName: "LG",
         opponentLongName: "LG 트윈스",
+        opponentStarterPitcherName: "김진성",
         isHome: false
       ),
     ],
