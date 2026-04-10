@@ -41,11 +41,11 @@ extension HomeGameInfoMediumWidgetView {
                 
                 teamAsset.widgetBackgroundGradient.opacity(0.2)
                 
-//                Image(.teamCardBG)
-//                    .resizable()
-//                    .scaledToFill()
-//                    .opacity(0.3)
-//                    .blendMode(.softLight)
+                Image(.teamCardBG)
+                    .resizable()
+                    .scaledToFill()
+                    .opacity(0.3)
+                    .blendMode(.softLight)
                 
                 contentsView
             }
@@ -67,7 +67,7 @@ extension HomeGameInfoMediumWidgetView {
     }
     
     private var gameInfoContentsView: some View {
-        HStack(spacing: 33) {
+        HStack(spacing: 37) {
             teamInfoView(
                 asset: teamAsset,
                 team: entry.teamLongName,
@@ -106,23 +106,26 @@ extension HomeGameInfoMediumWidgetView {
                 .scaledToFit()
                 .frame(width: 56)
                 .shadow(color: .white.opacity(0.1), radius: 20, x: 0, y: 0)
-            
+
             Text(team)
                 .font(.SB8)
                 .foregroundStyle(.grayWhite)
-            
+                .fixedSize()
+
             if let pitcher {
                 HStack(spacing: 2) {
                     Image(.pitcher)
                         .resizable()
                         .scaledToFit()
                         .frame(width: 10)
-                    
+
                     Text(pitcher)
                         .font(.M6)
+                        .fixedSize()
                 }
                 .foregroundStyle(teamAsset.primaryPalette.color200)
             }
         }
+        .frame(width: 56)
     }
 }

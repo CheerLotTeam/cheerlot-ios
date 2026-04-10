@@ -20,12 +20,14 @@ struct GameInfoView: View {
                 asset.primaryColor
                 
                 asset.widgetBackgroundGradient.opacity(0.2)
-                
-//                Image(.teamCardBG)
-//                    .resizable()
-//                    .scaledToFill()
-//                    .opacity(0.3)
-//                    .blendMode(.softLight)
+                    .overlay {
+                        Image(.teamCardBG)
+                            .resizable()
+                            .scaledToFill()
+                            .opacity(0.3)
+                            .blendMode(.softLight)
+                            .clipped()
+                    }
                 
                 contentsView
             }
