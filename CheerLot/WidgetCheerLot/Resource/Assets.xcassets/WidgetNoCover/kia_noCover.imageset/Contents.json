@@ -1,15 +1,12 @@
 {
   "images" : [
     {
-      "filename" : "Image.png",
+      "filename" : "kia_noCover.png",
       "idiom" : "universal"
     }
   ],
   "info" : {
     "author" : "xcode",
     "version" : 1
-  },
-  "properties" : {
-    "preserves-vector-representation" : true
   }
 }
