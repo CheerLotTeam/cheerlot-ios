@@ -23,24 +23,14 @@ struct TeamEmptyView: View {
         endPoint: .bottom
       )
       .opacity(0.2)
-
-      VStack(spacing: 0) {
-        Spacer()
-        Spacer()
-        TextView
-        Spacer()
-        CapsuleBaseView(
-          title: "팀 설정하기",
-          bgColor: .appPrimary
-        )
-        Spacer()
-      }
+        
+      contentsView
     }
   }
 }
 
 extension TeamEmptyView {
-  private var TextView: some View {
+  private var textView: some View {
     VStack(spacing: 2) {
       Text("팀 정보 없음")
         .font(isSmallSize ? .SB5 : .SB3)
@@ -53,6 +43,20 @@ extension TeamEmptyView {
       }
     }
   }
+    
+    private var contentsView: some View {
+        VStack(spacing: 0) {
+          Spacer()
+          Spacer()
+          textView
+          Spacer()
+          CapsuleBaseView(
+            title: "팀 설정하기",
+            bgColor: .appPrimary
+          )
+          Spacer()
+        }
+    }
 }
 
 #Preview {
