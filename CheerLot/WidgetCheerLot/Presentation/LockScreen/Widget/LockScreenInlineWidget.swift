@@ -41,7 +41,7 @@ struct LockScreenInlineWidgetView: View {
 // MARK: - Widget
 
 struct LockScreenInlineWidget: Widget {
-  let kind: String = "LockScreenInlineWidget"
+  let kind: String = WidgetKind.lockGameInfoInline
 
   var body: some WidgetConfiguration {
     StaticConfiguration(kind: kind, provider: TeamGamesProvider()) { entry in

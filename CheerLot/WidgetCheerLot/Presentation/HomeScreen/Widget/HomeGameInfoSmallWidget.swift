@@ -55,7 +55,7 @@ struct HomeGameInfoSmallWidgetView: View {
 // MARK: - Widget
 
 struct HomeGameInfoSmallWidget: Widget {
-  let kind: String = "HomeGameInfoSmallWidget"
+    let kind: String = WidgetKind.homeGameInfoSmall
 
   var body: some WidgetConfiguration {
     StaticConfiguration(kind: kind, provider: TeamGamesProvider()) { entry in

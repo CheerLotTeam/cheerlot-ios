@@ -44,7 +44,7 @@ struct LockScreenCircularWidgetView: View {
 // MARK: - Widget
 
 struct LockScreenCircularWidget: Widget {
-  let kind: String = "LockScreenCircularWidget"
+    let kind: String = WidgetKind.lockGameInfoCircular
 
   var body: some WidgetConfiguration {
     StaticConfiguration(kind: kind, provider: StaticProvider()) { _ in
