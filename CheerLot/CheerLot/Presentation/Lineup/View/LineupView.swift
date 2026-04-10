@@ -165,8 +165,8 @@ extension LineupView {
         HStack(spacing: 2) {
           Image(.pitcher)
             .resizable()
-            .frame(width: 12, height: 12)
             .scaledToFit()
+            .frame(width: 12)
 
           Text(starterPitcher)
             .font(.B4)

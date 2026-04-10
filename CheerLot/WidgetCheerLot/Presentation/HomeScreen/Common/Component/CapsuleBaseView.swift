@@ -12,14 +12,12 @@ struct CapsuleBaseView: View {
   let bgColor: Color
 
   var body: some View {
-    HStack(spacing: 3) {
+    HStack(spacing: 1) {
       Text(title)
         .font(.M6)
 
       Image(systemName: "baseball.diamond.bases")
-        .resizable()
-        .aspectRatio(contentMode: .fit)
-        .frame(width: 16)
+        .font(.system(size: 9, weight: .regular))
     }
     .foregroundStyle(.grayWhite)
     .padding(.horizontal, 9)

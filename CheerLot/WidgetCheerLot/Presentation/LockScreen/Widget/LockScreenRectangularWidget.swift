@@ -47,7 +47,7 @@ struct LockScreenRectangularWidgetView: View {
 // MARK: - Widget
 
 struct LockScreenRectangularWidget: Widget {
-  let kind: String = "LockScreenRectangularWidget"
+  let kind: String = WidgetKind.lockGameInfoRectangular
 
   var body: some WidgetConfiguration {
     StaticConfiguration(kind: kind, provider: TeamGamesProvider()) { entry in

@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "hh_noCover.png",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

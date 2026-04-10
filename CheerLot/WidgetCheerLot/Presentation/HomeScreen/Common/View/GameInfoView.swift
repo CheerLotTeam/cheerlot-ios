@@ -12,38 +12,34 @@ struct GameInfoView: View {
   let title: String
   let dateString: String
   let capsuleTitle: String
-  let opponents: String
   let asset: WidgetTeamAssetVO
 
   var body: some View {
-    ZStack {
-      asset.primaryColor
+    ZStack(alignment: .topTrailing) {
+      ZStack {
+        asset.primaryColor
 
-      asset.widgetBackgroundGradient.opacity(0.2)
+        asset.widgetBackgroundGradient.opacity(0.2)
+          .overlay {
+            Image(.teamCardBG)
+              .resizable()
+              .scaledToFill()
+              .opacity(0.3)
+              .blendMode(.softLight)
+              .clipped()
+          }
 
-      //            Image(.teamCardBG)
-      //                .resizable()
-      //                .scaledToFill()
-      //                .opacity(0.3)
-      //                .blendMode(.softLight)
-
-      VStack(spacing: 0) {
-        Spacer()
-        Spacer()
-        TextView
-        Spacer()
-        CapsuleBaseView(
-          title: capsuleTitle,
-          bgColor: asset.primaryPalette.color500
-        )
-        Spacer()
+        contentsView
       }
+
+      ReloadButton(color: asset.primaryPalette.color200)
+        .padding([.top, .trailing], 18)
     }
   }
 }
 
 extension GameInfoView {
-  private var TextView: some View {
+  private var textView: some View {
     VStack(spacing: isSmallSize ? 0 : 2) {
       Text(dateString)
         .font(.M5)
@@ -52,16 +48,26 @@ extension GameInfoView {
       Text(title)
         .font(isSmallSize ? .SB5 : .SB3)
         .foregroundStyle(.grayWhite)
+    }
+  }
 
-      Text(opponents)
-        .font(.M5)
-        .foregroundStyle(.grayWhite)
+  private var contentsView: some View {
+    VStack(spacing: 0) {
+      Spacer()
+      Spacer()
+      textView
+      Spacer()
+      CapsuleBaseView(
+        title: capsuleTitle,
+        bgColor: asset.primaryPalette.color500
+      )
+      Spacer()
     }
   }
 }
 
 #Preview {
   GameInfoView(
-    isSmallSize: true, title: "시즌 종료", dateString: "00월 00일", capsuleTitle: "최근 라인업", opponents: "",
+    isSmallSize: true, title: "시즌 종료", dateString: "00월 00일", capsuleTitle: "최근 라인업",
     asset: WidgetTeamAssetVO(TeamID(TeamDataSource.TeamCode.samsung.rawValue)))
 }
