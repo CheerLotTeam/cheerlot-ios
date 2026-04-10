@@ -15,35 +15,30 @@ struct GameInfoView: View {
   let opponents: String
   let asset: WidgetTeamAssetVO
 
-  var body: some View {
-    ZStack {
-      asset.primaryColor
-
-      asset.widgetBackgroundGradient.opacity(0.2)
-
-      //            Image(.teamCardBG)
-      //                .resizable()
-      //                .scaledToFill()
-      //                .opacity(0.3)
-      //                .blendMode(.softLight)
-
-      VStack(spacing: 0) {
-        Spacer()
-        Spacer()
-        TextView
-        Spacer()
-        CapsuleBaseView(
-          title: capsuleTitle,
-          bgColor: asset.primaryPalette.color500
-        )
-        Spacer()
-      }
+    var body: some View {
+        ZStack(alignment: .topTrailing) {
+            ZStack {
+                asset.primaryColor
+                
+                asset.widgetBackgroundGradient.opacity(0.2)
+                
+                //            Image(.teamCardBG)
+                //                .resizable()
+                //                .scaledToFill()
+                //                .opacity(0.3)
+                //                .blendMode(.softLight)
+                
+                contentsView
+            }
+            
+            ReloadButton(color: asset.primaryPalette.color200)
+                .padding([.top, .trailing], 18)
+        }
     }
-  }
 }
 
 extension GameInfoView {
-  private var TextView: some View {
+  private var textView: some View {
     VStack(spacing: isSmallSize ? 0 : 2) {
       Text(dateString)
         .font(.M5)
@@ -52,12 +47,22 @@ extension GameInfoView {
       Text(title)
         .font(isSmallSize ? .SB5 : .SB3)
         .foregroundStyle(.grayWhite)
-
-      Text(opponents)
-        .font(.M5)
-        .foregroundStyle(.grayWhite)
     }
   }
+    
+    private var contentsView: some View {
+        VStack(spacing: 0) {
+            Spacer()
+            Spacer()
+            textView
+            Spacer()
+            CapsuleBaseView(
+                title: capsuleTitle,
+                bgColor: asset.primaryPalette.color500
+            )
+            Spacer()
+        }
+    }
 }
 
 #Preview {
