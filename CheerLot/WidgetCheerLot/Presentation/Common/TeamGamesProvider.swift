@@ -101,12 +101,11 @@ struct TeamGamesProvider: TimelineProvider {
     }
   }
 
-  // 00시 8분, 경기 시간 1시간 전 등...
-  // 현재는 00시 8분만 호출 -> 수정 필요
+  // 서버 업데이트 시간에 맞춰 00시 15분 호출
   private func nextUpdateDate() -> Date {
     let calendar = Calendar.current
     let tomorrow = calendar.date(byAdding: .day, value: 1, to: .now) ?? .now
     let midnight = calendar.startOfDay(for: tomorrow)
-    return calendar.date(byAdding: .minute, value: 8, to: midnight) ?? midnight
+    return calendar.date(byAdding: .minute, value: 15, to: midnight) ?? midnight
   }
 }
