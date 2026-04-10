@@ -11,7 +11,7 @@ struct HomeGameInfoSmallWidgetView: View {
   let entry: TeamGamesEntry
 
   private var dateString: String {
-      entry.date.koreanDateFormatted
+    entry.date.koreanDateFormatted
   }
 
   private var asset: WidgetTeamAssetVO {
@@ -37,9 +37,10 @@ struct HomeGameInfoSmallWidgetView: View {
         case .seasonEnded: "최근 라인업"
         case .teamEmpty: ""
         }
-      
+
       GameInfoView(
-        isSmallSize: true, title: title, dateString: dateString, capsuleTitle: capsuleTitle, asset: asset)
+        isSmallSize: true, title: title, dateString: dateString, capsuleTitle: capsuleTitle,
+        asset: asset)
     }
   }
 }

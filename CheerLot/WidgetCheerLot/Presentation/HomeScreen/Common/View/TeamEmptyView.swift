@@ -23,7 +23,7 @@ struct TeamEmptyView: View {
         endPoint: .bottom
       )
       .opacity(0.2)
-        
+
       contentsView
     }
   }
@@ -43,20 +43,20 @@ extension TeamEmptyView {
       }
     }
   }
-    
-    private var contentsView: some View {
-        VStack(spacing: 0) {
-          Spacer()
-          Spacer()
-          textView
-          Spacer()
-          CapsuleBaseView(
-            title: "팀 설정하기",
-            bgColor: .appPrimary
-          )
-          Spacer()
-        }
+
+  private var contentsView: some View {
+    VStack(spacing: 0) {
+      Spacer()
+      Spacer()
+      textView
+      Spacer()
+      CapsuleBaseView(
+        title: "팀 설정하기",
+        bgColor: .appPrimary
+      )
+      Spacer()
     }
+  }
 }
 
 #Preview {

@@ -9,7 +9,7 @@ import SwiftUI
 import WidgetKit
 
 struct HomeGameInfoMediumWidget: Widget {
-    let kind: String = WidgetKind.homeGameInfoMedium
+  let kind: String = WidgetKind.homeGameInfoMedium
 
   var body: some WidgetConfiguration {
     StaticConfiguration(kind: kind, provider: TeamGamesProvider()) { entry in
@@ -31,4 +31,3 @@ struct HomeGameInfoMediumWidget: Widget {
   TeamGamesEntry.preview
   TeamGamesEntry.fallback
 }
-

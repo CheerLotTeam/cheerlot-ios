@@ -15,7 +15,7 @@ struct WidgetCheerLotBundle: WidgetBundle {
   }
 
   var body: some Widget {
-//    WidgetCheerLot()
+    //    WidgetCheerLot()
     WidgetCheerLotControl()
     WidgetCheerLotLiveActivity()
     LockScreenInlineWidget()

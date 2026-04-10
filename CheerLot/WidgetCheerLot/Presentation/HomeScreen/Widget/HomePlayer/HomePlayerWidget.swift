@@ -233,7 +233,7 @@ private struct PlayButton: View {
 // MARK: - Widget
 
 struct HomePlayerWidget: Widget {
-    let kind: String = WidgetKind.homePlayerSmall
+  let kind: String = WidgetKind.homePlayerSmall
 
   var body: some WidgetConfiguration {
     StaticConfiguration(kind: kind, provider: HomePlayerProvider()) { entry in
