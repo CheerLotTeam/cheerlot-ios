@@ -30,9 +30,10 @@ struct LockScreenInlineWidgetView: View {
     } icon: {
       switch entry.gameStatus {
       case .playingToday:
-        Image("widgetIcon")
+        Image(.widgetIcon)
+          .symbolRenderingMode(.hierarchical)
       default:
-        Image(systemName: "baseball")
+        Image(systemName: "baseball.fill")
       }
     }
   }
