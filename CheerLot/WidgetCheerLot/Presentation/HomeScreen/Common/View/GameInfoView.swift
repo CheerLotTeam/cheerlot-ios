@@ -12,7 +12,6 @@ struct GameInfoView: View {
   let title: String
   let dateString: String
   let capsuleTitle: String
-  let opponents: String
   let asset: WidgetTeamAssetVO
 
     var body: some View {
@@ -22,11 +21,11 @@ struct GameInfoView: View {
                 
                 asset.widgetBackgroundGradient.opacity(0.2)
                 
-                //            Image(.teamCardBG)
-                //                .resizable()
-                //                .scaledToFill()
-                //                .opacity(0.3)
-                //                .blendMode(.softLight)
+//                Image(.teamCardBG)
+//                    .resizable()
+//                    .scaledToFill()
+//                    .opacity(0.3)
+//                    .blendMode(.softLight)
                 
                 contentsView
             }
@@ -67,6 +66,5 @@ extension GameInfoView {
 
 #Preview {
   GameInfoView(
-    isSmallSize: true, title: "시즌 종료", dateString: "00월 00일", capsuleTitle: "최근 라인업", opponents: "",
-    asset: WidgetTeamAssetVO(TeamID(TeamDataSource.TeamCode.samsung.rawValue)))
+    isSmallSize: true, title: "시즌 종료", dateString: "00월 00일", capsuleTitle: "최근 라인업", asset: WidgetTeamAssetVO(TeamID(TeamDataSource.TeamCode.samsung.rawValue)))
 }
