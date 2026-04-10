@@ -15,7 +15,7 @@ struct WidgetCheerLotBundle: WidgetBundle {
   }
 
   var body: some Widget {
-    WidgetCheerLot()
+//    WidgetCheerLot()
     WidgetCheerLotControl()
     WidgetCheerLotLiveActivity()
     LockScreenInlineWidget()
@@ -23,5 +23,7 @@ struct WidgetCheerLotBundle: WidgetBundle {
     LockScreenCircularWidget()
     HomePlayerWidget()
     HomeGameInfoSmallWidget()
+    HomeGameInfoMediumWidget()
+    HomeGameScheduleMediumWidget()
   }
 }
