@@ -16,11 +16,11 @@ enum WidgetKind {
   static let homeGameInfoMedium = "HomeGameInfoMediumWidget"
   static let homeGameScheduleMedium = "HomeGameScheduleMediumWidget"
 
-  static let homePlayerSmall = "HomePlayerWidget"
+  static let homePlaybackSmall = "HomePlaybackWidget"
 
   static let gameInfoWidgets = [
     lockGameInfoCircular, lockGameInfoRectangular, lockGameInfoInline, homeGameInfoSmall,
     homeGameInfoMedium, homeGameScheduleMedium,
   ]
-  static let musicWidgets = [homePlayerSmall]
+  static let musicWidgets = [homePlaybackSmall]
 }
