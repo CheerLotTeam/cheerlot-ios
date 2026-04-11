@@ -40,6 +40,7 @@ public struct TypeStyle {
 extension Font {
   public enum RobotoCondensed: String {
     case black = "RobotoCondensed-Black"
+    case medium = "RobotoCondensed-Medium"
 
     /// SwiftUI 폰트 반환
     func swiftUIFont(size: CGFloat) -> Font {
@@ -68,8 +69,24 @@ extension TypeStyle {
   public static let T4 = TypeStyle(
     font: Font.RobotoCondensed.black.swiftUIFont(size: 15),
     size: 15,
-    lineHeight: 0.9,
+    lineHeight: 1.0,
     letterSpacing: 0
+  )
+
+  /// Medium 15pt
+  public static let T5 = TypeStyle(
+    font: Font.RobotoCondensed.medium.swiftUIFont(size: 15),
+    size: 15,
+    lineHeight: 1.0,
+    letterSpacing: 0
+  )
+
+  /// Bold 28pt
+  public static let B1 = TypeStyle(
+    font: Font.Pretendard.bold.swiftUIFont(size: 28),
+    size: 28,
+    lineHeight: 1.3,
+    letterSpacing: -0.04
   )
 
   /// Bold 24pt

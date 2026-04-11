@@ -30,9 +30,10 @@ struct LockScreenInlineWidgetView: View {
     } icon: {
       switch entry.gameStatus {
       case .playingToday:
-        Image("widgetIcon")
+        Image(.widgetIcon)
+          .symbolRenderingMode(.hierarchical)
       default:
-        Image(systemName: "baseball")
+        Image(systemName: "baseball.fill")
       }
     }
   }
@@ -41,7 +42,7 @@ struct LockScreenInlineWidgetView: View {
 // MARK: - Widget
 
 struct LockScreenInlineWidget: Widget {
-  let kind: String = "LockScreenInlineWidget"
+  let kind: String = WidgetKind.lockGameInfoInline
 
   var body: some WidgetConfiguration {
     StaticConfiguration(kind: kind, provider: TeamGamesProvider()) { entry in
