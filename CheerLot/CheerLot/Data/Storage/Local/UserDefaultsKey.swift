@@ -15,6 +15,7 @@ enum UserDefaultsKey {
 
   enum Widget {
     static let playerName = "widget.playerName"
+    static let songTitle = "widget.songTitle"
     static let totalSongCount = "widget.totalSongCount"
     static let gameSchedule = "widget.gameSchedule"
   }
