@@ -14,6 +14,7 @@ struct TeamGameDTO: Decodable {
   let hasTodayGame: Bool
   let opponentTeamCode: String?
   let starterPitcherName: String?
+  let lineupUpdatedToday: Bool
 }
 
 struct TeamVersionsDTO: Decodable {
