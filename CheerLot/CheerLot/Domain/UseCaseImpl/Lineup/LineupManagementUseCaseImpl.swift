@@ -12,6 +12,7 @@ final class LineupManagementUseCaseImpl: LineupManagementUseCase {
   private let teamRemoteRepository: TeamRemoteRepository
   private let playerLocalRepository: PlayerLocalRepository
   private let playerRemoteRepository: PlayerRemoteRepository
+  private let gameScheduleRepository: GameScheduleRepository
   private let userSettingsRepository: UserSettingsRepository
   private let watchSyncRepository: WatchSyncRepository
 
@@ -20,6 +21,7 @@ final class LineupManagementUseCaseImpl: LineupManagementUseCase {
     teamRemoteRepository: TeamRemoteRepository,
     playerLocalRepository: PlayerLocalRepository,
     playerRemoteRepository: PlayerRemoteRepository,
+    gameScheduleRepository: GameScheduleRepository,
     userSettingsRepository: UserSettingsRepository,
     watchSyncRepository: WatchSyncRepository
   ) {
@@ -27,6 +29,7 @@ final class LineupManagementUseCaseImpl: LineupManagementUseCase {
     self.teamRemoteRepository = teamRemoteRepository
     self.playerLocalRepository = playerLocalRepository
     self.playerRemoteRepository = playerRemoteRepository
+    self.gameScheduleRepository = gameScheduleRepository
     self.userSettingsRepository = userSettingsRepository
     self.watchSyncRepository = watchSyncRepository
   }
@@ -79,6 +82,8 @@ final class LineupManagementUseCaseImpl: LineupManagementUseCase {
       try await syncGameInfo(teamId)
       try await syncLineup(teamId, newVersion: serverVersions.lineupVersion)
     }
+
+    try await syncScheduleIfNeeded(teamId)
   }
 
   private func forceSync(_ teamId: TeamID) async throws {
@@ -94,6 +99,8 @@ final class LineupManagementUseCaseImpl: LineupManagementUseCase {
   private func syncGameInfo(_ teamId: TeamID) async throws {
     let gameInfo = try await teamRemoteRepository.fetchTodayGameInfo(teamId)
 
+    userSettingsRepository.setLineupUpdatedToday(gameInfo.lineupUpdatedToday, for: teamId)
+
     guard let localTeam = try await teamLocalRepository.fetchTeam(teamId) else {
       throw LocalStorageError.notFound
     }
@@ -105,6 +112,15 @@ final class LineupManagementUseCaseImpl: LineupManagementUseCase {
     )
 
     try await teamLocalRepository.updateTeam(updatedTeam)
+  }
+
+  private func syncScheduleIfNeeded(_ teamId: TeamID) async throws {
+    let cached = gameScheduleRepository.fetchGameSchedule(for: teamId)
+
+    guard cached?.recentGames.first?.date != Date.now.yyyyMMddFormatted else { return }
+
+    let schedule = try await teamRemoteRepository.fetchGamesSchedule(teamId)
+    gameScheduleRepository.saveGameSchedule(schedule, for: teamId)
   }
 
   private func syncPlayers(_ teamId: TeamID, newVersion: Int) async throws {
@@ -158,7 +174,6 @@ final class LineupManagementUseCaseImpl: LineupManagementUseCase {
     }
 
     try await updateLineupVersion(teamId, newVersion)
-    userSettingsRepository.resetShowRecentLineup()
   }
 
   // MARK: - Private Methods - Data Fetch
@@ -168,16 +183,42 @@ final class LineupManagementUseCaseImpl: LineupManagementUseCase {
       throw LocalStorageError.notFound
     }
 
+    // 라인업 선수 리스트
     let allPlayers = try await playerLocalRepository.fetchAllPlayers(teamId)
     let lineupPlayers =
       allPlayers
       .filter { $0.battingOrder != nil }
       .sorted { ($0.battingOrder ?? 0) < ($1.battingOrder ?? 0) }
 
+    // 오늘 라인업 업데이트 여부
+    let lineupUpdatedToday = userSettingsRepository.getLineupUpdatedToday(for: teamId)
+    // lineupUpdatedToday가 true면 teamData에 있는 정보 사용, false면 게임 스케줄의 첫번째 경기 정보 사용
+    let todaySchedule = lineupUpdatedToday ? nil : gameScheduleRepository.fetchGameSchedule(for: teamId)?.recentGames.first
+    let opponentTeamId: TeamID? = lineupUpdatedToday
+      ? teamData.gameInfo.opponent
+      : todaySchedule?.opponentTeamId
+    let starterPitcherName: String? = lineupUpdatedToday
+      ? teamData.gameInfo.starterPitcherName
+      : todaySchedule?.starterPitcherName
+
+    // Entity단의 경기 상태 매칭
+    let finalStatus: GameStatus = (teamData.gameInfo.status == .playingToday && !lineupUpdatedToday)
+      ? .lineupPending
+      : teamData.gameInfo.status
+
+    let resolvedGameInfo = TeamGameInfo(
+      id: teamData.gameInfo.id,
+      status: finalStatus,
+      opponent: opponentTeamId,
+      starterPitcherName: starterPitcherName,
+      lastGameDate: teamData.gameInfo.lastGameDate,
+      lineupUpdatedToday: lineupUpdatedToday
+    )
+
     return LineupData(
-      gameInfo: teamData.gameInfo,
+      gameInfo: resolvedGameInfo,
       lineupPlayers: lineupPlayers,
-      opponentTeamId: teamData.gameInfo.opponent
+      opponentTeamId: opponentTeamId
     )
   }
 
