@@ -46,6 +46,9 @@ final class LineupViewModel {
   @Injected(AnalyticsService.self) private var analyticsService
 
   @ObservationIgnored
+  @Injected(AppLaunchContext.self) private var launchContext
+
+  @ObservationIgnored
   @Injected(TeamSelectionUseCase.self) private var teamSelectionUseCase
 
   @ObservationIgnored
@@ -69,10 +72,12 @@ final class LineupViewModel {
 
     if !hasTrackedAppOpen {
       hasTrackedAppOpen = true
+      let widgetKind = launchContext.sourceWidgetKind
+      launchContext.sourceWidgetKind = nil
       analyticsService.track(
         AppOpenEvent(
-          entryPoint: .app,
-          widgetId: nil,
+          entryPoint: widgetKind != nil ? .widget : .app,
+          widgetId: widgetKind,
           isGameDay: [.playingToday, .lineupPending].contains(gameInfo?.status)
         )
       )
