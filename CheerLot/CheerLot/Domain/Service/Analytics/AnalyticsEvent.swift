@@ -42,7 +42,7 @@ enum PlayTrigger: String {
 
 struct AppOpenEvent: AnalyticsEvent {
   let entryPoint: AppEntryPoint
-  let widgetId: Int?
+  let widgetId: String?
   let isGameDay: Bool
 
   var name: String { "app_open" }
