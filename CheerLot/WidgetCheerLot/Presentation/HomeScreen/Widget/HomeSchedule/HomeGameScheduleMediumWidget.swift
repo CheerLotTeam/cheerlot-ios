@@ -16,8 +16,8 @@ struct HomeGameScheduleMediumWidget: Widget {
       HomeGameScheduleMediumWidgetView(entry: entry)
         .containerBackground(.clear, for: .widget)
     }
-    .configurationDisplayName("경기 일정")
-    .description("오늘의 경기 일정을 잠금화면에서 확인하세요.")
+    .configurationDisplayName("전체 일정")
+    .description("다가오는 경기 일정을 한눈에 확인해요")
     .supportedFamilies([.systemMedium])
     .contentMarginsDisabledIfAvailable()
   }

@@ -54,8 +54,8 @@ struct LockScreenRectangularWidget: Widget {
       LockScreenRectangularWidgetView(entry: entry)
         .containerBackground(.clear, for: .widget)
     }
-    .configurationDisplayName("경기 일정")
-    .description("오늘의 경기 일정을 잠금화면에서 확인하세요.")
+    .configurationDisplayName("오늘 경기")
+    .description("오늘 경기 일정 확인")
     .supportedFamilies([.accessoryRectangular])
   }
 }
