@@ -40,7 +40,7 @@ extension HomeGameScheduleMediumWidgetView {
   }
 
   private var todayDateTextView: some View {
-    VStack(spacing: 0) {
+    VStack(spacing: -2) {
       Text(entry.date.dayOfWeek)
         .font(.M5)
         .foregroundStyle(.gray100)

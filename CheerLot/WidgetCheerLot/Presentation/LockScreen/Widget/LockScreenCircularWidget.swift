@@ -51,8 +51,8 @@ struct LockScreenCircularWidget: Widget {
       LockScreenCircularWidgetView()
         .containerBackground(.clear, for: .widget)
     }
-    .configurationDisplayName("경기 일정")
-    .description("오늘의 경기 일정을 잠금화면에서 확인하세요.")
+    .configurationDisplayName("쳐랏")
+    .description("응원가 바로 듣기")
     .supportedFamilies([.accessoryCircular])
   }
 }
