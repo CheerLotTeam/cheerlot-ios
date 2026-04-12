@@ -7,6 +7,7 @@
 
 import Foundation
 import Observation
+import WidgetKit
 
 @Observable
 final class TeamMembersViewModel {
@@ -193,9 +194,16 @@ final class TeamMembersViewModel {
       }
 
       isLoading = false
+      saveWidgetSongCount()
     } catch {
       isLoading = false
       errorMessage = "전체 선수 데이터를 불러올 수 없습니다: \(error.localizedDescription)"
     }
+  }
+
+  private func saveWidgetSongCount() {
+    UserDefaults(suiteName: AppGroup.id)?.set(
+      totalSongCount, forKey: UserDefaultsKey.Widget.totalSongCount)
+    WidgetCenter.shared.reloadTimelines(ofKind: "HomePlaybackWidget")
   }
 }

@@ -21,7 +21,7 @@ struct WidgetCheerLotBundle: WidgetBundle {
     LockScreenInlineWidget()
     LockScreenRectangularWidget()
     LockScreenCircularWidget()
-    HomePlayerWidget()
+    HomePlaybackWidget()
     HomeGameInfoSmallWidget()
     HomeGameInfoMediumWidget()
     HomeGameScheduleMediumWidget()
