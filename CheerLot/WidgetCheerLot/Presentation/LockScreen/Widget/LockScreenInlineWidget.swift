@@ -48,6 +48,7 @@ struct LockScreenInlineWidget: Widget {
     StaticConfiguration(kind: kind, provider: TeamGamesProvider()) { entry in
       LockScreenInlineWidgetView(entry: entry)
         .containerBackground(.clear, for: .widget)
+        .widgetURL(URL(string: "cheerlot://lineup?from=\(WidgetKind.lockGameInfoInline)"))
     }
     .configurationDisplayName("오늘 경기")
     .description("오늘 경기 일정 확인")

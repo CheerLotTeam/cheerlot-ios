@@ -50,6 +50,7 @@ struct LockScreenCircularWidget: Widget {
     StaticConfiguration(kind: kind, provider: StaticProvider()) { _ in
       LockScreenCircularWidgetView()
         .containerBackground(.clear, for: .widget)
+        .widgetURL(URL(string: "cheerlot://lineup?from=\(WidgetKind.lockGameInfoCircular)"))
     }
     .configurationDisplayName("쳐랏")
     .description("응원가 바로 듣기")
