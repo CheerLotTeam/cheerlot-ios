@@ -97,9 +97,9 @@ struct TeamGamesProvider: TimelineProvider {
 
   private func mapStatus(_ gameStatus: GameStatus) -> WidgetGameStatus {
     switch gameStatus {
-    case .playingToday: return .playingToday
-    case .offDay: return .offDay
-    case .seasonEnded: return .seasonEnded
+    case .playingToday, .lineupPending: return .playingToday
+    case .offDay:                       return .offDay
+    case .seasonEnded:                  return .seasonEnded
     }
   }
 
