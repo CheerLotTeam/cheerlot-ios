@@ -66,7 +66,8 @@ extension TeamGameDTO {
       status: status,
       opponent: opponentTeamId,
       starterPitcherName: self.starterPitcherName,
-      lastGameDate: self.lastGameDate
+      lastGameDate: self.lastGameDate,
+      lineupUpdatedToday: self.lineupUpdatedToday
     )
   }
 }
