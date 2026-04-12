@@ -73,7 +73,7 @@ final class LineupViewModel {
         AppOpenEvent(
           entryPoint: .app,
           widgetId: nil,
-          isGameDay: gameInfo?.status == .playingToday
+          isGameDay: [.playingToday, .lineupPending].contains(gameInfo?.status)
         )
       )
     }
