@@ -40,17 +40,14 @@ struct LineupGameInfoVO: Equatable {
     self.status = gameInfo.status
   }
 
-  var todayNoGameText: String {
-    let today = Self.todayString()
-    return "\(today) | 경기 없음"
+  var todayGameInfoText: String {
+    "\(Self.todayString()) | \(gameTeamsText)"
   }
+
+  var gameDateText: String { date }
 
   var lastGameInfoText: String {
-    "\(gameDateText) | \(gameTeamsText)"
-  }
-
-  var gameDateText: String {
-    date
+    "\(date) | \(gameTeamsText)"
   }
 
   var gameTeamsText: String {

@@ -85,11 +85,20 @@ struct LineupView: View {
 
   private func noGameMessage(for status: GameStatus) -> String {
     switch status {
-    case .offDay: return "오늘은 경기가 없는 날이에요"
-    case .seasonEnded: return "다음 시즌 준비중이에요"
-    case .playingToday: return ""
+    case .lineupPending: return "오늘 라인업을 준비중이에요"
+    case .offDay:        return "오늘은 경기가 없는 날이에요"
+    case .seasonEnded:   return "다음 시즌 준비중이에요"
+    case .playingToday:  return ""
     }
   }
+    
+    private func toggleShowLineupMessage(for status: GameStatus) -> String {
+        switch status {
+        case .lineupPending, .seasonEnded: return "최근 경기 라인업 보기"
+        case .offDay:        return "이전 경기 라인업 보기"
+        case .playingToday:  return ""
+        }
+    }
 }
 
 extension LineupView {
@@ -158,10 +167,10 @@ extension LineupView {
 
   private func gameInfoView(asset: LineupAssetVO, gameInfo: LineupGameInfoVO) -> some View {
     HStack(spacing: 8) {
-      Text(viewModel.shouldShowLineup ? gameInfo.lastGameInfoText : gameInfo.todayNoGameText)
+      Text(viewModel.displayGameInfoText)
         .font(.M5_gameState)
 
-      if viewModel.shouldShowLineup, let starterPitcher = gameInfo.starterPitcher {
+      if viewModel.shouldShowLineup || viewModel.gameStatus == .lineupPending, let starterPitcher = gameInfo.starterPitcher {
         HStack(spacing: 2) {
           Image(.pitcher)
             .resizable()
@@ -265,9 +274,9 @@ extension LineupView {
         .foregroundStyle(asset.positionTextColor)
 
       Button {
-        viewModel.toggleShowRecentLineup()
+        viewModel.toggleShowLineup()
       } label: {
-        Text("최근 경기 라인업 보기")
+        Text(toggleShowLineupMessage(for: status))
           .font(.SB8)
           .foregroundStyle(.grayWhite)
           .padding(.vertical, 6)
