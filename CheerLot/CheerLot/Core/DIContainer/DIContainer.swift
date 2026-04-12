@@ -85,6 +85,10 @@ final class DIContainer {
 extension DIContainer {
 
   private func assembleService() {
+    registerSingleton(AppLaunchContext.self) {
+      AppLaunchContext()
+    }
+
     registerSingleton(AnalyticsService.self) {
       AmplitudeAnalyticsService()
     }
