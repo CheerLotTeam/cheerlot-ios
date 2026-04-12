@@ -14,21 +14,28 @@ struct TeamGameInfo: Identifiable, Hashable, Equatable {
   var opponent: TeamID?
   var starterPitcherName: String?
   var lastGameDate: String?
+  var lineupUpdatedToday: Bool
 
   init(
-    id: TeamID, status: GameStatus, opponent: TeamID? = nil, starterPitcherName: String? = nil,
-    lastGameDate: String? = nil
+    id: TeamID,
+    status: GameStatus,
+    opponent: TeamID? = nil,
+    starterPitcherName: String? = nil,
+    lastGameDate: String? = nil,
+    lineupUpdatedToday: Bool
   ) {
     self.id = id
     self.status = status
     self.opponent = opponent
     self.starterPitcherName = starterPitcherName
     self.lastGameDate = lastGameDate
+    self.lineupUpdatedToday = lineupUpdatedToday
   }
 }
 
 enum GameStatus {
-  case playingToday
+  case playingToday    // 오늘 경기 있고 라인업 준비됨
+  case lineupPending   // 오늘 경기 있고 라인업 준비중
   case offDay
   case seasonEnded
 }

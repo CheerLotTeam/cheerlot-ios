@@ -123,7 +123,8 @@ extension CheerLotSchemaV3.Team {
         status: status,
         opponent: self.opponentTeamId.map { TeamID($0) },
         starterPitcherName: self.starterPitcherName,
-        lastGameDate: self.lastGameDate
+        lastGameDate: self.lastGameDate,
+        lineupUpdatedToday: false
       ),
       versionInfo: TeamVersionInfo(
         id: TeamID(self.teamId),
