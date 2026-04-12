@@ -65,14 +65,14 @@ extension HomeGameScheduleMediumWidgetView {
   }
 
   private var gameScheduleView: some View {
-      LazyVStack(spacing: 6) {
-          ForEach(Array(entry.gameSchedule.enumerated()), id: \.offset) {
-              index, game in
-              GameScheduleCell(team: entry.teamId, game: game, asset: asset, isToday: index == 0)
-                  .frame(maxWidth: .infinity)
-          }
+    LazyVStack(spacing: 6) {
+      ForEach(Array(entry.gameSchedule.enumerated()), id: \.offset) {
+        index, game in
+        GameScheduleCell(team: entry.teamId, game: game, asset: asset, isToday: index == 0)
+          .frame(maxWidth: .infinity)
       }
-      .frame(maxWidth: .infinity)
+    }
+    .frame(maxWidth: .infinity)
   }
 
   private var notSeasonOutContentsView: some View {

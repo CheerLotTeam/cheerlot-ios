@@ -20,7 +20,7 @@ struct GameInfoView: View {
         asset.primaryColor
 
         asset.widgetBackgroundGradient.opacity(0.2)
-          
+
         contentsView
       }
 

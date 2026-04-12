@@ -34,11 +34,11 @@ struct CheerLotApp: App {
         await bootstrap()
       }
       .onOpenURL { url in
-          guard url.scheme == "cheerlot",
-                let components = URLComponents(url: url, resolvingAgainstBaseURL: false),
-                let from = components.queryItems?.first(where: { $0.name == "from" })?.value
-          else { return }
-          DIContainer.shared.resolve(AppLaunchContext.self).sourceWidgetKind = from
+        guard url.scheme == "cheerlot",
+          let components = URLComponents(url: url, resolvingAgainstBaseURL: false),
+          let from = components.queryItems?.first(where: { $0.name == "from" })?.value
+        else { return }
+        DIContainer.shared.resolve(AppLaunchContext.self).sourceWidgetKind = from
       }
       .alert("초기화 실패", isPresented: $showBootstrapError) {
         Button("다시 시도") {

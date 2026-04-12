@@ -34,8 +34,8 @@ struct TeamGameInfo: Identifiable, Hashable, Equatable {
 }
 
 enum GameStatus {
-  case playingToday    // 오늘 경기 있고 라인업 준비됨
-  case lineupPending   // 오늘 경기 있고 라인업 준비중
+  case playingToday  // 오늘 경기 있고 라인업 준비됨
+  case lineupPending  // 오늘 경기 있고 라인업 준비중
   case offDay
   case seasonEnded
 }
