@@ -81,6 +81,8 @@ extension WidgetSyncUseCaseImpl {
   private func syncGameInfo(_ teamId: TeamID, localTeam: TeamState) async throws {
     let gameInfo = try await teamRemoteRepository.fetchTodayGameInfo(teamId)
 
+    userSettingsRepository.setLineupUpdatedToday(gameInfo.lineupUpdatedToday, for: teamId)
+
     let updatedTeam = TeamState(
       teamId: teamId,
       gameInfo: gameInfo,
@@ -128,7 +130,6 @@ extension WidgetSyncUseCaseImpl {
     }
 
     try await updateLineupVersion(teamId, newVersion)
-    userSettingsRepository.resetShowRecentLineup()
   }
 
   private func updateLineupVersion(_ teamId: TeamID, _ version: Int) async throws {

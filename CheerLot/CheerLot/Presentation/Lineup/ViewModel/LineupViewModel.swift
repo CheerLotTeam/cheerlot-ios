@@ -22,18 +22,19 @@ final class LineupViewModel {
   var showToast = false
   var toastMessage = ""
 
-  var showRecentLineup: Bool = false {
-    didSet {
-      userSettingsUseCase.setShowRecentLineup(showRecentLineup)
-    }
-  }
+  private var showLineup: Bool = false
 
   var gameStatus: GameStatus {
     gameInfo?.status ?? .offDay
   }
 
   var shouldShowLineup: Bool {
-    gameStatus == .playingToday || showRecentLineup
+    gameStatus == .playingToday || showLineup
+  }
+
+  var displayGameInfoText: String {
+    guard let gameInfo else { return "" }
+    return showLineup ? gameInfo.lastGameInfoText : gameInfo.todayGameInfoText
   }
 
   private var currentTeamId: String?
@@ -45,7 +46,7 @@ final class LineupViewModel {
   @Injected(AnalyticsService.self) private var analyticsService
 
   @ObservationIgnored
-  @Injected(UserSettingsUseCase.self) private var userSettingsUseCase
+  @Injected(AppLaunchContext.self) private var launchContext
 
   @ObservationIgnored
   @Injected(TeamSelectionUseCase.self) private var teamSelectionUseCase
@@ -68,22 +69,23 @@ final class LineupViewModel {
     currentTeamId = teamInfo.id.value
 
     await loadData()
-    showRecentLineup = userSettingsUseCase.getShowRecentLineup()
 
     if !hasTrackedAppOpen {
       hasTrackedAppOpen = true
+      let widgetKind = launchContext.sourceWidgetKind
+      launchContext.sourceWidgetKind = nil
       analyticsService.track(
         AppOpenEvent(
-          entryPoint: .app,
-          widgetId: nil,
-          isGameDay: gameInfo?.status == .playingToday
+          entryPoint: widgetKind != nil ? .widget : .app,
+          widgetId: widgetKind,
+          isGameDay: [.playingToday, .lineupPending].contains(gameInfo?.status)
         )
       )
     }
   }
 
-  func toggleShowRecentLineup() {
-    showRecentLineup = true
+  func toggleShowLineup() {
+    showLineup = true
   }
 
   func loadData() async {

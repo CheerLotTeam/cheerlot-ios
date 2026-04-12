@@ -18,18 +18,6 @@ final class UserSettingsRepositoryImpl: UserSettingsRepository {
     self.sharedDefaults = defaults
   }
 
-  func getShowRecentLineup() -> Bool {
-    sharedDefaults.bool(forKey: UserDefaultsKey.showRecentLineup)
-  }
-
-  func setShowRecentLineup(_ value: Bool) {
-    sharedDefaults.set(value, forKey: UserDefaultsKey.showRecentLineup)
-  }
-
-  func resetShowRecentLineup() {
-    sharedDefaults.set(false, forKey: UserDefaultsKey.showRecentLineup)
-  }
-
   func getAppIconMode() -> AppIconMode {
     guard
       let rawValue = sharedDefaults.string(forKey: UserDefaultsKey.appIconMode),
@@ -42,5 +30,13 @@ final class UserSettingsRepositoryImpl: UserSettingsRepository {
 
   func setAppIconMode(_ mode: AppIconMode) {
     sharedDefaults.set(mode.rawValue, forKey: UserDefaultsKey.appIconMode)
+  }
+
+  func getLineupUpdatedToday(for teamId: TeamID) -> Bool {
+    sharedDefaults.bool(forKey: UserDefaultsKey.lineupUpdatedToday(for: teamId))
+  }
+
+  func setLineupUpdatedToday(_ value: Bool, for teamId: TeamID) {
+    sharedDefaults.set(value, forKey: UserDefaultsKey.lineupUpdatedToday(for: teamId))
   }
 }

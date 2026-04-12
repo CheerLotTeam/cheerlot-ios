@@ -35,18 +35,12 @@ extension HomeGameScheduleMediumWidgetView {
 
       asset.widgetBackgroundGradient.opacity(0.2)
 
-      Image(.teamCardBG)
-        .resizable()
-        .scaledToFill()
-        .opacity(0.3)
-        .blendMode(.softLight)
-
       notSeasonOutContentsView
     }
   }
 
   private var todayDateTextView: some View {
-    VStack(spacing: 0) {
+    VStack(spacing: -2) {
       Text(entry.date.dayOfWeek)
         .font(.M5)
         .foregroundStyle(.gray100)
@@ -72,8 +66,9 @@ extension HomeGameScheduleMediumWidgetView {
 
   private var gameScheduleView: some View {
     LazyVStack(spacing: 6) {
-      ForEach(entry.gameSchedule) { game in
-        GameScheduleCell(team: entry.teamId, game: game, asset: asset)
+      ForEach(Array(entry.gameSchedule.enumerated()), id: \.offset) {
+        index, game in
+        GameScheduleCell(team: entry.teamId, game: game, asset: asset, isToday: index == 0)
           .frame(maxWidth: .infinity)
       }
     }

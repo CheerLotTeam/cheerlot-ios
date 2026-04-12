@@ -50,6 +50,9 @@ extension TeamLocalRepositoryImpl {
     case .playingToday:
       model.hasTodayGame = true
       model.isSeasonEnded = false
+    case .lineupPending:
+      model.hasTodayGame = true
+      model.isSeasonEnded = false
     case .offDay:
       model.hasTodayGame = false
       model.isSeasonEnded = false

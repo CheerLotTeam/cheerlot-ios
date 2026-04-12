@@ -85,6 +85,10 @@ final class DIContainer {
 extension DIContainer {
 
   private func assembleService() {
+    registerSingleton(AppLaunchContext.self) {
+      AppLaunchContext()
+    }
+
     registerSingleton(AnalyticsService.self) {
       AmplitudeAnalyticsService()
     }
@@ -129,6 +133,10 @@ extension DIContainer {
 
     registerSingleton(WatchSyncRepository.self) {
       WatchSyncRepositoryImpl()
+    }
+
+    registerSingleton(GameScheduleRepository.self) {
+      GameScheduleRepositoryImpl()
     }
   }
 
@@ -196,6 +204,7 @@ extension DIContainer {
         teamRemoteRepository: container.resolve(TeamRemoteRepository.self),
         playerLocalRepository: container.resolve(PlayerLocalRepository.self),
         playerRemoteRepository: container.resolve(PlayerRemoteRepository.self),
+        gameScheduleRepository: container.resolve(GameScheduleRepository.self),
         userSettingsRepository: container.resolve(UserSettingsRepository.self),
         watchSyncRepository: container.resolve(WatchSyncRepository.self)
       )

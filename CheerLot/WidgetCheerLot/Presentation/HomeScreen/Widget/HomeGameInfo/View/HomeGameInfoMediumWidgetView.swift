@@ -45,12 +45,6 @@ extension HomeGameInfoMediumWidgetView {
 
         teamAsset.widgetBackgroundGradient.opacity(0.2)
 
-        Image(.teamCardBG)
-          .resizable()
-          .scaledToFill()
-          .opacity(0.3)
-          .blendMode(.softLight)
-
         contentsView
       }
 
@@ -60,7 +54,7 @@ extension HomeGameInfoMediumWidgetView {
   }
 
   private var contentsView: some View {
-    VStack(spacing: 4) {
+    VStack(spacing: 2) {
       gameInfoContentsView
 
       CapsuleBaseView(
@@ -93,19 +87,19 @@ extension HomeGameInfoMediumWidgetView {
   }
 
   private var dateInfoView: some View {
-    VStack(spacing: -6) {
+    VStack(spacing: -8) {
       Text(entry.date.koreanDateFormatted)
         .font(.M5)
         .foregroundStyle(teamAsset.primaryPalette.color200)
 
-      Text("VS")
+      Text("vs")
         .font(.B1)
         .foregroundStyle(.grayWhite)
     }
   }
 
   private func teamInfoView(asset: WidgetTeamAssetVO, team: String, pitcher: String?) -> some View {
-    VStack(spacing: 2) {
+    VStack(spacing: 0) {
       asset.noCoverImage
         .resizable()
         .scaledToFit()

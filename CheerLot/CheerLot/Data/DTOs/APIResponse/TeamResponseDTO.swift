@@ -14,6 +14,7 @@ struct TeamGameDTO: Decodable {
   let hasTodayGame: Bool
   let opponentTeamCode: String?
   let starterPitcherName: String?
+  let lineupUpdatedToday: Bool
 }
 
 struct TeamVersionsDTO: Decodable {
@@ -65,7 +66,8 @@ extension TeamGameDTO {
       status: status,
       opponent: opponentTeamId,
       starterPitcherName: self.starterPitcherName,
-      lastGameDate: self.lastGameDate
+      lastGameDate: self.lastGameDate,
+      lineupUpdatedToday: self.lineupUpdatedToday
     )
   }
 }

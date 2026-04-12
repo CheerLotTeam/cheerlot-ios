@@ -11,6 +11,7 @@ struct GameScheduleCell: View {
   let team: String
   let game: Game
   let asset: WidgetTeamAssetVO
+  let isToday: Bool
 
   var body: some View {
     HStack {
@@ -27,7 +28,7 @@ struct GameScheduleCell: View {
     .background(
       RoundedRectangle(cornerRadius: 11)
         .fill(
-          asset.primaryPalette.color300.opacity(0.5)
+          isToday ? .white.opacity(0.25) : .white.opacity(0.1)
         )
     )
   }

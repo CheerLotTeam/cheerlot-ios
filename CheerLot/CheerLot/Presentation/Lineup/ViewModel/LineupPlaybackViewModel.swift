@@ -126,7 +126,7 @@ final class LineupPlaybackViewModel {
 
     gameDate = gameInfoVO.gameDateText
     teamsText = gameInfoVO.gameTeamsText
-    isGameDay = gameInfoVO.status == .playingToday
+    isGameDay = [.playingToday, .lineupPending].contains(gameInfoVO.status)
   }
 
   private func beginPlayback() {
