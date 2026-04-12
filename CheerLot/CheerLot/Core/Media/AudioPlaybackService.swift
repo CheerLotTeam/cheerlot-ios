@@ -10,6 +10,7 @@ import Combine
 import MediaPlayer
 import Observation
 import UIKit
+import WidgetKit
 
 /// 앱 전역 오디오 재생을 담당하는 서비스
 @Observable
@@ -113,6 +114,11 @@ final class AudioPlaybackService: AudioPlayer {
     currentPlayerName = queuePlayerNames[currentIndex]
     currentCoverImageName = coverImageName
 
+    if source == .teamMembers {
+      UserDefaults(suiteName: AppGroup.id)?.set(
+        songs.count, forKey: UserDefaultsKey.Widget.totalSongCount)
+    }
+
     playCurrentSong()
   }
 
@@ -184,6 +190,7 @@ final class AudioPlaybackService: AudioPlayer {
 
     isPlaying = true
     syncNowPlaying()
+    updateWidgetState()
 
     endOfTrackCancellable = NotificationCenter.default
       .publisher(for: .AVPlayerItemDidPlayToEndTime, object: item)
@@ -212,6 +219,7 @@ final class AudioPlaybackService: AudioPlayer {
     player.pause()
     isPlaying = false
     syncNowPlaying()
+    updateWidgetState()
   }
 
   func resume() {
@@ -219,6 +227,7 @@ final class AudioPlaybackService: AudioPlayer {
     player.play()
     isPlaying = true
     syncNowPlaying()
+    updateWidgetState()
   }
 
   func toggle() {
@@ -241,6 +250,7 @@ final class AudioPlaybackService: AudioPlayer {
     currentPlayerName = nil
     currentCoverImageName = nil
     clearNowPlaying()
+    updateWidgetState()
   }
 
   // MARK: - Time / Seek
@@ -441,5 +451,17 @@ extension AudioPlaybackService {
 
   fileprivate func clearNowPlaying() {
     nowPlayingSession.nowPlayingInfoCenter.nowPlayingInfo = nil
+  }
+
+  private func updateWidgetState() {
+    let defaults = UserDefaults(suiteName: AppGroup.id)
+    if isPlaying, let playerName = currentPlayerName, let songTitle = nowPlaying?.title {
+      defaults?.set(playerName, forKey: UserDefaultsKey.Widget.playerName)
+      defaults?.set(songTitle, forKey: UserDefaultsKey.Widget.songTitle)
+    } else {
+      defaults?.removeObject(forKey: UserDefaultsKey.Widget.playerName)
+      defaults?.removeObject(forKey: UserDefaultsKey.Widget.songTitle)
+    }
+    WidgetCenter.shared.reloadTimelines(ofKind: "HomePlaybackWidget")
   }
 }

@@ -33,6 +33,9 @@ final class TeamSelectionRepositoryImpl: TeamSelectionRepository {
   func updateSelectedTeam(_ teamId: TeamID) {
     sharedDefaults.set(teamId.value, forKey: UserDefaultsKey.selectedTeamId)
     sharedDefaults.set(true, forKey: UserDefaultsKey.hasSelectedTeam)
+    sharedDefaults.removeObject(forKey: UserDefaultsKey.Widget.totalSongCount)
+    sharedDefaults.removeObject(forKey: UserDefaultsKey.Widget.playerName)
+    sharedDefaults.removeObject(forKey: UserDefaultsKey.Widget.songTitle)
 
     NotificationCenter.default.post(
       name: .teamSelected,
