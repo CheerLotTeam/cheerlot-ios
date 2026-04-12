@@ -35,12 +35,6 @@ extension HomeGameScheduleMediumWidgetView {
 
       asset.widgetBackgroundGradient.opacity(0.2)
 
-      Image(.teamCardBG)
-        .resizable()
-        .scaledToFill()
-        .opacity(0.3)
-        .blendMode(.softLight)
-
       notSeasonOutContentsView
     }
   }
