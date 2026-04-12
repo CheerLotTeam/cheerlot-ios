@@ -119,13 +119,13 @@ private struct TeamStateView: View {
       asset.widgetBackgroundGradient
         .opacity(0.2)
 
-      Image("teamCardBG")
-        .resizable()
-        .scaledToFill()
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .clipped()
-        .opacity(0.5)
-        .blendMode(.softLight)
+//      Image("teamCardBG")
+//        .resizable()
+//        .scaledToFill()
+//        .frame(maxWidth: .infinity, maxHeight: .infinity)
+//        .clipped()
+//        .opacity(0.5)
+//        .blendMode(.softLight)
 
       VStack(alignment: .leading, spacing: 0) {
         asset.coverImage
@@ -173,13 +173,13 @@ private struct PlayerStateView: View {
       asset.widgetBackgroundGradient
         .opacity(0.2)
 
-      Image("teamCardBG")
-        .resizable()
-        .scaledToFill()
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .clipped()
-        .opacity(0.5)
-        .blendMode(.softLight)
+//      Image("teamCardBG")
+//        .resizable()
+//        .scaledToFill()
+//        .frame(maxWidth: .infinity, maxHeight: .infinity)
+//        .clipped()
+//        .opacity(0.5)
+//        .blendMode(.softLight)
 
       VStack(alignment: .leading, spacing: 0) {
         asset.coverImage
