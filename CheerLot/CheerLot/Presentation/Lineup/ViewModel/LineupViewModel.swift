@@ -121,7 +121,7 @@ final class LineupViewModel {
     guard !isLoading else { return }
     isLoading = true
     errorMessage = nil
-      
+
     defer { isLoading = false }
 
     do {
@@ -180,16 +180,16 @@ final class LineupViewModel {
     )
 
     // 최근 완료 경기 VO (showLineup=true 시 사용)
-      if let recentInfo = data.recentGameInfo {
-          let recentOpponentInfo = recentInfo.opponent.flatMap { teamInfoUseCase.getTeamInfo($0) }
-          recentGameInfoVO = LineupGameInfoVO(
-            teamInfo: teamInfo,
-            opponentTeamInfo: recentOpponentInfo,
-            gameInfo: recentInfo
-          )
-      } else {
-          recentGameInfoVO = nil
-      }
+    if let recentInfo = data.recentGameInfo {
+      let recentOpponentInfo = recentInfo.opponent.flatMap { teamInfoUseCase.getTeamInfo($0) }
+      recentGameInfoVO = LineupGameInfoVO(
+        teamInfo: teamInfo,
+        opponentTeamInfo: recentOpponentInfo,
+        gameInfo: recentInfo
+      )
+    } else {
+      recentGameInfoVO = nil
+    }
 
     // Lineup Players VO 변환
     lineupPlayers = data.lineupPlayers.map { LineupPlayerVO(from: $0) }

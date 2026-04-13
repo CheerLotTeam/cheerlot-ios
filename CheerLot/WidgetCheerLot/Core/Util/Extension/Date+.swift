@@ -37,13 +37,13 @@ extension Date {
     formatter.timeZone = TimeZone(identifier: "Asia/Seoul")
     return formatter
   }()
-    
-    private static let yyyyMMddFormatter: DateFormatter = {
-      let formatter = DateFormatter()
-      formatter.dateFormat = "yyyy-MM-dd"
-      formatter.timeZone = TimeZone(identifier: "Asia/Seoul")
-      return formatter
-    }()
+
+  private static let yyyyMMddFormatter: DateFormatter = {
+    let formatter = DateFormatter()
+    formatter.dateFormat = "yyyy-MM-dd"
+    formatter.timeZone = TimeZone(identifier: "Asia/Seoul")
+    return formatter
+  }()
 
   // ex. Wed
   var dayOfWeek: String { Date.dayOfWeekFormatter.string(from: self) }

@@ -199,9 +199,13 @@ final class LineupManagementUseCaseImpl: LineupManagementUseCase {
     let recentGameInfo: TeamGameInfo? = lineupUpdatedToday ? nil : teamData.gameInfo
 
     // 기본 화면 표시용: lineupUpdatedToday=true면 teamData 직접 사용, false면 스케줄 API 첫번째 경기 사용
-      let todaySchedule = lineupUpdatedToday ? nil : gameScheduleRepository.fetchGameSchedule(for: teamId)?.recentGames.first
-      let opponentTeamId: TeamID? = lineupUpdatedToday ? teamData.gameInfo.opponent : todaySchedule?.opponentTeamId
-      let starterPitcherName: String? = lineupUpdatedToday ? teamData.gameInfo.starterPitcherName : todaySchedule?.starterPitcherName
+    let todaySchedule =
+      lineupUpdatedToday
+      ? nil : gameScheduleRepository.fetchGameSchedule(for: teamId)?.recentGames.first
+    let opponentTeamId: TeamID? =
+      lineupUpdatedToday ? teamData.gameInfo.opponent : todaySchedule?.opponentTeamId
+    let starterPitcherName: String? =
+      lineupUpdatedToday ? teamData.gameInfo.starterPitcherName : todaySchedule?.starterPitcherName
 
     // Entity단의 경기 상태 매칭
     let finalStatus: GameStatus =
