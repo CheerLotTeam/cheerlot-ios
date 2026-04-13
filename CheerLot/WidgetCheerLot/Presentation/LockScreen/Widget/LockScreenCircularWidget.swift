@@ -61,7 +61,7 @@ struct LockScreenCircularWidget: Widget {
 // MARK: - Preview
 
 #Preview(as: .accessoryCircular) {
-  LockScreenRectangularWidget()
+  LockScreenCircularWidget()
 } timeline: {
   StaticEntry()
 }
