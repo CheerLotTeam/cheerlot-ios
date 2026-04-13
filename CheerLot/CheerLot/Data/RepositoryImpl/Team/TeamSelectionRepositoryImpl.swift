@@ -55,4 +55,6 @@ final class TeamSelectionRepositoryImpl: TeamSelectionRepository {
 
 extension Notification.Name {
   static let teamSelected = Notification.Name("teamSelected")
+  static let playTeamSongs = Notification.Name("playTeamSongs")
+  static let openTeamMembers = Notification.Name("openTeamMembers")
 }
