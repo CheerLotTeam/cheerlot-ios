@@ -67,14 +67,12 @@ struct TeamGamesProvider: TimelineProvider {
     schedule: TeamGameScheduleInfo,
     gameStatus: GameStatus
   ) -> TeamGamesEntry {
-    let dateFormatter = DateFormatter()
-    dateFormatter.dateFormat = "yyyy-MM-dd"
-
     let games = schedule.recentGames.map { info in
       let opponentInfo = info.opponentTeamId.flatMap { teamInfoUseCase.getTeamInfo($0) }
+      let date = Date.from(yyyyMMdd: info.date) ?? .now
       return Game(
-        id: dateFormatter.date(from: info.date) ?? .now,
-        date: dateFormatter.date(from: info.date) ?? .now,
+        id: date,
+        date: date,
         hasGame: info.hasGame,
         starterPitcherName: info.starterPitcherName,
         opponentId: info.opponentTeamId?.value,

@@ -59,4 +59,9 @@ extension Date {
 
   // ex. 2026-04-13
   var yyyyMMddFormatted: String { Date.yyyyMMddFormatter.string(from: self) }
+
+  // yyyy-MM-dd 문자열 → Date 파싱
+  static func from(yyyyMMdd: String) -> Date? {
+    yyyyMMddFormatter.date(from: yyyyMMdd)
+  }
 }
