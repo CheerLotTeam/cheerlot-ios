@@ -59,6 +59,7 @@ final class LineupPlaybackViewModel {
 
   func onAppear() async {
     await loadData()
+    guard !Task.isCancelled else { return }
     trackPresented()
     beginPlayback()
   }

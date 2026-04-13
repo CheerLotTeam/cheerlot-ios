@@ -146,6 +146,14 @@ extension LineupPlaybackService {
 
     let trigger = pendingTrigger ?? .userTap
     pendingTrigger = nil
+
+    if song.audioURL.hasPrefix("http"), let url = URL(string: song.audioURL) {
+      play(url)
+    } else {
+      playBundle(song.audioURL)
+    }
+
+    guard isPlaying else { return }
     analyticsService.track(
       CheerPlayStartedEvent(
         source: .lineup,
@@ -155,15 +163,6 @@ extension LineupPlaybackService {
       )
     )
     analyticsService.incrementUserProperty(.totalPlayCount)
-
-    if song.audioURL.hasPrefix("http"),
-      let url = URL(string: song.audioURL)
-    {
-      play(url)
-      return
-    }
-
-    playBundle(song.audioURL)
   }
 
   fileprivate func play(_ url: URL) {
