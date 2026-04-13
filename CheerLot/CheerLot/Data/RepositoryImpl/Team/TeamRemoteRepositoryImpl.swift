@@ -70,7 +70,7 @@ final class TeamRemoteRepositoryImpl: TeamRemoteRepository {
         case .success(let response):
           do {
             let dto = try response.map(TeamGameScheduleDTO.self)
-            continuation.resume(returning: dto.toEntity())
+            continuation.resume(returning: try dto.toEntity())
           } catch {
             continuation.resume(throwing: NetworkError.decodingError(error))
           }
