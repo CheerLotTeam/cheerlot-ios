@@ -92,6 +92,7 @@ final class LineupManagementUseCaseImpl: LineupManagementUseCase {
     try await syncGameInfo(teamId)
     try await syncPlayers(teamId, newVersion: serverVersions.playersVersion)
     try await syncLineup(teamId, newVersion: serverVersions.lineupVersion)
+    try await syncScheduleIfNeeded(teamId)
   }
 
   // MARK: - Private Methods - Individual Sync
@@ -192,18 +193,15 @@ final class LineupManagementUseCaseImpl: LineupManagementUseCase {
 
     // 오늘 라인업 업데이트 여부
     let lineupUpdatedToday = userSettingsRepository.getLineupUpdatedToday(for: teamId)
-    // lineupUpdatedToday가 true면 teamData에 있는 정보 사용, false면 게임 스케줄의 첫번째 경기 정보 사용
-    let todaySchedule =
-      lineupUpdatedToday
-      ? nil : gameScheduleRepository.fetchGameSchedule(for: teamId)?.recentGames.first
-    let opponentTeamId: TeamID? =
-      lineupUpdatedToday
-      ? teamData.gameInfo.opponent
-      : todaySchedule?.opponentTeamId
-    let starterPitcherName: String? =
-      lineupUpdatedToday
-      ? teamData.gameInfo.starterPitcherName
-      : todaySchedule?.starterPitcherName
+
+    // lineupUpdatedToday=false일 때 teamData.gameInfo는 최근 완료 경기 정보 (최근 투수, 상대팀, 날짜)
+    // showLineup=true 시 ViewModel에서 사용하도록 전달
+    let recentGameInfo: TeamGameInfo? = lineupUpdatedToday ? nil : teamData.gameInfo
+
+    // 기본 화면 표시용: lineupUpdatedToday=true면 teamData 직접 사용, false면 스케줄 API 첫번째 경기 사용
+      let todaySchedule = lineupUpdatedToday ? nil : gameScheduleRepository.fetchGameSchedule(for: teamId)?.recentGames.first
+      let opponentTeamId: TeamID? = lineupUpdatedToday ? teamData.gameInfo.opponent : todaySchedule?.opponentTeamId
+      let starterPitcherName: String? = lineupUpdatedToday ? teamData.gameInfo.starterPitcherName : todaySchedule?.starterPitcherName
 
     // Entity단의 경기 상태 매칭
     let finalStatus: GameStatus =
@@ -223,7 +221,8 @@ final class LineupManagementUseCaseImpl: LineupManagementUseCase {
     return LineupData(
       gameInfo: resolvedGameInfo,
       lineupPlayers: lineupPlayers,
-      opponentTeamId: opponentTeamId
+      opponentTeamId: opponentTeamId,
+      recentGameInfo: recentGameInfo
     )
   }
 
