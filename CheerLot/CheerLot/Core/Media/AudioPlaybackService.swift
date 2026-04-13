@@ -62,6 +62,7 @@ final class AudioPlaybackService: AudioPlayer {
     setupSession()
     setupRemoteCommands()
     startNowPlayingTick()
+    updateWidgetState()
   }
 
   deinit {
@@ -200,6 +201,7 @@ final class AudioPlaybackService: AudioPlayer {
         guard !self.queue.isEmpty else {
           self.isPlaying = false
           self.syncNowPlaying()
+          self.updateWidgetState()
           return
         }
 

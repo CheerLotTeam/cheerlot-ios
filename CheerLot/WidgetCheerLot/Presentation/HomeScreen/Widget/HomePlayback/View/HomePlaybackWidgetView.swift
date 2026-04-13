@@ -19,6 +19,7 @@ struct HomePlaybackWidgetView: View {
 
   private var title: String {
     switch entry.displayState {
+    case .teamEmpty: ""
     case .team(let teamName, _): teamName
     case .player(let playerName, _): playerName
     }
@@ -26,6 +27,7 @@ struct HomePlaybackWidgetView: View {
 
   private var subtitle: String {
     switch entry.displayState {
+    case .teamEmpty: ""
     case .team(_, let totalSongCount): totalSongCount > 0 ? "총 \(totalSongCount)곡" : "응원가 재생하기"
     case .player(_, let songTitle): songTitle
     }
@@ -33,14 +35,19 @@ struct HomePlaybackWidgetView: View {
 
   private var deeplink: URL? {
     switch entry.displayState {
+    case .teamEmpty: nil
     case .team: URL(string: "cheerlot://teamSong")
     case .player: URL(string: "cheerlot://playerSong")
     }
   }
 
   var body: some View {
-    PlaybackStateView
-      .widgetURL(deeplink)
+    if case .teamEmpty = entry.displayState {
+      TeamEmptyView(isSmallSize: true)
+    } else {
+      PlaybackStateView
+        .widgetURL(deeplink)
+    }
   }
 }
 

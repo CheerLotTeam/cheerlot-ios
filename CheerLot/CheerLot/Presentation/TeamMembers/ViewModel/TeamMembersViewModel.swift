@@ -19,6 +19,7 @@ final class TeamMembersViewModel {
   var errorMessage: String?
   var showToast = false
   var toastMessage = ""
+  var pendingPlayAll = false
 
   private var players: [PlayerInfo] = []
 
@@ -195,6 +196,11 @@ final class TeamMembersViewModel {
 
       isLoading = false
       saveWidgetSongCount()
+
+      if pendingPlayAll {
+        pendingPlayAll = false
+        didTapPlayAll()
+      }
     } catch {
       isLoading = false
       errorMessage = "전체 선수 데이터를 불러올 수 없습니다: \(error.localizedDescription)"

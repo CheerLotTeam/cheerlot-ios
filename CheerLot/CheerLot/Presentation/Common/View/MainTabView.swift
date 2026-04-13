@@ -23,6 +23,7 @@ struct MainTabView: View {
 
   @State private var selectedTab: TabKey = .lineup
   @State private var isPlayerExpanded: Bool = false
+  @State private var suppressNextRestore: Bool = false
   @State private var lineupViewModel = ViewModelFactory.shared.createLineupViewModel()
   @State private var teamMembersViewModel = ViewModelFactory.shared.createTeamMembersViewModel()
   @State private var searchViewModel = ViewModelFactory.shared.createSearchViewModel()
@@ -79,6 +80,18 @@ struct MainTabView: View {
     .onChange(of: scenePhase) { _, newPhase in
       guard newPhase == .active else { return }
       restorePlayback()
+    }
+    .onReceive(NotificationCenter.default.publisher(for: .playTeamSongs)) { _ in
+      suppressNextRestore = true
+      selectedTab = .teamMembers
+      if !teamMembersViewModel.rows.isEmpty {
+        teamMembersViewModel.didTapPlayAll()
+      } else {
+        teamMembersViewModel.pendingPlayAll = true
+      }
+    }
+    .onReceive(NotificationCenter.default.publisher(for: .openTeamMembers)) { _ in
+      selectedTab = .teamMembers
     }
     .fullScreenCover(isPresented: $isPlayerExpanded) {
       playbackCover
@@ -197,7 +210,10 @@ extension MainTabView {
     guard audioPlayer.nowPlaying != nil else { return }
     guard !isPlayerExpanded else { return }
     guard showMiniPlayer else { return }
-
+    if suppressNextRestore {
+      suppressNextRestore = false
+      return
+    }
     isPlayerExpanded = true
   }
 }

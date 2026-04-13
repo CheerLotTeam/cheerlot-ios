@@ -16,6 +16,8 @@ struct HomePlaybackEntry: TimelineEntry {
   let displayState: DisplayState
 
   enum DisplayState {
+    /// 팀 미선택 상태
+    case teamEmpty
     /// 앱 백그라운드 X: 팀 전체 응원가 모드
     case team(teamName: String, totalSongCount: Int)
     /// 앱 백그라운드 O: 선수 응원가 재생 중
@@ -29,21 +31,11 @@ struct HomePlaybackProvider: TimelineProvider {
   @Injected(TeamSelectionUseCase.self) private var teamSelectionUseCase
 
   func placeholder(in context: Context) -> HomePlaybackEntry {
-    HomePlaybackEntry(
-      date: .now,
-      teamId: "SAMSUNG",
-      displayState: .team(teamName: "삼성 라이온즈", totalSongCount: 30)
-    )
+    fetchEntry()
   }
 
   func getSnapshot(in context: Context, completion: @escaping (HomePlaybackEntry) -> Void) {
-    completion(
-      HomePlaybackEntry(
-        date: .now,
-        teamId: "SAMSUNG",
-        displayState: .team(teamName: "삼성 라이온즈", totalSongCount: 30)
-      )
-    )
+    completion(fetchEntry())
   }
 
   func getTimeline(
@@ -57,11 +49,7 @@ struct HomePlaybackProvider: TimelineProvider {
 
   private func fetchEntry() -> HomePlaybackEntry {
     guard let teamInfo = teamSelectionUseCase.getCurrentTeam() else {
-      return HomePlaybackEntry(
-        date: .now,
-        teamId: "SAMSUNG",
-        displayState: .team(teamName: "삼성", totalSongCount: 0)
-      )
+      return HomePlaybackEntry(date: .now, teamId: "", displayState: .teamEmpty)
     }
 
     let defaults = UserDefaults(suiteName: AppGroup.id)
