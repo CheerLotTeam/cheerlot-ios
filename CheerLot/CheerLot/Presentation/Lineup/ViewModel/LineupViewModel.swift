@@ -121,16 +121,19 @@ final class LineupViewModel {
     guard !isLoading else { return }
     isLoading = true
     errorMessage = nil
+      
+    defer { isLoading = false }
 
     do {
       let data = try await lineupManagementUseCase.loadLineupWithSync(for: TeamID(teamId))
 
       convertToVO(data: data, teamId: teamId)
-
-      isLoading = false
     } catch {
-      isLoading = false
-      errorMessage = "데이터를 불러올 수 없습니다: \(error.userMessage)"
+      if let error = error as? NetworkError, case .decodingError = error {
+        errorMessage = "경기 정보를 준비하고 있어요\n잠시후 다시 확인해주세요"
+      } else {
+        errorMessage = "데이터를 불러올 수 없습니다: \(error.userMessage)"
+      }
     }
   }
 
