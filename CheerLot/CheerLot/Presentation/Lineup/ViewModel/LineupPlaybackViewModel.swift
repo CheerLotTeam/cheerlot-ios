@@ -118,16 +118,18 @@ final class LineupPlaybackViewModel {
 
     lineupPlayers = data.lineupPlayers.map { LineupPlayerVO(from: $0) }
 
-    let opponentTeamInfo = data.opponentTeamId.flatMap { teamInfoUseCase.getTeamInfo($0) }
-    let gameInfoVO = LineupGameInfoVO(
+    // recentGameInfo가 없으면 gameInfo (-> lineupUpdatedToday=true)
+    let recentGameInfo = data.recentGameInfo ?? data.gameInfo
+    let opponentTeamInfo = recentGameInfo.opponent.flatMap { teamInfoUseCase.getTeamInfo($0) }
+    let lineupGameInfoVO = LineupGameInfoVO(
       teamInfo: teamInfo,
       opponentTeamInfo: opponentTeamInfo,
-      gameInfo: data.gameInfo
+      gameInfo: recentGameInfo
     )
 
-    gameDate = gameInfoVO.gameDateText
-    teamsText = gameInfoVO.gameTeamsText
-    isGameDay = [.playingToday, .lineupPending].contains(gameInfoVO.status)
+    gameDate = lineupGameInfoVO.gameDateText
+    teamsText = lineupGameInfoVO.gameTeamsText
+    isGameDay = [.playingToday, .lineupPending].contains(lineupGameInfoVO.status)
   }
 
   private func beginPlayback() {
