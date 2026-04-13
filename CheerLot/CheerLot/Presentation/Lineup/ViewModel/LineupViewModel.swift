@@ -23,6 +23,9 @@ final class LineupViewModel {
   var toastMessage = ""
 
   private var showLineup: Bool = false
+  private var recentGameInfoVO: LineupGameInfoVO?
+  private var currentTeamId: String?
+  private var hasTrackedAppOpen = false
 
   var gameStatus: GameStatus {
     gameInfo?.status ?? .offDay
@@ -34,11 +37,35 @@ final class LineupViewModel {
 
   var displayGameInfoText: String {
     guard let gameInfo else { return "" }
+    if showLineup, let recentVO = recentGameInfoVO {
+      return recentVO.lastGameInfoText
+    }
     return showLineup ? gameInfo.lastGameInfoText : gameInfo.todayGameInfoText
   }
 
-  private var currentTeamId: String?
-  private var hasTrackedAppOpen = false
+  var displayStarterPitcherName: String? {
+    if showLineup, let recentVO = recentGameInfoVO {
+      return recentVO.starterPitcher
+    }
+    return gameInfo?.starterPitcher
+  }
+
+  var noGameMessage: String {
+    switch gameStatus {
+    case .lineupPending: return "오늘 라인업을 준비중이에요"
+    case .offDay: return "오늘은 경기가 없는 날이에요"
+    case .seasonEnded: return "다음 시즌 준비중이에요"
+    case .playingToday: return ""
+    }
+  }
+
+  var toggleShowLineupMessage: String {
+    switch gameStatus {
+    case .lineupPending, .seasonEnded: return "최근 경기 라인업 보기"
+    case .offDay: return "이전 경기 라인업 보기"
+    case .playingToday: return ""
+    }
+  }
 
   // MARK: - Dependencies
 
@@ -148,6 +175,18 @@ final class LineupViewModel {
       opponentTeamInfo: opponentTeamInfo,
       gameInfo: data.gameInfo
     )
+
+    // 최근 완료 경기 VO (showLineup=true 시 사용)
+      if let recentInfo = data.recentGameInfo {
+          let recentOpponentInfo = recentInfo.opponent.flatMap { teamInfoUseCase.getTeamInfo($0) }
+          recentGameInfoVO = LineupGameInfoVO(
+            teamInfo: teamInfo,
+            opponentTeamInfo: recentOpponentInfo,
+            gameInfo: recentInfo
+          )
+      } else {
+          recentGameInfoVO = nil
+      }
 
     // Lineup Players VO 변환
     lineupPlayers = data.lineupPlayers.map { LineupPlayerVO(from: $0) }
