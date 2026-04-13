@@ -30,13 +30,31 @@ struct TeamGamesProvider: TimelineProvider {
 
   func getTimeline(in context: Context, completion: @escaping (Timeline<TeamGamesEntry>) -> Void) {
     Task {
-      let entry = await fetchEntry(useSync: true)
-      let timeline = Timeline(entries: [entry], policy: .after(nextUpdateDate()))
+      let (entry, synced) = await fetchEntryWithResult()
+      // sync 성공: 다음날 00:15 갱신 / 실패: 5분 후 재시도
+      let nextUpdate = synced ? nextUpdateDate() : nextRetryDate()
+      let timeline = Timeline(entries: [entry], policy: .after(nextUpdate))
       completion(timeline)
     }
   }
 
   // MARK: - Private
+
+  private func fetchEntryWithResult() async -> (TeamGamesEntry, synced: Bool) {
+    guard let teamInfo = teamSelectionUseCase.getCurrentTeam() else {
+      return (.fallback, false)
+    }
+
+    if let result = try? await widgetSyncUseCase.syncAndFetch(for: teamInfo.id) {
+      return (buildEntry(from: result, teamInfo: teamInfo), true)
+    }
+
+    if let result = await widgetSyncUseCase.fetchLocal(for: teamInfo.id) {
+      return (buildEntry(from: result, teamInfo: teamInfo), false)
+    }
+
+    return (.fallback, false)
+  }
 
   private func fetchEntry(useSync: Bool) async -> TeamGamesEntry {
     guard let teamInfo = teamSelectionUseCase.getCurrentTeam() else {
@@ -67,14 +85,12 @@ struct TeamGamesProvider: TimelineProvider {
     schedule: TeamGameScheduleInfo,
     gameStatus: GameStatus
   ) -> TeamGamesEntry {
-    let dateFormatter = DateFormatter()
-    dateFormatter.dateFormat = "yyyy-MM-dd"
-
     let games = schedule.recentGames.map { info in
       let opponentInfo = info.opponentTeamId.flatMap { teamInfoUseCase.getTeamInfo($0) }
+      let date = Date.from(yyyyMMdd: info.date) ?? .now
       return Game(
-        id: dateFormatter.date(from: info.date) ?? .now,
-        date: dateFormatter.date(from: info.date) ?? .now,
+        id: date,
+        date: date,
         hasGame: info.hasGame,
         starterPitcherName: info.starterPitcherName,
         opponentId: info.opponentTeamId?.value,
@@ -109,5 +125,10 @@ struct TeamGamesProvider: TimelineProvider {
     let tomorrow = calendar.date(byAdding: .day, value: 1, to: .now) ?? .now
     let midnight = calendar.startOfDay(for: tomorrow)
     return calendar.date(byAdding: .minute, value: 15, to: midnight) ?? midnight
+  }
+
+  // sync 실패 시 5분 후 재시도
+  private func nextRetryDate() -> Date {
+    Date.now.addingTimeInterval(5 * 60)
   }
 }

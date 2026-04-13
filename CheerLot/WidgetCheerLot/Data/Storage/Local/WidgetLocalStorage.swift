@@ -26,7 +26,7 @@ final class WidgetLocalStorage {
     )
 
     do {
-      // 위젯은 읽기 전용 — 마이그레이션 없이 기존 store를 그대로 열기
+      // 마이그레이션 없이 기존 store를 그대로 열기
       return try ModelContainer(for: schema, configurations: configuration)
     } catch {
       fatalError("Widget ModelContainer 생성 실패: \(error)")

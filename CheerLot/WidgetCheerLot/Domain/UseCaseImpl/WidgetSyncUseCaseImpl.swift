@@ -47,9 +47,15 @@ final class WidgetSyncUseCaseImpl: WidgetSyncUseCase {
       try await syncLineup(teamId, newVersion: serverVersions.lineupVersion)
     }
 
-    // 3. 경기 일정 조회 → UserDefaults 저장
-    let schedule = try await teamRemoteRepository.fetchGamesSchedule(teamId)
-    gameScheduleRepository.saveGameSchedule(schedule, for: teamId)
+    // 3. 오늘 날짜 기준으로 캐시가 없거나 오래됐을 때만 경기 일정 fetch
+    let schedule: TeamGameScheduleInfo
+    let cached = gameScheduleRepository.fetchGameSchedule(for: teamId)
+    if let cached, cached.recentGames.first?.date == Date.now.yyyyMMddFormatted {
+      schedule = cached
+    } else {
+      schedule = try await teamRemoteRepository.fetchGamesSchedule(teamId)
+      gameScheduleRepository.saveGameSchedule(schedule, for: teamId)
+    }
 
     // 4. 동기화 후 최신 팀 상태 조회
     guard let updatedTeam = try await teamLocalRepository.fetchTeam(teamId) else {

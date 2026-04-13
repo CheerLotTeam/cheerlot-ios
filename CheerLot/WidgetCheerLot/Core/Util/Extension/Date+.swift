@@ -38,6 +38,13 @@ extension Date {
     return formatter
   }()
 
+  private static let yyyyMMddFormatter: DateFormatter = {
+    let formatter = DateFormatter()
+    formatter.dateFormat = "yyyy-MM-dd"
+    formatter.timeZone = TimeZone(identifier: "Asia/Seoul")
+    return formatter
+  }()
+
   // ex. Wed
   var dayOfWeek: String { Date.dayOfWeekFormatter.string(from: self) }
 
@@ -49,4 +56,12 @@ extension Date {
 
   // ex. 04/10
   var slashDateFormatted: String { Date.slashDateFormatter.string(from: self) }
+
+  // ex. 2026-04-13
+  var yyyyMMddFormatted: String { Date.yyyyMMddFormatter.string(from: self) }
+
+  // yyyy-MM-dd 문자열 → Date 파싱
+  static func from(yyyyMMdd: String) -> Date? {
+    yyyyMMddFormatter.date(from: yyyyMMdd)
+  }
 }

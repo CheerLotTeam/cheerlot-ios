@@ -83,9 +83,12 @@ extension TeamVersionsDTO {
 }
 
 extension TeamGameScheduleDTO {
-  func toEntity() -> TeamGameScheduleInfo {
+  func toEntity() throws -> TeamGameScheduleInfo {
+    guard let code = TeamDataSource.fromAPICode(teamCode) else {
+      throw LocalStorageError.invalidData
+    }
     return TeamGameScheduleInfo(
-      id: TeamID(self.teamCode),
+      id: TeamID(code.rawValue),
       recentGames: self.recentGames.map { game in
         GameScheduleInfo(
           date: game.date,
