@@ -14,7 +14,13 @@ actor PlayerLocalRepositoryImpl: PlayerLocalRepository {
     guard let player = try findPlayer(playerId: playerId) else {
       return nil
     }
-    return try player.toEntity()
+    do {
+      return try player.toEntity()
+    } catch LocalStorageError.invalidData {
+      // team == nil인 고아 Player 삭제 후 nil 반환
+      modelContext.delete(player)
+      return nil
+    }
   }
 
   func fetchAllPlayers(_ teamId: TeamID) async throws -> [PlayerInfo] {
