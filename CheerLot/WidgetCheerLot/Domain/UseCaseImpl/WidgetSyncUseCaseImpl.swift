@@ -10,23 +10,17 @@ import Foundation
 final class WidgetSyncUseCaseImpl: WidgetSyncUseCase {
   private let teamLocalRepository: TeamLocalRepository
   private let teamRemoteRepository: TeamRemoteRepository
-  private let playerLocalRepository: PlayerLocalRepository
-  private let playerRemoteRepository: PlayerRemoteRepository
   private let gameScheduleRepository: GameScheduleRepository
   private let userSettingsRepository: UserSettingsRepository
 
   init(
     teamLocalRepository: TeamLocalRepository,
     teamRemoteRepository: TeamRemoteRepository,
-    playerLocalRepository: PlayerLocalRepository,
-    playerRemoteRepository: PlayerRemoteRepository,
     gameScheduleRepository: GameScheduleRepository,
     userSettingsRepository: UserSettingsRepository
   ) {
     self.teamLocalRepository = teamLocalRepository
     self.teamRemoteRepository = teamRemoteRepository
-    self.playerLocalRepository = playerLocalRepository
-    self.playerRemoteRepository = playerRemoteRepository
     self.gameScheduleRepository = gameScheduleRepository
     self.userSettingsRepository = userSettingsRepository
   }
@@ -34,20 +28,14 @@ final class WidgetSyncUseCaseImpl: WidgetSyncUseCase {
   // MARK: - WidgetSyncUseCase
 
   func syncAndFetch(for teamId: TeamID) async throws -> WidgetGamesInfo {
-    // 1. 버전 확인
-    let serverVersions = try await teamRemoteRepository.fetchVersions(teamId)
-
     guard let localTeam = try await teamLocalRepository.fetchTeam(teamId) else {
       throw LocalStorageError.notFound
     }
 
-    // 2. 버전이 다르면 경기 정보 + 라인업 모두 동기화
-    if localTeam.versionInfo.lineupVersion != serverVersions.lineupVersion {
-      try await syncGameInfo(teamId, localTeam: localTeam)
-      try await syncLineup(teamId, newVersion: serverVersions.lineupVersion)
-    }
+    // 1. 경기 정보 항상 fetch
+    try await syncGameInfo(teamId, localTeam: localTeam)
 
-    // 3. 오늘 날짜 기준으로 캐시가 없거나 오래됐을 때만 경기 일정 fetch
+    // 2. 오늘 날짜 기준으로 캐시가 없거나 오래됐을 때만 경기 일정 fetch
     let schedule: TeamGameScheduleInfo
     let cached = gameScheduleRepository.fetchGameSchedule(for: teamId)
     if let cached, cached.recentGames.first?.date == Date.now.yyyyMMddFormatted {
@@ -57,7 +45,7 @@ final class WidgetSyncUseCaseImpl: WidgetSyncUseCase {
       gameScheduleRepository.saveGameSchedule(schedule, for: teamId)
     }
 
-    // 4. 동기화 후 최신 팀 상태 조회
+    // 3. 동기화 후 최신 팀 상태 조회
     guard let updatedTeam = try await teamLocalRepository.fetchTeam(teamId) else {
       throw LocalStorageError.notFound
     }
@@ -93,64 +81,6 @@ extension WidgetSyncUseCaseImpl {
       teamId: teamId,
       gameInfo: gameInfo,
       versionInfo: localTeam.versionInfo
-    )
-    try await teamLocalRepository.updateTeam(updatedTeam)
-  }
-
-  private func syncLineup(_ teamId: TeamID, newVersion: Int) async throws {
-    let serverLineup = try await playerRemoteRepository.fetchLineup(teamId)
-    let localPlayers = try await playerLocalRepository.fetchAllPlayers(teamId)
-
-    try await playerLocalRepository.performTransaction {
-      for localPlayer in localPlayers where localPlayer.battingOrder != nil {
-        let updated = PlayerInfo(
-          id: localPlayer.id,
-          teamId: localPlayer.teamId,
-          name: localPlayer.name,
-          backNumber: localPlayer.backNumber,
-          position: localPlayer.position,
-          batThrow: localPlayer.batThrow,
-          battingOrder: nil,
-          cheerSongs: localPlayer.cheerSongs
-        )
-        try await playerLocalRepository.updatePlayer(updated)
-      }
-
-      for lineupPlayer in serverLineup {
-        if let localPlayer = try await playerLocalRepository.fetchPlayer(lineupPlayer.id) {
-          let updated = PlayerInfo(
-            id: localPlayer.id,
-            teamId: localPlayer.teamId,
-            name: localPlayer.name,
-            backNumber: localPlayer.backNumber,
-            position: lineupPlayer.position,
-            batThrow: lineupPlayer.batThrow,
-            battingOrder: lineupPlayer.battingOrder,
-            cheerSongs: localPlayer.cheerSongs
-          )
-          try await playerLocalRepository.updatePlayer(updated)
-        } else {
-          try await playerLocalRepository.createPlayer(lineupPlayer, teamId)
-        }
-      }
-    }
-
-    try await updateLineupVersion(teamId, newVersion)
-  }
-
-  private func updateLineupVersion(_ teamId: TeamID, _ version: Int) async throws {
-    guard let localTeam = try await teamLocalRepository.fetchTeam(teamId) else {
-      throw LocalStorageError.notFound
-    }
-
-    let updatedTeam = TeamState(
-      teamId: teamId,
-      gameInfo: localTeam.gameInfo,
-      versionInfo: TeamVersionInfo(
-        id: teamId,
-        lineupVersion: version,
-        playersVersion: localTeam.versionInfo.playersVersion
-      )
     )
     try await teamLocalRepository.updateTeam(updatedTeam)
   }
