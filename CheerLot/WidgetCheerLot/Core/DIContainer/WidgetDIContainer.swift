@@ -81,14 +81,6 @@ extension WidgetDIContainer {
       TeamRemoteRepositoryImpl()
     }
 
-    registerSingleton(PlayerLocalRepository.self) {
-      PlayerLocalRepositoryImpl(modelContainer: WidgetLocalStorage.shared.modelContainer)
-    }
-
-    registerSingleton(PlayerRemoteRepository.self) {
-      PlayerRemoteRepositoryImpl()
-    }
-
     registerSingleton(GameScheduleRepository.self) {
       GameScheduleRepositoryImpl()
     }
@@ -115,8 +107,6 @@ extension WidgetDIContainer {
       WidgetSyncUseCaseImpl(
         teamLocalRepository: container.resolve(TeamLocalRepository.self),
         teamRemoteRepository: container.resolve(TeamRemoteRepository.self),
-        playerLocalRepository: container.resolve(PlayerLocalRepository.self),
-        playerRemoteRepository: container.resolve(PlayerRemoteRepository.self),
         gameScheduleRepository: container.resolve(GameScheduleRepository.self),
         userSettingsRepository: container.resolve(UserSettingsRepository.self)
       )
