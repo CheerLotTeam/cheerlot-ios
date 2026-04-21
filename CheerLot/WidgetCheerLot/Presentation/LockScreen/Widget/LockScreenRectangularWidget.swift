@@ -17,8 +17,9 @@ struct LockScreenRectangularWidgetView: View {
     switch entry.gameStatus {
     case .teamEmpty: return "팀 정보 없음"
     case .playingToday:
+      let isHome = entry.gameSchedule.first?.isHome == true
       let opponent = entry.gameSchedule.first?.opponentShortName ?? ""
-      return "\(entry.teamShortName) vs \(opponent)"
+      return "\(isHome ? opponent : entry.teamShortName) vs \(isHome ? entry.teamShortName : opponent)"
     case .offDay: return "경기 없음"
     case .seasonEnded: return "시즌 종료"
     }
