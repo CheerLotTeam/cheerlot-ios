@@ -176,7 +176,8 @@ final class LineupViewModel {
     gameInfo = LineupGameInfoVO(
       teamInfo: teamInfo,
       opponentTeamInfo: opponentTeamInfo,
-      gameInfo: data.gameInfo
+      gameInfo: data.gameInfo,
+      isHome: data.isHome
     )
 
     // 최근 완료 경기 VO (showLineup=true 시 사용)

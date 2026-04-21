@@ -206,6 +206,7 @@ final class LineupManagementUseCaseImpl: LineupManagementUseCase {
       lineupUpdatedToday ? teamData.gameInfo.opponent : todaySchedule?.opponentTeamId
     let starterPitcherName: String? =
       lineupUpdatedToday ? teamData.gameInfo.starterPitcherName : todaySchedule?.starterPitcherName
+    let isHome: Bool? = gameScheduleRepository.fetchGameSchedule(for: teamId)?.recentGames.first?.isHome
 
     // Entity단의 경기 상태 매칭
     let finalStatus: GameStatus =
@@ -226,6 +227,7 @@ final class LineupManagementUseCaseImpl: LineupManagementUseCase {
       gameInfo: resolvedGameInfo,
       lineupPlayers: lineupPlayers,
       opponentTeamId: opponentTeamId,
+      isHome: isHome,
       recentGameInfo: recentGameInfo
     )
   }

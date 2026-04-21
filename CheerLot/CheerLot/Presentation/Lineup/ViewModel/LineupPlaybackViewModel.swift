@@ -124,7 +124,8 @@ final class LineupPlaybackViewModel {
     let lineupGameInfoVO = LineupGameInfoVO(
       teamInfo: teamInfo,
       opponentTeamInfo: opponentTeamInfo,
-      gameInfo: displayGameInfo
+      gameInfo: displayGameInfo,
+      isHome: data.isHome
     )
 
     gameDate = lineupGameInfoVO.gameDateText
