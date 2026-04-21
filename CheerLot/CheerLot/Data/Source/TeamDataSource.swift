@@ -148,10 +148,7 @@ struct TeamDataSource {
   }
 
   static func fromAPICode(_ apiCode: String) -> TeamCode? {
-    let normalized =
-      apiCode
-      .trimmingCharacters(in: .whitespacesAndNewlines)
-      .lowercased()
+    let normalized = apiCode.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
 
     switch normalized {
     case APICode.doosan.rawValue: return .doosan

@@ -1,0 +1,134 @@
+//
+//  TeamGamesProvider.swift
+//  CheerLot
+//
+//  Created by 이현주 on 4/6/26.
+//
+
+import WidgetKit
+
+struct TeamGamesProvider: TimelineProvider {
+  @Injected(TeamSelectionUseCase.self) private var teamSelectionUseCase
+  @Injected(TeamInfoUseCase.self) private var teamInfoUseCase
+  @Injected(WidgetSyncUseCase.self) private var widgetSyncUseCase
+
+  // MARK: - Placeholder
+
+  func placeholder(in context: Context) -> TeamGamesEntry {
+    .preview
+  }
+
+  // MARK: - Snapshot
+
+  func getSnapshot(in context: Context, completion: @escaping (TeamGamesEntry) -> Void) {
+    Task {
+      completion(await fetchEntry(useSync: false))
+    }
+  }
+
+  // MARK: - Timeline
+
+  func getTimeline(in context: Context, completion: @escaping (Timeline<TeamGamesEntry>) -> Void) {
+    Task {
+      let (entry, synced) = await fetchEntryWithResult()
+      // sync 성공: 다음날 00:15 갱신 / 실패: 5분 후 재시도
+      let nextUpdate = synced ? nextUpdateDate() : nextRetryDate()
+      let timeline = Timeline(entries: [entry], policy: .after(nextUpdate))
+      completion(timeline)
+    }
+  }
+
+  // MARK: - Private
+
+  private func fetchEntryWithResult() async -> (TeamGamesEntry, synced: Bool) {
+    guard let teamInfo = teamSelectionUseCase.getCurrentTeam() else {
+      return (.fallback, false)
+    }
+
+    if let result = try? await widgetSyncUseCase.syncAndFetch(for: teamInfo.id) {
+      return (buildEntry(from: result, teamInfo: teamInfo), true)
+    }
+
+    if let result = await widgetSyncUseCase.fetchLocal(for: teamInfo.id) {
+      return (buildEntry(from: result, teamInfo: teamInfo), false)
+    }
+
+    return (.fallback, false)
+  }
+
+  private func fetchEntry(useSync: Bool) async -> TeamGamesEntry {
+    guard let teamInfo = teamSelectionUseCase.getCurrentTeam() else {
+      return .fallback
+    }
+
+    if useSync, let result = try? await widgetSyncUseCase.syncAndFetch(for: teamInfo.id) {
+      return buildEntry(from: result, teamInfo: teamInfo)
+    }
+
+    if let result = await widgetSyncUseCase.fetchLocal(for: teamInfo.id) {
+      return buildEntry(from: result, teamInfo: teamInfo)
+    }
+
+    return .fallback
+  }
+
+  private func buildEntry(from result: WidgetGamesInfo, teamInfo: TeamInfo) -> TeamGamesEntry {
+    buildEntry(
+      teamInfo: teamInfo,
+      schedule: result.schedule,
+      gameStatus: result.gameStatus
+    )
+  }
+
+  private func buildEntry(
+    teamInfo: TeamInfo,
+    schedule: TeamGameScheduleInfo,
+    gameStatus: GameStatus
+  ) -> TeamGamesEntry {
+    let games = schedule.recentGames.map { info in
+      let opponentInfo = info.opponentTeamId.flatMap { teamInfoUseCase.getTeamInfo($0) }
+      let date = Date.from(yyyyMMdd: info.date) ?? .now
+      return Game(
+        id: date,
+        date: date,
+        hasGame: info.hasGame,
+        starterPitcherName: info.starterPitcherName,
+        opponentId: info.opponentTeamId?.value,
+        opponentShortName: opponentInfo?.shortName,
+        opponentLongName: opponentInfo?.longName,
+        opponentStarterPitcherName: info.opponentStarterPitcherName,
+        isHome: info.isHome
+      )
+    }
+
+    return TeamGamesEntry(
+      date: .now,
+      teamId: teamInfo.id.value,
+      teamShortName: teamInfo.shortName,
+      teamLongName: teamInfo.longName,
+      gameSchedule: games,
+      gameStatus: mapStatus(gameStatus)
+    )
+  }
+
+  private func mapStatus(_ gameStatus: GameStatus) -> WidgetGameStatus {
+    switch gameStatus {
+    case .playingToday, .lineupPending: return .playingToday
+    case .offDay: return .offDay
+    case .seasonEnded: return .seasonEnded
+    }
+  }
+
+  // 서버 업데이트 시간에 맞춰 00시 15분 호출
+  private func nextUpdateDate() -> Date {
+    let calendar = Calendar.current
+    let tomorrow = calendar.date(byAdding: .day, value: 1, to: .now) ?? .now
+    let midnight = calendar.startOfDay(for: tomorrow)
+    return calendar.date(byAdding: .minute, value: 15, to: midnight) ?? midnight
+  }
+
+  // sync 실패 시 5분 후 재시도
+  private func nextRetryDate() -> Date {
+    Date.now.addingTimeInterval(5 * 60)
+  }
+}

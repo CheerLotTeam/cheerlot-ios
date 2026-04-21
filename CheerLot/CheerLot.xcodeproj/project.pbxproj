@@ -16,6 +16,8 @@
 		CF05480E2E895CFB003CCB61 /* FirebaseRemoteConfig in Frameworks */ = {isa = PBXBuildFile; productRef = CF05480D2E895CFB003CCB61 /* FirebaseRemoteConfig */; };
 		CF09BDE92E22901C00E11198 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = CF09BDE82E22901C00E11198 /* FirebaseAnalytics */; };
 		CF09BDEB2E22901C00E11198 /* FirebaseCrashlytics in Frameworks */ = {isa = PBXBuildFile; productRef = CF09BDEA2E22901C00E11198 /* FirebaseCrashlytics */; };
+		CF3952002F8271A40028D2DA /* Moya in Frameworks */ = {isa = PBXBuildFile; productRef = CF3951FF2F8271A40028D2DA /* Moya */; };
+		CF3952022F8271AA0028D2DA /* AmplitudeUnified in Frameworks */ = {isa = PBXBuildFile; productRef = CF3952012F8271AA0028D2DA /* AmplitudeUnified */; };
 		CF3BA7382DED7FB900E600B6 /* WatchCheerLot Watch App.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = CF3BA72B2DED7FB800E600B6 /* WatchCheerLot Watch App.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		CF66AB892F75030800D131B8 /* AmplitudeUnified in Frameworks */ = {isa = PBXBuildFile; productRef = CF66AB882F75030800D131B8 /* AmplitudeUnified */; };
 		CF703F922DE82C5F00330888 /* Moya in Frameworks */ = {isa = PBXBuildFile; productRef = CF703F912DE82C5F00330888 /* Moya */; };
@@ -77,6 +79,62 @@
 			);
 			target = 3C96AB792F3B4953007ED0A5 /* WidgetCheerLotExtension */;
 		};
+		3CE85B502F7D7BA9003FE470 /* Exceptions for "CheerLot" folder in "WidgetCheerLotExtension" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Core/Util/Config.swift,
+				Data/DTOs/APIResponse/PlayerResponseDTO.swift,
+				Data/DTOs/APIResponse/ServerErrorResponseDTO.swift,
+				Data/DTOs/APIResponse/TeamResponseDTO.swift,
+				Data/DTOs/LocalDataMapping/GameScheduleStorageDTO.swift,
+				Data/RepositoryImpl/Setting/UserSettingsRepositoryImpl.swift,
+				Data/RepositoryImpl/Team/GameScheduleRepositoryImpl.swift,
+				Data/RepositoryImpl/Team/TeamInfoRepositoryImpl.swift,
+				Data/RepositoryImpl/Team/TeamLocalRepositoryImpl.swift,
+				Data/RepositoryImpl/Team/TeamRemoteRepositoryImpl.swift,
+				Data/RepositoryImpl/Team/TeamSelectionRepositoryImpl.swift,
+				Data/Source/TeamDataSource.swift,
+				Data/Storage/Local/LocalStorageError.swift,
+				Data/Storage/Local/Schema/CheerLotSchemaV3.swift,
+				Data/Storage/Local/Schema/SchemaAliases.swift,
+				Data/Storage/Local/UserDefaultsKey.swift,
+				Data/Storage/Remote/API/AudioAPI.swift,
+				Data/Storage/Remote/API/PlayerAPI.swift,
+				Data/Storage/Remote/API/TeamAPI.swift,
+				Data/Storage/Remote/base/APIDomain.swift,
+				Data/Storage/Remote/base/APITargetType.swift,
+				Data/Storage/Remote/base/NetworkError.swift,
+				Data/Storage/Remote/base/NetworkProvider.swift,
+				Domain/Entity/CheerSong/CheerSongInfo.swift,
+				Domain/Entity/Player/PlayerInfo.swift,
+				Domain/Entity/Team/LineupData.swift,
+				Domain/Entity/Team/TeamGameInfo.swift,
+				Domain/Entity/Team/TeamGameScheduleInfo.swift,
+				Domain/Entity/Team/TeamInfo.swift,
+				Domain/Entity/Team/TeamState.swift,
+				Domain/Entity/Team/TeamVersionInfo.swift,
+				Domain/Repository/Interface/Setting/UserSettingsRepository.swift,
+				Domain/Repository/Interface/Team/GameScheduleRepository.swift,
+				Domain/Repository/Interface/Team/TeamInfoRepository.swift,
+				Domain/Repository/Interface/Team/TeamLocalRepository.swift,
+				Domain/Repository/Interface/Team/TeamRemoteRepository.swift,
+				Domain/Repository/Interface/Team/TeamSelectionRepository.swift,
+				Domain/UseCase/Team/TeamGameInfoUseCase.swift,
+				Domain/UseCase/Team/TeamInfoUseCase.swift,
+				Domain/UseCase/Team/TeamSelectionUseCase.swift,
+				Domain/UseCaseImpl/Team/TeamGameInfoUseCaseImpl.swift,
+				Domain/UseCaseImpl/Team/TeamInfoUseCaseImpl.swift,
+				Domain/UseCaseImpl/Team/TeamSelectionUseCaseImpl.swift,
+				Presentation/Setting/ValueObject/AppIconMode.swift,
+				"Resource/Fonts/Pretendard-Bold.otf",
+				"Resource/Fonts/Pretendard-Medium.otf",
+				"Resource/Fonts/Pretendard-Regular.otf",
+				"Resource/Fonts/Pretendard-SemiBold.otf",
+				"Resource/Fonts/RobotoCondensed-Black.ttf",
+				Secret.xcconfig,
+			);
+			target = 3C96AB792F3B4953007ED0A5 /* WidgetCheerLotExtension */;
+		};
 		CF3BA7982DED855A00E600B6 /* Exceptions for "CheerLot" folder in "WatchCheerLot Watch App" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
@@ -120,6 +178,7 @@
 			exceptions = (
 				CF502C212E1BDDEE00AF772B /* Exceptions for "CheerLot" folder in "CheerLot" target */,
 				CF3BA7982DED855A00E600B6 /* Exceptions for "CheerLot" folder in "WatchCheerLot Watch App" target */,
+				3CE85B502F7D7BA9003FE470 /* Exceptions for "CheerLot" folder in "WidgetCheerLotExtension" target */,
 			);
 			path = CheerLot;
 			sourceTree = "<group>";
@@ -131,7 +190,9 @@
 			isa = PBXFrameworksBuildPhase;
 			files = (
 				3C96AB7F2F3B4954007ED0A5 /* SwiftUI.framework in Frameworks */,
+				CF3952022F8271AA0028D2DA /* AmplitudeUnified in Frameworks */,
 				3C96AB7D2F3B4954007ED0A5 /* WidgetKit.framework in Frameworks */,
+				CF3952002F8271A40028D2DA /* Moya in Frameworks */,
 			);
 		};
 		CF3BA7282DED7FB800E600B6 /* Frameworks */ = {
@@ -203,6 +264,10 @@
 				3C96AB802F3B4954007ED0A5 /* WidgetCheerLot */,
 			);
 			name = WidgetCheerLotExtension;
+			packageProductDependencies = (
+				CF3951FF2F8271A40028D2DA /* Moya */,
+				CF3952012F8271AA0028D2DA /* AmplitudeUnified */,
+			);
 			productName = WidgetCheerLotExtension;
 			productReference = 3C96AB7A2F3B4953007ED0A5 /* WidgetCheerLotExtension.appex */;
 			productType = "com.apple.product-type.app-extension";
@@ -466,7 +531,7 @@
 				INFOPLIST_FILE = WidgetCheerLot/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = WidgetCheerLot;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 26.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -479,11 +544,15 @@
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "match Development group.com.CheerLot.WidgetCheerLot";
 				SKIP_INSTALL = YES;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -503,7 +572,7 @@
 				INFOPLIST_FILE = WidgetCheerLot/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = WidgetCheerLot;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 26.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -516,11 +585,15 @@
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "match AppStore group.com.CheerLot.WidgetCheerLot";
 				SKIP_INSTALL = YES;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
@@ -736,7 +809,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 6;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = D8KHM6Q8SA;
@@ -757,7 +830,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.0.0;
+				MARKETING_VERSION = 2.1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = group.com.CheerLot;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -783,7 +856,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 6;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = D8KHM6Q8SA;
@@ -804,7 +877,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.0.0;
+				MARKETING_VERSION = 2.1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = group.com.CheerLot;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -885,8 +958,8 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/amplitude/AmplitudeUnified-Swift";
 			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 1.0.0;
+				branch = main;
+				kind = branch;
 			};
 		};
 		CF703F902DE82C5F00330888 /* XCRemoteSwiftPackageReference "Moya" */ = {
@@ -924,6 +997,16 @@
 			isa = XCSwiftPackageProductDependency;
 			package = CF09BDE72E22901C00E11198 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseCrashlytics;
+		};
+		CF3951FF2F8271A40028D2DA /* Moya */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = CF703F902DE82C5F00330888 /* XCRemoteSwiftPackageReference "Moya" */;
+			productName = Moya;
+		};
+		CF3952012F8271AA0028D2DA /* AmplitudeUnified */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = CF66AB872F75030700D131B8 /* XCRemoteSwiftPackageReference "AmplitudeUnified-Swift" */;
+			productName = AmplitudeUnified;
 		};
 		CF66AB882F75030800D131B8 /* AmplitudeUnified */ = {
 			isa = XCSwiftPackageProductDependency;

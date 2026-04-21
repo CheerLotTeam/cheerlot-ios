@@ -14,18 +14,6 @@ final class UserSettingsUseCaseImpl: UserSettingsUseCase {
     self.userSettingsRepository = userSettingsRepository
   }
 
-  func getShowRecentLineup() -> Bool {
-    userSettingsRepository.getShowRecentLineup()
-  }
-
-  func setShowRecentLineup(_ value: Bool) {
-    userSettingsRepository.setShowRecentLineup(value)
-  }
-
-  func resetShowRecentLineup() {
-    userSettingsRepository.resetShowRecentLineup()
-  }
-
   func getAppIconMode() -> AppIconMode {
     userSettingsRepository.getAppIconMode()
   }

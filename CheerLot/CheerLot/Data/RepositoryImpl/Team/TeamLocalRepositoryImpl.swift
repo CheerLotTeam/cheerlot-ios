@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftData
+import WidgetKit
 
 @ModelActor
 actor TeamLocalRepositoryImpl: TeamLocalRepository {
@@ -24,6 +25,7 @@ actor TeamLocalRepositoryImpl: TeamLocalRepository {
 
     updateModelFromEntity(model: data, entity: team)
     try modelContext.save()
+    WidgetCenter.shared.reloadAllTimelines()
   }
 
   func teamExists(_ teamId: TeamID) async throws -> Bool {
@@ -46,6 +48,9 @@ extension TeamLocalRepositoryImpl {
   private func updateModelFromEntity(model: Team, entity: TeamState) {
     switch entity.gameInfo.status {
     case .playingToday:
+      model.hasTodayGame = true
+      model.isSeasonEnded = false
+    case .lineupPending:
       model.hasTodayGame = true
       model.isSeasonEnded = false
     case .offDay:

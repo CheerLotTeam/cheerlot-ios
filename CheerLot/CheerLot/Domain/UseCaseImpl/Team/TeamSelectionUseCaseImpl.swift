@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import WidgetKit
 
 final class TeamSelectionUseCaseImpl: TeamSelectionUseCase {
 
@@ -21,10 +22,12 @@ final class TeamSelectionUseCaseImpl: TeamSelectionUseCase {
 
   func selectTeam(_ teamId: TeamID) {
     teamSelectionRepository.updateSelectedTeam(teamId)
+    WidgetCenter.shared.reloadAllTimelines()
   }
 
   func changeTeam(_ teamId: TeamID) {
     teamSelectionRepository.updateSelectedTeam(teamId)
+    WidgetCenter.shared.reloadAllTimelines()
   }
 
   func hasSelectedTeam() -> Bool {

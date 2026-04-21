@@ -73,6 +73,7 @@ final class PlaybackViewModel {
 
   func onAppear() async {
     await loadIsGameDay()
+    guard !Task.isCancelled else { return }
     syncFromService()
     startObservingTime()
     trackPresented()

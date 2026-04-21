@@ -83,13 +83,6 @@ struct LineupView: View {
     return max(0, availableHeight / 9)
   }
 
-  private func noGameMessage(for status: GameStatus) -> String {
-    switch status {
-    case .offDay: return "오늘은 경기가 없는 날이에요"
-    case .seasonEnded: return "다음 시즌 준비중이에요"
-    case .playingToday: return ""
-    }
-  }
 }
 
 extension LineupView {
@@ -139,7 +132,7 @@ extension LineupView {
       .frame(maxHeight: .infinity, alignment: .top)  // header 상단 고정
 
       if !viewModel.shouldShowLineup {
-        hasNoGameView(asset: asset, status: viewModel.gameStatus)
+        hasNoGameView(asset: asset)
       }
     }
   }
@@ -158,15 +151,17 @@ extension LineupView {
 
   private func gameInfoView(asset: LineupAssetVO, gameInfo: LineupGameInfoVO) -> some View {
     HStack(spacing: 8) {
-      Text(viewModel.shouldShowLineup ? gameInfo.lastGameInfoText : gameInfo.todayNoGameText)
+      Text(viewModel.displayGameInfoText)
         .font(.M5_gameState)
 
-      if viewModel.shouldShowLineup, let starterPitcher = gameInfo.starterPitcher {
+      if viewModel.shouldShowLineup || viewModel.gameStatus == .lineupPending,
+        let starterPitcher = viewModel.displayStarterPitcherName
+      {
         HStack(spacing: 2) {
           Image(.pitcher)
             .resizable()
-            .frame(width: 12, height: 12)
             .scaledToFit()
+            .frame(width: 12)
 
           Text(starterPitcher)
             .font(.B4)
@@ -256,18 +251,18 @@ extension LineupView {
     .clipShape(Rectangle())
   }
 
-  private func hasNoGameView(asset: LineupAssetVO, status: GameStatus) -> some View {
+  private func hasNoGameView(asset: LineupAssetVO) -> some View {
     VStack(spacing: 24) {
       Spacer()
 
-      Text(noGameMessage(for: status))
+      Text(viewModel.noGameMessage)
         .font(.M3)
         .foregroundStyle(asset.positionTextColor)
 
       Button {
-        viewModel.toggleShowRecentLineup()
+        viewModel.toggleShowLineup()
       } label: {
-        Text("최근 경기 라인업 보기")
+        Text(viewModel.toggleShowLineupMessage)
           .font(.SB8)
           .foregroundStyle(.grayWhite)
           .padding(.vertical, 6)

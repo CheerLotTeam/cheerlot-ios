@@ -18,7 +18,7 @@ protocol AnalyticsEvent {
 
 enum AppEntryPoint: String {
   case app
-  case widget  // 추후
+  case widget
   case push  // 추후
 }
 
@@ -42,7 +42,7 @@ enum PlayTrigger: String {
 
 struct AppOpenEvent: AnalyticsEvent {
   let entryPoint: AppEntryPoint
-  let widgetId: Int?
+  let widgetId: String?
   let isGameDay: Bool
 
   var name: String { "app_open" }

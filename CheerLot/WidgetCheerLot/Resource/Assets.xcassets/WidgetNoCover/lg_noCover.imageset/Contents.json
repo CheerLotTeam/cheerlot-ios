@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "lg_noCover.png",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

@@ -5,6 +5,7 @@
 //  Created by theo on 6/2/25.
 //
 
+internal import Alamofire
 import Foundation
 import Moya
 

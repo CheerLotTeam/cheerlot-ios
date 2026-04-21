@@ -10,8 +10,17 @@ import Foundation
 enum UserDefaultsKey {
   static let selectedTeamId = "selectedTeamId"
   static let hasSelectedTeam = "hasSelectedTeam"
-  static let showRecentLineup = "showRecentLineup"
   static let appIconMode = "appIconMode"
+  static func lineupUpdatedToday(for teamId: TeamID) -> String {
+    "lineupUpdatedToday.\(teamId.value)"
+  }
+
+  enum Widget {
+    static let playerName = "widget.playerName"
+    static let songTitle = "widget.songTitle"
+    static let totalSongCount = "widget.totalSongCount"
+    static let gameSchedule = "widget.gameSchedule"
+  }
 }
 
 enum AppGroup {

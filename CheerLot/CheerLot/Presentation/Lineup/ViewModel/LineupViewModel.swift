@@ -22,22 +22,50 @@ final class LineupViewModel {
   var showToast = false
   var toastMessage = ""
 
-  var showRecentLineup: Bool = false {
-    didSet {
-      userSettingsUseCase.setShowRecentLineup(showRecentLineup)
-    }
-  }
+  private var showLineup: Bool = false
+  private var recentGameInfoVO: LineupGameInfoVO?
+  private var currentTeamId: String?
+  private var hasTrackedAppOpen = false
 
   var gameStatus: GameStatus {
     gameInfo?.status ?? .offDay
   }
 
   var shouldShowLineup: Bool {
-    gameStatus == .playingToday || showRecentLineup
+    gameStatus == .playingToday || showLineup
   }
 
-  private var currentTeamId: String?
-  private var hasTrackedAppOpen = false
+  var displayGameInfoText: String {
+    guard let gameInfo else { return "" }
+    if showLineup, let recentVO = recentGameInfoVO {
+      return recentVO.lastGameInfoText
+    }
+    return showLineup ? gameInfo.lastGameInfoText : gameInfo.todayGameInfoText
+  }
+
+  var displayStarterPitcherName: String? {
+    if showLineup, let recentVO = recentGameInfoVO {
+      return recentVO.starterPitcher
+    }
+    return gameInfo?.starterPitcher
+  }
+
+  var noGameMessage: String {
+    switch gameStatus {
+    case .lineupPending: return "오늘 라인업을 준비중이에요"
+    case .offDay: return "오늘은 경기가 없는 날이에요"
+    case .seasonEnded: return "다음 시즌 준비중이에요"
+    case .playingToday: return ""
+    }
+  }
+
+  var toggleShowLineupMessage: String {
+    switch gameStatus {
+    case .lineupPending, .seasonEnded: return "최근 경기 라인업 보기"
+    case .offDay: return "이전 경기 라인업 보기"
+    case .playingToday: return ""
+    }
+  }
 
   // MARK: - Dependencies
 
@@ -45,7 +73,7 @@ final class LineupViewModel {
   @Injected(AnalyticsService.self) private var analyticsService
 
   @ObservationIgnored
-  @Injected(UserSettingsUseCase.self) private var userSettingsUseCase
+  @Injected(AppLaunchContext.self) private var launchContext
 
   @ObservationIgnored
   @Injected(TeamSelectionUseCase.self) private var teamSelectionUseCase
@@ -68,22 +96,23 @@ final class LineupViewModel {
     currentTeamId = teamInfo.id.value
 
     await loadData()
-    showRecentLineup = userSettingsUseCase.getShowRecentLineup()
 
     if !hasTrackedAppOpen {
       hasTrackedAppOpen = true
+      let widgetKind = launchContext.sourceWidgetKind
+      launchContext.sourceWidgetKind = nil
       analyticsService.track(
         AppOpenEvent(
-          entryPoint: .app,
-          widgetId: nil,
-          isGameDay: gameInfo?.status == .playingToday
+          entryPoint: widgetKind != nil ? .widget : .app,
+          widgetId: widgetKind,
+          isGameDay: [.playingToday, .lineupPending].contains(gameInfo?.status)
         )
       )
     }
   }
 
-  func toggleShowRecentLineup() {
-    showRecentLineup = true
+  func toggleShowLineup() {
+    showLineup = true
   }
 
   func loadData() async {
@@ -93,15 +122,18 @@ final class LineupViewModel {
     isLoading = true
     errorMessage = nil
 
+    defer { isLoading = false }
+
     do {
       let data = try await lineupManagementUseCase.loadLineupWithSync(for: TeamID(teamId))
 
       convertToVO(data: data, teamId: teamId)
-
-      isLoading = false
     } catch {
-      isLoading = false
-      errorMessage = "데이터를 불러올 수 없습니다: \(error.userMessage)"
+      if let error = error as? NetworkError, case .decodingError = error {
+        errorMessage = "경기 정보를 준비하고 있어요\n잠시후 다시 확인해주세요"
+      } else {
+        errorMessage = "데이터를 불러올 수 없습니다: \(error.userMessage)"
+      }
     }
   }
 
@@ -146,6 +178,18 @@ final class LineupViewModel {
       opponentTeamInfo: opponentTeamInfo,
       gameInfo: data.gameInfo
     )
+
+    // 최근 완료 경기 VO (showLineup=true 시 사용)
+    if let recentInfo = data.recentGameInfo {
+      let recentOpponentInfo = recentInfo.opponent.flatMap { teamInfoUseCase.getTeamInfo($0) }
+      recentGameInfoVO = LineupGameInfoVO(
+        teamInfo: teamInfo,
+        opponentTeamInfo: recentOpponentInfo,
+        gameInfo: recentInfo
+      )
+    } else {
+      recentGameInfoVO = nil
+    }
 
     // Lineup Players VO 변환
     lineupPlayers = data.lineupPlayers.map { LineupPlayerVO(from: $0) }

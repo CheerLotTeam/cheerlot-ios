@@ -10,9 +10,17 @@ import WidgetKit
 
 @main
 struct WidgetCheerLotBundle: WidgetBundle {
+  init() {
+    WidgetDIContainer.shared.assemble()
+  }
+
   var body: some Widget {
-    WidgetCheerLot()
-    WidgetCheerLotControl()
-    WidgetCheerLotLiveActivity()
+    LockScreenInlineWidget()
+    LockScreenRectangularWidget()
+    LockScreenCircularWidget()
+    HomePlaybackWidget()
+    HomeGameInfoSmallWidget()
+    HomeGameInfoMediumWidget()
+    HomeGameScheduleMediumWidget()
   }
 }
