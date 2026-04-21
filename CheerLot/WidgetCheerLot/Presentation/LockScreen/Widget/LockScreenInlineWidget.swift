@@ -19,7 +19,8 @@ struct LockScreenInlineWidgetView: View {
     case .playingToday:
       let isHome = entry.gameSchedule.first?.isHome == true
       let opponent = entry.gameSchedule.first?.opponentShortName ?? ""
-      return "\(isHome ? opponent : entry.teamShortName) VS \(isHome ? entry.teamShortName : opponent)"
+      return
+        "\(isHome ? opponent : entry.teamShortName) VS \(isHome ? entry.teamShortName : opponent)"
     case .offDay: return "경기 없음"
     case .seasonEnded: return "시즌 종료"
     }
