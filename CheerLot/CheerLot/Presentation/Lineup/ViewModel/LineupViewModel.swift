@@ -186,7 +186,8 @@ final class LineupViewModel {
       recentGameInfoVO = LineupGameInfoVO(
         teamInfo: teamInfo,
         opponentTeamInfo: recentOpponentInfo,
-        gameInfo: recentInfo
+        gameInfo: recentInfo,
+        isHome: data.recentGameIsHome
       )
     } else {
       recentGameInfoVO = nil
