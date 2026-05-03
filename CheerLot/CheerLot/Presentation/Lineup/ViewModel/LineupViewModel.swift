@@ -168,7 +168,7 @@ final class LineupViewModel {
     guard let teamInfo = teamInfoUseCase.getTeamInfo(TeamID(teamId)) else { return }
 
     // 상대팀 정보 조회
-    let opponentTeamInfo = data.opponentTeamId.flatMap {
+    let opponentTeamInfo = data.gameInfo.opponent.flatMap {
       teamInfoUseCase.getTeamInfo($0)
     }
 
