@@ -50,9 +50,10 @@ final class WidgetSyncUseCaseImpl: WidgetSyncUseCase {
       throw LocalStorageError.notFound
     }
 
+    let resolvedStatus = resolvedGameStatus(updatedTeam.gameInfo.status, hasGame: schedule.recentGames.first?.hasGame)
     return WidgetGamesInfo(
       schedule: schedule,
-      gameStatus: updatedTeam.gameInfo.status
+      gameStatus: resolvedStatus
     )
   }
 
@@ -62,9 +63,10 @@ final class WidgetSyncUseCaseImpl: WidgetSyncUseCase {
       let localTeam = try? await teamLocalRepository.fetchTeam(teamId)
     else { return nil }
 
+    let resolvedStatus = resolvedGameStatus(localTeam.gameInfo.status, hasGame: schedule.recentGames.first?.hasGame)
     return WidgetGamesInfo(
       schedule: schedule,
-      gameStatus: localTeam.gameInfo.status
+      gameStatus: resolvedStatus
     )
   }
 }
@@ -72,6 +74,14 @@ final class WidgetSyncUseCaseImpl: WidgetSyncUseCase {
 // MARK: - Private
 
 extension WidgetSyncUseCaseImpl {
+  private func resolvedGameStatus(_ status: GameStatus, hasGame: Bool?) -> GameStatus {
+    guard hasGame == false else { return status }
+    switch status {
+    case .playingToday, .lineupPending: return .offDay
+    case .offDay, .seasonEnded: return status
+    }
+  }
+
   private func syncGameInfo(_ teamId: TeamID, localTeam: TeamState) async throws {
     let gameInfo = try await teamRemoteRepository.fetchTodayGameInfo(teamId)
 
