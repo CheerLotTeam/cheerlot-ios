@@ -19,6 +19,7 @@ struct GameInfoView: View {
   var body: some View {
     ZStack(alignment: .topTrailing) {
         if renderingMode != .accented {
+            asset.primaryColor
             asset.widgetBackgroundGradient.opacity(0.2)
         }
 

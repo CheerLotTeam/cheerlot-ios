@@ -34,6 +34,7 @@ extension HomeGameScheduleMediumWidgetView {
   private var notSeasonOutView: some View {
     ZStack {
         if renderingMode != .accented {
+            asset.primaryColor
             asset.widgetBackgroundGradient.opacity(0.2)
         }
       notSeasonOutContentsView

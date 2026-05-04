@@ -43,6 +43,7 @@ extension HomeGameInfoMediumWidgetView {
   private var playingTodayView: some View {
     ZStack(alignment: .topTrailing) {
       if renderingMode != .accented {
+        teamAsset.primaryColor
         teamAsset.widgetBackgroundGradient.opacity(0.2)
       }
 
