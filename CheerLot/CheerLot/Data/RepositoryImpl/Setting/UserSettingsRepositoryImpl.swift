@@ -39,4 +39,16 @@ final class UserSettingsRepositoryImpl: UserSettingsRepository {
   func setLineupUpdatedToday(_ value: Bool, for teamId: TeamID) {
     sharedDefaults.set(value, forKey: UserDefaultsKey.lineupUpdatedToday(for: teamId))
   }
+
+  func getLineupIsHome(for teamId: TeamID) -> Bool? {
+    sharedDefaults.object(forKey: "lineupIsHome.\(teamId.value)") as? Bool
+  }
+
+  func setLineupIsHome(_ value: Bool?, for teamId: TeamID) {
+    if let value {
+      sharedDefaults.set(value, forKey: "lineupIsHome.\(teamId.value)")
+    } else {
+      sharedDefaults.removeObject(forKey: "lineupIsHome.\(teamId.value)")
+    }
+  }
 }

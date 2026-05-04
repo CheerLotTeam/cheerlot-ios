@@ -65,16 +65,15 @@ extension HomeGameInfoMediumWidgetView {
   }
 
   private var gameInfoContentsView: some View {
-    HStack(spacing: 37) {
-      teamInfoView(
-        asset: teamAsset,
-        team: entry.teamLongName,
-        pitcher: entry.gameSchedule.first?.starterPitcherName
-      )
+    let isHome = entry.gameSchedule.first?.isHome == true
+    let myTeamView = teamInfoView(
+      asset: teamAsset,
+      team: entry.teamLongName,
+      pitcher: entry.gameSchedule.first?.starterPitcherName
+    )
 
-      dateInfoView
-
-      if let opponentAsset = opponentTeamAsset,
+    return HStack(spacing: 37) {
+      if isHome, let opponentAsset = opponentTeamAsset,
         let opponentLongName = entry.gameSchedule.first?.opponentLongName
       {
         teamInfoView(
@@ -82,6 +81,20 @@ extension HomeGameInfoMediumWidgetView {
           team: opponentLongName,
           pitcher: entry.gameSchedule.first?.opponentStarterPitcherName
         )
+        dateInfoView
+        myTeamView
+      } else {
+        myTeamView
+        dateInfoView
+        if let opponentAsset = opponentTeamAsset,
+          let opponentLongName = entry.gameSchedule.first?.opponentLongName
+        {
+          teamInfoView(
+            asset: opponentAsset,
+            team: opponentLongName,
+            pitcher: entry.gameSchedule.first?.opponentStarterPitcherName
+          )
+        }
       }
     }
   }
