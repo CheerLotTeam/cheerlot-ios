@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import WidgetKit
 
 struct GameScheduleCell: View {
   let team: String
@@ -22,14 +23,13 @@ struct GameScheduleCell: View {
       Text(game.date.slashDateFormatted)
         .font(.M6)
         .foregroundStyle(asset.primaryPalette.color200)
+        .widgetAccentable()
     }
     .padding(.horizontal, 10)
     .padding(.vertical, 11)
     .background(
       RoundedRectangle(cornerRadius: 11)
-        .fill(
-          isToday ? .white.opacity(0.25) : .white.opacity(0.1)
-        )
+        .fill(isToday ? Color.white.opacity(0.25) : Color.white.opacity(0.1))
     )
   }
 }
@@ -47,10 +47,12 @@ extension GameScheduleCell {
             .font(.T4)
         }
         .foregroundStyle(.grayWhite)
+        .widgetAccentable()
       } else {
         Text("경기 없음")
           .font(.M5)
           .foregroundStyle(asset.primaryPalette.color200)
+          .widgetAccentable()
       }
     }
   }

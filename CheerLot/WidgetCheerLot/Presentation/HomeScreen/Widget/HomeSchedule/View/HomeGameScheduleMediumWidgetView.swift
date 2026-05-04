@@ -6,9 +6,11 @@
 //
 
 import SwiftUI
+import WidgetKit
 
 struct HomeGameScheduleMediumWidgetView: View {
   let entry: TeamGamesEntry
+  @Environment(\.widgetRenderingMode) var renderingMode
 
   private var asset: WidgetTeamAssetVO {
     WidgetTeamAssetVO(TeamID(entry.teamId))
@@ -31,10 +33,9 @@ struct HomeGameScheduleMediumWidgetView: View {
 extension HomeGameScheduleMediumWidgetView {
   private var notSeasonOutView: some View {
     ZStack {
-      asset.primaryColor
-
-      asset.widgetBackgroundGradient.opacity(0.2)
-
+        if renderingMode != .accented {
+            asset.widgetBackgroundGradient.opacity(0.2)
+        }
       notSeasonOutContentsView
     }
   }
@@ -44,10 +45,12 @@ extension HomeGameScheduleMediumWidgetView {
       Text(entry.date.dayOfWeek)
         .font(.M5)
         .foregroundStyle(.gray100)
+        .widgetAccentable()
 
       Text(entry.date.dayOfMonth)
         .font(.B3)
         .foregroundStyle(.grayWhite)
+        .widgetAccentable()
     }
   }
 
@@ -57,17 +60,17 @@ extension HomeGameScheduleMediumWidgetView {
 
       asset.noCoverImage
         .resizable()
+        .widgetAccentedRenderingMode(.fullColor)
         .scaledToFit()
         .frame(width: 60)
-        .shadow(color: .white.opacity(0.15), radius: 20, x: 0, y: 0)
+        .shadow(color: Color.white.opacity(0.15), radius: 20, x: 0, y: 0)
     }
     .frame(width: 60)
   }
 
   private var gameScheduleView: some View {
     LazyVStack(spacing: 6) {
-      ForEach(Array(entry.gameSchedule.enumerated()), id: \.offset) {
-        index, game in
+      ForEach(Array(entry.gameSchedule.enumerated()), id: \.offset) { index, game in
         GameScheduleCell(team: entry.teamId, game: game, asset: asset, isToday: index == 0)
           .frame(maxWidth: .infinity)
       }

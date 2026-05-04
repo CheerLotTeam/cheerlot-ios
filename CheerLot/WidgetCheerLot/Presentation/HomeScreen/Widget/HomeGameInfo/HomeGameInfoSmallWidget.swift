@@ -14,7 +14,13 @@ struct HomeGameInfoSmallWidget: Widget {
   var body: some WidgetConfiguration {
     StaticConfiguration(kind: kind, provider: TeamGamesProvider()) { entry in
       HomeGameInfoSmallWidgetView(entry: entry)
-        .containerBackground(.clear, for: .widget)
+        .containerBackground(for: .widget) {
+          if entry.teamId.isEmpty {
+            Color.white
+          } else {
+            WidgetTeamAssetVO(TeamID(entry.teamId)).primaryColor
+          }
+        }
         .widgetURL(URL(string: "cheerlot://lineup?from=\(WidgetKind.homeGameInfoSmall)"))
     }
     .configurationDisplayName("오늘 경기")

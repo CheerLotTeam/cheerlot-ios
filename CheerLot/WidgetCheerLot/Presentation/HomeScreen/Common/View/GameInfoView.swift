@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import WidgetKit
 
 struct GameInfoView: View {
   let isSmallSize: Bool
@@ -13,18 +14,18 @@ struct GameInfoView: View {
   let dateString: String
   let capsuleTitle: String
   let asset: WidgetTeamAssetVO
+  @Environment(\.widgetRenderingMode) var renderingMode
 
   var body: some View {
     ZStack(alignment: .topTrailing) {
-      ZStack {
-        asset.primaryColor
+        if renderingMode != .accented {
+            asset.widgetBackgroundGradient.opacity(0.2)
+        }
 
-        asset.widgetBackgroundGradient.opacity(0.2)
-
-        contentsView
-      }
+      contentsView
 
       ReloadButton(color: asset.primaryPalette.color200)
+        .widgetAccentable()
         .padding([.top, .trailing], 18)
     }
   }
@@ -36,10 +37,12 @@ extension GameInfoView {
       Text(dateString)
         .font(.M5)
         .foregroundStyle(asset.primaryPalette.color200)
+        .widgetAccentable()
 
       Text(title)
         .font(isSmallSize ? .SB5 : .SB3)
         .foregroundStyle(.grayWhite)
+        .widgetAccentable()
     }
   }
 
@@ -55,6 +58,7 @@ extension GameInfoView {
       )
       Spacer()
     }
+    .frame(maxWidth: .infinity, maxHeight: .infinity)
   }
 }
 
