@@ -11,12 +11,13 @@ import SwiftUI
 struct LineupMemberCell: View {
   let player: LineupPlayerVO
   let asset: LineupAssetVO
+  let isCompact: Bool
 
   var body: some View {
     HStack(spacing: 12) {
       if let battingOrder = player.battingOrder {
         Text("\(battingOrder)")
-          .font(.M0)
+          .font(isCompact ? .M0_lineupCompact : .M0)
           .foregroundStyle(asset.battingOrderTextColor)
       }
 
@@ -27,9 +28,10 @@ struct LineupMemberCell: View {
       Image(systemName: "play.fill")
         .resizable()
         .scaledToFit()
-        .frame(width: 12)
+        .frame(width: isCompact ? 10 : 12)
         .foregroundStyle(player.hasSong ? .grayWhite : asset.playDisableColor)
     }
+    .frame(maxHeight: .infinity)
   }
 }
 
@@ -37,11 +39,11 @@ extension LineupMemberCell {
   private var textContents: some View {
     HStack(alignment: .bottom, spacing: 8) {
       Text(player.name)
-        .font(.SB5_lineupName)
+        .font(isCompact ? .SB5_lineupNameCompact : .SB5_lineupName)
         .foregroundStyle(.grayWhite)
 
       Text(player.batThrow.isEmpty ? player.position : "\(player.position), \(player.batThrow)")
-        .font(.M5_position)
+        .font(isCompact ? .M5_positionCompact : .M5_position)
         .foregroundStyle(asset.positionTextColor)
     }
   }
