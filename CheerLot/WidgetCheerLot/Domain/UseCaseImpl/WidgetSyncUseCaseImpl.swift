@@ -50,7 +50,8 @@ final class WidgetSyncUseCaseImpl: WidgetSyncUseCase {
       throw LocalStorageError.notFound
     }
 
-    let resolvedStatus = resolvedGameStatus(updatedTeam.gameInfo.status, hasGame: schedule.recentGames.first?.hasGame)
+    let resolvedStatus = resolvedGameStatus(
+      updatedTeam.gameInfo.status, hasGame: schedule.recentGames.first?.hasGame)
     return WidgetGamesInfo(
       schedule: schedule,
       gameStatus: resolvedStatus
@@ -63,7 +64,8 @@ final class WidgetSyncUseCaseImpl: WidgetSyncUseCase {
       let localTeam = try? await teamLocalRepository.fetchTeam(teamId)
     else { return nil }
 
-    let resolvedStatus = resolvedGameStatus(localTeam.gameInfo.status, hasGame: schedule.recentGames.first?.hasGame)
+    let resolvedStatus = resolvedGameStatus(
+      localTeam.gameInfo.status, hasGame: schedule.recentGames.first?.hasGame)
     return WidgetGamesInfo(
       schedule: schedule,
       gameStatus: resolvedStatus

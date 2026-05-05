@@ -14,17 +14,17 @@ struct TeamEmptyView: View {
 
   var body: some View {
     ZStack {
-        if renderingMode != .accented {
-            LinearGradient(
-                colors: [
-                    .grayWhite,
-                    .appPrimary,
-                ],
-                startPoint: .top,
-                endPoint: .bottom
-            )
-            .opacity(0.2)
-        }
+      if renderingMode != .accented {
+        LinearGradient(
+          colors: [
+            .grayWhite,
+            .appPrimary,
+          ],
+          startPoint: .top,
+          endPoint: .bottom
+        )
+        .opacity(0.2)
+      }
 
       contentsView
     }

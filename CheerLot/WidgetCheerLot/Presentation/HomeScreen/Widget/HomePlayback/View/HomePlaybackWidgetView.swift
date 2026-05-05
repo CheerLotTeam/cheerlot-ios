@@ -56,10 +56,10 @@ struct HomePlaybackWidgetView: View {
 extension HomePlaybackWidgetView {
   private var PlaybackStateView: some View {
     ZStack {
-        if renderingMode != .accented {
-            asset.primaryColor
-            asset.widgetBackgroundGradient.opacity(0.2)
-        }
+      if renderingMode != .accented {
+        asset.primaryColor
+        asset.widgetBackgroundGradient.opacity(0.2)
+      }
       contentsView
     }
   }

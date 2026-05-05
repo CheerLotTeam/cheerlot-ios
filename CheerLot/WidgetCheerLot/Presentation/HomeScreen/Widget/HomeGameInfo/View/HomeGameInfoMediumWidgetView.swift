@@ -11,7 +11,7 @@ import WidgetKit
 struct HomeGameInfoMediumWidgetView: View {
   let entry: TeamGamesEntry
   @Environment(\.widgetRenderingMode) var renderingMode
-    
+
   private var teamAsset: WidgetTeamAssetVO {
     WidgetTeamAssetVO(TeamID(entry.teamId))
   }

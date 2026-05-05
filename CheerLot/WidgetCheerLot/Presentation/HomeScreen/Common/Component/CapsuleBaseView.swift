@@ -11,7 +11,7 @@ import WidgetKit
 struct CapsuleBaseView: View {
   let title: String
   let bgColor: Color
-    
+
   @Environment(\.widgetRenderingMode) var renderingMode
 
   var body: some View {
@@ -27,8 +27,8 @@ struct CapsuleBaseView: View {
     .padding(.horizontal, 9)
     .padding(.vertical, 5)
     .background(
-        Capsule()
-            .fill(renderingMode == .accented ? .white.opacity(0.25) : bgColor)
+      Capsule()
+        .fill(renderingMode == .accented ? .white.opacity(0.25) : bgColor)
     )
   }
 }

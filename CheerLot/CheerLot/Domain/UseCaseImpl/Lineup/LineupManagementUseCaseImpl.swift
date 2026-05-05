@@ -205,7 +205,8 @@ final class LineupManagementUseCaseImpl: LineupManagementUseCase {
     // lineupUpdatedToday=false일 때 teamData.gameInfo는 최근 완료 경기 정보 (최근 투수, 상대팀, 날짜)
     // showLineup=true 시 ViewModel에서 사용하도록 전달
     let recentGameInfo: TeamGameInfo? = lineupUpdatedToday ? nil : teamData.gameInfo
-    let recentGameIsHome: Bool? = lineupUpdatedToday ? nil : userSettingsRepository.getLineupIsHome(for: teamId)
+    let recentGameIsHome: Bool? =
+      lineupUpdatedToday ? nil : userSettingsRepository.getLineupIsHome(for: teamId)
 
     // 기본 화면 표시용: lineupUpdatedToday=true면 teamData 직접 사용, false면 스케줄 API 첫번째 경기 사용
     let todaySchedule = lineupUpdatedToday ? nil : firstRecentGame
