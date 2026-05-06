@@ -13,6 +13,8 @@ import WidgetKit
 struct HomePlaybackWidgetView: View {
   let entry: HomePlaybackEntry
 
+  @Environment(\.widgetRenderingMode) var renderingMode
+
   private var asset: WidgetTeamAssetVO {
     WidgetTeamAssetVO(TeamID(entry.teamId))
   }
@@ -54,8 +56,10 @@ struct HomePlaybackWidgetView: View {
 extension HomePlaybackWidgetView {
   private var PlaybackStateView: some View {
     ZStack {
-      asset.primaryColor
-      asset.widgetBackgroundGradient.opacity(0.2)
+      if renderingMode != .accented {
+        asset.primaryColor
+        asset.widgetBackgroundGradient.opacity(0.2)
+      }
       contentsView
     }
   }
@@ -64,6 +68,7 @@ extension HomePlaybackWidgetView {
     VStack(alignment: .leading, spacing: 10) {
       asset.coverImage
         .resizable()
+        .widgetAccentedRenderingMode(.fullColor)
         .scaledToFit()
         .frame(width: 84, height: 84)
         .clipShape(RoundedRectangle(cornerRadius: 12))
@@ -88,22 +93,25 @@ extension HomePlaybackWidgetView {
         .font(.SB8)
         .foregroundStyle(.grayWhite)
         .lineLimit(1)
+        .widgetAccentable()
 
       Text(subtitle)
         .font(.M5)
         .foregroundStyle(asset.primaryPalette.color200)
         .lineLimit(1)
+        .widgetAccentable()
     }
   }
 
   private var playImage: some View {
     Circle()
-      .fill(asset.primaryPalette.color500)
+      .fill(renderingMode == .accented ? .white.opacity(0.25) : asset.primaryPalette.color500)
       .frame(width: 32, height: 32)
       .overlay {
         Image(systemName: "play.fill")
           .font(.system(size: 14, weight: .regular))
           .foregroundStyle(.grayWhite)
+          .widgetAccentable()
       }
   }
 }

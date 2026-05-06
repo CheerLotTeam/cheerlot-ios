@@ -19,12 +19,25 @@ struct LineupView: View {
   // MARK: - Layout Constants
   private let teamNameHeight: CGFloat = 44.5
   private let gameInfoHeight: CGFloat = 26.5
-  private let cardTopPadding: CGFloat = 20
-  private let cardBottomPadding: CGFloat = 10
-  private let cardSpacing: CGFloat = 4
   private let separatorHeight: CGFloat = 1
   private let safeAreaVerticalPadding: CGFloat = 10
   private let safeAreaHorizontalPadding: CGFloat = 20
+
+  private func isCompact(cardHeight: CGFloat) -> Bool {
+    cardHeight < 550
+  }
+
+  private func cardTopPadding(cardHeight: CGFloat) -> CGFloat {
+    isCompact(cardHeight: cardHeight) ? 12 : 20
+  }
+
+  private func cardBottomPadding(cardHeight: CGFloat) -> CGFloat {
+    isCompact(cardHeight: cardHeight) ? 6 : 10
+  }
+
+  private func cardSpacing(cardHeight: CGFloat) -> CGFloat {
+    isCompact(cardHeight: cardHeight) ? 2 : 4
+  }
 
   var body: some View {
     GeometryReader { geo in
@@ -73,8 +86,9 @@ struct LineupView: View {
   private func listHeight(cardHeight: CGFloat) -> CGFloat {
     max(
       0,
-      cardHeight - teamNameHeight - gameInfoHeight - cardTopPadding - cardBottomPadding
-        - cardSpacing * 3)
+      cardHeight - teamNameHeight - gameInfoHeight - cardTopPadding(cardHeight: cardHeight)
+        - cardBottomPadding(cardHeight: cardHeight) - cardSpacing(cardHeight: cardHeight) * 3
+    )
   }
 
   private func cellHeight(cardHeight: CGFloat) -> CGFloat {
@@ -115,11 +129,11 @@ extension LineupView {
     -> some View
   {
     ZStack {
-      VStack(spacing: cardSpacing) {
+      VStack(spacing: cardSpacing(cardHeight: cardHeight)) {
 
         if let gameInfo = viewModel.gameInfo {
-          teamName(asset: asset, gameInfo: gameInfo)
-            .padding(.bottom, cardSpacing)
+          teamName(asset: asset, gameInfo: gameInfo, cardHeight: cardHeight)
+            .padding(.bottom, cardSpacing(cardHeight: cardHeight))
           gameInfoView(asset: asset, gameInfo: gameInfo)
         }
 
@@ -127,9 +141,9 @@ extension LineupView {
           lineupList(asset: asset, cardHeight: cardHeight, cardWidth: cardWidth)
         }
       }
-      .padding(.top, cardTopPadding)
-      .padding(.bottom, cardBottomPadding)
-      .frame(maxHeight: .infinity, alignment: .top)  // header 상단 고정
+      .padding(.top, cardTopPadding(cardHeight: cardHeight))
+      .padding(.bottom, cardBottomPadding(cardHeight: cardHeight))
+      .frame(width: cardWidth, height: cardHeight, alignment: .top)
 
       if !viewModel.shouldShowLineup {
         hasNoGameView(asset: asset)
@@ -137,10 +151,17 @@ extension LineupView {
     }
   }
 
-  private func teamName(asset: LineupAssetVO, gameInfo: LineupGameInfoVO) -> some View {
+  private func teamName(
+    asset: LineupAssetVO,
+    gameInfo: LineupGameInfoVO,
+    cardHeight: CGFloat
+  ) -> some View {
     Text(gameInfo.teamEnglishName)
       .font(.T1)
       .foregroundStyle(.grayWhite)
+      .lineLimit(1)
+      .minimumScaleFactor(0.9)
+      .frame(height: teamNameHeight, alignment: .center)
       .shadow(
         color: asset.cardTextShadowColor,
         radius: 8,
@@ -174,7 +195,11 @@ extension LineupView {
     .foregroundColor(.grayWhite)
   }
 
-  private func lineupList(asset: LineupAssetVO, cardHeight: CGFloat, cardWidth: CGFloat)
+  private func lineupList(
+    asset: LineupAssetVO,
+    cardHeight: CGFloat,
+    cardWidth: CGFloat
+  )
     -> some View
   {
     List {
@@ -182,7 +207,8 @@ extension LineupView {
         VStack(spacing: 0) {
           LineupMemberCell(
             player: player,
-            asset: asset
+            asset: asset,
+            isCompact: isCompact(cardHeight: cardHeight)
           )
           .frame(height: cellHeight(cardHeight: cardHeight))
           .padding(.horizontal, 5.5)
@@ -248,6 +274,8 @@ extension LineupView {
     .listStyle(.plain)
     .scrollDisabled(true)
     .scrollContentBackground(.hidden)
+    .contentMargins(.vertical, 0, for: .scrollContent)
+    .environment(\.defaultMinListRowHeight, 0)
     .clipShape(Rectangle())
   }
 

@@ -6,10 +6,13 @@
 //
 
 import SwiftUI
+import WidgetKit
 
 struct CapsuleBaseView: View {
   let title: String
   let bgColor: Color
+
+  @Environment(\.widgetRenderingMode) var renderingMode
 
   var body: some View {
     HStack(spacing: 1) {
@@ -19,10 +22,14 @@ struct CapsuleBaseView: View {
       Image(systemName: "baseball.diamond.bases")
         .font(.system(size: 9, weight: .regular))
     }
+    .widgetAccentable()
     .foregroundStyle(.grayWhite)
     .padding(.horizontal, 9)
     .padding(.vertical, 5)
-    .background(Capsule().fill(bgColor))
+    .background(
+      Capsule()
+        .fill(renderingMode == .accented ? .white.opacity(0.25) : bgColor)
+    )
   }
 }
 
