@@ -14,11 +14,13 @@ struct LineupGameInfoVO: Equatable {
   let opponent: String?
   let starterPitcher: String?
   let status: GameStatus
+  let isHome: Bool?
 
   init(
     teamInfo: TeamInfo,
     opponentTeamInfo: TeamInfo?,
-    gameInfo: TeamGameInfo
+    gameInfo: TeamGameInfo,
+    isHome: Bool? = nil
   ) {
     self.teamName = teamInfo.shortName
     self.teamEnglishName = teamInfo.englishFullName
@@ -26,6 +28,7 @@ struct LineupGameInfoVO: Equatable {
     self.opponent = opponentTeamInfo?.shortName
     self.starterPitcher = gameInfo.starterPitcherName
     self.status = gameInfo.status
+    self.isHome = isHome
   }
 
   var todayGameInfoText: String {
@@ -40,7 +43,7 @@ struct LineupGameInfoVO: Equatable {
 
   var gameTeamsText: String {
     if let opponent = opponent {
-      "\(teamName) vs \(opponent)"
+      isHome == true ? "\(opponent) vs \(teamName)" : "\(teamName) vs \(opponent)"
     } else {
       "경기없음"
     }

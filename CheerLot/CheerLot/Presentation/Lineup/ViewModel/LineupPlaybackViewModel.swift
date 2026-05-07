@@ -121,10 +121,12 @@ final class LineupPlaybackViewModel {
     // recentGameInfo가 없으면 gameInfo (-> lineupUpdatedToday=true)
     let displayGameInfo = data.recentGameInfo ?? data.gameInfo
     let opponentTeamInfo = displayGameInfo.opponent.flatMap { teamInfoUseCase.getTeamInfo($0) }
+    let displayIsHome = data.recentGameInfo != nil ? data.recentGameIsHome : data.isHome
     let lineupGameInfoVO = LineupGameInfoVO(
       teamInfo: teamInfo,
       opponentTeamInfo: opponentTeamInfo,
-      gameInfo: displayGameInfo
+      gameInfo: displayGameInfo,
+      isHome: displayIsHome
     )
 
     gameDate = lineupGameInfoVO.gameDateText

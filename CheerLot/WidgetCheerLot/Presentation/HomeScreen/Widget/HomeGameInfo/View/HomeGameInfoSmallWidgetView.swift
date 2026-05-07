@@ -22,10 +22,12 @@ struct HomeGameInfoSmallWidgetView: View {
     if entry.gameStatus == .teamEmpty {
       TeamEmptyView(isSmallSize: true)
     } else {
+      let isHome = entry.gameSchedule.first?.isHome == true
+      let opponent = entry.gameSchedule.first?.opponentShortName ?? ""
       let title: String =
         switch entry.gameStatus {
         case .playingToday:
-          "\(entry.teamShortName) vs \(entry.gameSchedule.first?.opponentShortName ?? "")"
+          "\(isHome ? opponent : entry.teamShortName) vs \(isHome ? entry.teamShortName : opponent)"
         case .offDay: "경기 없음"
         case .seasonEnded: "시즌 종료"
         case .teamEmpty: ""

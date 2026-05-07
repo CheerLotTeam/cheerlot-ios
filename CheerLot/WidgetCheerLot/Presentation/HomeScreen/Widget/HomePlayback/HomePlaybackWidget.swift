@@ -81,7 +81,13 @@ struct HomePlaybackWidget: Widget {
   var body: some WidgetConfiguration {
     StaticConfiguration(kind: kind, provider: HomePlaybackProvider()) { entry in
       HomePlaybackWidgetView(entry: entry)
-        .containerBackground(Color.clear, for: .widget)
+        .containerBackground(for: .widget) {
+          if entry.teamId.isEmpty {
+            Color.white
+          } else {
+            WidgetTeamAssetVO(TeamID(entry.teamId)).primaryColor
+          }
+        }
     }
     .configurationDisplayName("응원가 플레이어")
     .description("응원가를 홈화면에서 바로 재생해요.")

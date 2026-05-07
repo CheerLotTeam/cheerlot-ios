@@ -194,18 +194,27 @@ final class LineupManagementUseCaseImpl: LineupManagementUseCase {
     // 오늘 라인업 업데이트 여부
     let lineupUpdatedToday = userSettingsRepository.getLineupUpdatedToday(for: teamId)
 
+    /// 최근 3경기 스케줄 중 첫번째 경기 (오늘)
+    let firstRecentGame = gameScheduleRepository.fetchGameSchedule(for: teamId)?.recentGames.first
+
+    // 라인업이 오늘 업데이트됐을 때 스케줄의 isHome을 저장 (추후 recentGameInfo용으로 활용)
+    if lineupUpdatedToday {
+      userSettingsRepository.setLineupIsHome(firstRecentGame?.isHome, for: teamId)
+    }
+
     // lineupUpdatedToday=false일 때 teamData.gameInfo는 최근 완료 경기 정보 (최근 투수, 상대팀, 날짜)
     // showLineup=true 시 ViewModel에서 사용하도록 전달
     let recentGameInfo: TeamGameInfo? = lineupUpdatedToday ? nil : teamData.gameInfo
+    let recentGameIsHome: Bool? =
+      lineupUpdatedToday ? nil : userSettingsRepository.getLineupIsHome(for: teamId)
 
     // 기본 화면 표시용: lineupUpdatedToday=true면 teamData 직접 사용, false면 스케줄 API 첫번째 경기 사용
-    let todaySchedule =
-      lineupUpdatedToday
-      ? nil : gameScheduleRepository.fetchGameSchedule(for: teamId)?.recentGames.first
+    let todaySchedule = lineupUpdatedToday ? nil : firstRecentGame
     let opponentTeamId: TeamID? =
       lineupUpdatedToday ? teamData.gameInfo.opponent : todaySchedule?.opponentTeamId
     let starterPitcherName: String? =
       lineupUpdatedToday ? teamData.gameInfo.starterPitcherName : todaySchedule?.starterPitcherName
+    let isHome: Bool? = firstRecentGame?.isHome
 
     // Entity단의 경기 상태 매칭
     let finalStatus: GameStatus =
@@ -225,8 +234,9 @@ final class LineupManagementUseCaseImpl: LineupManagementUseCase {
     return LineupData(
       gameInfo: resolvedGameInfo,
       lineupPlayers: lineupPlayers,
-      opponentTeamId: opponentTeamId,
-      recentGameInfo: recentGameInfo
+      isHome: isHome,
+      recentGameInfo: recentGameInfo,
+      recentGameIsHome: recentGameIsHome
     )
   }
 

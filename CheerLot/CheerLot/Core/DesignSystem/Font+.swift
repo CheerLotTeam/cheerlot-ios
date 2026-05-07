@@ -236,6 +236,15 @@ extension TypeStyle {
     letterSpacing: 0
   )
 
+  /// SemiBold 18pt_lineupNameCompact
+  public static let SB5_lineupNameCompact = TypeStyle(
+    font: Font.Pretendard.semibold.swiftUIFont(size: 18),
+    uiFont: Font.Pretendard.semibold.uiFont(size: 18),
+    size: 18,
+    lineHeight: 1.0,
+    letterSpacing: 0
+  )
+
   /// SemiBold 18pt
   public static let SB6 = TypeStyle(
     font: Font.Pretendard.semibold.swiftUIFont(size: 18),
@@ -286,6 +295,15 @@ extension TypeStyle {
     font: Font.Pretendard.medium.swiftUIFont(size: 28),
     uiFont: Font.Pretendard.medium.uiFont(size: 28),
     size: 28,
+    lineHeight: 1.3,
+    letterSpacing: 0
+  )
+
+  /// Medium 24pt_lineupCompact
+  public static let M0_lineupCompact = TypeStyle(
+    font: Font.Pretendard.medium.swiftUIFont(size: 24),
+    uiFont: Font.Pretendard.medium.uiFont(size: 24),
+    size: 24,
     lineHeight: 1.3,
     letterSpacing: 0
   )
@@ -349,6 +367,15 @@ extension TypeStyle {
     font: Font.Pretendard.medium.swiftUIFont(size: 12),
     uiFont: Font.Pretendard.medium.uiFont(size: 12),
     size: 12,
+    lineHeight: 1.0,
+    letterSpacing: -0.05
+  )
+
+  /// Medium 10pt_positionCompact
+  public static let M5_positionCompact = TypeStyle(
+    font: Font.Pretendard.medium.swiftUIFont(size: 10),
+    uiFont: Font.Pretendard.medium.uiFont(size: 10),
+    size: 10,
     lineHeight: 1.0,
     letterSpacing: -0.05
   )

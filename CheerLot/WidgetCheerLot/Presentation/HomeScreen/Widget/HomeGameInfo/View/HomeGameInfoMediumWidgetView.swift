@@ -6,9 +6,11 @@
 //
 
 import SwiftUI
+import WidgetKit
 
 struct HomeGameInfoMediumWidgetView: View {
   let entry: TeamGamesEntry
+  @Environment(\.widgetRenderingMode) var renderingMode
 
   private var teamAsset: WidgetTeamAssetVO {
     WidgetTeamAssetVO(TeamID(entry.teamId))
@@ -40,15 +42,15 @@ struct HomeGameInfoMediumWidgetView: View {
 extension HomeGameInfoMediumWidgetView {
   private var playingTodayView: some View {
     ZStack(alignment: .topTrailing) {
-      ZStack {
+      if renderingMode != .accented {
         teamAsset.primaryColor
-
         teamAsset.widgetBackgroundGradient.opacity(0.2)
-
-        contentsView
       }
 
+      contentsView
+
       ReloadButton(color: teamAsset.primaryPalette.color200)
+        .widgetAccentable()
         .padding([.top, .trailing], 18)
     }
   }
@@ -62,19 +64,19 @@ extension HomeGameInfoMediumWidgetView {
         bgColor: teamAsset.primaryPalette.color500
       )
     }
+    .frame(maxWidth: .infinity, maxHeight: .infinity)
   }
 
   private var gameInfoContentsView: some View {
-    HStack(spacing: 37) {
-      teamInfoView(
-        asset: teamAsset,
-        team: entry.teamLongName,
-        pitcher: entry.gameSchedule.first?.starterPitcherName
-      )
+    let isHome = entry.gameSchedule.first?.isHome == true
+    let myTeamView = teamInfoView(
+      asset: teamAsset,
+      team: entry.teamLongName,
+      pitcher: entry.gameSchedule.first?.starterPitcherName
+    )
 
-      dateInfoView
-
-      if let opponentAsset = opponentTeamAsset,
+    return HStack(spacing: 37) {
+      if isHome, let opponentAsset = opponentTeamAsset,
         let opponentLongName = entry.gameSchedule.first?.opponentLongName
       {
         teamInfoView(
@@ -82,6 +84,20 @@ extension HomeGameInfoMediumWidgetView {
           team: opponentLongName,
           pitcher: entry.gameSchedule.first?.opponentStarterPitcherName
         )
+        dateInfoView
+        myTeamView
+      } else {
+        myTeamView
+        dateInfoView
+        if let opponentAsset = opponentTeamAsset,
+          let opponentLongName = entry.gameSchedule.first?.opponentLongName
+        {
+          teamInfoView(
+            asset: opponentAsset,
+            team: opponentLongName,
+            pitcher: entry.gameSchedule.first?.opponentStarterPitcherName
+          )
+        }
       }
     }
   }
@@ -91,10 +107,12 @@ extension HomeGameInfoMediumWidgetView {
       Text(entry.date.koreanDateFormatted)
         .font(.M5)
         .foregroundStyle(teamAsset.primaryPalette.color200)
+        .widgetAccentable()
 
       Text("vs")
         .font(.B1)
         .foregroundStyle(.grayWhite)
+        .widgetAccentable()
     }
   }
 
@@ -102,25 +120,29 @@ extension HomeGameInfoMediumWidgetView {
     VStack(spacing: 0) {
       asset.noCoverImage
         .resizable()
+        .widgetAccentedRenderingMode(.fullColor)
         .scaledToFit()
         .frame(width: 56)
-        .shadow(color: .white.opacity(0.1), radius: 20, x: 0, y: 0)
+        .shadow(color: Color.white.opacity(0.1), radius: 20, x: 0, y: 0)
 
       Text(team)
         .font(.SB8)
         .foregroundStyle(.grayWhite)
         .fixedSize()
+        .widgetAccentable()
 
       if let pitcher {
         HStack(spacing: 2) {
           Image(.pitcher)
             .resizable()
+            .widgetAccentedRenderingMode(.accentedDesaturated)
             .scaledToFit()
             .frame(width: 10)
 
           Text(pitcher)
             .font(.M6)
             .fixedSize()
+            .widgetAccentable()
         }
         .foregroundStyle(teamAsset.primaryPalette.color200)
       }

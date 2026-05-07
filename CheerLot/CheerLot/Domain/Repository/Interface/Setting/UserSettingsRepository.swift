@@ -23,4 +23,10 @@ protocol UserSettingsRepository {
 
   /// 오늘 해당 팀의 라인업 업데이트 여부를 저장한다
   func setLineupUpdatedToday(_ value: Bool, for teamId: TeamID)
+
+  /// 가장 최근 라인업 업데이트 시점의 홈/어웨이 여부를 반환한다
+  func getLineupIsHome(for teamId: TeamID) -> Bool?
+
+  /// 가장 최근 라인업 업데이트 시점의 홈/어웨이 여부를 저장한다
+  func setLineupIsHome(_ value: Bool?, for teamId: TeamID)
 }
