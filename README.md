@@ -25,15 +25,12 @@
 
 ## Features
 
-- 구단별 선수 목록 조회
-- 선수별 응원가 탐색 및 재생
-- 라인업 기반 응원가 재생
-- 경기 정보 조회 및 홈/원정 경기 표시
-- 팀 선택에 따른 앱 테마 변경
-- 검색을 통한 선수 빠른 탐색
-- 미니 플레이어 및 전체 재생 화면 지원
-- WidgetKit 기반 홈 화면/잠금화면 위젯 지원
-- Apple Watch 확장 타깃 지원
+- 구단별 선수 및 경기 정보 조회
+- 팀 선수 응원가 검색 및 미니 플레이어를 통한 백그라운드 재생
+- 라인업 기반 응원가 연속 재생
+- 팀 선택 기반 앱 테마 적용
+- WidgetKit 기반 홈/잠금 화면 위젯 지원
+- Apple Watch를 통한 라인업 선수 응원가 가사 확인
 
 <br>
 
@@ -45,10 +42,11 @@
 - SwiftData
 - AVFoundation
 - MediaPlayer
+- WatchConnectivity
 
 ### Architecture
-- MVVM
-- Coordinator
+- MVVM + Clean Architecture
+- Coordinator Pattern
 - Repository
 - UseCase
 
@@ -66,15 +64,15 @@
 
 ## Architecture
 
-이 프로젝트는 **SwiftUI 기반 MVVM 구조**를 중심으로 구성되어 있으며, 화면 상태 관리와 비즈니스 로직을 분리하기 위해 ViewModel, UseCase, Repository 계층을 함께 사용합니다.
+이 프로젝트는 **SwiftUI 기반 MVVM 구조**를 중심으로, 화면 상태 관리와 비즈니스 로직, 데이터 접근 책임을 분리하도록 구성되어 있습니다. Presentation, Domain, Data, Core 계층을 기준으로 기능을 나누고, ViewModel은 UseCase를 통해 도메인 로직을 실행하며 Repository는 데이터 소스 접근을 추상화합니다.
 
 - **View**
   - SwiftUI 기반으로 화면을 선언적으로 구성합니다.
   - 사용자 입력을 ViewModel 또는 Coordinator로 전달합니다.
 
 - **ViewModel**
-  - 화면 상태를 관리합니다.
-  - View에서 필요한 데이터를 가공하고 사용자 액션을 처리합니다.
+  - 화면 상태와 사용자 액션을 관리합니다.
+  - View에서 필요한 데이터를 가공하고 UseCase 호출 결과를 UI 상태로 변환합니다.
 
 - **UseCase**
   - 앱의 주요 기능 단위 로직을 담당합니다.
@@ -82,14 +80,19 @@
 
 - **Repository**
   - 로컬 데이터와 원격 데이터 접근을 추상화합니다.
-  - SwiftData 및 네트워크 데이터 소스를 관리합니다.
+  - SwiftData, UserDefaults, 네트워크, WatchConnectivity 등 실제 데이터 소스와 도메인 계층 사이의 경계를 만듭니다.
 
 - **Coordinator**
   - 화면 이동과 모달 표시 흐름을 관리합니다.
   - View 내부의 네비게이션 책임을 줄이고 화면 전환 로직을 분리합니다.
 
+- ** DIContainer**
+  - UseCase, Repository, ViewModel 생성 책임을 한곳에서 관리합니다.
+  - iOS 앱, Widget, Apple Watch 확장 타깃에서 필요한 의존성을 각 실행 환경에 맞게 조립합니다.
+
 - **Extensions**
   - iOS 앱뿐 아니라 WidgetKit과 Apple Watch 확장 타깃까지 고려하여 기능을 확장합니다.
+  - 공통 도메인 흐름은 유지하되, 각 타깃에 필요한 저장소와 표현 계층을 분리합니다.
 
 <br>
 
