@@ -31,6 +31,8 @@ final class AudioPlaybackService: AudioPlayer {
   // MARK: - Queue
   private var queue: [CheerSongInfo] = []
   private var queuePlayerNames: [String] = []
+  private var originalQueue: [CheerSongInfo] = []
+  private var originalPlayerNames: [String] = []
   private var currentIndex: Int = 0
 
   // MARK: - State (UI Binding)
@@ -39,6 +41,8 @@ final class AudioPlaybackService: AudioPlayer {
   var currentCoverImageName: String?
   var isPlaying: Bool = false
   var playbackMode: PlaybackMode = .normal
+  var isShuffleEnabled: Bool = false
+  var repeatMode: RepeatMode = .off
 
   var currentQueueIndex: Int {
     currentIndex
@@ -77,8 +81,12 @@ final class AudioPlaybackService: AudioPlayer {
   func play(_ song: CheerSongInfo, playerName: String?, coverImageName: String?) {
     queue = [song]
     queuePlayerNames = [playerName ?? song.playerId.value]
+    originalQueue = queue
+    originalPlayerNames = queuePlayerNames
     currentIndex = 0
     playbackMode = .normal
+    isShuffleEnabled = false
+    repeatMode = .off
     pendingTrigger = .userTap
 
     nowPlaying = song
@@ -105,6 +113,8 @@ final class AudioPlaybackService: AudioPlayer {
 
     queue = songs
     queuePlayerNames = playerNames
+    originalQueue = songs
+    originalPlayerNames = playerNames
     currentIndex = index
     playbackMode = mode
     currentSource = source
@@ -114,6 +124,12 @@ final class AudioPlaybackService: AudioPlayer {
     nowPlaying = queue[currentIndex]
     currentPlayerName = queuePlayerNames[currentIndex]
     currentCoverImageName = coverImageName
+
+    if isShuffleEnabled, let nowPlaying {
+      applyShuffledQueue(keeping: nowPlaying)
+      self.nowPlaying = queue[currentIndex]
+      currentPlayerName = queuePlayerNames[currentIndex]
+    }
 
     if source == .teamMembers {
       UserDefaults(suiteName: AppGroup.id)?.set(
@@ -133,6 +149,28 @@ final class AudioPlaybackService: AudioPlayer {
     currentPlayerName = queuePlayerNames[currentIndex]
 
     playCurrentSong()
+  }
+
+  func setShuffleEnabled(_ isEnabled: Bool) {
+    guard isShuffleEnabled != isEnabled else { return }
+    guard let currentSong = nowPlaying else {
+      isShuffleEnabled = isEnabled
+      return
+    }
+
+    isShuffleEnabled = isEnabled
+
+    if isEnabled {
+      applyShuffledQueue(keeping: currentSong)
+    } else {
+      restoreOriginalQueue(keeping: currentSong)
+    }
+
+    syncNowPlaying()
+  }
+
+  func setRepeatMode(_ mode: RepeatMode) {
+    repeatMode = mode
   }
 
   /// 이전곡
@@ -205,15 +243,7 @@ final class AudioPlaybackService: AudioPlayer {
           return
         }
 
-        switch self.playbackMode {
-        case .normal:
-          self.pendingTrigger = .autoNext
-          self.playNext()
-
-        case .search:
-          self.seek(0)
-          self.resume()
-        }
+        self.handleTrackEnded()
       }
   }
 
@@ -245,12 +275,16 @@ final class AudioPlaybackService: AudioPlayer {
 
     queue = []
     queuePlayerNames = []
+    originalQueue = []
+    originalPlayerNames = []
     currentIndex = 0
 
     isPlaying = false
     nowPlaying = nil
     currentPlayerName = nil
     currentCoverImageName = nil
+    isShuffleEnabled = false
+    repeatMode = .off
     clearNowPlaying()
     updateWidgetState()
   }
@@ -298,6 +332,69 @@ final class AudioPlaybackService: AudioPlayer {
         completion()
       }
     }
+  }
+}
+
+// MARK: - Queue Policy
+extension AudioPlaybackService {
+  private func handleTrackEnded() {
+    guard !queue.isEmpty else {
+      isPlaying = false
+      syncNowPlaying()
+      updateWidgetState()
+      return
+    }
+
+    if repeatMode == .one || playbackMode == .search {
+      seek(0)
+      resume()
+      return
+    }
+
+    if currentIndex + 1 < queue.count {
+      pendingTrigger = .autoNext
+      currentIndex += 1
+      nowPlaying = queue[currentIndex]
+      currentPlayerName = queuePlayerNames[currentIndex]
+      playCurrentSong()
+      return
+    }
+
+    guard queue.count > 1 else {
+      isPlaying = false
+      syncNowPlaying()
+      updateWidgetState()
+      return
+    }
+
+    pendingTrigger = .autoNext
+    currentIndex = 0
+    nowPlaying = queue[currentIndex]
+    currentPlayerName = queuePlayerNames[currentIndex]
+    playCurrentSong()
+  }
+
+  private func applyShuffledQueue(keeping currentSong: CheerSongInfo) {
+    let sourceSongs = originalQueue.isEmpty ? queue : originalQueue
+    let sourceNames = originalPlayerNames.isEmpty ? queuePlayerNames : originalPlayerNames
+    let pairs = Array(zip(sourceSongs, sourceNames))
+    guard let currentPair = pairs.first(where: { $0.0.id == currentSong.id }) else { return }
+
+    let shuffledPairs = pairs
+      .filter { $0.0.id != currentSong.id }
+      .shuffled()
+
+    queue = [currentPair.0] + shuffledPairs.map(\.0)
+    queuePlayerNames = [currentPair.1] + shuffledPairs.map(\.1)
+    currentIndex = 0
+  }
+
+  private func restoreOriginalQueue(keeping currentSong: CheerSongInfo) {
+    guard !originalQueue.isEmpty else { return }
+
+    queue = originalQueue
+    queuePlayerNames = originalPlayerNames
+    currentIndex = originalQueue.firstIndex(where: { $0.id == currentSong.id }) ?? 0
   }
 }
 
