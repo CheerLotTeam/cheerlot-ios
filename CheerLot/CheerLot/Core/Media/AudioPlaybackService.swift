@@ -380,7 +380,8 @@ extension AudioPlaybackService {
     let pairs = Array(zip(sourceSongs, sourceNames))
     guard let currentPair = pairs.first(where: { $0.0.id == currentSong.id }) else { return }
 
-    let shuffledPairs = pairs
+    let shuffledPairs =
+      pairs
       .filter { $0.0.id != currentSong.id }
       .shuffled()
 
