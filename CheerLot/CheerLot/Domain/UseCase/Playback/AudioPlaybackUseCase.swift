@@ -30,6 +30,10 @@ protocol AudioPlaybackUseCase {
 
   var canSkipManually: Bool { get }
 
+  var isShuffleEnabled: Bool { get }
+
+  var repeatMode: RepeatMode { get }
+
   /// 진행률 계산
   var duration: Double { get }
 
@@ -59,6 +63,10 @@ protocol AudioPlaybackUseCase {
 
   /// 이전곡
   func playPrevious()
+
+  func setShuffleEnabled(_ isEnabled: Bool)
+
+  func setRepeatMode(_ mode: RepeatMode)
 
   /// 일시정지
   func pause()

@@ -29,6 +29,8 @@ final class PlaybackViewModel {
   var playerName: String
   var lyrics: String
   var isSeeking: Bool = false
+  var isShuffleEnabled: Bool = false
+  var repeatMode: RepeatMode = .off
 
   // MARK: - Dependencies
 
@@ -116,6 +118,17 @@ final class PlaybackViewModel {
     syncFromService()
   }
 
+  func toggleShuffle() {
+    audioPlaybackUseCase.setShuffleEnabled(!audioPlaybackUseCase.isShuffleEnabled)
+    syncFromService()
+  }
+
+  func toggleRepeatOne() {
+    let nextMode: RepeatMode = audioPlaybackUseCase.repeatMode == .one ? .off : .one
+    audioPlaybackUseCase.setRepeatMode(nextMode)
+    syncFromService()
+  }
+
   func closePlayback(completion: @escaping () -> Void) {
     audioPlaybackUseCase.resetToBeginning { [weak self] in
       guard let self else { return }
@@ -139,6 +152,8 @@ extension PlaybackViewModel {
   /// 서비스 -> UI 상태 동기화
   fileprivate func syncFromService() {
     isPlaying = audioPlaybackUseCase.isPlaying
+    isShuffleEnabled = audioPlaybackUseCase.isShuffleEnabled
+    repeatMode = audioPlaybackUseCase.repeatMode
 
     let rawDuration = audioPlaybackUseCase.duration
     let rawCurrentTime = audioPlaybackUseCase.currentTime
