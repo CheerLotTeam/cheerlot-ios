@@ -16,6 +16,8 @@ protocol AudioPlayer {
   var duration: Double { get }
   var playbackMode: PlaybackMode { get }
   var canSkipManually: Bool { get }
+  var isShuffleEnabled: Bool { get }
+  var repeatMode: RepeatMode { get }
 
   /// 현재 재생 큐에서 재생 중인 곡의 인덱스
   var currentQueueIndex: Int { get }
@@ -27,6 +29,8 @@ protocol AudioPlayer {
     mode: PlaybackMode, source: PlaySource, isGameDay: Bool)
   func playNext()
   func playPrevious()
+  func setShuffleEnabled(_ isEnabled: Bool)
+  func setRepeatMode(_ mode: RepeatMode)
   func pause()
   func resume()
   func toggle()

@@ -46,6 +46,14 @@ final class AudioPlaybackUseCaseImpl: AudioPlaybackUseCase {
     audioPlayer.canSkipManually
   }
 
+  var isShuffleEnabled: Bool {
+    audioPlayer.isShuffleEnabled
+  }
+
+  var repeatMode: RepeatMode {
+    audioPlayer.repeatMode
+  }
+
   var duration: Double {
     audioPlayer.duration
   }
@@ -92,6 +100,14 @@ final class AudioPlaybackUseCaseImpl: AudioPlaybackUseCase {
 
   func playPrevious() {
     audioPlayer.playPrevious()
+  }
+
+  func setShuffleEnabled(_ isEnabled: Bool) {
+    audioPlayer.setShuffleEnabled(isEnabled)
+  }
+
+  func setRepeatMode(_ mode: RepeatMode) {
+    audioPlayer.setRepeatMode(mode)
   }
 
   func pause() {

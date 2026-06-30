@@ -186,7 +186,14 @@ extension PlaybackView {
 
   /// 컨트롤
   private var controlView: some View {
-    HStack(spacing: 44) {
+    HStack(spacing: 18) {
+      playbackButton(
+        "shuffle",
+        iconSize: 21,
+        opacity: viewModel.isShuffleEnabled ? 1 : 0.3
+      ) {
+        viewModel.toggleShuffle()
+      }
       playbackButton("backward.fill") {
         viewModel.playPrevious()
       }
@@ -203,6 +210,13 @@ extension PlaybackView {
       }
       .disabled(!viewModel.canSkipManually)
       .opacity(viewModel.canSkipManually ? 1 : 0.3)
+      playbackButton(
+        "repeat.1",
+        iconSize: 21,
+        opacity: viewModel.repeatMode == .one ? 1 : 0.3
+      ) {
+        viewModel.toggleRepeatOne()
+      }
     }
   }
 
@@ -210,14 +224,17 @@ extension PlaybackView {
   private func playbackButton(
     _ systemName: String,
     center: Bool = false,
+    iconSize: CGFloat? = nil,
+    opacity: Double = 1,
     action: @escaping () -> Void = {}
   ) -> some View {
     Button {
       action()
     } label: {
       Image(systemName: systemName)
-        .font(.system(size: center ? 32 : 24, weight: .regular))
+        .font(.system(size: iconSize ?? (center ? 32 : 24), weight: .regular))
         .foregroundStyle(.grayWhite)
+        .opacity(opacity)
     }
     .buttonStyle(PlaybackButtonStyle(size: 56))
   }
